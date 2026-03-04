@@ -441,6 +441,7 @@
                             }
 
                             history.pushState(null, "", url.href);
+                            if (!navigator.onLine) applyOfflineUI();
 
                             currentLinkEl = null;
                             if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
@@ -464,6 +465,31 @@
 
                     window.addEventListener("popstate", () => location.reload());
                 }
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('/service-worker.js');
+                }
+
+                function applyOfflineUI() {
+                    const header = document.querySelector('header');
+                    const versionText = document.getElementById('footer-version-text');
+                    if (header) header.style.backgroundColor = '#F0F020C0';
+                    if (versionText) {
+                        versionText.outerHTML = '<p class="hide show-on-medium" style="color: #F0F020;">インターネットに接続されていません。キャッシュされたコンテンツを使用しています。</p>';
+                    }
+                }
+
+                function revertOnlineUI() {
+                    const header = document.querySelector('header');
+                    if (header) header.style.backgroundColor = '';
+                    location.reload();
+                }
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    if (!navigator.onLine) applyOfflineUI();
+                });
+
+                window.addEventListener('offline', applyOfflineUI);
+                window.addEventListener('online', revertOnlineUI);
             })();
         </script>
         {% block extra_head %}{% endblock %}
@@ -491,7 +517,7 @@
                 <a href="/public-key/" class="text-no-decoration hide show-on-medium">public-key</a>
             </div>
             <div class="flex">
-                <p class="hide show-on-medium"><a href="https://github.com/nercone-dev/website/" class="text-no-decoration">version:</a><a href="/server-version/" class="text-no-decoration">{{ server_version }}</a></p>
+                <p class="hide show-on-medium" id="footer-version-text"><a href="https://github.com/nercone-dev/website/" class="text-no-decoration">version:</a><a href="/server-version/" class="text-no-decoration">{{ server_version }}</a></p>
             </div>
         </footer>
     </body>
