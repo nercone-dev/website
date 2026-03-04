@@ -465,6 +465,7 @@
 
                     window.addEventListener("popstate", () => location.reload());
                 }
+
                 if ('serviceWorker' in navigator) {
                     navigator.serviceWorker.register('/service-worker.js');
                 }
@@ -474,7 +475,7 @@
                     const versionText = document.getElementById('footer-version-text');
                     if (header) header.style.backgroundColor = '#404020C0';
                     if (versionText) {
-                        versionText.outerHTML = '<p class="hide show-on-medium" style="color: #A9A920;">インターネットに接続されていません。キャッシュされたコンテンツを使用しています。</p>';
+                        versionText.outerHTML = '<p class="hide show-on-large" style="color: #A9A920;" id="footer-version-text">インターネットに接続されていません。キャッシュされたコンテンツを使用しています。</p>';
                     }
                 }
 
@@ -502,7 +503,7 @@
                 <p class="hide show-on-medium">{% block header_desc %}<a href="/daily-quote/" class="text-no-decoration">{{ get_daily_quote() }}</a>{% endblock %}</p>
             </div>
             <div class="flex">
-                <a href="/access-counter/" class="text-no-decoration">#{{ get_access_count() }}</a>
+                <a href="/access-counter/" class="text-no-decoration hide show-on-large">あなたは{{ get_access_count() }}番目の訪問者です。</a>
             </div>
         </header>
         <main>{% block content %}{% endblock %}</main>
@@ -517,7 +518,7 @@
                 <a href="/public-key/" class="text-no-decoration hide show-on-medium">public-key</a>
             </div>
             <div class="flex">
-                <p class="hide show-on-medium" id="footer-version-text"><a href="https://github.com/nercone-dev/website/" class="text-no-decoration">version = </a><a href="/server-version/" class="text-no-decoration">{{ server_version }}</a></p>
+                <a href="/server-version/" class="text-no-decoration hide show-on-medium" id="footer-version-text">{{ server_version }}</a>
             </div>
         </footer>
     </body>
