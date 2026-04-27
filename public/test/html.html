@@ -1,0 +1,17 @@
+{% extends "/base.html" %}
+{% block title %}HTML Test Page - Nercone{% endblock %}
+{% block description %}nercone.devのHTMLファイル処理のテストページです。{% endblock %}
+{% block content %}
+            <h1>H1</h1>
+            <h2>H2</h2>
+            <h3>H3</h3>
+            <h4>H4</h4>
+            <h5>H5</h5>
+            <h6>H6</h6>
+            <p><b>太字</b> <i>斜体(イタリック)</i></p>
+            <p>インラインコード<code>html.code(.inline)</code>のテスト</p>
+            <pre>import requests<br>print(requests.get("https://nercone.dev/welcome").text)</pre>
+            <p><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">リンク</a></p>
+            <p><b>画像:</b></p>
+            <img src="https://assets.nercone.dev/images/favicon.png" width="256px">
+{% endblock %}

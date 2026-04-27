@@ -1,12 +1,12 @@
 {% extends "/base.html" %}
 {% block title %}今日の迷言 - Nercone{% endblock %}
-{% block extra_title %}Daily Quote{% endblock %}
+{% block title_suffix %}Daily Quote{% endblock %}
 {% block header_desc %}日替わり迷言集{% endblock %}
 {% block extra_head %}
         <style>
             main {
                 display: grid;
-                grid-template-rows: auto 1fr auto;
+                grid-template-rows: 1fr auto;
             }
             .big-text {
                 margin: 0;
@@ -18,8 +18,7 @@
         </style>
 {% endblock %}
 {% block content %}
-            <p class="text-small text-bold"><a href="/" class="text-no-decoration">← ホーム</a></p>
-            <p class="text-highlight big-text">{{ get_daily_quote() }}</p>
+            <p class="text-white big-text"><span class="text-light-grey-alt unselectable">"</span>{{ get_daily_quote() }}<span class="text-light-grey-alt unselectable">"</span></p>
             <div class="block">
                 <p>日替わり迷言集です。毎日0:00 UTCに更新されます。</p>
             </div>

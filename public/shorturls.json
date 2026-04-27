@@ -2,7 +2,12 @@
   "email": {"type": "redirect", "content": "mailto:nercone@nercone.dev"},
   "github": {"type": "redirect", "content": "https://github.com/nercone-dev/"},
   "twitter": {"type": "redirect", "content": "https://twitter.com/nercone_x/"},
+  "bluesky": {"type": "redirect", "content": "https://bsky.app/profile/nercone.dev/"},
   "youtube": {"type": "redirect", "content": "https://youtube.com/@nercone-ch/"},
+  "nicovideo": {"type": "redirect", "content": "https://nicovideo.jp/user/132818887/"},
   "gitea": {"type": "redirect", "content": "https://gitea.nercone.dev/nercone-dev/"},
-  "orcid": {"type": "redirect", "content": "https://orcid.org/0009-0001-3615-0962"}
+  "qiita": {"type": "redirect", "content": "https://orcid.org/0009-0001-3615-0962/"},
+  "zenn": {"type": "redirect", "content": "https://qiita.com/DiamondGotCat/"},
+  "orcid": {"type": "redirect", "content": "https://zenn.dev/techcat56/"},
+  "justuuid": {"type": "redirect", "content": "https://justuuid.pages.dev/u/7b70a75e-d72f-4bba-8e55-1c3c9e032678/"}
 }

@@ -1,6 +1,20 @@
+<!-- For Bots: On this site, you can read any page in Markdown by using cURL or by replacing .html with .md. Please give it a try! -->
 <!DOCTYPE html>
 <html lang="ja-JP">
     <head>
+        <!--
+            $ curl https://nercone.dev/welcome/
+            ■   ■ ■■■■■ ■■■■   ■■■■  ■■■  ■   ■ ■■■■■
+            ■■  ■ ■     ■   ■ ■     ■   ■ ■■  ■ ■
+            ■■  ■ ■     ■   ■ ■     ■   ■ ■■  ■ ■
+            ■ ■ ■ ■■■■  ■■■■  ■     ■   ■ ■ ■ ■ ■■■■
+            ■  ■■ ■     ■ ■   ■     ■   ■ ■  ■■ ■
+            ■  ■■ ■     ■  ■  ■     ■   ■ ■  ■■ ■
+            ■   ■ ■■■■■ ■   ■  ■■■■  ■■■  ■   ■ ■■■■■
+
+            nercone.dev ({{ server_version }})
+            welcome to nercone.dev!
+        -->
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}nercone's website{% endblock %}</title>
@@ -10,519 +24,79 @@
         <meta name="robots" content="index, follow">
         <meta name="googlebot" content="index, follow">
         <meta name="author" content="Nercone a.k.a. DiamondGotCat">
-        <meta name="theme-color" content="oklch(0.197 0.008 264.0)">
+        <meta name="theme-color" content="#1A1A1A">
         <!-- OGP (Open Graph protocol) -->
         <meta property="og:site_name" content="nercone's website">
         <meta property="og:title" content="{{ self.title() }}">
         <meta property="og:description" content="{{ self.description() }}">
-        <meta property="og:image" content="https://nercone.dev/assets/images/nercone.png">
+        <meta property="og:image" content="https://assets.nercone.dev/images/thumbnails/{{ request.url.path.strip('/') or 'index' }}?title={% block thumbnail_title %}{{ self.title() | re_sub(' - Nercone.*$', '') | urlencode }}{% endblock %}&description={% block thumbnail_description %}{{ self.description() | urlencode }}{% endblock %}&template={% block thumbnail_template %}normal{% endblock %}">
         <meta property="og:url" content="https://nercone.dev/">
         <meta property="og:type" content="website">
         <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="{{ self.title() }}">
         <meta name="twitter:description" content="{{ self.description() }}">
-        <meta name="twitter:image" content="https://nercone.dev/assets/images/nercone.png">
-        <!-- Scripts / Stylesheets etc. -->
+        <meta name="twitter:image" content="https://assets.nercone.dev/images/thumbnails/{{ request.url.path.strip('/') or 'index' }}?title={{ self.thumbnail_title() }}&description={{ self.thumbnail_description() }}&template={{ self.thumbnail_template() }}">
+        <!-- PWA (Progressive Web App) -->
         <link rel="manifest" href="/site.webmanifest">
-        <link rel="apple-touch-icon" href="/assets/images/favicon_cat.png" sizes="1200x1200">
-        <link rel="icon" type="image/png" href="/assets/images/favicon_cat.png" sizes="1200x1200">
-        <link rel="icon" type="image/svg+xml" href="/assets/images/favicon_cat.svg" sizes="1200x1200">
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+JP:wght@100..900&family=Noto+Sans+TC:wght@100..900&display=swap&family=Noto+Sans+SC:wght@100..900&family=Noto+Sans+KR:wght@100..900&display=swap');
-            @font-face {
-                font-family: "MesloLGS Nerd Font";
-                font-style: normal;
-                font-weight: 400;
-                src:
-                    local("MesloLGS Nerd Font"),
-                    url("https://nercone.dev/assets/fonts/MesloLGSNerdFont-Regular.woff2") format("woff2")
-            }
-            @font-face {
-                font-family: "MesloLGS Nerd Font";
-                font-style: normal;
-                font-weight: 700;
-                src:
-                    local("MesloLGS Nerd Font"),
-                    url("https://nercone.dev/assets/fonts/MesloLGSNerdFont-Bold.woff2") format("woff2")
-            }
-            @font-face {
-                font-family: "MesloLGS Nerd Font";
-                font-style: italic;
-                font-weight: 400;
-                src:
-                    local("MesloLGS Nerd Font"),
-                    url("https://nercone.dev/assets/fonts/MesloLGSNerdFont-Italic.woff2") format("woff2")
-            }
-            @font-face {
-                font-family: "MesloLGS Nerd Font";
-                font-style: italic;
-                font-weight: 700;
-                src:
-                    local("MesloLGS Nerd Font"),
-                    url("https://nercone.dev/assets/fonts/MesloLGSNerdFont-BoldItalic.woff2") format("woff2")
-            }
-            html {
-                color: #A9A9A9;
-                background-color: #202020;
-                margin: 0;
-                padding: 0;
-                padding-top: 0;
-                padding-bottom: 0;
-                font-family: "Inter", "Noto Sans JP", "Noto Sans TC", "Noto Sans SC", sans-serif, monospace;
-                font-size: 12pt;
-                font-optical-sizing: auto;
-                font-weight: 200;
-                font-style: normal;
-            }
-            body {
-                margin: 0;
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-            }
-            header {
-                view-transition-name: header-content;
-                background-color: #202020C0;
-                backdrop-filter: blur(5px);
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                padding: 24px;
-                display: flex;
-                align-items: center;
-                gap: 16px;
-                position: fixed;
-                z-index: 10;
-            }
-            main {
-                view-transition-name: main-content;
-                padding: 24px;
-                padding-top: 60px;
-                padding-bottom: 0px;
-                flex: 1;
-            }
-            footer {
-                view-transition-name: footer-content;
-                padding: 24px;
-                padding-top: 0px;
-                display: flex;
-                align-items: center;
-                gap: 16px;
-                z-index: 10;
-            }
-            section {
-                padding-top: 4px;
-                padding-bottom: 4px;
-            }
-            a {
-                text-decoration: underline;
-                color: inherit;
-            }
-            h1 {
-                font-weight: 400;
-                line-height: 8pt;
-            }
-            h2 {
-                font-weight: 300;
-            }
-            h3, h4, h5, h6 {
-                font-weight: 200;
-            }
-            section h2, section h3 {
-                line-height: 8pt;
-            }
-            h1, h2, h3, h4, h5, h6 {
-                color: #C8C8C8;
-            }
-            .block {
-                background-color: #303030;
-                border-radius: 6px;
-                padding-top: 4px;
-                padding-left: 24px;
-                padding-right: 24px;
-                padding-bottom: 4px;
-                margin-bottom: 16px;
-            }
-            .block pre {
-                margin-bottom: 20px;
-            }
-            pre {
-                border-radius: 4px;
-                background-color: #262626;
-                padding: 8px;
-                padding-left: 16px;
-                overflow-x: auto;
-                white-space: pre;
-                line-height: 24px;
-                font-size: small;
-                font-family: "MesloLGS Nerd Font", "Noto Sans JP", "Noto Sans TC", "Noto Sans SC", monospace, sans-serif;
-                font-optical-sizing: auto;
-                font-style: normal;
-            }
-            .code {
-                padding: 4px;
-                font-family: "MesloLGS Nerd Font", "Noto Sans JP", "Noto Sans TC", "Noto Sans SC", monospace, sans-serif;
-                font-optical-sizing: auto;
-                font-style: normal;
-            }
-            .banner {
-                height: 50px;
-                width: auto;
-                border-radius: 6px;
-            }
-            .flex {
-                display: flex;
-                align-items: center;
-                gap: 16px;
-            }
-            .flex > * {
-                margin: 0;
-            }
-            .flex-1 {
-                flex: 1;
-            }
-            .flex-vertical {
-                flex-direction: column;
-            }
-            .text-small {
-                font-size: small;
-            }
-            .text-bold {
-                font-weight: 400;
-            }
-            .text-no-decoration {
-                text-decoration: none;
-            }
-            .text-underline {
-                text-decoration: underline;
-            }
-            .text-highlight {
-                color: #C8C8C8;
-            }
-            .text-lowlight {
-                color: #818181;
-            }
-            .text-tc {
-                font-family: "Noto Sans TC";
-            }
-            .text-sc {
-                font-family: "Noto Sans SC";
-            }
-            .text-kr {
-                font-family: "Noto Sans KR";
-            }
-            .narrow-height {
-                line-height: 0;
-            }
-            .hide {
-                display: none;
-            }
-            @media (min-width: 780px) {
-                .hide.show-on-medium {
-                    display: block;
-                }
-            }
-            @media (min-width: 1200px) {
-                .hide.show-on-large {
-                    display: block;
-                }
-            }
-            @keyframes vt-fade-out {
-                from { opacity: 1; }
-                to   { opacity: 0; }
-            }
-            @keyframes vt-fade-in {
-                from { opacity: 0; }
-                to   { opacity: 1; }
-            }
-            @keyframes vt-blur-out {
-                from { filter: blur(0px); }
-                to   { filter: blur(6px); }
-            }
-            @keyframes vt-blur-in {
-                from { filter: blur(6px); }
-                to   { filter: blur(0px); }
-            }
-            @media (prefers-reduced-motion: reduce) {
-                ::view-transition-old(header-content),
-                ::view-transition-new(header-content) {
-                    z-index: 1;
-                    pointer-events: none;
-                }
-            }
-            @media (prefers-reduced-motion: reduce) {
-                ::view-transition-old(main-content),
-                ::view-transition-new(main-content) {
-                    z-index: 1;
-                    pointer-events: none;
-                }
-            }
-            @media (prefers-reduced-motion: reduce) {
-                ::view-transition-old(footer-content),
-                ::view-transition-new(footer-content) {
-                    z-index: 1;
-                    pointer-events: none;
-                }
-            }
-            * { cursor: none; }
-            #cursor {
-                view-transition-name: none;
-                position: fixed;
-                z-index: 99999;
-                width: 25px;
-                height: 25px;
-                border-radius: 50%;
-                background: #C8C8C8C0;
-                pointer-events: none;
-                transform: translate(-50%, -50%);
-                opacity: 0;
-                transition:
-                    left 0.08s ease-out,
-                    top 0.08s ease-out,
-                    width 0.15s cubic-bezier(0.22, 1, 0.36, 1),
-                    height 0.15s cubic-bezier(0.22, 1, 0.36, 1),
-                    border-radius 0.15s cubic-bezier(0.22, 1, 0.36, 1),
-                    background 0.15s ease,
-                    transform 0.08s ease-out,
-                    opacity 0.3s ease;
-            }
-            #cursor.visible {
-                opacity: 1;
-            }
-            #cursor.on-text {
-                width: 3px;
-                border-radius: 1.5px;
-                background: #C8C8C8C0;
-            }
-            #cursor.on-link {
-                border-radius: 6px;
-                background: #C8C8C840;
-                transform: translate(0, 0);
-            }
-        </style>
-        <script>
-            (() => {
-                const textSelectors = 'p, h1, h2, h3, h4, h5, h6, span, li, label, td, th, pre, .code';
-                const linkSelectors = 'a, button, [role="button"], input[type="submit"], input[type="button"]';
-                const padding = 6;
-
-                let mouseX = 0, mouseY = 0;
-                let currentLinkEl = null;
-                let rafId = null;
-                let cursor = null;
-                let cursorVisible = false;
-                let lastTouchTime = 0;
-                const TOUCH_MOUSE_GUARD_MS = 800;
-
-                function showCursor() {
-                    if (!cursorVisible && cursor) {
-                        cursorVisible = true;
-                        cursor.classList.add('visible');
-                    }
-                }
-
-                function hideCursor() {
-                    if (cursor) {
-                        cursorVisible = false;
-                        cursor.classList.remove('visible');
-                        currentLinkEl = null;
-                        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-                        cursor.classList.remove('on-link', 'on-text');
-                    }
-                }
-
-                function isSyntheticMouse() {
-                    return Date.now() - lastTouchTime < TOUCH_MOUSE_GUARD_MS;
-                }
-
-                function updateCursorForLink(el) {
-                    const rect = el.getBoundingClientRect();
-                    cursor.classList.remove('on-text');
-                    cursor.classList.add('on-link');
-                    cursor.style.transform = 'none';
-                    cursor.style.left   = (rect.left - padding) + 'px';
-                    cursor.style.top    = (rect.top  - padding) + 'px';
-                    cursor.style.width  = (rect.width  + padding * 2) + 'px';
-                    cursor.style.height = (rect.height + padding * 2) + 'px';
-                }
-
-                function trackLink() {
-                    if (currentLinkEl) {
-                        updateCursorForLink(currentLinkEl);
-                        rafId = requestAnimationFrame(trackLink);
-                    }
-                }
-
-                document.addEventListener('DOMContentLoaded', () => {
-                    cursor = document.getElementById('cursor');
-                    if (!cursor) return;
-
-                    document.addEventListener('touchstart', () => { lastTouchTime = Date.now(); hideCursor(); }, { passive: true });
-                    document.addEventListener('touchmove', () => { lastTouchTime = Date.now(); hideCursor(); }, { passive: true });
-                    document.addEventListener('touchend', () => { lastTouchTime = Date.now(); }, { passive: true });
-
-                    document.addEventListener('mousemove', (e) => {
-                        if (isSyntheticMouse()) return;
-                        if (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) return;
-
-                        mouseX = e.clientX;
-                        mouseY = e.clientY;
-
-                        showCursor();
-
-                        const el = document.elementFromPoint(mouseX, mouseY);
-                        const linkEl = el ? el.closest(linkSelectors) : null;
-
-                        if (linkEl) {
-                            if (currentLinkEl !== linkEl) {
-                                currentLinkEl = linkEl;
-                                if (rafId) cancelAnimationFrame(rafId);
-                                rafId = requestAnimationFrame(trackLink);
-                            }
-                        } else {
-                            if (currentLinkEl) {
-                                currentLinkEl = null;
-                                if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-                            }
-                            cursor.classList.remove('on-link');
-                            cursor.style.transform = 'translate(-50%, -50%)';
-                            cursor.style.left = mouseX + 'px';
-                            cursor.style.top  = mouseY + 'px';
-                            cursor.style.width = '';
-                            cursor.style.height = '';
-
-                            if (el && el.closest(textSelectors)) {
-                                cursor.classList.add('on-text');
-                            } else {
-                                cursor.classList.remove('on-text');
-                            }
-                        }
-                    });
-
-                    document.addEventListener('mousedown', () => {
-                        cursor.style.transform = currentLinkEl
-                            ? 'translate(0, 0) scale(0.97)'
-                            : 'translate(-50%, -50%) scale(0.9)';
-                    });
-                    document.addEventListener('mouseup', () => {
-                        cursor.style.transform = currentLinkEl
-                            ? 'translate(0, 0) scale(1)'
-                            : 'translate(-50%, -50%) scale(1)';
-                    });
-
-                    window.addEventListener('scroll', () => {
-                        if (currentLinkEl) updateCursorForLink(currentLinkEl);
-                    }, { passive: true });
-                });
-
-                if (document.startViewTransition) {
-                    document.addEventListener("click", (event) => {
-                        const link = event.target.closest("a");
-                        if (!link || link.hasAttribute('download')) return;
-
-                        const url = new URL(link.href, location.href);
-                        if (url.origin !== location.origin) return;
-                        if (link.target || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-
-                        event.preventDefault();
-
-                        document.startViewTransition(async () => {
-                            const response = await fetch(url.href, {
-                                headers: { "X-Requested-With": "view-transition" }
-                            });
-                            const html = await response.text();
-                            const doc = new DOMParser().parseFromString(html, "text/html");
-
-                            for (const tag of ['head', 'header', 'main', 'footer']) {
-                                const newEl = doc.querySelector(tag);
-                                const curEl = document.querySelector(tag);
-                                if (!newEl || !curEl) { location.href = url.href; return; }
-                                curEl.innerHTML = newEl.innerHTML;
-                            }
-
-                            history.pushState(null, "", url.href);
-                            if (!navigator.onLine) applyOfflineUI();
-
-                            currentLinkEl = null;
-                            if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-                            cursor.classList.remove('on-link', 'on-text');
-                            cursor.style.transform = 'translate(-50%, -50%)';
-                            cursor.style.left = mouseX + 'px';
-                            cursor.style.top  = mouseY + 'px';
-                            cursor.style.width = '';
-                            cursor.style.height = '';
-
-                            const el = document.elementFromPoint(mouseX, mouseY);
-                            const newLinkEl = el ? el.closest(linkSelectors) : null;
-                            if (newLinkEl) {
-                                currentLinkEl = newLinkEl;
-                                rafId = requestAnimationFrame(trackLink);
-                            } else if (el && el.closest(textSelectors)) {
-                                cursor.classList.add('on-text');
-                            }
-                        });
-                    });
-
-                    window.addEventListener("popstate", () => location.reload());
-                }
-
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.register('/service-worker.js');
-                }
-
-                function applyOfflineUI() {
-                    const header = document.querySelector('header');
-                    const versionText = document.getElementById('footer-version-text');
-                    if (header) header.style.backgroundColor = '#404020C0';
-                    if (versionText) {
-                        versionText.outerHTML = '<p class="hide show-on-large" style="color: #A9A920;" id="footer-version-text">インターネットに接続されていません。キャッシュされたコンテンツを使用しています。</p>';
-                    }
-                }
-
-                function revertOnlineUI() {
-                    const header = document.querySelector('header');
-                    if (header) header.style.backgroundColor = '';
-                    location.reload();
-                }
-
-                document.addEventListener('DOMContentLoaded', () => {
-                    if (!navigator.onLine) applyOfflineUI();
-                });
-
-                window.addEventListener('offline', applyOfflineUI);
-                window.addEventListener('online', revertOnlineUI);
-            })();
-        </script>
+        <link rel="apple-touch-icon" href="https://assets.nercone.dev/images/favicon.png" sizes="1200x1200">
+        <link rel="icon" type="image/png" href="https://assets.nercone.dev/images/favicon.png" sizes="1200x1200">
+        <link rel="icon" type="image/svg+xml" href="https://assets.nercone.dev/images/favicon.svg" sizes="1200x1200">
+        <!-- Stylesheets / Scripts -->
+        <script src="https://assets.nercone.dev/js/main.js" defer></script>
+        <link rel="stylesheet" href="https://assets.nercone.dev/css/main.css">
+        <!-- External Stylesheets / Scripts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=BIZ+UDGothic&family=Noto+Sans+JP:wght@100..900&family=Noto+Sans+SC:wght@100..900&family=Noto+Sans+TC:wght@100..900&family=Noto+Sans+KR:wght@100..900&display=swap">
         {% block extra_head %}{% endblock %}
     </head>
+    {% block custom_body %}
     <body>
         <div id="cursor"></div>
+        <div id="loading-overlay" aria-hidden="true">
+            <svg viewBox="96 256 832 512" xmlns="http://www.w3.org/2000/svg">
+                <polyline points="872 572.75 152 332 152 692 512 692 872 332 872 692 684.5 692" fill="none" stroke="#fff" stroke-width="48" stroke-miterlimit="10"/>
+            </svg>
+        </div>
+        {% block custom_header %}
         <header class="flex">
             <div class="flex-1 flex">
-                <a href="/" class="text-no-decoration text-highlight" style="gap: 8px;"><span class="text-bold">Nercone</span> {% block extra_title %}{% endblock %}</a>
-                <p class="hide show-on-medium">{% block header_desc %}<a href="/daily-quote/" class="text-no-decoration">{{ get_daily_quote() }}</a>{% endblock %}</p>
+                <a href="/" class="text-no-decoration text-white" style="gap: 8px;">{% block title_prefix %}{% endblock %} <span class="font-bold">Nercone</span> {% block title_suffix %}{% endblock %}</a>
+                <p class="hide show-on-medium show-on-large">{% block header_desc %}<a href="/daily-quote/" class="text-no-decoration">{{ get_daily_quote() }}</a>{% endblock %}</p>
             </div>
             <div class="flex">
-                <a href="/access-counter/" class="text-no-decoration hide show-on-medium">あなたは{{ get_access_count() }}番目の訪問者です。</a>
+                <a href="/access-counter/" class="text-no-decoration hide show-on-medium show-on-large">あなたは{{ get_access_count() }}番目の訪問者です。</a>
             </div>
         </header>
+        {% endblock %}
         <main>{% block content %}{% endblock %}</main>
-        <footer class="flex text-lowlight">
+        {% block custom_footer %}
+        <footer class="flex text-light-grey-alt">
             <div class="flex-1 flex">
-                <a href="/" class="text-no-decoration"><span class="text-bold">nercone</span>.dev</a>
-                <a href="/about/" class="text-no-decoration">about</a>
-                <a href="/links/" class="text-no-decoration">links</a>
-                <a href="/projects/" class="text-no-decoration">projects</a>
-                <a href="mailto:nercone@nercone.dev" class="text-no-decoration hide show-on-medium">email</a>
-                <a href="{{ onion_site_url }}" class="text-no-decoration hide show-on-medium">onion</a>
-                <a href="/public-key/" class="text-no-decoration hide show-on-medium">public-key</a>
+                <a href="/" class="text-no-decoration hide show-on-medium show-on-large font-bold">{% block footer_domain_prefix %}{% endblock %}nercone.dev{% block footer_domain_suffix %}{% endblock %}</a>
+                {% block footer_links %}
+                <a href="/about/" class="text-no-decoration bold-on-small">about</a>
+                <a href="/links/" class="text-no-decoration bold-on-small">links</a>
+                <a href="/projects/" class="text-no-decoration bold-on-small">projects</a>
+                <a href="{{ onion_site_url }}" class="text-no-decoration hide show-on-large">onion</a>
+                <a href="mailto:nercone@nercone.dev" class="text-no-decoration hide show-on-large">email</a>
+                <a href="/public-key/" class="text-no-decoration hide show-on-large">public-key</a>
+                <a href="/vulnerability-reporters/" class="text-no-decoration hide show-on-large">vulnerability-reporters</a>
+                {% block extra_footer_links %}{% endblock %}
+                {% endblock %}
             </div>
             <div class="flex">
-                <p class="text-no-decoration">当サイトはリンクフリーです</p>
-                <a href="/server-version/" class="text-no-decoration hide show-on-medium" id="footer-version-text">{{ server_version }}</a>
+                <a href="https://nercone.dev/github/"><img alt="github" src="https://assets.nercone.dev/images/icons/github.svg" class="small-icon"></a>
+                <a href="https://nercone.dev/orcid/"><img alt="orcid" src="https://assets.nercone.dev/images/icons/orcid.svg" class="small-icon">
+                <a href="https://nercone.dev/twitter/"><img alt="twitter" src="https://assets.nercone.dev/images/icons/twitter.svg" class="small-icon">
+                <a href="https://nercone.dev/qiita/"><img alt="qiita" src="https://assets.nercone.dev/images/icons/qiita.svg" class="small-icon">
+                <a href="https://nercone.dev/zenn/"><img alt="zenn" src="https://assets.nercone.dev/images/icons/zenn.svg" class="small-icon">
+                <!--                         qiita            kotonai -->
+                <a href="/server-version/" class="font-bold text-no-decoration hide show-on-medium show-on-large">{{ server_version }}</a>
             </div>
         </footer>
+        {% endblock %}
     </body>
+    {% endblock %}
 </html>

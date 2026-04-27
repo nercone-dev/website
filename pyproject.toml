@@ -3,15 +3,31 @@ requires = ["uv_build>=0.9.5,<0.10.0"]
 build-backend = "uv_build"
 
 [project]
-name = "nercone-webserver"
+name = "nercone-website"
 version = "1.0.0"
 requires-python = ">=3.8"
 dependencies = [
-    "psutil",
-    "fastapi",
+    "resvg-py",
+    "scour",
+    "rjsmin",
+    "rcssmin",
+    "mistune",
+    "markitdown",
+    "beautifulsoup4",
+    "httpx[http2]",
+    "websockets",
     "jinja2",
-    "uvicorn[standard]"
+    "fastapi",
+    "uvicorn[standard]",
+    "cryptography",
+    "dnspython",
+    "aioquic",
+    "idna",
+    "pyasn1",
+    "pyasn1-modules",
+    "certifi",
+    "python-multipart"
 ]
 
 [project.scripts]
-nercone-webserver = "nercone_webserver.__main__:main"
+nercone-website = "nercone_website.__main__:main"

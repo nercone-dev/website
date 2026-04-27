@@ -1,0 +1,16 @@
+{% extends "/base.html" %}
+{% block title %}QRコード - Nercone{% endblock %}
+{% block title_suffix %}QR Code{% endblock %}
+{% block header_desc %}このサイトのトップページのQRコードです{% endblock %}
+{% block extra_head %}
+        <style>
+            main {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
+{% endblock %}
+{% block content %}
+            <img src="https://assets.nercone.dev/images/qr_code.svg" width="256" height="256">
+{% endblock %}

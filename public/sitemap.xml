@@ -13,11 +13,27 @@
         <priority>0.9</priority>
     </url>
     <url>
+        <loc>https://nercone.dev/tools/</loc>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://nercone.dev/tools/tls-test/</loc>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://nercone.dev/download-banner/</loc>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://nercone.dev/projects/</loc>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>https://nercone.dev/public-key/</loc>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://nercone.dev/vulnerability-reporters/</loc>
         <priority>0.9</priority>
     </url>
 </urlset>

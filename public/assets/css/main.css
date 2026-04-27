@@ -1,0 +1,523 @@
+html {
+    color: var(--color-light-grey);
+    background-color: var(--color-dark-grey);
+    margin: 0;
+    padding: 0;
+    font-family: "Inter", "BIZ UDGothic", "Noto Sans JP", "Noto Sans TC", "Noto Sans SC", sans-serif;
+    font-size: 12pt;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+header {
+    view-transition-name: header;
+    will-change: transform;
+    background-image: transparent;
+    backdrop-filter: blur(16px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 10;
+}
+@supports (-webkit-backdrop-filter: blur(1px)) {
+    header {
+        background-image: linear-gradient(to bottom, var(--color-dark-grey), transparent);
+    }
+}
+main {
+    view-transition-name: main-content;
+    padding: 24px;
+    padding-top: 60px;
+    padding-bottom: 0px;
+    flex: 1;
+}
+main > *:first-child {
+    margin-top: 16px;
+}
+footer {
+    view-transition-name: footer-content;
+    padding: 24px;
+    padding-top: 0px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 10;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-white);
+}
+
+/* Layout */
+section {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.block {
+    background-color: var(--color-dark-grey-alt);
+    border-radius: 8px;
+    padding: 16px 16px;
+    margin-bottom: 16px;
+}
+.block > *:first-child {
+    margin-top: 0;
+}
+.block > *:last-child {
+    margin-bottom: 0;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.flex > * {
+    margin: 0;
+}
+.flex-1 {
+    flex: 1;
+}
+.flex-vertical {
+    flex-direction: column;
+}
+
+/* Code */
+pre {
+    background-color: #202020;
+    border-radius: 4px;
+    padding: 8px;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 24px;
+    font-size: small;
+    font-family: "MesloLGS Nerd Font", "BIZ UDGothic", monospace;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+.block pre {
+    margin-bottom: 20px;
+}
+
+code {
+    padding: 4px;
+    font-family: "MesloLGS Nerd Font", "BIZ UDGothic", monospace;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+/* Fonts */
+@font-face {
+    font-family: "MesloLGS Nerd Font";
+    font-style: normal;
+    font-weight: 400;
+    src:
+        local("MesloLGS Nerd Font"),
+        url("https://assets.nercone.dev/fonts/MesloLGSNerdFont-Regular.woff2") format("woff2")
+}
+@font-face {
+    font-family: "MesloLGS Nerd Font";
+    font-style: normal;
+    font-weight: 700;
+    src:
+        local("MesloLGS Nerd Font"),
+        url("https://assets.nercone.dev/fonts/MesloLGSNerdFont-Bold.woff2") format("woff2")
+}
+@font-face {
+    font-family: "MesloLGS Nerd Font";
+    font-style: italic;
+    font-weight: 400;
+    src:
+        local("MesloLGS Nerd Font"),
+        url("https://assets.nercone.dev/fonts/MesloLGSNerdFont-Italic.woff2") format("woff2")
+}
+@font-face {
+    font-family: "MesloLGS Nerd Font";
+    font-style: italic;
+    font-weight: 700;
+    src:
+        local("MesloLGS Nerd Font"),
+        url("https://assets.nercone.dev/fonts/MesloLGSNerdFont-BoldItalic.woff2") format("woff2")
+}
+
+a {
+    text-decoration: underline;
+    color: inherit;
+}
+b {
+    font-weight: 600;
+}
+i {
+    font-style: italic;
+}
+u {
+    text-decoration: underline;
+}
+s {
+    text-decoration: line-through;
+}
+
+.font-thin {
+    font-weight: 100;
+}
+.font-extralight {
+    font-weight: 200;
+}
+.font-light {
+    font-weight: 300;
+}
+.font-regular {
+    font-weight: 400;
+}
+.font-medium {
+    font-weight: 500;
+}
+.font-bold {
+    font-weight: 600;
+}
+.font-extrabold {
+    font-weight: 700;
+}
+.font-black {
+    font-weight: 800;
+}
+
+.font-weight-100 {
+    font-weight: 100;
+}
+.font-weight-200 {
+    font-weight: 200;
+}
+.font-weight-300 {
+    font-weight: 300;
+}
+.font-weight-400 {
+    font-weight: 400;
+}
+.font-weight-500 {
+    font-weight: 500;
+}
+.font-weight-600 {
+    font-weight: 600;
+}
+.font-weight-700 {
+    font-weight: 700;
+}
+.font-weight-800 {
+    font-weight: 800;
+}
+.font-weight-900 {
+    font-weight: 900;
+}
+.font-weight-1000 {
+    font-weight: 1000;
+}
+
+.text-no-decoration {
+    text-decoration: none;
+}
+.text-italic {
+    font-style: italic;
+}
+.text-underline {
+    text-decoration: underline;
+}
+.text-overline {
+    text-decoration: overline;
+}
+.text-line-through {
+    text-decoration: line-through;
+}
+
+.font-xx-small {
+    font-size: xx-small;
+}
+.font-x-small {
+    font-size: x-small;
+}
+.font-small {
+    font-size: small;
+}
+.font-medium {
+    font-size: medium;
+}
+.font-large {
+    font-size: large;
+}
+.font-x-large {
+    font-size: x-large;
+}
+.font-xx-large {
+    font-size: xx-large;
+}
+.font-xxx-large {
+    font-size: xxx-large;
+}
+.font-smaller {
+    font-size: smaller;
+}
+.font-larger {
+    font-size: larger;
+}
+
+.font-inter {
+    font-family: "Inter";
+}
+.font-bizud {
+    font-family: "BIZ UDGothic";
+}
+.font-nsajp {
+    font-family: "Noto Sans JP";
+}
+.font-nsatc {
+    font-family: "Noto Sans TC";
+}
+.font-nsasc {
+    font-family: "Noto Sans SC";
+}
+.font-nsakr {
+    font-family: "Noto Sans KR";
+}
+.font-meslo {
+    font-family: "MesloLGS Nerd Font";
+}
+
+/* Colors */
+:root {
+    --color-black: #000000;
+    --color-white: #FFFFFF;
+
+    --color-dark-grey: #1A1A1A;
+    --color-dark-grey-alt: #272727;
+    --color-light-grey: #E0E0E0;
+    --color-light-grey-alt: #939393;
+
+    --color-red: #A03333;
+    --color-yellow: #CCA000;
+    --color-green: #00A050;
+    --color-teal: #00A0A0;
+    --color-blue: #0080C0;
+    --color-orange: #C86000;
+    --color-brown: #A07033;
+    --color-purple: #7844A0;
+    --color-magenta: #A043A0;
+    --color-indigo: #334DA0;
+
+    --color-bright-red: #C84040;
+    --color-bright-yellow: #FFC800;
+    --color-bright-green: #00C878;
+    --color-bright-teal: #00C8C8;
+    --color-bright-blue: #00C0FF;
+    --color-bright-orange: #FA7800;
+    --color-bright-brown: #C88C40;
+    --color-bright-purple: #C84040;
+    --color-bright-magenta: #C854C8;
+    --color-bright-indigo: #4060C8;
+}
+
+/* Text Colors */
+.text-black          { color: var(--color-black); }
+.text-white          { color: var(--color-white); }
+
+.text-dark-grey      { color: var(--color-dark-grey); }
+.text-dark-grey-alt  { color: var(--color-dark-grey-alt); }
+.text-light-grey     { color: var(--color-light-grey); }
+.text-light-grey-alt { color: var(--color-light-grey-alt); }
+
+.text-red            { color: var(--color-red); }
+.text-yellow         { color: var(--color-yellow); }
+.text-green          { color: var(--color-green); }
+.text-teal           { color: var(--color-teal); }
+.text-blue           { color: var(--color-blue); }
+.text-orange         { color: var(--color-orange); }
+.text-brown          { color: var(--color-brown); }
+.text-purple         { color: var(--color-purple); }
+.text-magenta        { color: var(--color-magenta); }
+.text-indigo         { color: var(--color-indigo); }
+
+.text-bright-red     { color: var(--color-bright-red); }
+.text-bright-yellow  { color: var(--color-bright-yellow); }
+.text-bright-green   { color: var(--color-bright-green); }
+.text-bright-teal    { color: var(--color-bright-teal); }
+.text-bright-blue    { color: var(--color-bright-blue); }
+.text-bright-orange  { color: var(--color-bright-orange); }
+.text-bright-brown   { color: var(--color-bright-brown); }
+.text-bright-purple  { color: var(--color-bright-purple); }
+.text-bright-magenta { color: var(--color-bright-magenta); }
+.text-bright-indigo  { color: var(--color-bright-indigo); }
+ 
+/* Background Colors */
+.bg-black          { background-color: var(--color-black); }
+.bg-white          { background-color: var(--color-white); }
+
+.bg-dark-grey      { background-color: var(--color-dark-grey); }
+.bg-dark-grey-alt  { background-color: var(--color-dark-grey-alt); }
+.bg-light-grey     { background-color: var(--color-light-grey); }
+.bg-light-grey-alt { background-color: var(--color-light-grey-alt); }
+
+.bg-red            { background-color: var(--color-red); }
+.bg-yellow         { background-color: var(--color-yellow); }
+.bg-green          { background-color: var(--color-green); }
+.bg-teal           { background-color: var(--color-teal); }
+.bg-blue           { background-color: var(--color-blue); }
+.bg-orange         { background-color: var(--color-orange); }
+.bg-brown          { background-color: var(--color-brown); }
+.bg-purple         { background-color: var(--color-purple); }
+.bg-magenta        { background-color: var(--color-magenta); }
+.bg-indigo         { background-color: var(--color-indigo); }
+
+.bg-bright-red     { background-color: var(--color-bright-red); }
+.bg-bright-yellow  { background-color: var(--color-bright-yellow); }
+.bg-bright-green   { background-color: var(--color-bright-green); }
+.bg-bright-teal    { background-color: var(--color-bright-teal); }
+.bg-bright-blue    { background-color: var(--color-bright-blue); }
+.bg-bright-orange  { background-color: var(--color-bright-orange); }
+.bg-bright-brown   { background-color: var(--color-bright-brown); }
+.bg-bright-purple  { background-color: var(--color-bright-purple); }
+.bg-bright-magenta { background-color: var(--color-bright-magenta); }
+.bg-bright-indigo  { background-color: var(--color-bright-indigo); }
+
+/* Responsive Design */
+.hide {
+    display: none;
+}
+@media (max-width: 740px) {
+    .bold-on-small {
+        font-weight: 600;
+    }
+    .hide.show-on-small {
+        display: block;
+    }
+}
+@media (min-width: 740px) and (max-width: 1080px) {
+    .hide.show-on-medium {
+        display: block;
+    }
+}
+@media (min-width: 1080px) {
+    .hide.show-on-large {
+        display: block;
+    }
+}
+
+/* View Transition */
+@keyframes vt-fade-out {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+@keyframes vt-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes vt-blur-out {
+    from { filter: blur(0px); }
+    to   { filter: blur(6px); }
+}
+@keyframes vt-blur-in {
+    from { filter: blur(6px); }
+    to   { filter: blur(0px); }
+}
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(main-content),
+    ::view-transition-new(main-content),
+    ::view-transition-old(footer-content),
+    ::view-transition-new(footer-content) {
+        z-index: 1;
+        pointer-events: none;
+    }
+}
+
+/* Cursor */
+* { cursor: none; }
+#cursor {
+    view-transition-name: none;
+    position: fixed;
+    z-index: 99999;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #FFFFFFC0;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition:
+        left 0.08s ease-out,
+        top 0.08s ease-out,
+        width 0.15s cubic-bezier(0.22, 1, 0.36, 1),
+        height 0.15s cubic-bezier(0.22, 1, 0.36, 1),
+        border-radius 0.15s cubic-bezier(0.22, 1, 0.36, 1),
+        background 0.15s ease,
+        transform 0.08s ease-out,
+        opacity 0.3s ease;
+}
+#cursor.visible { opacity: 1; }
+#cursor.on-text {
+    width: 3px;
+    border-radius: 1.5px;
+    background: #FFFFFFC0;
+}
+#cursor.on-link {
+    border-radius: 6px;
+    background: #FFFFFF40;
+    transform: translate(0, 0);
+}
+
+/* Loading Overlay */
+#loading-overlay {
+    view-transition-name: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-dark-grey);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    pointer-events: none;
+    opacity: 1;
+}
+#loading-overlay svg {
+    --size: clamp(340px, 28vmin, 380px);
+    width: var(--size);
+    height: calc(var(--size) * 512 / 832);
+    opacity: 0;
+    filter: blur(20px);
+    transform: scale(1);
+    will-change: opacity, filter, transform;
+}
+#loading-overlay polyline {
+    will-change: stroke-dashoffset;
+}
+
+/* Miscellaneous */
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.banner {
+    height: 50px;
+    width: auto;
+    border-radius: 6px;
+}
+.small-icon {
+    width: 12pt;
+    height: 12pt;
+    display: block;
+}

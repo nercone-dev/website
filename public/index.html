@@ -7,13 +7,13 @@
                 flex: 1;
                 display: flex;
             }
-            .aaaa {
+            .inner {
                 flex: 1;
                 display: flex;
                 align-items: center;
                 justify-content: center;
             }
-            .big-text {
+            #big-text {
                 margin: 0;
                 display: flex;
                 align-items: center;
@@ -21,18 +21,51 @@
                 font-size: 64pt;
                 font-weight: 600;
             }
-            @media (max-width: 460px) {
-                .big-text {
-                    font-size: 54pt;
+            @media (max-width: 512px) {
+                #big-text {
+                    font-size: 48pt;
+                }
+                #welcome-text {
+                    font-size: 10pt;
                 }
             }
         </style>
 {% endblock %}
 {% block content %}
-            <div class="aaaa">
+            <div class="inner">
                 <div class="flex-vertical">
-                    <p class="text-highlight big-text" style="padding-bottom: 0px; margin-bottom: 0px; text-box: trim-both cap alphabetic;">NERCONE</p>
-                    <p class="text-bold" style="padding-top: 0px; margin-top: 0px; text-box: trim-both cap alphabetic;">ようこそ・Welcome・<span class="text-tc">歡迎</span>・<span class="text-sc">欢迎</span>・<span class="text-kr">환영해요</span></p>
+                    <p id="big-text" class="text-white" style="padding-bottom: 0px; margin-bottom: 0px; text-box: trim-both cap alphabetic;">NERCONE</p>
+                    <p id="welcome-text" class="font-bold" style="padding-top: 0px; margin-top: 0px; text-box: trim-both cap alphabetic;">ようこそ・Welcome・<span class="font-nsasc">欢迎</span>・<span class="font-nsatc">歡迎</span>・<span class="font-nsakr">환영해요</span></p>
                 </div>
             </div>
+            <script>
+                (() => {
+                    const el = document.getElementById('big-text');
+                    if (!el) return;
+                    let tapCount = 0, tapTimer = null, lastTouch = 0;
+
+                    function onTap() {
+                        tapCount++;
+                        if (tapCount >= 3) {
+                            clearTimeout(tapTimer);
+                            tapCount = 0;
+                            typeof window.__navigate === 'function' ? window.__navigate('/qr-code/') : (location.href = '/qr-code/');
+                            return;
+                        }
+                        clearTimeout(tapTimer);
+                        tapTimer = setTimeout(() => { tapCount = 0; }, 400);
+                    }
+
+                    el.addEventListener('touchend', (e) => {
+                        e.preventDefault();
+                        lastTouch = Date.now();
+                        onTap();
+                    }, { passive: false });
+
+                    el.addEventListener('click', () => {
+                        if (Date.now() - lastTouch < 300) return;
+                        onTap();
+                    });
+                })();
+            </script>
 {% endblock %}

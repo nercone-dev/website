@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_レイヤー_1" data-name="レイヤー 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 56.25px;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        fill: #939393;
+      }
+
+      .cls-1, .cls-5 {
+        font-family: InterBIZUD-Bold, 'Inter BIZUD';
+        font-weight: 700;
+      }
+
+      .cls-3 {
+        font-family: InterBIZUD-Regular, 'Inter BIZUD';
+      }
+
+      .cls-3, .cls-5 {
+        font-size: 28.12px;
+      }
+
+      .cls-4 {
+        font-family: MesloBIZUD-Regular, 'Meslo BIZUD';
+        font-size: 18.75px;
+      }
+
+      .cls-6 {
+        fill: #4d4d4d;
+      }
+
+      .cls-5, .cls-7 {
+        fill: #c84040;
+      }
+
+      .cls-8 {
+        letter-spacing: -.06em;
+      }
+
+      .cls-9 {
+        fill: #333;
+      }
+
+      .cls-10 {
+        fill: #1a1a1a;
+      }
+
+      .cls-11 {
+        letter-spacing: .03em;
+      }
+    </style>
+  </defs>
+  <rect class="cls-10" width="1200" height="630"/>
+  <g>
+    <polygon class="cls-9" points="0 315 0 630 1200 630 1200 525 0 315"/>
+    <polygon class="cls-6" points="1200 315 1200 630 600 630 1200 315"/>
+  </g>
+  <path class="cls-2" d="M1136,566h-32.94v-7.06h25.88v-12.64l-23.82-7.97-27.66,27.66h-61.46v-64.9l87.22,29.16,32.78-32.78v68.52ZM1023.06,558.94h51.48l23.1-23.1-74.58-24.94v48.04ZM1110.7,532.76l18.24,6.1v-24.34l-18.24,18.24Z"/>
+  <rect class="cls-7" width="1200" height="18.75"/>
+  <text class="cls-5" transform="translate(1090.31 54.49)"><tspan x="0" y="0">ERROR</tspan></text>
+  <text class="cls-4" transform="translate(34.16 69.49)"><tspan x="0" y="0">__PATH__</tspan></text>
+  <text class="cls-1" transform="translate(32.15 142.92)"><tspan x="0" y="0">__TITLE__</tspan></text>
+  <text class="cls-3" transform="translate(33.6 185.25)"><tspan x="0" y="0">__DESCRIPTION__</tspan></text>
+</svg>

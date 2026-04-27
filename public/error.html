@@ -1,8 +1,10 @@
 {% extends "/base.html" %}
 {% block title %}{{ status_code }} {{ status_code_name }} - Nercone{% endblock %}
-{% block extra_title %}Error{% endblock %}
-{% block header_desc %}{{ status_code }} {{ status_code_name }}{% endblock %}
+{% block title_suffix %}{{ status_code }}{% endblock %}
+{% block header_desc %}<span class="text-light-grey-alt">{{ joke_message }}</span>{% endblock %}
+{% block description %}{{ message }}{% endblock %}
+{% block thumbnail_template %}error{% endblock %}
 {% block content %}
-            <h1 class="text-bold">{{ status_code }} {{ status_code_name }}</h1>
+            <h1 class="font-bold">{{ status_code }} {{ status_code_name }}</h1>
             <p>{{ message }}</p>
 {% endblock %}

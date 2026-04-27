@@ -1,1 +1,1 @@
-/root/.local/bin/nercone-webserver
+/root/.local/bin/nercone-website
