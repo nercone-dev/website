@@ -1,9 +1,9 @@
-# ╭──────────────────────────────────────────────╮
-# │ ╭──────╮                                     │
-# │ │      │  I'm a robot                        │
-# │ │      │                        antiCAPTCHA  │
-# │ ╰──────╯                    Privacy | Terms  │
-# ╰──────────────────────────────────────────────╯
+# ╭───────────────────────────────────────────────╮
+# │  ╭──────╮                                     │
+# │  │      │  I'm a robot                        │
+# │  │      │                        antiCAPTCHA  │
+# │  ╰──────╯                    Privacy | Terms  │
+# ╰───────────────────────────────────────────────╯
 # Note: "I'm a robot" Box Inspired by https://fxtwitter.com/robots.txt
 #       If want to delete this, Please send deletion request to: nercone@nercone.dev
 #       I delete this text if on received deletion request from FxEmbed.
