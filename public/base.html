@@ -29,22 +29,22 @@
         <meta property="og:site_name" content="nercone's website">
         <meta property="og:title" content="{{ self.title() }}">
         <meta property="og:description" content="{{ self.description() }}">
-        <meta property="og:image" content="https://assets.nercone.dev/images/thumbnails/{{ request.url.path.strip('/') or 'index' }}?title={% block thumbnail_title %}{{ self.title() | re_sub(' - Nercone.*$', '') | urlencode }}{% endblock %}&description={% block thumbnail_description %}{{ self.description() | urlencode }}{% endblock %}&template={% block thumbnail_template %}normal{% endblock %}">
+        <meta property="og:image" content="/assets/images/thumbnails/{{ request.url.path.strip('/') or 'index' }}?title={% block thumbnail_title %}{{ self.title() | re_sub(' - Nercone.*$', '') | urlencode }}{% endblock %}&description={% block thumbnail_description %}{{ self.description() | urlencode }}{% endblock %}&template={% block thumbnail_template %}normal{% endblock %}">
         <meta property="og:url" content="https://nercone.dev/">
         <meta property="og:type" content="website">
         <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="{{ self.title() }}">
         <meta name="twitter:description" content="{{ self.description() }}">
-        <meta name="twitter:image" content="https://assets.nercone.dev/images/thumbnails/{{ request.url.path.strip('/') or 'index' }}?title={{ self.thumbnail_title() }}&description={{ self.thumbnail_description() }}&template={{ self.thumbnail_template() }}">
+        <meta name="twitter:image" content="/assets/images/thumbnails/{{ request.url.path.strip('/') or 'index' }}?title={{ self.thumbnail_title() }}&description={{ self.thumbnail_description() }}&template={{ self.thumbnail_template() }}">
         <!-- PWA (Progressive Web App) -->
         <link rel="manifest" href="/site.webmanifest">
-        <link rel="apple-touch-icon" href="https://assets.nercone.dev/images/favicon.png" sizes="1200x1200">
-        <link rel="icon" type="image/png" href="https://assets.nercone.dev/images/favicon.png" sizes="1200x1200">
-        <link rel="icon" type="image/svg+xml" href="https://assets.nercone.dev/images/favicon.svg" sizes="1200x1200">
+        <link rel="apple-touch-icon" href="/assets/images/favicon.png" sizes="1200x1200">
+        <link rel="icon" type="image/png" href="/assets/images/favicon.png" sizes="1200x1200">
+        <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" sizes="1200x1200">
         <!-- Stylesheets / Scripts -->
-        <script src="https://assets.nercone.dev/js/main.js" defer></script>
-        <link rel="stylesheet" href="https://assets.nercone.dev/css/main.css">
+        <script src="/assets/js/main.js" defer></script>
+        <link rel="stylesheet" href="/assets/css/main.css">
         <!-- External Stylesheets / Scripts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
