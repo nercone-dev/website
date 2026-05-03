@@ -163,11 +163,11 @@ async def default_response(request: Request, full_path: str) -> Response:
         template_candidates = ["index.html", "README.html"]
         markdown_candidates = ["index.md", "README.md"]
     elif full_path.endswith(".html"):
-        template_candidates = [full_path.lstrip('/')]
-        markdown_candidates = [full_path[:-5].lstrip('/') + '.md']
+        template_candidates = [full_path[:-5].lstrip('/') + ".html"]
+        markdown_candidates = [full_path[:-5].lstrip('/') + ".md"]
     elif full_path.endswith(".md"):
-        template_candidates = [full_path[:-3].lstrip('/') + '.html']
-        markdown_candidates = [full_path.lstrip('/')]
+        template_candidates = [full_path[:-3].lstrip('/') + ".html"]
+        markdown_candidates = [full_path[:-3].lstrip('/') + ".md"]
     else:
         template_candidates = [f"{full_path.strip('/')}.html", f"{full_path.strip('/')}/index.html", f"{full_path.strip('/')}/README.html"]
         markdown_candidates = [f"{full_path.strip('/')}.md", f"{full_path.strip('/')}/index.md", f"{full_path.strip('/')}/README.md"]
