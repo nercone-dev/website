@@ -203,6 +203,7 @@
     function hideCursor() {
         if (cursor) {
             cursorVisible = false;
+            cursor.style.borderRadius = '';
             cursor.classList.remove('visible');
             currentLinkEl = null;
             if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
@@ -236,6 +237,20 @@
         cursor.style.top    = (rect.top  - padding) + 'px';
         cursor.style.width  = (rect.width  + padding * 2) + 'px';
         cursor.style.height = (rect.height + padding * 2) + 'px';
+
+        const cs = getComputedStyle(el);
+        function parseRadius(val, wRef) {
+            if (!val) return 0;
+            const first = val.trim().split(' ')[0];
+            return first.endsWith('%') ? parseFloat(first) / 100 * wRef : (parseFloat(first) || 0);
+        }
+        const w = rect.width;
+        cursor.style.borderRadius = [
+            cs.borderTopLeftRadius,
+            cs.borderTopRightRadius,
+            cs.borderBottomRightRadius,
+            cs.borderBottomLeftRadius,
+        ].map(v => `${parseRadius(v, w) + padding}px`).join(' ');
     }
 
     function trackLink() {
@@ -283,6 +298,7 @@
                 }
                 cursor.classList.remove('on-link');
                 cursor.style.transform = isMouseDown ? 'translate(-50%, -50%) scale(0.9)' : 'translate(-50%, -50%)';
+                cursor.style.borderRadius = '';
                 cursor.style.left = mouseX + 'px';
                 cursor.style.top  = mouseY + 'px';
                 cursor.style.width = '';
@@ -318,6 +334,7 @@
         if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
         cursor.classList.remove('on-link', 'on-text');
         cursor.style.transform = 'translate(-50%, -50%)';
+        cursor.style.borderRadius = '';
         cursor.style.left = mouseX + 'px';
         cursor.style.top  = mouseY + 'px';
         cursor.style.width = '';
