@@ -215,7 +215,20 @@
     }
 
     function updateCursorForLink(el) {
-        const rect = el.getBoundingClientRect();
+        let rect = el.getBoundingClientRect();
+
+        if (getComputedStyle(el).display === 'inline') {
+            const descendants = el.querySelectorAll('*');
+            if (descendants.length > 0) {
+                const rects = [...descendants].map(c => c.getBoundingClientRect());
+                const left   = Math.min(...rects.map(r => r.left));
+                const top    = Math.min(...rects.map(r => r.top));
+                const right  = Math.max(...rects.map(r => r.right));
+                const bottom = Math.max(...rects.map(r => r.bottom));
+                rect = { left, top, width: right - left, height: bottom - top };
+            }
+        }
+
         cursor.classList.remove('on-text');
         cursor.classList.add('on-link');
         cursor.style.transform = 'none';
