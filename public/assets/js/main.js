@@ -238,7 +238,6 @@
         cursor.style.width  = (rect.width  + padding * 2) + 'px';
         cursor.style.height = (rect.height + padding * 2) + 'px';
 
-        const cs = getComputedStyle(el);
         function parseRadius(val, wRef) {
             if (!val) return 0;
             const first = val.trim().split(' ')[0];
