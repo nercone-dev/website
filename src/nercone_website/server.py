@@ -160,8 +160,8 @@ async def default_response(request: Request, full_path: str) -> Response:
         markdown_mode = True
 
     if full_path in ["", "/"]:
-        template_candidates = ["index.html"]
-        markdown_candidates = ["index.md"]
+        template_candidates = ["index.html", "README.html"]
+        markdown_candidates = ["index.md", "README.md"]
     elif full_path.endswith(".html"):
         template_candidates = [full_path.lstrip('/')]
         markdown_candidates = [full_path[:-5].lstrip('/') + '.md']
@@ -169,10 +169,10 @@ async def default_response(request: Request, full_path: str) -> Response:
         template_candidates = [full_path[:-3].lstrip('/') + '.html']
         markdown_candidates = [full_path.lstrip('/')]
     else:
-        template_candidates = [f"{full_path.strip('/')}.html", f"{full_path.strip('/')}/index.html"]
+        template_candidates = [f"{full_path.strip('/')}.html", f"{full_path.strip('/')}/index.html", f"{full_path.strip('/')}/README.html"]
         markdown_candidates = [f"{full_path.strip('/')}.md", f"{full_path.strip('/')}/index.md", f"{full_path.strip('/')}/README.md"]
 
-    def try_html_templates():
+    def try_templates():
         for name in template_candidates:
             try:
                 if markdown_mode:
@@ -187,7 +187,7 @@ async def default_response(request: Request, full_path: str) -> Response:
                 continue
         return None
 
-    def try_md_files():
+    def try_markdowns():
         for name in markdown_candidates:
             try:
                 if not (markdown_path := resolve_static_file(name)):
@@ -221,7 +221,7 @@ async def default_response(request: Request, full_path: str) -> Response:
                 return error_page(templates, request, 403, "何をしてるんです？脆弱性報告のためならいいのですが、データ盗んで悪用するためなら今すぐにやめてくださいね？", "ディレクトリトラバーサルね、知ってる。公開してないところ覗きたいの？えっt")
         return None
 
-    for try_fn in ([try_md_files, try_html_templates] if markdown_mode else [try_html_templates, try_md_files]):
+    for try_fn in ([try_markdowns, try_templates] if markdown_mode else [try_templates, try_markdowns]):
         if response := try_fn():
             accesscounter.increase()
             return response
