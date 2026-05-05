@@ -1,3 +1,4 @@
+import time
 import uuid
 import json
 from pathlib import Path
@@ -7,7 +8,7 @@ from datetime import datetime, timezone
 access_log_path = Path.cwd().joinpath("logs", "access.log")
 access_log_path.parent.mkdir(parents=True, exist_ok=True)
 
-def log_access(scope: Scope, write: bool = False):
+def log_access(scope: Scope, write: bool = False) -> tuple[dict, float]:
     client = scope.get("client") or ("", 0)
     server = scope.get("server") or ("", 0)
     headers = dict(scope.get("headers", []))
@@ -29,13 +30,18 @@ def log_access(scope: Scope, write: bool = False):
         "headers": {k.decode(): v.decode() for k, v in headers.items()}
     }
     if write:
-        with access_log_path.open("a", encoding="utf-8") as f:
-            f.write(json.dumps(log, ensure_ascii=False) + "\n")
+        write_log(log)
     return log
 
-def finalize_log(log: dict, status_code: int, write: bool = True) -> None:
+def finalize_log(log: dict, status_code: int, start_time: float, timings: dict | None = None, write: bool = True) -> dict:
     log["status_code"] = status_code
+    log["duration"] = round((time.perf_counter() - start_time) * 1000, 3)
+    if timings:
+        log["timings"] = {k: round(v, 3) for k, v in timings.items()}
     if write:
-        with access_log_path.open("a", encoding="utf-8") as f:
-            f.write(json.dumps(log, ensure_ascii=False) + "\n")
+        write_log(log)
     return log
+
+def write_log(log: dict) -> None:
+    with access_log_path.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(log, ensure_ascii=False) + "\n")
