@@ -1,13 +1,10 @@
 import sqlite3
-from pathlib import Path
+from .config import Files
 
 class AccessCounter:
-    def __init__(self, filepath: str = str(Path.cwd().joinpath("databases", "access_counter.db"))):
-        self.filepath = filepath
-
     def get(self) -> int:
-        if Path(self.filepath).is_file():
-            conn = sqlite3.connect(self.filepath)
+        if Files.Databases.access_counter.is_file():
+            conn = sqlite3.connect(Files.Databases.access_counter)
             try:
                 cur = conn.cursor()
                 cur.execute("SELECT value FROM access_counter WHERE rowid = 1")
@@ -25,7 +22,7 @@ class AccessCounter:
             finally:
                 conn.close()
         else:
-            conn = sqlite3.connect(self.filepath)
+            conn = sqlite3.connect(Files.Databases.access_counter)
             conn.execute("""
             CREATE TABLE IF NOT EXISTS access_counter (
                 value INTEGER NOT NULL
@@ -37,8 +34,8 @@ class AccessCounter:
             return 0
 
     def increase(self):
-        if Path(self.filepath).is_file():
-            conn = sqlite3.connect(self.filepath)
+        if Files.Databases.access_counter.is_file():
+            conn = sqlite3.connect(Files.Databases.access_counter)
             try:
                 cur = conn.cursor()
                 conn.execute("BEGIN IMMEDIATE")
@@ -52,7 +49,7 @@ class AccessCounter:
             finally:
                 conn.close()
         else:
-            conn = sqlite3.connect(self.filepath)
+            conn = sqlite3.connect(Files.Databases.access_counter)
             conn.execute("""
             CREATE TABLE IF NOT EXISTS access_counter (
                 value INTEGER NOT NULL

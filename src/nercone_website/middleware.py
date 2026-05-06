@@ -1,16 +1,12 @@
 import time
 import rjsmin
 import rcssmin
-import subprocess
 from scour import scour
 from fastapi import Response
 from fastapi.responses import PlainTextResponse
 from starlette.types import Scope, ASGIApp, Receive, Send
 from .logger import log_access, finalize_log
-
-server_version = subprocess.run(["/usr/bin/git", "rev-parse", "--short", "HEAD"], text=True, capture_output=True).stdout.strip()
-onion_hostname = "4sbb7xhdn4meuesnqvcreewk6sjnvchrsx4lpnxmnjhz2soat74finid.onion"
-hostnames = ["localhost", "nercone.dev", "nerc1.dev", "diamondgotcat.net", "d-g-c.net", onion_hostname]
+from .config import VERSION, Hostnames
 
 class Middleware:
     def __init__(self, app: ASGIApp):
@@ -42,7 +38,7 @@ class Middleware:
         scope["log"] = log_access(scope)
         request_start = time.perf_counter()
 
-        if not any([hostname.endswith(candidate) for candidate in hostnames]):
+        if not any([hostname.endswith(candidate) for candidate in Hostnames.all]):
             response = PlainTextResponse("許可されていないホスト名でのアクセスです。", status_code=400)
             await self._send(response, scope, receive, send, timings, request_start)
             finalize_log(scope["log"], response.status_code, request_start, timings)
@@ -117,8 +113,8 @@ class Middleware:
     async def _send(self, response: Response, scope, receive, send, timings: dict, request_start: float):
         content_type = response.headers.get("content-type", "")
 
-        response.headers["Server"] = f"nercone.dev ({server_version})"
-        response.headers["Onion-Location"] = f"http://{onion_hostname}/"
+        response.headers["Server"] = f"nercone.dev ({VERSION[:7]})"
+        response.headers["Onion-Location"] = f"http://{Hostnames.onion}/"
         response.headers["Link"] = "<https://nercone.dev/sitemap.xml>; rel=\"sitemap\", <https://nercone.dev/robots.txt>; rel=\"robots\""
 
         if "access-control-allow-origin" not in response.headers:

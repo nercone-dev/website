@@ -16,17 +16,18 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import PlainTextResponse, JSONResponse, FileResponse, RedirectResponse
 from jinja2.exceptions import TemplateNotFound
 from .error import error_page
+from .config import VERSION, Hostnames, Directories, Files
 from .database import AccessCounter
-from .middleware import Middleware, server_version, onion_hostname
+from .middleware import Middleware
 
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 app.add_middleware(Middleware)
-templates = Jinja2Templates(directory=Path.cwd().joinpath("public"))
+templates = Jinja2Templates(directory=Directories.public)
 markitdown = MarkItDown()
 accesscounter = AccessCounter()
 templates.env.globals["get_access_count"] = accesscounter.get
-templates.env.globals["server_version"] = server_version
-templates.env.globals["onion_site_url"] = f"http://{onion_hostname}/"
+templates.env.globals["server_version"] = VERSION
+templates.env.globals["onion_site_url"] = f"http://{Hostnames.onion}/"
 templates.env.filters["re_sub"] = lambda s, pattern, repl: re.sub(pattern, repl, s)
 
 class CustomHTMLRenderer(mistune.HTMLRenderer):
@@ -46,17 +47,16 @@ templates.env.globals["this_year_in_heisei"] = this_year_in_heisei
 
 def get_daily_quote() -> str:
     seed = str(datetime.now(timezone.utc).date())
-    with Path.cwd().joinpath("public", "quotes.txt").open("r") as f:
+    with Files.quotes.open("r") as f:
         quotes = f.read().strip().split("\n")
     return random.Random(seed).choice(quotes)
 templates.env.globals["get_daily_quote"] = get_daily_quote
 
 def resolve_static_file(full_path: str) -> Path | None:
-    base_dir = Path.cwd().joinpath("public")
-    target_path = (base_dir / full_path.lstrip('/')).resolve()
-    if not target_path.is_relative_to(base_dir.resolve()):
+    path = Directories.public.joinpath(full_path).resolve()
+    if not path.is_relative_to(Directories.public):
         raise PermissionError()
-    return target_path if target_path.is_file() else None
+    return path if path.is_file() else None
 
 def resolve_shorturl(shorturls: dict, full_path: str) -> str | None:
     current_id = full_path.strip().rstrip("/")
@@ -85,7 +85,7 @@ async def status(request: Request):
     return JSONResponse(
         {
             "status": "ok",
-            "version": server_version,
+            "version": VERSION[:7],
             "daily_quote": get_daily_quote(),
             "access_count": accesscounter.get()
         },
@@ -104,7 +104,7 @@ async def welcome(request: Request):
 ■  ■■ ■     ■  ■  ■     ■   ■ ■  ■■ ■
 ■   ■ ■■■■■ ■   ■  ■■■■  ■■■  ■   ■ ■■■■■
 
-nercone.dev ({server_version})
+nercone.dev ({VERSION[:7]})
 welcome to nercone.dev!
         """.strip() + "\n",
         status_code=200
@@ -124,9 +124,9 @@ async def thumbnail(request: Request, path: str) -> Response:
     path_display = "nercone.dev / " + " / ".join(parts) if parts else "nercone.dev"
 
     svg_filename = "error.svg" if template_type == "error" else "normal.svg"
-    fonts_dir = Path.cwd().joinpath("public", "assets", "fonts")
+    fonts_dir = Directories.public.joinpath("assets", "fonts")
 
-    svg_path = Path.cwd().joinpath("public", "assets", "images", "thumbnails", svg_filename)
+    svg_path = Directories.public.joinpath("assets", "images", "thumbnails", svg_filename)
     svg = svg_path.read_text(encoding="utf-8")
     svg = svg.replace("__PATH__", escape(path_display))
     svg = svg.replace("__TITLE__", escape(title))
@@ -227,10 +227,9 @@ async def default_response(request: Request, full_path: str) -> Response:
             return response
 
     try:
-        path = Path.cwd().joinpath("public", "shorturls.json")
-        if not path.exists():
+        if not Files.shorturls.is_file():
             return error_page(templates, request, 500, "短縮URLの処理のためのJSONファイルがありません。", "設定ファイルぐらい用意しておけよ！")
-        shorturls = json.load(path.open("r", encoding="utf-8"))
+        shorturls = json.load(Files.shorturls.open("r", encoding="utf-8"))
     except Exception:
         return error_page(templates, request, 500, "短縮URLの処理のためのJSONファイルを正常に読み込めませんでした。", "なにこの設定ファイル読めないじゃない！")
 

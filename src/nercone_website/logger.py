@@ -1,12 +1,9 @@
 import time
 import uuid
 import json
-from pathlib import Path
 from starlette.types import Scope
 from datetime import datetime, timezone
-
-access_log_path = Path.cwd().joinpath("logs", "access.log")
-access_log_path.parent.mkdir(parents=True, exist_ok=True)
+from .config import Files
 
 def log_access(scope: Scope, write: bool = False) -> tuple[dict, float]:
     client = scope.get("client") or ("", 0)
@@ -43,5 +40,5 @@ def finalize_log(log: dict, status_code: int, start_time: float, timings: dict |
     return log
 
 def write_log(log: dict) -> None:
-    with access_log_path.open("a", encoding="utf-8") as f:
+    with Files.Logs.access.open("a", encoding="utf-8") as f:
         f.write(json.dumps(log, ensure_ascii=False) + "\n")
