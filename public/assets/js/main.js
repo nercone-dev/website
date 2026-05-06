@@ -81,7 +81,7 @@
 
     let abortController = null;
 
-    async function navigate(url) {
+    async function navigate(url, pushHistory = true) {
         if (abortController) abortController.abort();
         const ac = new AbortController();
         abortController = ac;
@@ -126,7 +126,7 @@
                 });
             }
 
-            history.pushState(null, '', response.url);
+            if (pushHistory) history.pushState(null, '', response.url);
 
             if (typeof window.__cursorReinit === 'function') {
                 window.__cursorReinit();
@@ -163,7 +163,7 @@
         navigate(url);
     });
 
-    window.addEventListener('popstate', () => location.reload());
+    window.addEventListener('popstate', () => navigate(new URL(location.href), false));
 })();
 
 /* Cursor */
