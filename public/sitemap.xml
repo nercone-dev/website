@@ -28,4 +28,8 @@
         <loc>https://nercone.dev/vulnerability-reporters/</loc>
         <priority>0.9</priority>
     </url>
+    <url>
+        <loc>https://nercone.dev/color-palette/</loc>
+        <priority>0.8</priority>
+    </url>
 </urlset>
