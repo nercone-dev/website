@@ -87,13 +87,12 @@ async def merge_css(request: Request) -> Response:
 
     for name in (n.strip() for n in path_param.split(",")):
         try:
-            file = resolve_file(f"assets/css/{name}.css")
+            if file := resolve_file(f"assets/js/{name}.js"):
+                content = file.read_text(encoding="utf-8")
+            else:
+                return render_error_page(request=request, status_code=404, message=f"ファイルが見つかりません: {name}.css")
         except PermissionError:
             return render_error_page(request=request, status_code=403, message="ねえ、今CSSファイル統合用のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？新しく追加されたエンドポイントに脆弱性あるか気になっただけ？そんなこと関係ないよね。攻撃しようとしたのは事実でしょ？？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
-        if file is None:
-            return render_error_page(request=request, status_code=404, message=f"ファイルが見つかりません: {name}.css")
-
-        content = file.read_text(encoding="utf-8")
 
         m = re.search(r'@charset\s+[^;]+;', content, re.IGNORECASE)
         if m and charset is None:
@@ -127,12 +126,12 @@ async def merge_js(request: Request) -> Response:
     contents: list[str] = []
     for name in (n.strip() for n in path_param.split(",")):
         try:
-            file = resolve_file(f"assets/js/{name}.js")
+            if file := resolve_file(f"assets/js/{name}.js"):
+                contents.append(file.read_text(encoding="utf-8"))
+            else:
+                return render_error_page(request=request, status_code=404, message=f"ファイルが見つかりません: {name}.js")
         except PermissionError:
             return render_error_page(request=request, status_code=403, message="ねえ、今JSファイル統合用のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？新しく追加されたエンドポイントに脆弱性あるか気になっただけ？そんなこと関係ないよね。攻撃しようとしたのは事実でしょ？？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
-        if file is None:
-            return render_error_page(request=request, status_code=404, message=f"ファイルが見つかりません: {name}.js")
-        contents.append(file.read_text(encoding="utf-8"))
 
     return Response(content=';\n'.join(c.strip() for c in contents if c.strip()), media_type="text/javascript")
 
