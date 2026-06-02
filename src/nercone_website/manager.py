@@ -137,7 +137,7 @@ class NetworkManager:
         return any(self.address in network for network in self.trusted_networks)
 
 class OptionManager:
-    defaults = {
+    options = {
         "dev.nercone.options.apperance.theme": "dark"
     }
 
@@ -154,7 +154,7 @@ class OptionManager:
         once = self.request.query_params.get(key + ".once", None)
         query = self.request.query_params.get(key, None)
         cookie = self.request.cookies.get(key, None)
-        return once or query or cookie or default or self.defaults.get(key)
+        return once or query or cookie or default or self.options.get(key)
 
     def set(self, response: Response, key: str, value: str):
         response.set_cookie(key, value, samesite="lax")
@@ -165,5 +165,5 @@ class OptionManager:
         for key in queries:
             if key.lower() in reserved_cookie_keys:
                 continue
-            if not key.endswith(".once") and cookies.get(key) != queries.get(key) or self.defaults.get(key) != (queries[key] or cookies[key]):
+            if key in self.options and not key.endswith(".once") and cookies.get(key) != queries.get(key) or self.options.get(key) != (queries[key] or cookies[key]):
                 response.set_cookie(key, queries[key], samesite="lax")

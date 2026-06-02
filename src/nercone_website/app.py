@@ -1,10 +1,13 @@
+import re
+
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import PlainTextResponse, JSONResponse
 
 from .databases import MimeTypes
 from .constants import Repositories
-from .renderer import default_response, render_error_page, render_thumbnail_png
 from .middleware import Middleware
+from .resolver import resolve_file
+from .renderer import default_response, render_error_page, render_thumbnail_png
 from .templates import get_daily_quote, access_counter
 
 MimeTypes.load()
@@ -70,6 +73,68 @@ async def fake_error_page(request: Request, status_code: str):
         return render_error_page(request=request, status_code=502)
     else:
         return render_error_page(request=request, status_code=400, message="errorエンドポイントのパスには「server」「nginx」またはHTTPレスポンスステータスコードのみが使用可能です。", joke_message="HTTP/1.1 600 Not Normal")
+
+@app.api_route("/assets/css/merge", methods=["GET"])
+async def merge_css(request: Request) -> Response:
+    path_param = request.query_params.get("path", "")
+    if not path_param:
+        return render_error_page(request=request, status_code=400, message="pathパラメータが必要です。")
+
+    charset: str | None = None
+    imports: list[str] = []
+    seen_imports: set[str] = set()
+    bodies: list[str] = []
+
+    for name in (n.strip() for n in path_param.split(",")):
+        try:
+            file = resolve_file(f"assets/css/{name}.css")
+        except PermissionError:
+            return render_error_page(request=request, status_code=403, message="ねえ、今CSSファイル統合用のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？新しく追加されたエンドポイントに脆弱性あるか気になっただけ？そんなこと関係ないよね。攻撃しようとしたのは事実でしょ？？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
+        if file is None:
+            return render_error_page(request=request, status_code=404, message=f"ファイルが見つかりません: {name}.css")
+
+        content = file.read_text(encoding="utf-8")
+
+        m = re.search(r'@charset\s+[^;]+;', content, re.IGNORECASE)
+        if m and charset is None:
+            charset = m.group(0)
+        content = re.sub(r'@charset\s+[^;]+;', '', content, flags=re.IGNORECASE)
+
+        for imp in re.findall(r'@import\b[^;]*;', content, re.DOTALL):
+            key = re.sub(r'\s+', ' ', imp.strip())
+            if key not in seen_imports:
+                seen_imports.add(key)
+                imports.append(key)
+        body = re.sub(r'@import\b[^;]*;', '', content, flags=re.DOTALL).strip()
+        if body:
+            bodies.append(body)
+
+    parts: list[str] = []
+    if charset:
+        parts.append(charset)
+    if imports:
+        parts.append('\n'.join(imports))
+    parts.extend(bodies)
+
+    return Response(content='\n\n'.join(parts), media_type="text/css")
+
+@app.api_route("/assets/js/merge", methods=["GET"])
+async def merge_js(request: Request) -> Response:
+    path_param = request.query_params.get("path", "")
+    if not path_param:
+        return render_error_page(request=request, status_code=400, message="pathパラメータが必要です。")
+
+    contents: list[str] = []
+    for name in (n.strip() for n in path_param.split(",")):
+        try:
+            file = resolve_file(f"assets/js/{name}.js")
+        except PermissionError:
+            return render_error_page(request=request, status_code=403, message="ねえ、今JSファイル統合用のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？新しく追加されたエンドポイントに脆弱性あるか気になっただけ？そんなこと関係ないよね。攻撃しようとしたのは事実でしょ？？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
+        if file is None:
+            return render_error_page(request=request, status_code=404, message=f"ファイルが見つかりません: {name}.js")
+        contents.append(file.read_text(encoding="utf-8"))
+
+    return Response(content=';\n'.join(c.strip() for c in contents if c.strip()), media_type="text/javascript")
 
 @app.api_route("/{path:path}", methods=["GET", "POST", "HEAD"])
 async def default_route(request: Request, path: str) -> Response:
