@@ -141,7 +141,7 @@ class Middleware:
         if "text/html" in content_type:
             scope["timings"].start("minify")
             try:
-                response.body = minify_html.minify(response.body.decode("utf-8", errors="replace"), minify_js=True, minify_css=True, keep_comments=True).encode("utf-8")
+                response.body = minify_html.minify(response.body.decode("utf-8", errors="replace"), minify_js=True, minify_css=True, keep_comments=True, keep_html_and_head_opening_tags=True).encode("utf-8")
             except Exception:
                 pass
             scope["timings"].stop("minify")
