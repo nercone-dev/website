@@ -112,7 +112,7 @@ https://github.com/nercone-dev/website-contents.git
 │   │   │   └── ...
 │   │   └── ...
 │   ├── fonts
-│   │   └── ...                  # NerconeSansJP / NerconeMonoJP (TTF, サムネイル生成に使用)
+│   │   └── ...                  # Nercone Sans JP/SC/TC/KR, Nercone Mono JP
 │   ├── css
 │   │   ├── pages
 │   │   │   ├── color-palette.css
@@ -124,11 +124,13 @@ https://github.com/nercone-dev/website-contents.git
 │   │   ├── themes
 │   │   │   ├── dark.css
 │   │   │   └── light.css
+│   │   ├── components
+│   │   │   ├── button.css
+│   │   │   └── dropdown.css
 │   │   ├── main.css
 │   │   ├── fonts.css
 │   │   ├── colors.css
 │   │   ├── cursor.css
-│   │   ├── components.css
 │   │   ├── layout.css
 │   │   ├── miscellaneous.css
 │   │   ├── view-transition.css
@@ -137,8 +139,9 @@ https://github.com/nercone-dev/website-contents.git
 │   │   ├── pages
 │   │   │   ├── index.js
 │   │   │   └── sidebar.js
+│   │   ├── components
+│   │   │   └── dropdown.js
 │   │   ├── main.js
-│   │   ├── components.js
 │   │   ├── cursor.js
 │   │   ├── view-transition.js
 │   │   ├── loading-overlay.js
@@ -394,4 +397,3 @@ Jinja2テンプレート内で利用可能なグローバル変数/関数:
 - 5XXエラーが発生した場合は`logs/error.log`にPythonのトレースバックが記録されます。リクエストIDでアクセスログと照合できます。
 - リクエストIDは[FourWord ID](https://github.com/nercone-dev/fourword/)のText形式が採用されており、テキスト形式に変換された後`X-Request-Id`レスポンスヘッダーとして返されます。幅が少し狭いターミナルでも折り返しが発生しないよう、`app.log`ファイルではCompact Text形式が採用されています。 
 - `Server-Timing`ヘッダーで各処理段階の所要時間を確認できます。
-- `/assets/`内のCSS/JS等のファイルはassets.nercone.devから取得されるため、ローカルの変更は反映されません。プレビュー機能などを使用する場合は、JavaScriptを実行するなどして手動で変更を反映させる必要があります。
