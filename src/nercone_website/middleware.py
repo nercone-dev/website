@@ -33,7 +33,7 @@ class Middleware:
                 "pp": PPManager(),
                 "csp": CSPManager(),
                 "timings": TimingManager(),
-                "network": NetworkManager(address=ipaddress.ip_address(scope.get["client"][0]) if scope.get["client"][0] else None, host=scope.get["client"][0], port=scope.get["client"][1]),
+                "network": NetworkManager(address=ipaddress.ip_address(scope["client"][0]) if scope["client"][0] else None, host=scope["client"][0], port=scope["client"][1]),
                 "options": OptionManager(HTTPConnection(scope=scope))
             })
 
