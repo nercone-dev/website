@@ -1,10 +1,32 @@
 import json
 import fcntl
-import logging
 from pathlib import Path
+from fourword.lib import FourWord
 from fastapi import Request, Response
 
 from .constants import Files
+
+def format_access(request: Request, response: Response | None = None) -> dict:
+    return {
+        "id": request.scope["id"].text,
+        "url": str(request.url),
+        "status": response.status_code or 0,
+        "method": request.method,
+        "client": {
+            "host": request.scope["network"].host,
+            "port": request.scope["network"].port
+        },
+        "headers": {
+            "request": dict(request.headers),
+            "response": dict(response.headers or {})
+        },
+        "managers": {
+            "pp": request.scope["pp"].directives,
+            "csp": request.scope["csp"].directives,
+            "timings": request.scope["timings"].timings,
+            "network": {"trusted": request.scope["network"].trusted}
+        }
+    }
 
 class Logger:
     @staticmethod
@@ -15,30 +37,10 @@ class Logger:
 
     @staticmethod
     def log_access(request: Request, response: Response):
-        log = {
-            "id": request.scope["id"].text,
-            "url": str(request.url),
-            "status": response.status_code,
-            "method": request.method,
-            "client": {
-                "host": request.scope["network"].host,
-                "port": request.scope["network"].port
-            },
-            "headers": {
-                "request": dict(request.headers),
-                "response": dict(response.headers)
-            },
-            "managers": {
-                "pp": request.scope["pp"].directives,
-                "csp": request.scope["csp"].directives,
-                "timings": request.scope["timings"].timings,
-                "network": {"trusted": request.scope["network"].trusted}
-            }
-        }
-        Logger.log(json.dumps(log), path=Files.Logs.access)
+        Logger.log(json.dumps(format_access(request, response)), path=Files.Logs.access)
         Logger.log(f"[{request.scope['id'].compact_text}] STATUS {response.status_code} FROM {request.scope['network'].host}:{request.scope['network'].port} TO {str(request.url)}")
 
     @staticmethod
-    def log_error(id: str, traceback: str):
-        Logger.log(f"[{id}]\n{traceback}", path=Files.Logs.error)
-        Logger.log(f"[{id}] STATUS 500")
+    def log_error(id: FourWord, traceback: str):
+        Logger.log(f"[{id.compact_text}]\n{traceback}", path=Files.Logs.error)
+        Logger.log(f"[{id.compact_text}] STATUS 500")

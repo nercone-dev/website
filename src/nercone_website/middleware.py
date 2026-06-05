@@ -88,7 +88,7 @@ class Middleware:
 
         except Exception:
             try:
-                Logger.log_error(scope.get("id", FourWord()).compact_text, traceback.format_exc())
+                Logger.log_error(scope.get("id", FourWord()), traceback.format_exc())
                 return render_error_page(Request(scope=scope, receive=receive), status_code=500)
             except Exception:
                 return PlainTextResponse("Internal Server Error", status_code=500)

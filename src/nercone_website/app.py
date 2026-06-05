@@ -3,6 +3,7 @@ import re
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import PlainTextResponse, JSONResponse
 
+from .logger import format_access
 from .databases import MimeTypes
 from .constants import Repositories
 from .middleware import Middleware
@@ -17,7 +18,7 @@ app.add_middleware(Middleware)
 
 @app.api_route("/ping", methods=["GET"])
 async def ping():
-    return PlainTextResponse("pong!", status_code=200)
+    return PlainTextResponse("pong!")
 
 @app.api_route("/welcome", methods=["GET"])
 async def welcome():
@@ -33,9 +34,12 @@ async def welcome():
 
 nercone.dev ({Repositories.Server.version}+{Repositories.Contents.version})
 welcome to nercone.dev!
-        """.strip() + "\n",
-        status_code=200
+        """.strip() + "\n"
     )
+
+@app.api_route("/echo", methods=["GET"])
+async def echo(request: Request):
+    return JSONResponse(format_access(request))
 
 @app.api_route("/status", methods=["GET"])
 async def status():
@@ -45,8 +49,7 @@ async def status():
             "version": {"server": Repositories.Server.version, "content": Repositories.Contents.version},
             "quote": get_daily_quote(),
             "counter": access_counter.get()
-        },
-        status_code=200
+        }
     )
 
 @app.api_route("/assets/images/thumbnail/template/{template}", methods=["GET"])
