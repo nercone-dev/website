@@ -192,7 +192,6 @@ class Middleware:
 
         if scope.get("scheme") == "https":
             set_header("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
-            set_header("Alt-Svc", 'h3=":443"; ma=86400')
 
         if content_type.startswith(("font/", "image/", "text/css", "text/javascript", "application/javascript")):
             set_header("Access-Control-Allow-Origin", "*", override=False)
