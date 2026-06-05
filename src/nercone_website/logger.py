@@ -10,7 +10,7 @@ def format_access(request: Request, response: Response | None = None) -> dict:
     return {
         "id": request.scope["id"].text,
         "url": str(request.url),
-        "status": response.status_code or 0,
+        "status": response.status_code if response is not None else 0,
         "method": request.method,
         "client": {
             "host": request.scope["network"].host,
@@ -18,7 +18,7 @@ def format_access(request: Request, response: Response | None = None) -> dict:
         },
         "headers": {
             "request": dict(request.headers),
-            "response": dict(response.headers or {})
+            "response": dict(response.headers) if response is not None else {}
         },
         "managers": {
             "pp": request.scope["pp"].directives,
