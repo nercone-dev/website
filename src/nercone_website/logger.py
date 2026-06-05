@@ -11,7 +11,7 @@ class Logger:
     def log(contents: str = "", end: str = "\n", path: Path = Files.Logs.app):
         with path.open("a", encoding="utf-8") as f:
             fcntl.flock(f, fcntl.LOCK_EX)
-            f.write(" ".join(contents) + end)
+            f.write(contents + end)
 
     @staticmethod
     def log_access(request: Request, response: Response):
