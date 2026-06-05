@@ -44,3 +44,4 @@ class TLS:
     certfile = os.environ.get("WEBSITE_TLS_CERTFILE", "/etc/letsencrypt/live/nercone.dev/fullchain.pem")
     keyfile = os.environ.get("WEBSITE_TLS_KEYFILE", "/etc/letsencrypt/live/nercone.dev/privkey.pem")
     ciphers = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305"
+    groups = "MLKEM768X25519:X25519:P-256:P-384"
