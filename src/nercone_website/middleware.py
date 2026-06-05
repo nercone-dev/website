@@ -14,7 +14,7 @@ from scour import scour
 from .logger import Logger
 from .manager import PPManager, CSPManager, TimingManager, NetworkManager, OptionManager
 from .renderer import render_error_page
-from .constants import Repositories, Hostnames, unix_socket
+from .constants import Repositories, Hostnames
 
 class Middleware:
     def __init__(self, app: ASGIApp):
@@ -33,11 +33,7 @@ class Middleware:
                 "pp": PPManager(),
                 "csp": CSPManager(),
                 "timings": TimingManager(),
-                "network": NetworkManager(
-                    address = None if unix_socket else ipaddress.ip_address(scope["client"][0]),
-                    host = headers.get(b"x-real-ip", b"UDS").decode() if unix_socket else scope["client"][0],
-                    port = 0 if unix_socket else scope["client"][1]
-                ),
+                "network": NetworkManager(address=ipaddress.ip_address(scope.get["client"][0]) if scope.get["client"][0] else None, host=scope.get["client"][0], port=scope.get["client"][1]),
                 "options": OptionManager(HTTPConnection(scope=scope))
             })
 
@@ -181,6 +177,8 @@ class Middleware:
         set_header("Content-Length", str(len(response.body)))
 
         set_header("X-Request-Id", scope["id"].text)
+        set_header("X-Frame-Options", "SAMEORIGIN")
+        set_header("X-Content-Type-Options", "nosniff")
 
         set_header("Server", f"nercone.dev ({Repositories.Server.version}+{Repositories.Contents.version})")
         set_header("Onion-Location", f"http://{Hostnames.tor[0]}{scope.get("path", "/")}" + (f"?{scope.get("query_string", b"").decode()}" if scope.get("query_string", b"").decode() else ""))
@@ -191,6 +189,10 @@ class Middleware:
         set_header("Referrer-Policy", "strict-origin-when-cross-origin")
         set_header("Permissions-Policy", scope["pp"].header)
         set_header("Content-Security-Policy", scope["csp"].header)
+
+        if scope.get("scheme") == "https":
+            set_header("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
+            set_header("Alt-Svc", 'h3=":443"; ma=86400')
 
         if content_type.startswith(("font/", "image/", "text/css", "text/javascript", "application/javascript")):
             set_header("Access-Control-Allow-Origin", "*", override=False)

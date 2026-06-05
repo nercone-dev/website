@@ -11,7 +11,7 @@ dependencies = [
     "httpx[http2]",
 
     "fastapi",
-    "uvicorn[standard]",
+    "hypercorn[h3,uvloop]",
 
     "beautifulsoup4",
 

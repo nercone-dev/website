@@ -1,6 +1,7 @@
 import httpx
 import fcntl
 import mimetypes
+from fourword.lib import FourWord
 from datetime import datetime, timedelta
 
 from .logger import Logger
@@ -22,7 +23,7 @@ class MimeTypes:
                 response.raise_for_status()
             Files.mime_types.write_text(response.text, encoding="utf-8")
         except Exception as e:
-            Logger.log(f"MimeTypes: Failed to fetch mime.types: {e}")
+            Logger.log(f"[{FourWord().compact_text}] Failed to fetch mime.types: {e}")
 
     @staticmethod
     def load():

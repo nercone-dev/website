@@ -8,7 +8,7 @@ from .constants import Files
 
 class Logger:
     @staticmethod
-    def log(*contents: str, end: str = "\n", path: Path = Files.Logs.app):
+    def log(contents: str = "", end: str = "\n", path: Path = Files.Logs.app):
         with path.open("a", encoding="utf-8") as f:
             fcntl.flock(f, fcntl.LOCK_EX)
             f.write(" ".join(contents) + end)

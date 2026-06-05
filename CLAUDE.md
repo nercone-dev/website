@@ -4,9 +4,7 @@
 ## 概要
 ここは[nercone.dev](https://nercone.dev/)のWebサーバー本体のソースコードを管理しているリポジトリです。
 
-Python 3.12のFastAPI + Uvicornの上で動くASGIアプリケーションです。Uvicornは`workers=4`で起動し、UDS(`WEBSITE_UDS`環境変数が設定されている場合)またはTCP(`0.0.0.0:8080`)でリッスンします。
-
-コンテナ環境ではNginxがリバースプロキシとして前段に存在し、UDSを通じてアプリに接続します。
+Python 3.12のFastAPI + Hypercornの上で動くASGIアプリケーションです。
 
 ## 関連リポジトリ
 
@@ -36,7 +34,7 @@ https://github.com/nercone-dev/website.git
 ├── src
 │   └── nercone_website
 │       ├── __init__.py
-│       ├── __main__.py          # エントリポイント・Uvicorn起動
+│       ├── __main__.py          # エントリポイント・Hypercorn起動
 │       ├── constants.py         # 定数・パス・ホスト名定義
 │       ├── logger.py            # ロギング (Logger クラス)
 │       ├── databases.py         # MimeTypes・AccessCounter
@@ -154,8 +152,7 @@ https://github.com/nercone-dev/website-contents.git
 │   └── server.md
 ├── error
 │   ├── client.md                # クライアントエラー (4XX) 用テンプレート
-│   ├── server.html              # 5XXエラー用テンプレート (レンダリングなし・そのまま返却)
-│   └── nginx.html               # 502/503/504エラー用テンプレート (レンダリングなし)
+│   └── server.html              # 5XXエラー用テンプレート (レンダリングなし・そのまま返却)
 ├── test
 │   ├── html.html
 │   ├── markdown.md
@@ -190,8 +187,9 @@ https://github.com/nercone-dev/website-contents.git
 - `Directories`: `base`(CWD)、`public`、`logs`、`databases`の`Path`オブジェクト
 - `Files`: `mime.types`、`access_counter.txt`、各ログファイルの `Path`
 - `Repositories`: 起動時に`git rev-parse --short HEAD`でコミットハッシュを取得 (`Server.version`、`Contents.version`)
-- `Hostnames`: 許可ホスト名リスト(`www`/`tor`/`local`/`public = www + tor`/`all = local + public`)
-- `unix_socket`: `WEBSITE_UDS`環境変数の値 (未設定の場合は `None`)
+- `Hostnames`: 許可ホスト名リスト(`www`/`tor`/`local`/`public = www + tor`/`all = local + public`)。加えて`canonical`(`nercone.dev`)と`redirect`(`nerc1.dev`/`diamondgotcat.net`/`d-g-c.net`。サブドメインを保持したまま`nercone.dev`へ301する対象)を持つ。
+- `TLS`: `certfile`/`keyfile`(既定はLet's Encryptのパス。`WEBSITE_TLS_CERTFILE`/`WEBSITE_TLS_KEYFILE`で上書き可)と`ciphers`(TLS1.2系のECDHE-ECDSAスイート列)
+- `production`: 証明書(`TLS.certfile`/`keyfile`)が存在すれば`True`。本番エッジモード(TLS終端・特権ポート・リダイレクト有効)か開発モード(平文`:8080`)かの判定に使う。
 
 ### `databases.py`
 永続データの読み書き。
@@ -212,7 +210,7 @@ https://github.com/nercone-dev/website-contents.git
 - `PPManager`: `Permissions-Policy`ヘッダーを管理。`set()`/`append()`/`remove()`で操作し`header`プロパティでヘッダー文字列化。
 - `CSPManager`: `Content-Security-Policy`ヘッダーを管理。`set()`/`append()`/`remove()`で操作し`header`プロパティでヘッダー文字列化。
 - `TimingManager`: `Server-Timing`ヘッダー用の処理時間計測。`start(key)`/`stop(key)`でスパンを記録し`header`プロパティで出力。(計測対象: `total`/`recieve`/`app`/`app-retry`/`resolve-page`/`resolve-shorturl`/`render`/`convert`/`etag`/`minify`)
-- `NetworkManager`: クライアントのIPアドレス情報を保持。UDS接続時は `X-Real-IP` ヘッダーからホストを取得。`trusted`プロパティでプライベートIP帯(RFC 1918/RFC 6890等)か判定。
+- `NetworkManager`: クライアントのIPアドレス情報を保持。Hypercornがエッジで直接接続を受けるため、`scope["client"]`(実際のTCPピア)から取得する。`trusted`プロパティでプライベートIP帯(RFC 1918/RFC 6890等)か判定。
 - `OptionManager`: クエリパラメータとCookieを統合してユーザーオプションを管理。クエリパラメータは`apply()`呼び出し時に自動でCookieに永続化される(`.once`サフィックスを持つキーは永続化されない)。
 
 ### `resolver.py`
@@ -243,7 +241,7 @@ HTTPレスポンスの生成ロジック。
   4. `markdown_mode`時は`BeautifulSoup`で`<main>`を抽出し`markitdown`でMarkdown変換
   5. SHA-256でETagを計算、`If-None-Match`と一致すれば304を返す
   6. ページ未発見 -> `resolve_file` -> `resolve_shorturl` の順でフォールバック
-- `render_error_page(request, status_code, ...)`: エラーレスポンスの生成。502/503/504は`error/nginx.html`、他の5XXは`error/server.html`をレンダリングなしで返す。4XXは`error/client.md`をコンテキスト付きでレンダリングする。
+- `render_error_page(request, status_code, ...)`: エラーレスポンスの生成。5XXは`error/server.html`をレンダリングなしで返す。4XXは`error/client.md`をコンテキスト付きでレンダリングする。
 - `render_thumbnail_png(path, title, description, template)`: SVGテンプレートの`__PATH__`/`__TITLE__`/`__DESCRIPTION__` を置換後、`resvg_py`で1280×640のPNGに変換する。フォントは`public/assets/fonts/`の NerconeSansJP/NerconeMonoJPを使用。
 
 #### `markdown_mode` の判定ロジック (`renderer.py:46-47`)
@@ -260,11 +258,12 @@ ASGI形式のミドルウェア(`Middleware` クラス)。FastAPIの`add_middlew
 2. `scope` に各マネージャー(`id`/`pp`/`csp`/`timings`/`network`/`options`)を注入
 3. `timings.start("total")`
 4. ホスト名チェック: 不正なホスト名は403 (trusted networkからのアクセスは除外)
-5. WebSocket はサブドメインパス変換のみ行い素通り
-6. OPTIONSリクエストは204を返して終了
-7. リクエストボディを一括読み取り (`read_body`)
-8. サブドメイン処理: `""` / `"www"` 以外のサブドメインはパスに変換 (例: `foo.nercone.dev/bar` -> `/foo/bar`)。サブドメインパスで4XX が返った場合は元のパスでリトライ(`app-retry`)。
-9. `send()` でレスポンスを後処理してから送信
+5. リダイレクト処理 (`production`時のみ): alt-domain(`Hostnames.redirect`)はサブドメイン保持で`https://<...>.nercone.dev`へ301、それ以外で`scheme=="http"`かつ非onionなら`https://<host>`へ301。https clearnetとonion(平文)はそのまま継続。
+6. WebSocket はサブドメインパス変換のみ行い素通り
+7. OPTIONSリクエストは204を返して終了
+8. リクエストボディを一括読み取り (`read_body`)
+9. サブドメイン処理: `""` / `"www"` 以外のサブドメインはパスに変換 (例: `foo.nercone.dev/bar` -> `/foo/bar`)。サブドメインパスで4XX が返った場合は元のパスでリトライ(`app-retry`)。
+10. `send()` でレスポンスを後処理してから送信
 
 **`send()` の後処理:**
 - `text/html` -> `minify_html.minify` (JS/CSSのインラインminifyも有効)
@@ -286,13 +285,13 @@ FastAPIルーティング定義。`docs_url=None`/`redoc_url=None`/`openapi_url=
 | `/welcome` | GET | ASCIIアートのウェルカムメッセージ + バージョン情報。 |
 | `/status` | GET | JSON形式のステータス。`status`/`version`(server/content)/`quote`(デイリークォート)/`counter`(アクセス数)を含む。 |
 | `/assets/images/thumbnail/template/{template}` | GET | サムネイルPNG生成。クエリ: `path`/`title`/`description`。 |
-| `/error/{status_code}` | GET | エラーページのプレビュー。`server`/`nginx`またはHTTPステータスコードを指定。 |
+| `/error/{status_code}` | GET | エラーページのプレビュー。`server`またはHTTPステータスコードを指定。 |
 | `/{path:path}` | GET/POST/HEAD | メインルート。`resolve_page` -> `resolve_file` -> `resolve_shorturl` の順でレスポンスを決定。 |
 
 ## 設定と起動
 
 ### 環境変数
-- `WEBSITE_UDS`: Unix Domain Socket のパス。設定されている場合はUDSでリッスン(Nginxとの連携用)。未設定の場合は`0.0.0.0:8080`でTCPリッスン。
+- `WEBSITE_TLS_CERTFILE` / `WEBSITE_TLS_KEYFILE`: TLS証明書・秘密鍵のパス(既定はLet's Encryptのパス)。未設定の場合は`0.0.0.0:8080`でTCPリッスン。
 
 ### 起動コマンド
 ```sh
@@ -304,8 +303,9 @@ docker compose up -d
 ```
 
 ### Docker構成
-- `docker-compose.yml`で`network_mode: host`を使用
-- UDSソケットは`/run/website/app.sock`にマウント
+- ベースイメージは`python:3.12-slim-trixie`(OpenSSL 3.5はDebian 13以降で利用可能)
+- `docker-compose.yml`で`network_mode: host`を使用(`:80`/`:443` TCP・`:443` UDPを直接使用、特権ポートbindのためroot実行)
+- `/etc/letsencrypt`を読み取り専用でマウント (TLS証明書)
 - `logs/`/`databases/`はバインドマウントで永続化
 - `public/`は読み取り専用でマウント (`:ro`)
 - `.git/`も読み取り専用でマウント (バージョン情報取得用)
@@ -354,7 +354,7 @@ Jinja2テンプレート内で利用可能なグローバル変数/関数:
 | パッケージ | 用途 |
 |-----------|------|
 | `fastapi` | WebフレームワークとルーティングAPI |
-| `uvicorn[standard]` | ASGIサーバー |
+| `hypercorn[h3,uvloop]` | ASGIサーバー兼TLS終端エッジ (h3=aioquicによるHTTP/3、uvloop=高速イベントループ。WebSocketはwsprotoで内蔵) |
 | `jinja2` | HTMLテンプレートエンジン |
 | `mistune` | Markdown -> HTML変換 |
 | `markitdown` | HTML -> Markdown変換 (CLIツール/AIクローラー向けレスポンス用) |
