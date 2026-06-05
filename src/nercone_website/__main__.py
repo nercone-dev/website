@@ -35,10 +35,10 @@ class HypercornConfig(Config):
 def main():
     startup_id = FourWord().compact_text
     Logger.log(f"[{startup_id}] ------- STARTUP")
-    Logger.log(f"{' ' * startup_id+2} Nercone Website {Repositories.Server.version}+{Repositories.Contents.version}")
-    Logger.log(f"{' ' * startup_id+2} Hypercorn {version('hypercorn')}")
-    Logger.log(f"{' ' * startup_id+2} OpenSSL {ssl.OPENSSL_VERSION}")
-    Logger.log(f"{' ' * startup_id+2} ---------------")
+    Logger.log(f"{' ' * len(startup_id)+2} Nercone Website {Repositories.Server.version}+{Repositories.Contents.version}")
+    Logger.log(f"{' ' * len(startup_id)+2} Hypercorn {version('hypercorn')}")
+    Logger.log(f"{' ' * len(startup_id)+2} OpenSSL {ssl.OPENSSL_VERSION}")
+    Logger.log(f"{' ' * len(startup_id)+2} ---------------")
 
     MimeTypes.fetch()
 
