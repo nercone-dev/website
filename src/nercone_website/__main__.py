@@ -56,6 +56,7 @@ def main():
         config.bind = Ports.https
         config.quic_bind = Ports.https
         config.insecure_bind = Ports.http
+        config.alt_svc_headers = ['h3=":443"; ma=86400']
     else:
         config.bind = Ports.http
 
