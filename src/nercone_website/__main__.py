@@ -16,13 +16,21 @@ def set_ssl_groups(context: ssl.SSLContext, groups: str) -> None:
     if not libssl_name:
         raise ssl.SSLError("libssl Not Found")
     libssl = ctypes.CDLL(libssl_name)
-    fn = libssl.SSL_CTX_set1_groups_list
+    fn = None
+    for symbol in ("SSL_CTX_set1_groups_list", "SSL_CTX_set1_curves_list"):
+        try:
+            fn = getattr(libssl, symbol)
+            break
+        except AttributeError:
+            continue
+    if fn is None:
+        raise ssl.SSLError("SSL_CTX_set1_groups_list / SSL_CTX_set1_curves_list Not Found")
     fn.restype = ctypes.c_int
     fn.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
     ptr_size = ctypes.sizeof(ctypes.c_void_p)
     raw_ctx = ctypes.c_void_p.from_address(id(context) + 2 * ptr_size).value
     if fn(raw_ctx, groups.encode()) != 1:
-        raise ssl.SSLError(f"SSL_CTX_set1_groups_list Failed: {groups!r}")
+        raise ssl.SSLError(f"{symbol} Failed: {groups!r}")
 
 class HypercornConfig(Config):
     def create_ssl_context(self) -> ssl.SSLContext | None:
