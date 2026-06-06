@@ -189,7 +189,6 @@ https://github.com/nercone-dev/website-contents.git
 - `Repositories`: 起動時に`git rev-parse --short HEAD`でコミットハッシュを取得 (`Server.version`、`Contents.version`)
 - `Hostnames`: 許可ホスト名リスト(`www`/`tor`/`local`/`public = www + tor`/`all = local + public`)。加えて`canonical`(`nercone.dev`)と`redirect`(`nerc1.dev`/`diamondgotcat.net`/`d-g-c.net`。サブドメインを保持したまま`nercone.dev`へ301する対象)を持つ。
 - `TLS`: `certfile`/`keyfile`(既定はLet's Encryptのパス。`WEBSITE_TLS_CERTFILE`/`WEBSITE_TLS_KEYFILE`で上書き可)と`ciphers`(TLS1.2系のECDHE-ECDSAスイート列)
-- `production`: 証明書(`TLS.certfile`/`keyfile`)が存在すれば`True`。本番エッジモード(TLS終端・特権ポート・リダイレクト有効)か開発モード(平文`:8080`)かの判定に使う。
 
 ### `databases.py`
 永続データの読み書き。
@@ -258,7 +257,7 @@ ASGI形式のミドルウェア(`Middleware` クラス)。FastAPIの`add_middlew
 2. `scope` に各マネージャー(`id`/`pp`/`csp`/`timings`/`network`/`options`)を注入
 3. `timings.start("total")`
 4. ホスト名チェック: 不正なホスト名は403 (trusted networkからのアクセスは除外)
-5. リダイレクト処理 (`production`時のみ): alt-domain(`Hostnames.redirect`)はサブドメイン保持で`https://<...>.nercone.dev`へ301、それ以外で`scheme=="http"`かつ非onionなら`https://<host>`へ301。https clearnetとonion(平文)はそのまま継続。
+5. リダイレクト処理: alt-domain(`Hostnames.redirect`)はサブドメイン保持で`https://<...>.nercone.dev`へ301
 6. WebSocket はサブドメインパス変換のみ行い素通り
 7. OPTIONSリクエストは204を返して終了
 8. リクエストボディを一括読み取り (`read_body`)
@@ -270,7 +269,7 @@ ASGI形式のミドルウェア(`Middleware` クラス)。FastAPIの`add_middlew
 - `text/css` -> `rcssmin.cssmin`
 - `text/javascript` / `application/javascript` -> `rjsmin.jsmin`
 - `image/svg` -> `scour` (SVG最適化: ID短縮/コメント除去/改行除去)
-- レスポンスヘッダー付与: `Content-Length`/`X-Request-Id`/`Server`/`Onion-Location`/`Link`/`Cache-Control`/`Referrer-Policy`/`Permissions-Policy`/`Content-Security-Policy`/`Access-Control-*`
+- レスポンスヘッダー付与: `Content-Length`/`X-Request-Id`/`Server`/`Link`/`Cache-Control`/`Referrer-Policy`/`Permissions-Policy`/`Content-Security-Policy`/`Access-Control-*`
 - `Server-Timing` を最後に付与 (stop("total") の後)
 - `Logger.log_access()` でアクセスログを記録
 
