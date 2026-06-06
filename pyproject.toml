@@ -9,6 +9,7 @@ requires-python = ">=3.12"
 dependencies = [
     "websockets",
     "httpx[http2]",
+    "aioquic",
 
     "fastapi",
     "hypercorn[h3,uvloop]",
@@ -29,6 +30,9 @@ dependencies = [
     "pyyaml",
     "fourword"
 ]
+
+[tool.uv.sources]
+aioquic = { git = "https://github.com/nercone-forks/aioquic", branch = "main" }
 
 [project.scripts]
 nercone-website = "nercone_website.__main__:main"
