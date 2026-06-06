@@ -11,7 +11,7 @@ resolution-markers = [
 [[package]]
 name = "aioquic"
 version = "1.3.0"
-source = { git = "https://github.com/nercone-forks/aioquic?branch=main#5569d02ed5885ba4985f7a534c482408bfb8562b" }
+source = { git = "https://github.com/nercone-forks/aioquic?branch=feature%2Fpqc-support#af6c8799fd3f25c72deca56a53dc26014d351c70" }
 dependencies = [
     { name = "certifi" },
     { name = "cryptography" },
@@ -652,7 +652,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aioquic", git = "https://github.com/nercone-forks/aioquic?branch=main" },
+    { name = "aioquic", git = "https://github.com/nercone-forks/aioquic?branch=feature%2Fpqc-support" },
     { name = "beautifulsoup4" },
     { name = "fastapi" },
     { name = "fourword" },
