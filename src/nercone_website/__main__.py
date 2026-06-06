@@ -32,6 +32,16 @@ class HypercornConfig(Config):
             set_ssl_groups(context, TLS.groups)
         return context
 
+    def patch_quic_ssl_groups(self) -> None:
+        from hypercorn.protocol import quic as hypercorn_quic
+        original_init = hypercorn_quic.QuicProtocol.__init__
+
+        def patched_init(self, config, *args, **kwargs):
+            original_init(self, config, *args, **kwargs)
+            self.quic_config.ssl_groups = TLS.groups
+
+        hypercorn_quic.QuicProtocol.__init__ = patched_init
+
 def main():
     startup_id = FourWord().compact_text
     Logger.log(f"[{startup_id}] nercone.dev ({Repositories.Server.version}+{Repositories.Contents.version})")
@@ -60,12 +70,13 @@ def main():
         config.quic_bind = Ports.https
         config.insecure_bind = Ports.http
         config.alt_svc_headers = ['h3=":443"; ma=86400']
+        config.patch_quic_ssl_groups()
     else:
         config.bind = Ports.http
 
     run(config)
 
-    Logger.log(f"[{startup_id}] Stopped")
+    Logger.log(f"[{startup_id}] STOP")
 
 if __name__ == "__main__":
     main()
