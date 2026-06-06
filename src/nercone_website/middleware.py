@@ -2,7 +2,7 @@ import traceback
 import ipaddress
 from fourword.lib import FourWord
 from fastapi import Response
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import PlainTextResponse, RedirectResponse
 from starlette.requests import Request, HTTPConnection
 from starlette.types import ASGIApp, Scope, Receive, Send
 
@@ -56,6 +56,15 @@ class Middleware:
                     subdomain_path = f"/{'/'.join(subdomain.split('.')[::-1])}{original_path}"
                     scope = dict(scope, path=subdomain_path)
                 await self.app(scope, receive, send)
+                return
+
+            if not scope["network"].trusted and scope["scheme"] == "http":
+                host = headers.get(b"host", b"").decode()
+                path = scope.get("path", "/")
+                query_string = scope.get("query_string", b"").decode()
+                url = f"https://{host}{path}" + (f"?{query_string}" if query_string else "")
+                response = RedirectResponse(url=url, status_code=301)
+                await self.send(response, scope, receive, send)
                 return
 
             if scope.get("method") == "OPTIONS":
