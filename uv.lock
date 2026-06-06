@@ -11,7 +11,7 @@ resolution-markers = [
 [[package]]
 name = "aioquic"
 version = "1.3.0"
-source = { git = "https://github.com/nercone-forks/aioquic?branch=feature%2Fpqc-support#030ef8152b2844a00051a002beb29a87eba66e85" }
+source = { git = "https://github.com/nercone-forks/aioquic?branch=feature%2Fpqc-support#150ac3470cf5e357817591f3ee6c94a547ca0126" }
 dependencies = [
     { name = "certifi" },
     { name = "cryptography" },
