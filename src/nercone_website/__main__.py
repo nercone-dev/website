@@ -34,10 +34,13 @@ class HypercornConfig(Config):
 
 def main():
     startup_id = FourWord().compact_text
-    Logger.log(f"[{startup_id}] ------- START")
-    Logger.log(f"{' ' * (len(startup_id) + 2)} Nercone Website {Repositories.Server.version}+{Repositories.Contents.version}")
-    Logger.log(f"{' ' * (len(startup_id) + 2)} Hypercorn {version('hypercorn')}")
-    Logger.log(f"{' ' * (len(startup_id) + 2)} OpenSSL {ssl.OPENSSL_VERSION}")
+    Logger.log(f"[{startup_id}] nercone.dev ({Repositories.Server.version}+{Repositories.Contents.version})")
+    Logger.log(f"{' ' * (len(startup_id) + 2)}            with hypercorn {version('hypercorn')}")
+    Logger.log(f"{' ' * (len(startup_id) + 2)}                 fastapi   {version('fastapi')}")
+    Logger.log(f"{' ' * (len(startup_id) + 2)}                 jinja2    {version('jinja2')}")
+    Logger.log(f"{' ' * (len(startup_id) + 2)}                 aioquic   {version('aioquic')}")
+    Logger.log(f"{' ' * (len(startup_id) + 2)}                 fourword  {version('fourword')}")
+    Logger.log(f"{' ' * (len(startup_id) + 2)}                 openssl   {ssl.OPENSSL_VERSION}")
 
     MimeTypes.fetch()
 
@@ -62,7 +65,7 @@ def main():
 
     run(config)
 
-    Logger.log(f"[{startup_id}] ------- STOP\n")
+    Logger.log(f"[{startup_id}] Stopped")
 
 if __name__ == "__main__":
     main()
