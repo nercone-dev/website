@@ -68,7 +68,7 @@ def render_page(page: str, request: Request, render: bool = True, status_code: i
     timings: TimingManager = request.scope["timings"]
     templates: Jinja2Templates = request.scope["templates"]
 
-    if path := resolve_file(Directories.public.joinpath(page)):
+    if path := resolve_file(page):
         with path.open("r") as f:
             source = f.read()
 
