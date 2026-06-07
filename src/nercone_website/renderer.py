@@ -92,10 +92,11 @@ def render_page(page: str, request: Request, render: bool = True, status_code: i
             elif page.endswith(".md"):
                 html = htmlitdown(templates.env.from_string(body).render(request=request, **context))
 
-            if front.get("base").startswith("/"):
-                source = f"{{% extends \"{front['base']}\" %}}\n"
-            elif "base" in front:
-                source = f"{{% extends \"/base/{front['base']}.html\" %}}\n"
+            if "base" in front:
+                if front["base"].startswith("/"):
+                    source = f"{{% extends \"{front['base']}\" %}}\n"
+                else:
+                    source = f"{{% extends \"/base/{front['base']}.html\" %}}\n"
             else:
                 source = "{% extends \"/base/normal.html\" %}\n"
 
