@@ -40,7 +40,6 @@ https://github.com/nercone-dev/website.git
 │       ├── databases.py         # MimeTypes・AccessCounter
 │       ├── manager.py           # PPManager・CSPManager・TimingManager・NetworkManager・OptionManager
 │       ├── resolver.py          # ファイル・ページ・ショートURL解決
-│       ├── templates.py         # Jinja2テンプレート環境・デイリークォート
 │       ├── app.py               # FastAPIアプリ・ルーティング定義
 │       ├── renderer.py          # レスポンス生成・Markdown/HTML変換・サムネイル生成
 │       └── middleware.py        # ASGIミドルウェア・minify・セキュリティヘッダー付与・ロギング
@@ -185,23 +184,25 @@ https://github.com/nercone-dev/website-contents.git
 グローバルな定数・パス定義。アプリ起動時に一度だけ評価される。
 
 - `Directories`: `base`(CWD)、`public`、`logs`、`databases`の`Path`オブジェクト
-- `Files`: `mime.types`、`access_counter.txt`、各ログファイルの `Path`
-- `Repositories`: 起動時に`git rev-parse --short HEAD`でコミットハッシュを取得 (`Server.version`、`Contents.version`)
-- `Hostnames`: 許可ホスト名リスト(`www`/`tor`/`local`/`public = www + tor`/`all = local + public`)。加えて`canonical`(`nercone.dev`)と`redirect`(`nerc1.dev`/`diamondgotcat.net`/`d-g-c.net`。サブドメインを保持したまま`nercone.dev`へ301する対象)を持つ。
-- `TLS`: `certfile`/`keyfile`(既定はLet's Encryptのパス。`WEBSITE_TLS_CERTFILE`/`WEBSITE_TLS_KEYFILE`で上書き可)と`ciphers`(TLS1.2系のECDHE-ECDSAスイート列)
+- `Files`: `mime_types`/`access_counter`の`Path`と、ネストクラス`Files.Logs`(`app`/`access`/`error`の各ログパス)
+- `Repositories`: 起動時に`git rev-parse --short HEAD`でコミットハッシュを取得 (`Server.version`/`Server.url`、`Contents.version`/`Contents.url`)
+- `Hostnames`: `public`(外部公開ドメイン一覧: `nercone.dev`/`nerc1.dev`/`diamondgotcat.net`/`d-g-c.net`) / `local`(`localhost`/`127.0.0.1`) / `all = local + public`
+- `Ports`: `http`(`0.0.0.0:80`/`[::]:80`) / `https`(`0.0.0.0:443`/`[::]:443`)
+- `TLS`: `certfile`/`keyfile`(既定はLet's Encryptのパス。`WEBSITE_TLS_CERTFILE`/`WEBSITE_TLS_KEYFILE`で上書き可) / `ciphers`(ECDHE-ECDSAスイート列) / `groups`(PQC対応の鍵グループ: X25519MLKEM768等)
 
 ### `databases.py`
 永続データの読み書き。
 
-- `MimeTypes`: Apache httpdの`mime.types`をHTTP/2で取得し`mimetypes`モジュールに登録する。30日でキャッシュ切れ、起動時 (`__main__`) に1回フェッチし、アプリ初期化 (`app.py`) 時にロードする。
+- `MimeTypes`: GitHubの`apache/httpd`リポジトリから`mime.types`を取得し`mimetypes`モジュールに登録する。30日でキャッシュ切れ、起動時 (`__main__`) に1回フェッチし、アプリ初期化 (`app.py`) 時にロードする。
 - `AccessCounter`: `databases/access_counter.txt`への排他ロック(`fcntl.LOCK_EX`)を使ったカウンタ。`get()`で読み取り、`increase()`でインクリメント。
 
 ### `logger.py`
 ファイルへの排他ロック書き込みロガー。
 
+- `format_access(request, response)`: アクセスログ用の辞書を生成する。`id`/`url`/`status`/`method`/`client`/`headers`(リクエスト・レスポンス)/`managers`(pp/csp/timings/network)を含む。
 - `Logger.log()`: `logs/app.log`への一般ログ書き込み
-- `Logger.log_access()`: `logs/access.log`へのJSONL形式アクセスログ。リクエストID/URL/ステータス/メソッド/クライアント情報/全リクエスト/レスポンスヘッダー/PPManager/CSPManager/TimingManagerの状態を記録する。
-- `Logger.log_error()`: `logs/error.log`へのトレースバック記録
+- `Logger.log_access()`: `logs/access.log`にJSONL形式で`format_access`の結果を記録し、`app.log`にも1行サマリを書く。
+- `Logger.log_error()`: `logs/error.log`へのトレースバック記録。`app.log`にも1行サマリを書く。
 
 ### `manager.py`
 リクエストスコープにアタッチされる各種マネージャー。`Middleware.__call__` でインスタンス化され `scope` に格納される。
@@ -219,31 +220,24 @@ https://github.com/nercone-dev/website-contents.git
 - `resolve_page(path, markdown_mode)`: HTMLファイルとMarkdownファイルの候補を優先順位順に探索する。`markdown_mode=True`の場合は`.md`を優先して検索する。
 - `resolve_shorturl(path)`: `shorturls.json`を読んで短縮URL(`redirect` または `alias`)を解決する。`alias`はチェーン解決可能で最大10回まで(循環検出あり)。
 
-### `templates.py`
-Jinja2テンプレート環境の初期化とテンプレートグローバル関数の定義。
-
-- `templates`: `Jinja2Templates(directory=public/)` で初期化。フィルタ`re_sub`を追加。
-- グローバル変数: `access_counter`/`Repositories`/`Hostnames`
-- グローバル関数: `this_year()`/`this_year_in_heisei()`/`get_daily_quote()`
-- `get_daily_quote()`: `quotes.txt`から日付をシードにして1日1エントリを返す (UTCの日付でシード)。
-
 ### `renderer.py`
 HTTPレスポンスの生成ロジック。
 
 - `CustomHTMLRenderer`: `mistune`のカスタムレンダラー。`block_code`でコードブロックのシンタックスハイライトを無効化、`block_quote`でアラート記法(`[!NOTE]`/`[!WARNING]`等)を`div.block-{type}`に変換する。
 - `htmlitdown`: `mistune`インスタンス。プラグイン: `table`/`strikethrough`/`task_lists`/`footnotes`。
 - `markitdown`: `MarkItDown()`インスタンス (HTML -> Markdownのリバース変換用)。
+- `init_context(context, scope)`: Jinja2テンプレートに渡すコンテキスト辞書を初期化する。`re_sub`ラムダ/`this_year()`/`this_year_in_heisei()`/`get_daily_quote()`を追加する。旧`templates.py`の役割を担う。
+- `render_page(page, request, ...)`: 単一ページファイルのレンダリング。YAMLフロントマター解析 → Jinja2レンダリング → `{% extends %}`/`{% block %}`の自動生成の流れ。`markdown_mode`時は`BeautifulSoup`で`<main>`を抽出し`markitdown`でMarkdown変換。
 - `default_response(path, request, ...)`: メインのレスポンス生成関数。処理順序:
-  1. `resolve_page`でページファイルを探索
-  2. YAMLフロントマター(`---` ブロック)を解析して`base`/各ブロックを設定
-  3. Jinja2でレンダリング後、HTMLまたはMarkdownを生成
-  4. `markdown_mode`時は`BeautifulSoup`で`<main>`を抽出し`markitdown`でMarkdown変換
-  5. SHA-256でETagを計算、`If-None-Match`と一致すれば304を返す
-  6. ページ未発見 -> `resolve_file` -> `resolve_shorturl` の順でフォールバック
-- `render_error_page(request, status_code, ...)`: エラーレスポンスの生成。5XXは`error/server.html`をレンダリングなしで返す。4XXは`error/client.md`をコンテキスト付きでレンダリングする。
-- `render_thumbnail_png(path, title, description, template)`: SVGテンプレートの`__PATH__`/`__TITLE__`/`__DESCRIPTION__` を置換後、`resvg_py`で1280×640のPNGに変換する。フォントは`public/assets/fonts/`の NerconeSansJP/NerconeMonoJPを使用。
+  1. `resolve_page`でページファイルを探索し`render_page`に渡す
+  2. ページ未発見 -> `resolve_file` -> `resolve_shorturl` の順でフォールバック
+  3. いずれも不一致で404、ディレクトリトラバーサルで403
+  4. ETagの計算と304判定は`middleware.py`の`send()`で行う
+- `render_error_page(request, status_code, ...)`: エラーレスポンスの生成。5XXは`error/server.html`をレンダリングなしで返す。4XXは`error/client.md`をコンテキスト付きでレンダリングする。`error_messages`辞書に多数のステータスコード向けメッセージが定義されている。
+- `render_thumbnail_svg(path, title, description, template)`: SVGテンプレートの`__PATH__`/`__TITLE__`/`__DESCRIPTION__`を置換してSVG文字列を返す。
+- `render_thumbnail_png(path, title, description, template)`: `render_thumbnail_svg`の出力を`resvg_py`で1280×640のPNGに変換する。フォントは`public/assets/fonts/`の NerconeSansJP/NerconeMonoJPを使用。
 
-#### `markdown_mode` の判定ロジック (`renderer.py:46-47`)
+#### `markdown_mode` の判定ロジック (`renderer.py:138`)
 以下のいずれかに該当する場合に`markdown_mode = True`となる:
 - パスが `.md` で終わる
 - `Accept` ヘッダーに `text/markdown` が含まれる
@@ -254,23 +248,21 @@ ASGI形式のミドルウェア(`Middleware` クラス)。FastAPIの`add_middlew
 
 **リクエスト処理フロー:**
 1. `scope["type"]`が`http`/`websocket`以外は素通り
-2. `scope` に各マネージャー(`id`/`pp`/`csp`/`timings`/`network`/`options`)を注入
+2. `scope` に各マネージャー(`id`/`pp`/`csp`/`timings`/`network`/`options`) と `templates`(Jinja2Templates)/`accesscounter`(AccessCounter)/`directories`/`files`/`repositories`/`hostnames`/`ports`/`tls` を注入
 3. `timings.start("total")`
-4. ホスト名チェック: 不正なホスト名は403 (trusted networkからのアクセスは除外)
-5. リダイレクト処理: alt-domain(`Hostnames.redirect`)はサブドメイン保持で`https://<...>.nercone.dev`へ301
-6. WebSocket はサブドメインパス変換のみ行い素通り
+4. ホスト名チェック: `Hostnames.public` 以外のホスト名は403 (trusted networkからのアクセスは除外)
+5. WebSocket はサブドメインパス変換のみ行い素通り
+6. HTTPスキームかつ非trusted networkの場合はHTTPSへ301リダイレクト
 7. OPTIONSリクエストは204を返して終了
 8. リクエストボディを一括読み取り (`read_body`)
 9. サブドメイン処理: `""` / `"www"` 以外のサブドメインはパスに変換 (例: `foo.nercone.dev/bar` -> `/foo/bar`)。サブドメインパスで4XX が返った場合は元のパスでリトライ(`app-retry`)。
 10. `send()` でレスポンスを後処理してから送信
 
 **`send()` の後処理:**
-- `text/html` -> `minify_html.minify` (JS/CSSのインラインminifyも有効)
-- `text/css` -> `rcssmin.cssmin`
-- `text/javascript` / `application/javascript` -> `rjsmin.jsmin`
-- `image/svg` -> `scour` (SVG最適化: ID短縮/コメント除去/改行除去)
-- レスポンスヘッダー付与: `Content-Length`/`X-Request-Id`/`Server`/`Link`/`Cache-Control`/`Referrer-Policy`/`Permissions-Policy`/`Content-Security-Policy`/`Access-Control-*`
-- `Server-Timing` を最後に付与 (stop("total") の後)
+- コンテンツ圧縮 (`minify`スパン): `text/html` -> `minify_html.minify` / `text/css` -> `rcssmin.cssmin` / `text/javascript`,`application/javascript` -> `rjsmin.jsmin` / `image/svg` -> `scour`(ID短縮/コメント除去)
+- ETag計算 (`etag`スパン): SHA-256でETagを計算し、`If-None-Match`と一致すれば304を返す
+- レスポンスヘッダー付与: `Content-Length`/`ETag`/`X-Request-Id`/`X-Frame-Options`/`X-Content-Type-Options`/`Server`/`Link`/`Cache-Control`/`Referrer-Policy`/`Permissions-Policy`/`Content-Security-Policy`/`Strict-Transport-Security`(HTTPSのみ)/`Access-Control-*`
+- `Server-Timing` を最後に付与 (`stop("total")` の後)
 - `Logger.log_access()` でアクセスログを記録
 
 ### `app.py`
@@ -282,15 +274,18 @@ FastAPIルーティング定義。`docs_url=None`/`redoc_url=None`/`openapi_url=
 |------|----------|------|
 | `/ping` | GET | ヘルスチェック。`pong!`を返す。 |
 | `/welcome` | GET | ASCIIアートのウェルカムメッセージ + バージョン情報。 |
-| `/status` | GET | JSON形式のステータス。`status`/`version`(server/content)/`quote`(デイリークォート)/`counter`(アクセス数)を含む。 |
+| `/echo` | GET | `format_access`の結果をJSONで返す。デバッグ用。 |
+| `/status` | GET | JSON形式のステータス。`status`/`version`(server/content)/`counter`(アクセス数)を含む。 |
 | `/assets/images/thumbnail/template/{template}` | GET | サムネイルPNG生成。クエリ: `path`/`title`/`description`。 |
+| `/assets/css/merge` | GET | CSSファイルの結合。クエリ`path`にカンマ区切りでファイル名(拡張子なし)を指定。`@charset`/`@import`を整理してボディを結合する。 |
+| `/assets/js/merge` | GET | JSファイルの結合。クエリ`path`にカンマ区切りでファイル名(拡張子なし)を指定。 |
 | `/error/{status_code}` | GET | エラーページのプレビュー。`server`またはHTTPステータスコードを指定。 |
 | `/{path:path}` | GET/POST/HEAD | メインルート。`resolve_page` -> `resolve_file` -> `resolve_shorturl` の順でレスポンスを決定。 |
 
 ## 設定と起動
 
 ### 環境変数
-- `WEBSITE_TLS_CERTFILE` / `WEBSITE_TLS_KEYFILE`: TLS証明書・秘密鍵のパス(既定はLet's Encryptのパス)。未設定の場合は`0.0.0.0:8080`でTCPリッスン。
+- `WEBSITE_TLS_CERTFILE` / `WEBSITE_TLS_KEYFILE`: TLS証明書・秘密鍵のパス(既定はLet's Encryptのパス)。未設定の場合は`Ports.http`(`0.0.0.0:80`/`[::]:80`)でTCPリッスン。
 
 ### 起動コマンド
 ```sh
@@ -328,13 +323,11 @@ description: 説明文    # その他のブロックも任意に指定可能
 Jinja2テンプレート内で利用可能なグローバル変数/関数:
 
 - `request`: Starletteの`Request`オブジェクト
-- `access_counter`: `AccessCounter`インスタンス (`.get()`でカウント値取得)
-- `Repositories`: `Server.version`/`Contents.version`/`Server.url`/`Contents.url`
-- `Hostnames`: `www`/`tor`/`local`/`public`/`all`
 - `this_year()`: 日本時間の現在年
 - `this_year_in_heisei()`: 平成換算の現在年 (year - 1988)
-- `get_daily_quote()`: デイリークォート文字列
-- フィルタ `re_sub(pattern, repl)`: 正規表現置換
+- `get_daily_quote()`: `quotes.txt`から日付をシードにして1日1エントリを返す (UTCの日付でシード)
+- `re_sub(s, pattern, repl)`: 正規表現置換 (テンプレート内では `s | re_sub(pattern, repl)` の形で使用)
+- その他`scope`の全キー (`repositories`/`hostnames`/`accesscounter`等) もコンテキスト経由で参照可能
 
 ### 短縮URL (`shorturls.json`)
 
@@ -354,6 +347,7 @@ Jinja2テンプレート内で利用可能なグローバル変数/関数:
 |-----------|------|
 | `fastapi` | WebフレームワークとルーティングAPI |
 | `hypercorn[h3,uvloop]` | ASGIサーバー兼TLS終端エッジ (h3=aioquicによるHTTP/3、uvloop=高速イベントループ。WebSocketはwsprotoで内蔵) |
+| `aioquic` | HTTP/3のQUIC実装 (nercone-forksのPQCサポートブランチを使用) |
 | `jinja2` | HTMLテンプレートエンジン |
 | `mistune` | Markdown -> HTML変換 |
 | `markitdown` | HTML -> Markdown変換 (CLIツール/AIクローラー向けレスポンス用) |
