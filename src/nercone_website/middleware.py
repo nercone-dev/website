@@ -1,3 +1,4 @@
+import hashlib
 import traceback
 import ipaddress
 from fourword.lib import FourWord
@@ -121,14 +122,14 @@ class Middleware:
         new_scope = dict(scope, path=path)
 
         status_code = 200
-        resp_headers = []
+        response_headers = []
         body_parts = []
 
         async def capture_send(message):
-            nonlocal status_code, resp_headers
+            nonlocal status_code, response_headers
             if message["type"] == "http.response.start":
                 status_code = message["status"]
-                resp_headers = message.get("headers", [])
+                response_headers = message.get("headers", [])
             elif message["type"] == "http.response.body":
                 body_parts.append(message.get("body", b""))
 
@@ -138,7 +139,7 @@ class Middleware:
 
         response = Response(content=b"".join(body_parts), status_code=status_code)
 
-        for k, v in resp_headers:
+        for k, v in response_headers:
             response.headers.raw.append((k, v))
 
         return response
@@ -191,11 +192,22 @@ class Middleware:
                 pass
             scope["timings"].stop("minify")
 
+        response.headers["Content-Length"] = str(len(response.body))
+
+        headers = dict(scope.get("headers", []))
+
+        scope["timings"].start("etag")
+        etag = '"' + hashlib.sha256(response.body).hexdigest() + '"'
+        scope["timings"].stop("etag")
+
+        if headers.get(b"if-none-match", b"").decode() == etag:
+            response = Response(status_code=304)
+
         def set_header(key: str, value: str, override: bool = True):
             if override or key.lower() not in response.headers:
                 response.headers[key.lower()] = value
 
-        set_header("Content-Length", str(len(response.body)))
+        set_header("ETag", etag)
 
         set_header("X-Request-Id", scope["id"].text)
         set_header("X-Frame-Options", "SAMEORIGIN")
@@ -217,7 +229,6 @@ class Middleware:
             set_header("Access-Control-Allow-Origin", "*", override=False)
 
         else:
-            headers = dict(scope.get("headers", []))
             origin = headers.get(b"origin", b"").decode().strip()
             origin_host = origin.removeprefix("https://").removeprefix("http://").split("/")[0].split(":")[0]
 

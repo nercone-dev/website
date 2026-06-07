@@ -2,7 +2,6 @@ import io
 import re
 import yaml
 import random
-import hashlib
 import mistune
 import resvg_py
 from typing import Any
@@ -65,94 +64,87 @@ def init_context(context: dict[str, Any], scope: Scope):
             return "GReeeeN KA-RA-DA"
     context["get_daily_quote"] = get_daily_quote
 
+def render_page(page: str, request: Request, render: bool = True, status_code: int = 200, markdown_mode: bool = False, context: dict[str, Any] = {}):
+    timings: TimingManager = request.scope["timings"]
+    templates: Jinja2Templates = request.scope["templates"]
+
+    if path := resolve_file(Directories.public.joinpath(page)):
+        with path.open("r") as f:
+            source = f.read()
+
+        if render:
+            timings.start("render")
+
+            if not source.startswith("---"):
+                front = {}
+                body = source
+            else:
+                end = source.find("\n---", 3)
+                if end == -1:
+                    front = {}
+                    body = source
+                else:
+                    front = yaml.safe_load(source[3:end]) or {}
+                    body = source[end+4:].lstrip("\n")
+
+            if page.endswith(".html"):
+                html = templates.env.from_string(body).render(request=request, **context)
+            elif page.endswith(".md"):
+                html = htmlitdown(templates.env.from_string(body).render(request=request, **context))
+
+            if front.get("base").startswith("/"):
+                source = f"{{% extends \"{front['base']}\" %}}\n"
+            elif "base" in front:
+                source = f"{{% extends \"/base/{front['base']}.html\" %}}\n"
+            else:
+                source = "{% extends \"/base/normal.html\" %}\n"
+
+            for key, value in front.items():
+                source += f"{{% block {key} %}}{value}{{% endblock %}}\n"
+
+            source += f"{{% block main %}}\n{html}\n{{% endblock %}}\n"
+
+            content = templates.env.from_string(source).render(request=request, **context)
+            response = PlainTextResponse(content, status_code=status_code, media_type="text/html")
+
+            timings.stop("render")
+
+            if markdown_mode:
+                timings.start("convert")
+
+                soup = BeautifulSoup(content, "html.parser")
+                main = str(soup.find("main")) if soup.find("main") else content
+                content = markitdown.convert_stream(io.BytesIO(main.encode("utf-8")), file_extension=".html").text_content
+                response = PlainTextResponse(content, status_code=status_code, media_type="text/markdown")
+
+                timings.stop("convert")
+
+        else:
+            content = source
+            if page.endswith(".html"):
+                response = PlainTextResponse(content, status_code=status_code, media_type="text/html")
+            elif page.endswith(".md"):
+                response = PlainTextResponse(content, status_code=status_code, media_type="text/markdown")
+
+        return response
+
 def default_response(path: str, request: Request, status_code: int = 200, count: bool = True, render: bool = True, context: dict[str, Any] = {}, headers: dict[str, str] = {}):
     init_context(context, request.scope)
 
     timings: TimingManager = request.scope["timings"]
-    templates: Jinja2Templates = request.scope["templates"]
 
     markdown_ua = ["curl", "claude-user", "chatgpt-user", "google-extended", "perplexity-user"]
     markdown_mode = any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), any([ua in request.headers.get("user-agent", "").lower() for ua in markdown_ua])])
 
     try:
         if page := resolve_page(path, markdown_mode=markdown_mode, timings=timings):
-            with Directories.public.joinpath(page).open("r") as f:
-                source = f.read()
-
-            if render:
-                timings.start("render")
-
-                if not source.startswith("---"):
-                    front = {}
-                    body = source
-                else:
-                    end = source.find("\n---", 3)
-                    if end == -1:
-                        front = {}
-                        body = source
-                    else:
-                        front = yaml.safe_load(source[3:end]) or {}
-                        body = source[end+4:].lstrip("\n")
-
-                if page.endswith(".html"):
-                    html = templates.env.from_string(body).render(request=request, **context)
-                elif page.endswith(".md"):
-                    html = htmlitdown(templates.env.from_string(body).render(request=request, **context))
-
-                if "base" in front:
-                    if front["base"].startswith("/"):
-                        source = f"{{% extends \"{front['base']}\" %}}\n"
-                    else:
-                        source = f"{{% extends \"/base/{front['base']}.html\" %}}\n"
-                else:
-                    source = "{% extends \"/base/normal.html\" %}\n"
-                for key, value in front.items():
-                    source += f"{{% block {key} %}}{value}{{% endblock %}}\n"
-                source += f"{{% block main %}}\n{html}\n{{% endblock %}}\n"
-
-                content = templates.env.from_string(source).render(request=request, **context)
-                response = PlainTextResponse(content, status_code=status_code, media_type="text/html")
-
-                timings.stop("render")
-
-                if markdown_mode:
-                    timings.start("convert")
-
-                    soup = BeautifulSoup(content, "html.parser")
-                    main = str(soup.find("main")) if soup.find("main") else content
-                    content = markitdown.convert_stream(io.BytesIO(main.encode("utf-8")), file_extension=".html").text_content
-                    response = PlainTextResponse(content, status_code=status_code, media_type="text/markdown")
-
-                    timings.stop("convert")
-
-            else:
-                content = source
-                if page.endswith(".html"):
-                    response = PlainTextResponse(content, status_code=status_code, media_type="text/html")
-                elif page.endswith(".md"):
-                    response = PlainTextResponse(content, status_code=status_code, media_type="text/markdown")
-
-            timings.start("etag")
-            etag = '"' + hashlib.sha256(content.encode("utf-8")).hexdigest() + '"'
-            timings.stop("etag")
-
-            if request.headers.get("if-none-match") == etag:
-                response = Response(status_code=304, headers={"ETag": etag})
-            else:
-                response.headers["ETag"] = etag
+            response = render_page(page, request=request, render=render, status_code=status_code, markdown_mode=markdown_mode, context=context)
 
             if count:
                 request.scope["accesscounter"].increase()
 
         elif file := resolve_file(path):
-            timings.start("etag")
-            etag = '"' + hashlib.sha256(file.read_bytes()).hexdigest() + '"'
-            timings.stop("etag")
-
-            if request.headers.get("if-none-match") == etag:
-                response = Response(status_code=304, headers={"ETag": etag})
-            else:
-                response = FileResponse(file, status_code=status_code, headers={"ETag": etag})
+            response = FileResponse(file, status_code=status_code)
 
         elif url := resolve_shorturl(path, timings=timings):
             response = RedirectResponse(url, status_code=status_code if 299 < status_code < 400 else 307)
@@ -167,7 +159,6 @@ def default_response(path: str, request: Request, status_code: int = 200, count:
         response.headers[key.lower().strip()] = value
 
     context["options"].apply(response)
-
     return response
 
 error_messages = {
@@ -199,15 +190,14 @@ def render_error_page(request: Request, status_code: int = 500, message: str | N
         request.scope["csp"].append("script-src", "'unsafe-inline'")
         request.scope["csp"].append("style-src", "fonts.googleapis.com", "'unsafe-inline'")
         request.scope["csp"].append("font-src", "fonts.gstatic.com")
-        return default_response("error/server", request=request, status_code=status_code, count=False, render=False)
+        return render_page("error/server.html", request=request, status_code=status_code, render=False)
     else:
-        context = {
+        return render_page("error/client.md", request=request, status_code=status_code, context={
             "status_code": status_code,
             "status_code_name": HTTPStatus(status_code).phrase,
             "message": message or error_messages.get(status_code, {}).get("normal", "不明なエラーが発生しました。"),
             "joke_message": joke_message or error_messages.get(status_code, {}).get("joke", "あんのーん")
-        }
-        return default_response("error/client", request=request, status_code=status_code, count=False, context=context)
+        })
 
 thumbnail_font_dir = Directories.public.joinpath("assets", "fonts")
 thumbnail_font_files = [
