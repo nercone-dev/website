@@ -166,5 +166,8 @@ class OptionManager:
         for key in queries:
             if key.lower() in reserved_cookie_keys:
                 continue
-            if key in self.options and not key.endswith(".once") and cookies.get(key) != queries.get(key) or (queries.get(key) or cookies.get(key)) != self.options.get(key):
-                response.set_cookie(key, queries[key], samesite="lax")
+            if key in self.options and not key.endswith(".once") and cookies.get(key) != queries.get(key):
+                if (queries.get(key) or cookies.get(key)) != self.options.get(key):
+                    response.set_cookie(key, queries[key], samesite="lax")
+                else:
+                    response.delete_cookie(key, samesite="lax")
