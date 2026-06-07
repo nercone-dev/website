@@ -96,6 +96,7 @@ class TimingManager:
         return now
 
     def stop(self, key: str) -> float:
+        assert key in self.timings
         now = time.perf_counter()
         self.timings[key] = [self.timings[key][0], now]
         return now

@@ -1,6 +1,7 @@
 import io
 import re
 import yaml
+import random
 import hashlib
 import mistune
 import resvg_py
@@ -8,14 +9,17 @@ from typing import Any
 from html import escape
 from http import HTTPStatus
 from bs4 import BeautifulSoup
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 from markitdown import MarkItDown
+from starlette.types import Scope
 from fastapi import Request, Response
 from fastapi.responses import PlainTextResponse, FileResponse, RedirectResponse
+from fastapi.templating import Jinja2Templates
 
 from .manager import TimingManager
 from .resolver import resolve_file, resolve_page, resolve_shorturl
 from .constants import Directories
-from .templates import templates, access_counter
 
 class CustomHTMLRenderer(mistune.HTMLRenderer):
     _alert_re = re.compile(r'^\s*<p>\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\](?:\n(.*?))?</p>\s*', re.IGNORECASE | re.DOTALL,)
@@ -38,10 +42,34 @@ class CustomHTMLRenderer(mistune.HTMLRenderer):
 markitdown = MarkItDown()
 htmlitdown = mistune.create_markdown(renderer=CustomHTMLRenderer(escape=False), plugins=["table", "strikethrough", "task_lists", "footnotes"])
 
+def init_context(context: dict[str, Any], scope: Scope):
+    context.update(scope)
+
+    context["re_sub"] = lambda s, pattern, repl: re.sub(pattern, repl, s)
+
+    def this_year() -> int:
+        return datetime.now(ZoneInfo("Asia/Tokyo")).year
+    context["this_year"] = this_year
+
+    def this_year_in_heisei() -> int: # heysay is not ended.
+        return datetime.now(ZoneInfo("Asia/Tokyo")).year - 1988
+    context["this_year_in_heisei"] = this_year_in_heisei
+
+    def get_daily_quote() -> str:
+        if file := resolve_file("quotes.txt"):
+            seed = str(datetime.now(timezone.utc).date())
+            with file.open("r") as f:
+                quotes = f.read().strip().split("\n")
+            return random.Random(seed).choice(quotes)
+        else:
+            return "GReeeeN KA-RA-DA"
+    context["get_daily_quote"] = get_daily_quote
+
 def default_response(path: str, request: Request, status_code: int = 200, count: bool = True, render: bool = True, context: dict[str, Any] = {}, headers: dict[str, str] = {}):
-    context.update(request.scope)
+    init_context(context, request.scope)
 
     timings: TimingManager = request.scope["timings"]
+    templates: Jinja2Templates = request.scope["templates"]
 
     markdown_ua = ["curl", "claude-user", "chatgpt-user", "google-extended", "perplexity-user"]
     markdown_mode = any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), any([ua in request.headers.get("user-agent", "").lower() for ua in markdown_ua])])
@@ -114,7 +142,7 @@ def default_response(path: str, request: Request, status_code: int = 200, count:
                 response.headers["ETag"] = etag
 
             if count:
-                access_counter.increase()
+                request.scope["accesscounter"].increase()
 
         elif file := resolve_file(path):
             timings.start("etag")

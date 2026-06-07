@@ -3,6 +3,7 @@ import ipaddress
 from fourword.lib import FourWord
 from fastapi import Response
 from fastapi.responses import PlainTextResponse, RedirectResponse
+from fastapi.templating import Jinja2Templates
 from starlette.requests import Request, HTTPConnection
 from starlette.types import ASGIApp, Scope, Receive, Send
 
@@ -14,7 +15,8 @@ from scour import scour
 from .logger import Logger
 from .manager import PPManager, CSPManager, TimingManager, NetworkManager, OptionManager
 from .renderer import render_error_page
-from .constants import Repositories, Hostnames
+from .constants import Directories, Files, Repositories, Hostnames, Ports, TLS
+from .databases import AccessCounter
 
 class Middleware:
     def __init__(self, app: ASGIApp):
@@ -34,7 +36,17 @@ class Middleware:
                 "csp": CSPManager(),
                 "timings": TimingManager(),
                 "network": NetworkManager(address=ipaddress.ip_address(scope["client"][0]) if scope["client"][0] else None, host=scope["client"][0], port=scope["client"][1]),
-                "options": OptionManager(HTTPConnection(scope=scope))
+                "options": OptionManager(HTTPConnection(scope=scope)),
+
+                "templates": Jinja2Templates(directory=Directories.public),
+                "accesscounter": AccessCounter(),
+
+                "directories": Directories,
+                "files": Files,
+                "repositories": Repositories,
+                "hostnames": Hostnames,
+                "ports": Ports,
+                "tls": TLS
             })
 
             scope["timings"].start("total")

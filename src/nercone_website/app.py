@@ -1,5 +1,4 @@
 import re
-
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import PlainTextResponse, JSONResponse
 
@@ -9,7 +8,6 @@ from .constants import Repositories
 from .middleware import Middleware
 from .resolver import resolve_file
 from .renderer import default_response, render_error_page, render_thumbnail_png
-from .templates import get_daily_quote, access_counter
 
 MimeTypes.load()
 
@@ -42,13 +40,12 @@ async def echo(request: Request):
     return JSONResponse(format_access(request))
 
 @app.api_route("/status", methods=["GET"])
-async def status():
+async def status(request: Request):
     return JSONResponse(
         {
             "status": "ok",
             "version": {"server": Repositories.Server.version, "content": Repositories.Contents.version},
-            "quote": get_daily_quote(),
-            "counter": access_counter.get()
+            "counter": request.scope["accesscounter"].get()
         }
     )
 
