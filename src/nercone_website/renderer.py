@@ -68,7 +68,10 @@ def render_page(page: str, request: Request, render: bool = True, status_code: i
             source = f.read()
 
         if render:
-            timings.start("render")
+            if page.endswith(".html"):
+                timings.start("render", "Jinja2 template rendering")
+            elif page.endswith(".md"):
+                timings.start("render", "Jinja2 template rendering and Markdown to HTML conversion")
 
             if not source.startswith("---"):
                 front = {}
@@ -106,7 +109,7 @@ def render_page(page: str, request: Request, render: bool = True, status_code: i
             timings.stop("render")
 
             if markdown_mode:
-                timings.start("convert")
+                timings.start("convert", "HTML to Markdown conversion")
 
                 soup = BeautifulSoup(content, "html.parser")
                 main = str(soup.find("main")) if soup.find("main") else content

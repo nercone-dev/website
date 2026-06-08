@@ -50,7 +50,7 @@ class Middleware:
                 "tls": TLS
             })
 
-            scope["timings"].start("total")
+            scope["timings"].start("total", "Total request processing time")
 
             hostname = headers.get(b"host", b"").decode().split(":")[0].strip()
             if hostname.split(".")[-1] == "localhost":
@@ -85,7 +85,7 @@ class Middleware:
                 await self.send(response, scope, receive, send)
                 return
 
-            scope["timings"].start("recieve")
+            scope["timings"].start("recieve", "Reading request body")
             body = await self.read_body(receive)
             scope["timings"].stop("recieve")
 
@@ -93,19 +93,19 @@ class Middleware:
                 return {"type": "http.request", "body": body, "more_body": False}
 
             if subdomain in ["", "www"]:
-                response = await self.get_response(scope, cached_receive, scope["path"], "app")
+                response = await self.get_response(scope, cached_receive, scope["path"], "app", "FastAPI app routing and handling (Total)")
                 await self.send(response, scope, cached_receive, send)
 
             else:
                 original_path = scope["path"] if scope["path"].strip() else "/"
                 subdomain_path = f"/{'/'.join(subdomain.split('.')[::-1])}{original_path}"
 
-                response = await self.get_response(scope, cached_receive, subdomain_path, "app")
+                response = await self.get_response(scope, cached_receive, subdomain_path, "app", "FastAPI app routing and handling (Total)")
                 if response.status_code < 400 or response.status_code >= 500:
                     await self.send(response, scope, cached_receive, send)
                     return
 
-                response = await self.get_response(scope, cached_receive, original_path, "app-retry")
+                response = await self.get_response(scope, cached_receive, original_path, "app-retry", "FastAPI app routing and handling (Retry, Total)")
                 await self.send(response, scope, cached_receive, send)
 
         except Exception:
@@ -116,7 +116,7 @@ class Middleware:
             except Exception:
                 await self.send(PlainTextResponse("Internal Server Error", status_code=500), scope, cached_receive, send)
 
-    async def get_response(self, scope: Scope, receive: Receive, path: str, key: str) -> Response:
+    async def get_response(self, scope: Scope, receive: Receive, path: str, key: str, description: str | None = None) -> Response:
         if path != "/" and path.endswith("/"):
             path = path.rstrip("/")
 
@@ -134,7 +134,7 @@ class Middleware:
             elif message["type"] == "http.response.body":
                 body_parts.append(message.get("body", b""))
 
-        scope["timings"].start(key)
+        scope["timings"].start(key, description)
         await self.app(new_scope, receive, capture_send)
         scope["timings"].stop(key)
 
@@ -158,7 +158,7 @@ class Middleware:
         content_type = response.headers.get("content-type", "")
 
         if "text/html" in content_type:
-            scope["timings"].start("minify")
+            scope["timings"].start("minify", "HTML minification")
             try:
                 response.body = minify_html.minify(response.body.decode("utf-8", errors="replace"), minify_js=True, minify_css=True, keep_comments=True, keep_html_and_head_opening_tags=True).encode("utf-8")
             except Exception:
@@ -166,7 +166,7 @@ class Middleware:
             scope["timings"].stop("minify")
 
         elif "text/css" in content_type:
-            scope["timings"].start("minify")
+            scope["timings"].start("minify", "CSS minification")
             try:
                 response.body = rcssmin.cssmin(response.body.decode("utf-8", errors="replace")).encode("utf-8")
             except Exception:
@@ -174,7 +174,7 @@ class Middleware:
             scope["timings"].stop("minify")
 
         elif any(content_type.startswith(t) for t in ["text/javascript", "application/javascript"]):
-            scope["timings"].start("minify")
+            scope["timings"].start("minify", "JavaScript minification")
             try:
                 response.body = rjsmin.jsmin(response.body.decode("utf-8", errors="replace")).encode("utf-8")
             except Exception:
@@ -182,7 +182,7 @@ class Middleware:
             scope["timings"].stop("minify")
 
         elif "image/svg" in content_type:
-            scope["timings"].start("minify")
+            scope["timings"].start("minify", "SVG minification")
             try:
                 scour_options = scour.generateDefaultOptions()
                 scour_options.newlines = False
@@ -197,7 +197,7 @@ class Middleware:
 
         headers = dict(scope.get("headers", []))
 
-        scope["timings"].start("etag")
+        scope["timings"].start("etag", "ETag computation (SHA-256)")
         etag = '"' + hashlib.sha256(response.body).hexdigest() + '"'
         scope["timings"].stop("etag")
 

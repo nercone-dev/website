@@ -88,26 +88,27 @@ class CSPManager:
 
 class TimingManager:
     def __init__(self):
-        self.timings: dict[str, list[float, float | None]] = {}
+        self.timings: dict[str, list[float, float | None, str | None]] = {}
 
-    def start(self, key: str) -> float:
+    def start(self, key: str, description: str | None = None) -> float:
+        assert key not in self.timings
         now = time.perf_counter()
-        self.timings[key] = [now, None]
+        self.timings[key] = [now, None, description]
         return now
 
-    def stop(self, key: str) -> float:
+    def stop(self, key: str, description: str | None = None) -> float:
         assert key in self.timings
         now = time.perf_counter()
-        self.timings[key] = [self.timings[key][0], now]
+        self.timings[key] = [self.timings[key][0], now, description or self.timings[key][2]]
         return now
 
     @property
     def header(self) -> str:
         headers = []
-        sorted_timings = sorted(self.timings.items(), key=lambda item: item[1][1] or float("inf"))
-        for key, timing in sorted_timings:
-            duration = round((timing[1] - timing[0]) * 1000, 3)
-            headers.append(f"{key};dur={duration}")
+        sorted_timings = sorted(((key, value) for key, value in self.timings.items() if value[1] is not None), key=lambda item: item[1][1])
+        for key, value in sorted_timings:
+            duration = round((value[1] - value[0]) * 1000, 3)
+            headers.append(f"{key}{f';desc=\"{value[2]}\"' if value[2] is not None else ''};dur={duration}")
         return ", ".join(headers)
 
 class NetworkManager:

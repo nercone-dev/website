@@ -12,7 +12,7 @@ def resolve_file(path: str) -> Path | None:
 
 def resolve_page(path: str, markdown_mode: bool = False, timings: TimingManager | None = None) -> str | None:
     if timings:
-        timings.start("resolve-page")
+        timings.start("resolve-page", "Resolving HTML/Markdown file")
 
     if path in ["", "/"]:
         template_candidates = ["index.html", "README.html"]
@@ -44,7 +44,7 @@ def resolve_page(path: str, markdown_mode: bool = False, timings: TimingManager 
 
 def resolve_shorturl(path: str, timings: TimingManager | None = None) -> str | None:
     if timings:
-        timings.start("resolve-shorturl")
+        timings.start("resolve-shorturl", "Resolving Short URL")
 
     max_retry = 10
 
