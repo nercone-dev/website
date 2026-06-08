@@ -123,19 +123,19 @@ class Middleware:
                 return {"type": "http.request", "body": body, "more_body": False}
 
             if subdomain in ["", "www"]:
-                response = await self.get_response(scope, cached_receive, scope["path"], "app", "ASGI App (Total)")
+                response = await self.get_response(scope, cached_receive, scope["path"], "app", "ASGI App Total")
                 await self.send(response, scope, cached_receive, send)
 
             else:
                 original_path = scope["path"] if scope["path"].strip() else "/"
                 subdomain_path = f"/{'/'.join(subdomain.split('.')[::-1])}{original_path}"
 
-                response = await self.get_response(scope, cached_receive, subdomain_path, "app", "ASGI App (Total)")
+                response = await self.get_response(scope, cached_receive, subdomain_path, "app", "ASGI App Total")
                 if response.status_code < 400 or response.status_code >= 500:
                     await self.send(response, scope, cached_receive, send)
                     return
 
-                response = await self.get_response(scope, cached_receive, original_path, "app-retry", "ASGI App (Total, Retry)")
+                response = await self.get_response(scope, cached_receive, original_path, "app-retry", "ASGI App Total (Retry)")
                 await self.send(response, scope, cached_receive, send)
 
         except Exception:

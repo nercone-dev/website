@@ -68,11 +68,6 @@ def render_page(page: str, request: Request, render: bool = True, status_code: i
             source = f.read()
 
         if render:
-            if page.endswith(".html"):
-                timings.start("render", "Jinja2 template rendering")
-            elif page.endswith(".md"):
-                timings.start("render", "Jinja2 template rendering and Markdown to HTML conversion")
-
             if not source.startswith("---"):
                 front = {}
                 body = source
@@ -85,10 +80,16 @@ def render_page(page: str, request: Request, render: bool = True, status_code: i
                     front = yaml.safe_load(source[3:end]) or {}
                     body = source[end+4:].lstrip("\n")
 
+            timings.start("render", "Render template")
+            rendered = templates.env.from_string(body).render(request=request, **context)
+            timings.stop("render")
+
             if page.endswith(".html"):
-                html = templates.env.from_string(body).render(request=request, **context)
+                html = rendered
             elif page.endswith(".md"):
-                html = htmlitdown(templates.env.from_string(body).render(request=request, **context))
+                timings.start("convert", "Markdown to HTML")
+                html = htmlitdown(rendered)
+                timings.stop("convert")
 
             if "base" in front:
                 if front["base"].startswith("/"):
@@ -106,10 +107,8 @@ def render_page(page: str, request: Request, render: bool = True, status_code: i
             content = templates.env.from_string(source).render(request=request, **context)
             response = PlainTextResponse(content, status_code=status_code, media_type="text/html")
 
-            timings.stop("render")
-
             if markdown_mode:
-                timings.start("convert", "HTML to Markdown conversion")
+                timings.start("convert", "HTML to Markdown")
 
                 soup = BeautifulSoup(content, "html.parser")
                 main = str(soup.find("main")) if soup.find("main") else content
