@@ -178,13 +178,14 @@ class Middleware:
         return response
 
     async def read_body(self, receive: Receive) -> bytes:
-        body = b""
+        parts = []
         while True:
             message = await receive()
-            body += message.get("body", b"")
+            if chunk := message.get("body"):
+                parts.append(chunk)
             if not message.get("more_body", False):
                 break
-        return body
+        return b"".join(parts)
 
     async def send(self, response: Response, scope, receive, send):
         content_type = response.headers.get("content-type", "")
@@ -205,7 +206,7 @@ class Middleware:
             except Exception:
                 pass
 
-        elif any(content_type.startswith(t) for t in ["text/javascript", "application/javascript"]):
+        elif content_type.startswith(("text/javascript", "application/javascript")):
             try:
                 scope["timings"].start("minify", "JavaScript minification")
                 response.body = minify_js(response.body)
