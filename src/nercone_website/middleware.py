@@ -112,9 +112,9 @@ class Middleware:
             try:
                 Logger.log_error(scope.get("id", FourWord()), traceback.format_exc())
                 Logger.log_access(Request(scope=scope, receive=receive), status_code=500)
-                self.send(render_error_page(Request(scope=scope, receive=receive), status_code=500), scope, cached_receive, send)
+                await self.send(render_error_page(Request(scope=scope, receive=receive), status_code=500), scope, cached_receive, send)
             except Exception:
-                self.send(PlainTextResponse("Internal Server Error", status_code=500), scope, cached_receive, send)
+                await self.send(PlainTextResponse("Internal Server Error", status_code=500), scope, cached_receive, send)
 
     async def get_response(self, scope: Scope, receive: Receive, path: str, key: str) -> Response:
         if path != "/" and path.endswith("/"):
