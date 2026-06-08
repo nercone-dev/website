@@ -91,13 +91,19 @@ class TimingManager:
         self.timings: dict[str, list[float, float | None, str | None]] = {}
 
     def start(self, key: str, description: str | None = None) -> float:
-        assert key not in self.timings
+        if key in self.timings:
+            n = 1
+            while f"{key}-{n}" in self.timings:
+                n += 1
+            key = f"{key}-{n}"
         now = time.perf_counter()
         self.timings[key] = [now, None, description]
         return now
 
     def stop(self, key: str, description: str | None = None) -> float:
-        assert key in self.timings
+        candidates = [k for k in self.timings if k == key or (k.startswith(f"{key}-") and k[len(key) + 1:].isdigit())]
+        assert candidates
+        key = max(candidates, key=lambda k: self.timings[k][0])
         now = time.perf_counter()
         self.timings[key] = [self.timings[key][0], now, description or self.timings[key][2]]
         return now

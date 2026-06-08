@@ -1,2 +1,0 @@
-- [ ] TimingManager.start()の重複時のassertを無くして代わりにresolve-page-2のように`-{int}`プレフィックスを追加するようにする
-- [ ] TimingManager.stop()時に一番新しいプレフィックスのものを使用するようにする
