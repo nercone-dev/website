@@ -192,7 +192,7 @@ class Middleware:
 
         if "text/html" in content_type:
             try:
-                scope["nercone.dev"]["timings"].start("minify", "HTML Minify")
+                scope["nercone.dev"]["timings"].start("minify", "Minify HTML")
                 response.body = minify_html(response.body)
                 scope["nercone.dev"]["timings"].stop("minify")
             except Exception:
@@ -200,7 +200,7 @@ class Middleware:
 
         elif "text/css" in content_type:
             try:
-                scope["nercone.dev"]["timings"].start("minify", "CSS Minify")
+                scope["nercone.dev"]["timings"].start("minify", "Minify CSS")
                 response.body = minify_css(response.body)
                 scope["nercone.dev"]["timings"].stop("minify")
             except Exception:
@@ -208,7 +208,7 @@ class Middleware:
 
         elif content_type.startswith(("text/javascript", "application/javascript")):
             try:
-                scope["nercone.dev"]["timings"].start("minify", "JavaScript Minify")
+                scope["nercone.dev"]["timings"].start("minify", "Minify JavaScript")
                 response.body = minify_js(response.body)
                 scope["nercone.dev"]["timings"].stop("minify")
             except Exception:
@@ -216,7 +216,7 @@ class Middleware:
 
         elif "image/svg" in content_type:
             try:
-                scope["nercone.dev"]["timings"].start("minify", "SVG Minify")
+                scope["nercone.dev"]["timings"].start("minify", "Minify SVG")
                 response.body = minify_svg(response.body)
                 scope["nercone.dev"]["timings"].stop("minify")
             except Exception:
