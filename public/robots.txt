@@ -13,6 +13,16 @@ User-Agent: *
 Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 
+# Google has stopped optimizing its main search engine service and is focusing exclusively on Gemini, yet its performance remains poor, causing the quality of search results to continue to decline. so I disallow it crawl by Google's Gemini-related bots.
+
+User-Agent: Google-Extended
+Disallow: /
+
+User-Agent: Google-CloudVertexBot
+Disallow: /
+
+# I hate Microsoft Edge/Bing and Windows 11, so I disallow it crawl by Microsoft's bots.
+
 User-Agent: BingBot
 Disallow: /
 
