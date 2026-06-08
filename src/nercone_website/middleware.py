@@ -47,7 +47,9 @@ class Middleware:
                 "repositories": Repositories,
                 "hostnames": Hostnames,
                 "ports": Ports,
-                "tls": TLS
+                "tls": TLS,
+
+                "logged": False
             })
 
             scope["timings"].start("total", "Total request processing time")
@@ -111,7 +113,8 @@ class Middleware:
         except Exception:
             try:
                 Logger.log_error(scope.get("id", FourWord()), traceback.format_exc())
-                Logger.log_access(Request(scope=scope, receive=receive), status_code=500)
+                if not scope.get("logged", False):
+                    Logger.log_access(Request(scope=scope, receive=receive), status_code=500)
                 await self.send(render_error_page(Request(scope=scope, receive=receive), status_code=500), scope, cached_receive, send)
             except Exception:
                 await self.send(PlainTextResponse("Internal Server Error", status_code=500), scope, cached_receive, send)
@@ -249,4 +252,6 @@ class Middleware:
         set_header("Server-Timing", scope["timings"].header)
 
         Logger.log_access(request=Request(scope=scope, receive=receive), response=response)
+        scope["logged"] = True
+
         await response(scope, receive, send)
