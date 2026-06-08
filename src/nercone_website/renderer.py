@@ -42,7 +42,7 @@ markitdown = MarkItDown()
 htmlitdown = mistune.create_markdown(renderer=CustomHTMLRenderer(escape=False), plugins=["table", "strikethrough", "task_lists", "footnotes"])
 
 def init_context(context: dict[str, Any], scope: Scope):
-    context.update(scope)
+    context.update(scope["nercone.dev"])
 
     context["re_sub"] = lambda s, pattern, repl: re.sub(pattern, repl, s)
     context["this_year"] = datetime.now(ZoneInfo("Asia/Tokyo")).year
@@ -60,8 +60,8 @@ def init_context(context: dict[str, Any], scope: Scope):
 def render_page(page: str, request: Request, render: bool = True, status_code: int = 200, markdown_mode: bool = False, context: dict[str, Any] = {}):
     init_context(context, request.scope)
 
-    timings: TimingManager = request.scope["timings"]
-    templates: Jinja2Templates = request.scope["templates"]
+    timings: TimingManager = request.scope["nercone.dev"]["timings"]
+    templates: Jinja2Templates = request.scope["nercone.dev"]["templates"]
 
     if path := resolve_file(page):
         with path.open("r") as f:
@@ -131,14 +131,14 @@ def default_response(path: str, request: Request, status_code: int = 200, count:
     markdown_ua = ["curl", "claude-user", "chatgpt-user", "google-extended", "perplexity-user"]
     markdown_mode = any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), any([ua in request.headers.get("user-agent", "").lower() for ua in markdown_ua])])
 
-    timings: TimingManager = request.scope["timings"]
+    timings: TimingManager = request.scope["nercone.dev"]["timings"]
 
     try:
         if page := resolve_page(path, markdown_mode=markdown_mode, timings=timings):
             response = render_page(page, request=request, render=render, status_code=status_code, markdown_mode=markdown_mode, context=context)
 
             if count:
-                request.scope["accesscounter"].increase()
+                request.scope["nercone.dev"]["accesscounter"].increase()
 
         elif file := resolve_file(path):
             response = FileResponse(file, status_code=status_code)
@@ -155,7 +155,7 @@ def default_response(path: str, request: Request, status_code: int = 200, count:
     for key, value in headers.items():
         response.headers[key.lower().strip()] = value
 
-    request.scope["options"].apply(response)
+    request.scope["nercone.dev"]["options"].apply(response)
     return response
 
 error_messages = {
@@ -184,9 +184,9 @@ error_messages = {
 
 def render_error_page(request: Request, status_code: int = 500, message: str | None = None, joke_message: str | None = None) -> Response:
     if status_code in range(500, 599):
-        request.scope["csp"].append("script-src", "'unsafe-inline'")
-        request.scope["csp"].append("style-src", "fonts.googleapis.com", "'unsafe-inline'")
-        request.scope["csp"].append("font-src", "fonts.gstatic.com")
+        request.scope["nercone.dev"]["csp"].append("script-src", "'unsafe-inline'")
+        request.scope["nercone.dev"]["csp"].append("style-src", "fonts.googleapis.com", "'unsafe-inline'")
+        request.scope["nercone.dev"]["csp"].append("font-src", "fonts.gstatic.com")
         return render_page("error/server.html", request=request, status_code=status_code, render=False)
     else:
         return render_page("error/client.md", request=request, status_code=status_code, context={

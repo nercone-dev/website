@@ -8,23 +8,23 @@ from .constants import Files
 
 def format_access(request: Request, response: Response | None = None) -> dict:
     return {
-        "id": request.scope["id"].text,
+        "id": request.scope["nercone.dev"]["id"].text,
         "url": str(request.url),
         "status": response.status_code if response is not None else 0,
         "method": request.method,
         "client": {
-            "host": request.scope["network"].host,
-            "port": request.scope["network"].port
+            "host": request.scope["nercone.dev"]["network"].host,
+            "port": request.scope["nercone.dev"]["network"].port
         },
         "headers": {
             "request": dict(request.headers),
             "response": dict(response.headers) if response is not None else {}
         },
         "managers": {
-            "pp": request.scope["pp"].directives,
-            "csp": request.scope["csp"].directives,
-            "timings": request.scope["timings"].timings,
-            "network": {"trusted": request.scope["network"].trusted}
+            "pp": request.scope["nercone.dev"]["pp"].directives,
+            "csp": request.scope["nercone.dev"]["csp"].directives,
+            "timings": request.scope["nercone.dev"]["timings"].timings,
+            "network": {"trusted": request.scope["nercone.dev"]["network"].trusted}
         }
     }
 

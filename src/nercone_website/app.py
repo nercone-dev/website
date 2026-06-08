@@ -45,7 +45,7 @@ async def status(request: Request):
         {
             "status": "ok",
             "version": Repository.version,
-            "counter": request.scope["accesscounter"].get()
+            "counter": request.scope["nercone.dev"]["accesscounter"].get()
         }
     )
 
