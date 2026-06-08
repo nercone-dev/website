@@ -20,11 +20,9 @@ class Files:
         access = Directories.logs.joinpath("access.log")
         error = Directories.logs.joinpath("error.log")
 
-class Repositories:
-    class Server:
-        url = subprocess.run(["/usr/bin/git", "remote", "get-url", "origin"], text=True, capture_output=True, cwd=Directories.base).stdout.strip()
-        version = subprocess.run(["/usr/bin/git", "rev-parse", "--short", "HEAD"], text=True, capture_output=True, cwd=Directories.base).stdout.strip()
-
+class Repository:
+    url = subprocess.run(["/usr/bin/git", "remote", "get-url", "origin"], text=True, capture_output=True, cwd=Directories.base).stdout.strip()
+    version = subprocess.run(["/usr/bin/git", "rev-parse", "--short", "HEAD"], text=True, capture_output=True, cwd=Directories.base).stdout.strip()
 
 class Hostnames:
     public = ["nercone.dev", "nerc1.dev", "diamondgotcat.net", "d-g-c.net"]

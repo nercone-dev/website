@@ -4,7 +4,7 @@ from fastapi.responses import PlainTextResponse, JSONResponse
 
 from .logger import format_access
 from .databases import MimeTypes
-from .constants import Repositories
+from .constants import Repository
 from .middleware import Middleware
 from .resolver import resolve_file
 from .renderer import default_response, render_error_page, render_thumbnail_png
@@ -30,7 +30,7 @@ async def welcome():
 ■  ■■ ■     ■  ■  ■     ■   ■ ■  ■■ ■
 ■   ■ ■■■■■ ■   ■  ■■■■  ■■■  ■   ■ ■■■■■
 
-nercone.dev ({Repositories.Server.version})
+nercone.dev ({Repository.version})
 welcome to nercone.dev!
         """.strip() + "\n"
     )
@@ -44,7 +44,7 @@ async def status(request: Request):
     return JSONResponse(
         {
             "status": "ok",
-            "version": Repositories.Server.version,
+            "version": Repository.version,
             "counter": request.scope["accesscounter"].get()
         }
     )

@@ -8,7 +8,7 @@ from hypercorn.config import Config
 from importlib.metadata import version
 
 from .logger import Logger
-from .constants import Repositories, Ports, TLS
+from .constants import Repository, Ports, TLS
 from .databases import MimeTypes
 
 def set_ssl_groups(context: ssl.SSLContext, groups: str) -> None:
@@ -44,7 +44,7 @@ class HypercornConfig(Config):
 
 def main():
     startup_id = FourWord().compact_text
-    Logger.log(f"[{startup_id}] nercone.dev ({Repositories.Server.version})")
+    Logger.log(f"[{startup_id}] nercone.dev ({Repository.version})")
     Logger.log(f"{' ' * (len(startup_id) + 2)} with hypercorn {version('hypercorn')}")
     Logger.log(f"{' ' * (len(startup_id) + 2)}      fastapi   {version('fastapi')}")
     Logger.log(f"{' ' * (len(startup_id) + 2)}      jinja2    {version('jinja2')}")

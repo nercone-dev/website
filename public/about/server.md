@@ -4,7 +4,7 @@ header_desc: このサーバーの詳細情報
 description: nercone.devのサーバーの詳細情報
 ---
 
-# nercone.dev ({{ repositories.Server.version }})
+# nercone.dev ({{ repository.Server.version }})
 nercone.devへのHTTP(S)リクエストは、Python+Hypercorn+FastAPIで構築されたWebサーバーによって処理されています。
 
 サードパーティのソフトウェアや機密情報などの公開ができない/難しい箇所を除く、ほとんどの箇所はGitHubで公開しています。
@@ -23,12 +23,9 @@ SSLの全バージョンを含む、TLS 1.1以前のSSL/TLSは無効化してい
 `X25519MLKEM768`などのハイブリッドPQCでの鍵交換に対応済みです。
 純粋なPQC(`MLKEM1024`/`MLKEM768`)にも対応済みですが、ハイブリッドPQCより優先順位を低くしています。
 
-## リポジトリ
-
-### サーバー ([github.com:nercone-dev/website](https://github.com/nercone-dev/website/)@[{{ repositories.Server.version }}]({{ "https://github.com/nercone-dev/website/commit/" + repositories.Server.version }}))
+## リポジトリ ([github.com:nercone-dev/website](https://github.com/nercone-dev/website/)@[{{ repository.Server.version }}]({{ "https://github.com/nercone-dev/website/commit/" + repository.Server.version }}))
 途中でGiteaに移動したり戻したり~~ラジバンダリ~~しましたが、現時点でサーバーのソースコードはここで管理しています。
 やっぱりGitHubが一番落ち着くんです。
-
 
 ## その他の情報
 

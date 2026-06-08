@@ -182,7 +182,7 @@ https://github.com/nercone-dev/website.git
 
 - `Directories`: `base`(CWD)、`public`、`logs`、`databases`の`Path`オブジェクト
 - `Files`: `mime_types`/`access_counter`の`Path`と、ネストクラス`Files.Logs`(`app`/`access`/`error`の各ログパス)
-- `Repositories`: 起動時に`git rev-parse --short HEAD`でコミットハッシュを取得 (`Server.version`/`Server.url`)
+- `Repository`: 起動時に`git rev-parse --short HEAD`でコミットハッシュを取得 (`version`/`url`)
 - `Hostnames`: `public`(外部公開ドメイン一覧: `nercone.dev`/`nerc1.dev`/`diamondgotcat.net`/`d-g-c.net`) / `local`(`localhost`/`127.0.0.1`) / `all = local + public`
 - `Ports`: `http`(`0.0.0.0:80`/`[::]:80`) / `https`(`0.0.0.0:443`/`[::]:443`)
 - `TLS`: `certfile`/`keyfile`(既定はLet's Encryptのパス。`WEBSITE_TLS_CERTFILE`/`WEBSITE_TLS_KEYFILE`で上書き可) / `ciphers`(ECDHE-ECDSAスイート列) / `groups`(PQC対応の鍵グループ: X25519MLKEM768等)
@@ -245,7 +245,7 @@ ASGI形式のミドルウェア(`Middleware` クラス)。FastAPIの`add_middlew
 
 **リクエスト処理フロー:**
 1. `scope["type"]`が`http`/`websocket`以外は素通り
-2. `scope` に各マネージャー(`id`/`pp`/`csp`/`timings`/`network`/`options`) と `templates`(Jinja2Templates)/`accesscounter`(AccessCounter)/`directories`/`files`/`repositories`/`hostnames`/`ports`/`tls` を注入
+2. `scope` に各マネージャー(`id`/`pp`/`csp`/`timings`/`network`/`options`) と `templates`(Jinja2Templates)/`accesscounter`(AccessCounter)/`directories`/`files`/`repository`/`hostnames`/`ports`/`tls` を注入
 3. `timings.start("total")`
 4. ホスト名チェック: `Hostnames.public` 以外のホスト名は403 (trusted networkからのアクセスは除外)
 5. WebSocket はサブドメインパス変換のみ行い素通り
@@ -324,7 +324,7 @@ Jinja2テンプレート内で利用可能なグローバル変数/関数:
 - `this_year_in_heisei()`: 平成換算の現在年 (year - 1988)
 - `get_daily_quote`: `quotes.txt`から日付をシードにして1日1エントリ (UTCの日付でシード)
 - `re_sub(s, pattern, repl)`: 正規表現置換 (テンプレート内では `s | re_sub(pattern, repl)` の形で使用)
-- その他`scope`の全キー (`repositories`/`hostnames`/`accesscounter`等) もコンテキスト経由で参照可能
+- その他`scope`の全キー (`repository`/`hostnames`/`accesscounter`等) もコンテキスト経由で参照可能
 
 ### 短縮URL (`shorturls.json`)
 

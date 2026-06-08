@@ -16,7 +16,7 @@ from scour import scour
 from .logger import Logger
 from .manager import PPManager, CSPManager, TimingManager, NetworkManager, OptionManager
 from .renderer import render_error_page
-from .constants import Directories, Files, Repositories, Hostnames, Ports, TLS
+from .constants import Directories, Files, Repository, Hostnames, Ports, TLS
 from .databases import AccessCounter
 
 class Middleware:
@@ -44,7 +44,7 @@ class Middleware:
 
                 "directories": Directories,
                 "files": Files,
-                "repositories": Repositories,
+                "repository": Repository,
                 "hostnames": Hostnames,
                 "ports": Ports,
                 "tls": TLS,
@@ -217,7 +217,7 @@ class Middleware:
         set_header("X-Frame-Options", "SAMEORIGIN")
         set_header("X-Content-Type-Options", "nosniff")
 
-        set_header("Server", f"nercone.dev ({Repositories.Server.version})")
+        set_header("Server", f"nercone.dev ({Repository.version})")
         set_header("Link", "<https://nercone.dev/sitemap.xml>; rel=\"sitemap\", <https://nercone.dev/robots.txt>; rel=\"robots\"")
 
         set_header("Cache-Control", "no-cache", override=False)

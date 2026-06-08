@@ -10,7 +10,7 @@
     ■  ■■ ■     ■  ■  ■     ■   ■ ■  ■■ ■
     ■   ■ ■■■■■ ■   ■  ■■■■  ■■■  ■   ■ ■■■■■
 
-    nercone.dev ({{ repositories.Server.version }})
+    nercone.dev ({{ repository.version }})
     welcome to nercone.dev!
 -->
 <!DOCTYPE html>
@@ -102,7 +102,7 @@
                     <a href="/qiita/"><img alt="qiita" src="https://assets.nercone.dev/images/3rd-party/icons/qiita.svg" class="small-icon"></a>
                     <a href="/zenn/"><img alt="zenn" src="https://assets.nercone.dev/images/3rd-party/icons/zenn.svg" class="small-icon"></a>
                     <!--                         qiita            kotonai -->
-                    <a href="/about/server/" class="text-no-decoration font-bold small:hide">{{ repositories.Server.version }}</a>
+                    <a href="/about/server/" class="text-no-decoration font-bold small:hide">{{ repository.version }}</a>
                 </div>
             </div>
             {% block extra_footer_sections %}{% endblock %}
