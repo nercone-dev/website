@@ -206,7 +206,7 @@ https://github.com/nercone-dev/website.git
 
 - `PPManager`: `Permissions-Policy`ヘッダーを管理。`set()`/`append()`/`remove()`で操作し`header`プロパティでヘッダー文字列化。
 - `CSPManager`: `Content-Security-Policy`ヘッダーを管理。`set()`/`append()`/`remove()`で操作し`header`プロパティでヘッダー文字列化。
-- `TimingManager`: `Server-Timing`ヘッダー用の処理時間計測。`start(key)`/`stop(key)`でスパンを記録し`header`プロパティで出力。(計測対象: `total`/`recieve`/`app`/`app-retry`/`resolve-page`/`resolve-shorturl`/`render`/`convert`/`etag`/`minify`)
+- `TimingManager`: `Server-Timing`ヘッダー用の処理時間計測。`start(key)`/`stop(key)`でスパンを記録し`header`プロパティで出力。(計測対象: `total`/`receive`/`app`/`app-retry`/`resolve-page`/`resolve-shorturl`/`render`/`convert`/`etag`/`minify`)
 - `NetworkManager`: クライアントのIPアドレス情報を保持。Hypercornがエッジで直接接続を受けるため、`scope["client"]`(実際のTCPピア)から取得する。`trusted`プロパティでプライベートIP帯(RFC 1918/RFC 6890等)か判定。
 - `OptionManager`: クエリパラメータとCookieを統合してユーザーオプションを管理。クエリパラメータは`apply()`呼び出し時に自動でCookieに永続化される(`.once`サフィックスを持つキーは永続化されない)。
 

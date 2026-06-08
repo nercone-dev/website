@@ -115,9 +115,9 @@ class Middleware:
                 await self.send(response, scope, receive, send)
                 return
 
-            scope["nercone.dev"]["timings"].start("recieve", "Read body")
+            scope["nercone.dev"]["timings"].start("receive", "Read body")
             body = await self.read_body(receive)
-            scope["nercone.dev"]["timings"].stop("recieve")
+            scope["nercone.dev"]["timings"].stop("receive")
 
             async def cached_receive():
                 return {"type": "http.request", "body": body, "more_body": False}
