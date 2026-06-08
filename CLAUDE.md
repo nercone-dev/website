@@ -9,9 +9,8 @@ Python 3.12のFastAPI + Hypercornの上で動くASGIアプリケーションで�
 ## 関連リポジトリ
 
 - `website` (`https://github.com/nercone-dev/website/`)
-- `website-contents` (`https://github.com/nercone-dev/website-contents/`)
 
-コンテンツ (HTML、Markdown、CSS、画像など) は別リポジトリ`website-contents`で管理されており、`git submodule`を使用し`public/`ディレクトリにマウントされています。
+コンテンツ (HTML、Markdown、CSS、画像など) は`public/`ディレクトリで管理されており、`website`リポジトリに直接含まれています。
 
 アクセスカウンタなどの一部の例外を除き、外部からのアクセスに対して`public/`ディレクトリ外のファイルのコンテンツに関する情報、またはそれを予測できるような情報は、リクエストに少しも含めてはなりません。
 これはセキュリティ上最も重要と言えます。そのため、このルールに従わない手法での機能の実装方法や問題の解決策は考えるべきではありません。
@@ -43,9 +42,8 @@ https://github.com/nercone-dev/website.git
 │       ├── app.py               # FastAPIアプリ・ルーティング定義
 │       ├── renderer.py          # レスポンス生成・Markdown/HTML変換・サムネイル生成
 │       └── middleware.py        # ASGIミドルウェア・minify・セキュリティヘッダー付与・ロギング
-├── public -> https://github.com/nercone-dev/website-contents.git
+├── public/
 ├── .gitignore
-├── .gitmodules
 ├── README.md
 ├── CLAUDE.md
 ├── LICENSE
@@ -57,10 +55,9 @@ https://github.com/nercone-dev/website.git
 └── update-contents.sh
 ```
 
-### `website-contents` (`/public/`)
+### `public/`
 
 ```
-https://github.com/nercone-dev/website-contents.git
 ├── .well-known
 │   ├── openpgpkey
 │   │   ├── hu
@@ -185,7 +182,7 @@ https://github.com/nercone-dev/website-contents.git
 
 - `Directories`: `base`(CWD)、`public`、`logs`、`databases`の`Path`オブジェクト
 - `Files`: `mime_types`/`access_counter`の`Path`と、ネストクラス`Files.Logs`(`app`/`access`/`error`の各ログパス)
-- `Repositories`: 起動時に`git rev-parse --short HEAD`でコミットハッシュを取得 (`Server.version`/`Server.url`、`Contents.version`/`Contents.url`)
+- `Repositories`: 起動時に`git rev-parse --short HEAD`でコミットハッシュを取得 (`Server.version`/`Server.url`)
 - `Hostnames`: `public`(外部公開ドメイン一覧: `nercone.dev`/`nerc1.dev`/`diamondgotcat.net`/`d-g-c.net`) / `local`(`localhost`/`127.0.0.1`) / `all = local + public`
 - `Ports`: `http`(`0.0.0.0:80`/`[::]:80`) / `https`(`0.0.0.0:443`/`[::]:443`)
 - `TLS`: `certfile`/`keyfile`(既定はLet's Encryptのパス。`WEBSITE_TLS_CERTFILE`/`WEBSITE_TLS_KEYFILE`で上書き可) / `ciphers`(ECDHE-ECDSAスイート列) / `groups`(PQC対応の鍵グループ: X25519MLKEM768等)
@@ -275,7 +272,7 @@ FastAPIルーティング定義。`docs_url=None`/`redoc_url=None`/`openapi_url=
 | `/ping` | GET | ヘルスチェック。`pong!`を返す。 |
 | `/welcome` | GET | ASCIIアートのウェルカムメッセージ + バージョン情報。 |
 | `/echo` | GET | `format_access`の結果をJSONで返す。デバッグ用。 |
-| `/status` | GET | JSON形式のステータス。`status`/`version`(server/content)/`counter`(アクセス数)を含む。 |
+| `/status` | GET | JSON形式のステータス。`status`/`version`(サーバーコミットハッシュ)/`counter`(アクセス数)を含む。 |
 | `/assets/images/thumbnail/template/{template}` | GET | サムネイルPNG生成。クエリ: `path`/`title`/`description`。 |
 | `/assets/css/merge` | GET | CSSファイルの結合。クエリ`path`にカンマ区切りでファイル名(拡張子なし)を指定。`@charset`/`@import`を整理してボディを結合する。 |
 | `/assets/js/merge` | GET | JSファイルの結合。クエリ`path`にカンマ区切りでファイル名(拡張子なし)を指定。 |
@@ -385,7 +382,7 @@ Jinja2テンプレート内で利用可能なグローバル変数/関数:
         - gitやuv、clangなどの日常的に使用される基本的なツールについては、記載する必要はありません。
 
 ## 補足
-- `/status`エンドポイントのレスポンスには起動時に`git rev-parse --short HEAD`で取得した`website`/`website-contents`のコミットハッシュを含むため、更新後に変更が正しく反映されているか確認できます。
+- `/status`エンドポイントのレスポンスには起動時に`git rev-parse --short HEAD`で取得したサーバーのコミットハッシュを含むため、更新後に変更が正しく反映されているか確認できます。
 - アクセスログは`logs/access.log`にJSONL形式で記録されます。ログエントリには `id`/`url`/`status`/`method`/`client`/`headers`/`managers`(pp/csp/timings/network)が含まれます。
 - 5XXエラーが発生した場合は`logs/error.log`にPythonのトレースバックが記録されます。リクエストIDでアクセスログと照合できます。
 - リクエストIDは[FourWord ID](https://github.com/nercone-dev/fourword/)のText形式が採用されており、テキスト形式に変換された後`X-Request-Id`レスポンスヘッダーとして返されます。幅が少し狭いターミナルでも折り返しが発生しないよう、`app.log`ファイルではCompact Text形式が採用されています。 
