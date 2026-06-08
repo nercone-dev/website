@@ -1,0 +1,7 @@
+Contact: mailto:nercone@nercone.dev
+Contact: mailto:bugaboo.decent_8y@icloud.com
+Expires: 2026-05-31T15:00:00.000Z
+Encryption: https://nercone.dev/public-key/
+Acknowledgments: https://nercone.dev/vulnerability-reporters/
+Preferred-Languages: ja, en
+Canonical: https://nercone.dev/.well-known/security.txt

@@ -1,0 +1,61 @@
+.button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-family: inherit;
+    font-size: smaller;
+    font-weight: 400;
+    color: var(--theme-color-text);
+    background-color: transparent;
+    border: 1px solid var(--theme-color-text-headline-underline);
+    text-decoration: none;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+    user-select: none;
+    box-sizing: border-box;
+}
+.button:hover {
+    background-color: color-mix(in srgb, var(--theme-color-stark) 8%, transparent);
+    color: var(--theme-color-stark);
+    border-color: var(--theme-color-text-alt);
+}
+.button:active {
+    background-color: color-mix(in srgb, var(--theme-color-stark) 16%, transparent);
+}
+.button.is-active {
+    background-color: var(--theme-color-background-pre);
+    color: var(--theme-color-stark);
+    border-color: var(--theme-color-text-alt);
+    font-weight: 600;
+}
+.button:disabled,
+.button.is-disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.button-primary {
+    color: var(--theme-color-background);
+    background-color: var(--theme-color-stark);
+    border-color: var(--theme-color-stark);
+}
+.button-primary:hover {
+    background-color: var(--theme-color-text);
+    border-color: var(--theme-color-text);
+    color: var(--theme-color-background);
+}
+.button-primary:active {
+    background-color: var(--theme-color-text-alt);
+    border-color: var(--theme-color-text-alt);
+}
+
+.button-ghost {
+    border-color: transparent;
+}
+.button-ghost:hover {
+    border-color: transparent;
+}
+.button-ghost:active {
+    border-color: transparent;
+}

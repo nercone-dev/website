@@ -1,0 +1,19 @@
+.selectable {
+    user-select: auto;
+    -webkit-touch-callout: default;
+}
+.unselectable {
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.banner {
+    height: 50px;
+    width: auto;
+}
+
+.small-icon {
+    width: 12pt;
+    height: 12pt;
+    display: block;
+}

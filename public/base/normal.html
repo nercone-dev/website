@@ -1,0 +1,117 @@
+<!-- 
+    For Bots: On this site, you can read any page in Markdown by using cURL or by replacing .html with .md. Please give it a try!
+
+    $ curl https://nercone.dev/welcome/
+    ■   ■ ■■■■■ ■■■■   ■■■■  ■■■  ■   ■ ■■■■■
+    ■■  ■ ■     ■   ■ ■     ■   ■ ■■  ■ ■
+    ■■  ■ ■     ■   ■ ■     ■   ■ ■■  ■ ■
+    ■ ■ ■ ■■■■  ■■■■  ■     ■   ■ ■ ■ ■ ■■■■
+    ■  ■■ ■     ■ ■   ■     ■   ■ ■  ■■ ■
+    ■  ■■ ■     ■  ■  ■     ■   ■ ■  ■■ ■
+    ■   ■ ■■■■■ ■   ■  ■■■■  ■■■  ■   ■ ■■■■■
+
+    nercone.dev ({{ repositories.Server.version }})
+    welcome to nercone.dev!
+-->
+<!DOCTYPE html>
+<html lang="ja-JP">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}nercone's website{% endblock %}</title>
+        <meta name="description" content="{% block description %}No description.{% endblock %}">
+        <!-- for Crawlers -->
+        <link rel="canonical" href="https://nercone.dev{{ request.url.path }}">
+        <meta name="robots" content="index, follow">
+        <meta name="googlebot" content="index, follow">
+        <meta name="author" content="Nercone a.k.a. DiamondGotCat">
+        <meta name="theme-color" content="#1A1A1A">
+        <!-- Thumbnail -->
+        {% set thumbnail_final_url %}{% block thumbnail_url %}https://assets.nercone.dev/images/thumbnail/template/{% block thumbnail_template %}normal{% endblock %}{% endblock %}?path={{ request.url.path.strip('/') or 'index' | urlencode }}&title={% block thumbnail_title %}{{ re_sub(self.title(), ' - Nercone.*$', '') | urlencode }}{% endblock %}&description={% block thumbnail_description %}{{ self.description() | urlencode }}{% endblock %}{% endset %}
+        <meta property="og:site_name" content="nercone's website">
+        <meta property="og:title" content="{{ self.title() }}">
+        <meta property="og:description" content="{{ self.description() }}">
+        <meta property="og:image" content="{{ thumbnail_final_url }}">
+        <meta property="og:url" content="https://nercone.dev{{ request.url.path }}">
+        <meta property="og:type" content="website">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{{ self.title() }}">
+        <meta name="twitter:description" content="{{ self.description() }}">
+        <meta name="twitter:image" content="{{ thumbnail_final_url }}">
+        <!-- PWA (Progressive Web App) -->
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="apple-touch-icon" href="https://assets.nercone.dev/images/favicon.png" sizes="384x384">
+        <link rel="icon" type="image/png" href="https://assets.nercone.dev/images/favicon.png" sizes="384x384">
+        <link rel="icon" type="image/svg+xml" href="https://assets.nercone.dev/images/favicon.svg" sizes="384x384">
+        <!-- Stylesheets / Scripts -->
+        <script src="https://assets.nercone.dev/js/merge/?path=main,loading-overlay,view-transition" defer></script>
+        <link rel="stylesheet" href="https://assets.nercone.dev/css/merge/?path=main,colors,loading-overlay,view-transition,themes/{{ options.get('dev.nercone.options.apperance.theme') }}">
+        {% block extra_head %}{% endblock %}
+    </head>
+    <body>
+        {% block body %}
+        <div id="cursor"></div>
+        <div id="loading-overlay" aria-hidden="true">
+            <svg viewBox="96 256 832 512" xmlns="http://www.w3.org/2000/svg">
+                <polyline points="872 572.75 152 332 152 692 512 692 872 332 872 692 684.5 692" fill="none" stroke="currentColor" stroke-width="48" stroke-miterlimit="10"/>
+            </svg>
+        </div>
+        {% block header %}
+        <header class="flex">
+            <div class="flex-1 flex">
+                <p id="header-title" translate="no">
+                    {% block header_title %}
+                    {% block header_title_prefix %}{% endblock %}
+                    {% block header_title_prefix_separator %} {% endblock %}
+                    {% set segments = request.url.path.strip('/').split('/') | select | list %}
+                    <a href="/" class="text-no-decoration text-stark small:font-bold">nercone.dev</a>
+                    {% for segment in segments %}
+                    {% set href = '/' + segments[:loop.index] | join('/') %}
+                    / <a href="{{ href }}" class="text-no-decoration">{{ segment }}</a>
+                    {% endfor %}
+                    {% block header_title_suffix %}{% endblock %}
+                    {% block header_title_suffix_separator %} {% endblock %}
+                    {% endblock %}
+                </p>
+                <p class="text-alt small:hide">{% block header_desc %}<a href="/daily-quote/" class="text-no-decoration small:hide medium:hide">{{ daily_quote }}</a>{% endblock %}</p>
+            </div>
+            <div class="flex">
+                <a href="/access-counter/" class="text-no-decoration font-variant-numeric-tabular small:text-stark small:font-bold">{{ accesscounter.get() }}</a>
+            </div>
+        </header>
+        {% endblock %}
+        <main>{% block main %}{% endblock %}</main>
+        {% block footer %}
+        <footer>
+            <div class="flex text-alt">
+                <div class="flex-1 flex">
+                    <a href="/" class="text-no-decoration font-bold small:hide" translate="no">{% block footer_domain_prefix %}{% endblock %}nercone.dev{% block footer_domain_suffix %}{% endblock %}</a>
+                    {% block footer_links %}
+                    <a href="/about/" class="text-no-decoration small:font-bold">about</a>
+                    <a href="/links/" class="text-no-decoration small:font-bold">links</a>
+                    <a href="/projects/" class="text-no-decoration small:font-bold">projects</a>
+                    <a href="mailto:nercone@nercone.dev" class="text-no-decoration small:hide">email</a>
+                    <a href="/public-key/" class="text-no-decoration small:hide">public-key</a>
+                    {% block extra_footer_links %}{% endblock %}
+                    {% endblock %}
+                </div>
+                <div class="flex">
+                    <a href="/github/"><img alt="github" src="https://assets.nercone.dev/images/3rd-party/icons/github.svg" class="small-icon"></a>
+                    <a href="/twitter/"><img alt="twitter" src="https://assets.nercone.dev/images/3rd-party/icons/twitter.svg" class="small-icon"></a>
+                    <a href="/orcid/"><img alt="orcid" src="https://assets.nercone.dev/images/3rd-party/icons/orcid.svg" class="small-icon"></a>
+                    <a href="/qiita/"><img alt="qiita" src="https://assets.nercone.dev/images/3rd-party/icons/qiita.svg" class="small-icon"></a>
+                    <a href="/zenn/"><img alt="zenn" src="https://assets.nercone.dev/images/3rd-party/icons/zenn.svg" class="small-icon"></a>
+                    <!--                         qiita            kotonai -->
+                    <a href="/about/server/" class="text-no-decoration font-bold small:hide">{{ repositories.Server.version }}</a>
+                </div>
+            </div>
+            {% block extra_footer_sections %}{% endblock %}
+        </footer>
+        {% endblock %}
+        {% endblock %}
+        <!-- Stylesheets / Scripts -->
+        <script src="https://assets.nercone.dev/js/merge/?path=cursor,class-prefix,components/dropdown" defer></script>
+        <link rel="stylesheet" href="https://assets.nercone.dev/css/merge/?path=fonts,cursor,layout,miscellaneous,components/button,components/dropdown">
+        {% block extra_imports %}{% endblock %}
+    </body>
+</html>

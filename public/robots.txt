@@ -1,0 +1,32 @@
+# ╭───────────────────────────────────────────────╮
+# │  ╭──────╮                                     │
+# │  │      │  I'm a robot                        │
+# │  │      │                        antiCAPTCHA  │
+# │  ╰──────╯                    Privacy | Terms  │
+# ╰───────────────────────────────────────────────╯
+# Note: "I'm a robot" Box Inspired by https://fxtwitter.com/robots.txt
+#       If want to delete this, Please send deletion request to: nercone@nercone.dev
+#       I delete this text if on received deletion request from FxEmbed.
+#       I don't check my emails often so my response may be delayed. Sorry.
+
+User-Agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+Allow: /
+
+User-Agent: BingBot
+Disallow: /
+
+User-Agent: AdIdxBot
+Disallow: /
+
+User-Agent: BingPreview
+Disallow: /
+
+User-Agent: MicrosoftPreview
+Disallow: /
+
+User-Agent: BingVideoPreview
+Disallow: /
+
+# Thanks for reading and following this robots.txt.
+# Have a nice day!

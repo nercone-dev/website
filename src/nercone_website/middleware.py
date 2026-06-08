@@ -217,7 +217,7 @@ class Middleware:
         set_header("X-Frame-Options", "SAMEORIGIN")
         set_header("X-Content-Type-Options", "nosniff")
 
-        set_header("Server", f"nercone.dev ({Repositories.Server.version}+{Repositories.Contents.version})")
+        set_header("Server", f"nercone.dev ({Repositories.Server.version})")
         set_header("Link", "<https://nercone.dev/sitemap.xml>; rel=\"sitemap\", <https://nercone.dev/robots.txt>; rel=\"robots\"")
 
         set_header("Cache-Control", "no-cache", override=False)

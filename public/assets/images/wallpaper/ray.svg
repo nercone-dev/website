@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_レイヤー_1" data-name="レイヤー 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1920 1080">
+  <defs>
+    <style>
+      .cls-1 {
+        filter: url(#outer-glow-1);
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 4px;
+      }
+
+      .cls-2 {
+        opacity: .25;
+      }
+
+      .cls-3 {
+        fill: url(#_名称未設定グラデーション_14);
+      }
+    </style>
+    <linearGradient id="_名称未設定グラデーション_14" data-name="名称未設定グラデーション 14" x1="960" y1="0" x2="960" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#061b26"/>
+      <stop offset="1" stop-color="#030e13"/>
+    </linearGradient>
+    <filter id="outer-glow-1" x="-17" y="403" width="1114" height="154" filterUnits="userSpaceOnUse">
+      <feOffset dx="0" dy="0"/>
+      <feGaussianBlur result="blur" stdDeviation="5"/>
+      <feFlood flood-color="#fff" flood-opacity=".5"/>
+      <feComposite in2="blur" operator="in"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <rect class="cls-3" width="1920" height="1080"/>
+  <line class="cls-2" x1="1920" y1="540" y2="540"/>
+  <polyline class="cls-2" points="720 540 840 420 1080 660 1200 540"/>
+  <polyline class="cls-2" points="720 540 840 660 1080 420 1200 540"/>
+  <polyline class="cls-1" points="0 540 720 540 840 420 960 540 1080 420"/>
+</svg>

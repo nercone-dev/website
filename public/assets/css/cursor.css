@@ -1,0 +1,32 @@
+* { cursor: none; }
+#cursor {
+    view-transition-name: none;
+    position: fixed;
+    z-index: 99999;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: var(--theme-color-background-cursor);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition:
+        left 0.08s ease-out,
+        top 0.08s ease-out,
+        width 0.15s cubic-bezier(0.22, 1, 0.36, 1),
+        height 0.15s cubic-bezier(0.22, 1, 0.36, 1),
+        border-radius 0.15s cubic-bezier(0.22, 1, 0.36, 1),
+        background 0.15s ease,
+        transform 0.08s ease-out,
+        opacity 0.3s ease;
+}
+#cursor.visible { opacity: 1; }
+#cursor.on-text {
+    width: 3px;
+    border-radius: 1.5px;
+    background: var(--theme-color-background-cursor);
+}
+#cursor.on-link {
+    background: var(--theme-color-background-cursor-on-link);
+    transform: translate(0, 0);
+}

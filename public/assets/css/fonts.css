@@ -1,0 +1,392 @@
+@font-face {
+    font-family: "Nercone Sans JP";
+    src: local("Nercone Sans JP"), url("https://assets.nercone.dev/fonts/NerconeSansJP-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Nercone Sans JP";
+    src: local("Nercone Sans JP"), url("https://assets.nercone.dev/fonts/NerconeSansJP-Italic.woff2") format("woff2");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Nercone Sans JP";
+    src: local("Nercone Sans JP"), url("https://assets.nercone.dev/fonts/NerconeSansJP-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Nercone Sans JP";
+    src: local("Nercone Sans JP"), url("https://assets.nercone.dev/fonts/NerconeSansJP-BoldItalic.woff2") format("woff2");
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Nercone Sans SC";
+    src: local("Nercone Sans SC"), url("https://assets.nercone.dev/fonts/NerconeSansSC-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Nercone Sans SC";
+    src: local("Nercone Sans SC"), url("https://assets.nercone.dev/fonts/NerconeSansSC-Italic.woff2") format("woff2");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Nercone Sans SC";
+    src: local("Nercone Sans SC"), url("https://assets.nercone.dev/fonts/NerconeSansSC-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Nercone Sans SC";
+    src: local("Nercone Sans SC"), url("https://assets.nercone.dev/fonts/NerconeSansSC-BoldItalic.woff2") format("woff2");
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Nercone Sans TC";
+    src: local("Nercone Sans TC"), url("https://assets.nercone.dev/fonts/NerconeSansTC-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Nercone Sans TC";
+    src: local("Nercone Sans TC"), url("https://assets.nercone.dev/fonts/NerconeSansTC-Italic.woff2") format("woff2");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Nercone Sans TC";
+    src: local("Nercone Sans TC"), url("https://assets.nercone.dev/fonts/NerconeSansTC-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Nercone Sans TC";
+    src: local("Nercone Sans TC"), url("https://assets.nercone.dev/fonts/NerconeSansTC-BoldItalic.woff2") format("woff2");
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Nercone Sans KR";
+    src: local("Nercone Sans KR"), url("https://assets.nercone.dev/fonts/NerconeSansKR-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Nercone Sans KR";
+    src: local("Nercone Sans KR"), url("https://assets.nercone.dev/fonts/NerconeSansKR-Italic.woff2") format("woff2");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Nercone Sans KR";
+    src: local("Nercone Sans KR"), url("https://assets.nercone.dev/fonts/NerconeSansKR-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Nercone Sans KR";
+    src: local("Nercone Sans KR"), url("https://assets.nercone.dev/fonts/NerconeSansKR-BoldItalic.woff2") format("woff2");
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Nercone Mono JP";
+    src: local("Nercone Mono JP"), url("https://assets.nercone.dev/fonts/NerconeMonoJP-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Nercone Mono JP";
+    src: local("Nercone Mono JP"), url("https://assets.nercone.dev/fonts/NerconeMonoJP-Italic.woff2") format("woff2");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Nercone Mono JP";
+    src: local("Nercone Mono JP"), url("https://assets.nercone.dev/fonts/NerconeMonoJP-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Nercone Mono JP";
+    src: local("Nercone Mono JP"), url("https://assets.nercone.dev/fonts/NerconeMonoJP-BoldItalic.woff2") format("woff2");
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+:root {
+    --font-family-noto: "Noto Sans JP", "Noto Sans SC", "Noto Sans TC", "Noto Sans KR";
+    --font-family-sans: "Nercone Sans JP", "Inter", var(--font-family-noto), sans-serif;
+    --font-family-mono: "Nercone Mono JP", "Meslo", var(--font-family-noto), monospace;
+    --font-size: 12pt;
+}
+
+a {
+    text-decoration: underline;
+    color: inherit;
+}
+b {
+    font-weight: 700;
+}
+i {
+    font-style: italic;
+}
+u {
+    text-decoration: underline;
+}
+s {
+    text-decoration: line-through;
+}
+
+.font-sans-jp {
+    font-family: "Nercone Sans JP";
+}
+.font-sans-sc {
+    font-family: "Nercone Sans SC";
+}
+.font-sans-tc {
+    font-family: "Nercone Sans TC";
+}
+.font-sans-kr {
+    font-family: "Nercone Sans KR";
+}
+.font-mono-jp {
+    font-family: "Nercone Mono JP";
+}
+
+.font-thin {
+    font-weight: 100;
+}
+.font-extralight {
+    font-weight: 200;
+}
+.font-light {
+    font-weight: 300;
+}
+.font-regular {
+    font-weight: 400;
+}
+.font-medium {
+    font-weight: 500;
+}
+.font-semibold {
+    font-weight: 600;
+}
+.font-bold {
+    font-weight: 700;
+}
+.font-extrabold {
+    font-weight: 800;
+}
+.font-black {
+    font-weight: 900;
+}
+.font-extrablack {
+    font-weight: 1000;
+}
+
+.font-weight-100 {
+    font-weight: 100;
+}
+.font-weight-200 {
+    font-weight: 200;
+}
+.font-weight-300 {
+    font-weight: 300;
+}
+.font-weight-400 {
+    font-weight: 400;
+}
+.font-weight-500 {
+    font-weight: 500;
+}
+.font-weight-600 {
+    font-weight: 600;
+}
+.font-weight-700 {
+    font-weight: 700;
+}
+.font-weight-800 {
+    font-weight: 800;
+}
+.font-weight-900 {
+    font-weight: 900;
+}
+.font-weight-1000 {
+    font-weight: 1000;
+}
+
+.font-variant-normal {
+    font-variant: normal;
+}
+
+.font-variant-caps-normal {
+    font-variant-caps: normal;
+}
+.font-variant-caps-small {
+    font-variant-caps: small-caps;
+}
+.font-variant-caps-all-small {
+    font-variant-caps: all-small-caps;
+}
+.font-variant-caps-petite {
+    font-variant-caps: petite-caps;
+}
+.font-variant-caps-all-petite {
+    font-variant-caps: all-petite-caps;
+}
+.font-variant-caps-unicase {
+    font-variant-caps: unicase;
+}
+.font-variant-caps-titling {
+    font-variant-caps: titling-caps;
+}
+
+.font-variant-ligatures-normal {
+    font-variant-ligatures: normal;
+}
+.font-variant-ligatures-none {
+    font-variant-ligatures: none;
+}
+.font-variant-ligatures-contextual {
+    font-variant-ligatures: contextual;
+}
+.font-variant-ligatures-no-contextual {
+    font-variant-ligatures: no-contextual;
+}
+.font-variant-ligatures-common {
+    font-variant-ligatures: common-ligatures;
+}
+.font-variant-ligatures-no-common {
+    font-variant-ligatures: no-common-ligatures;
+}
+.font-variant-ligatures-discretionary {
+    font-variant-ligatures: discretionary-ligatures;
+}
+.font-variant-ligatures-no-discretionary {
+    font-variant-ligatures: no-discretionary-ligatures;
+}
+.font-variant-ligatures-historical {
+    font-variant-ligatures: historical-ligatures;
+}
+.font-variant-ligatures-no-historical {
+    font-variant-ligatures: no-historical-ligatures;
+}
+
+.font-variant-numeric-normal {
+    font-variant-numeric: normal;
+}
+.font-variant-numeric-ordinal {
+    font-variant-numeric: ordinal;
+}
+.font-variant-numeric-slashed-zero {
+    font-variant-numeric: slashed-zero;
+}
+.font-variant-numeric-lining {
+    font-variant-numeric: lining-nums;
+}
+.font-variant-numeric-oldstyle {
+    font-variant-numeric: oldstyle-nums;
+}
+.font-variant-numeric-proportional {
+    font-variant-numeric: proportional-nums;
+}
+.font-variant-numeric-tabular {
+    font-variant-numeric: tabular-nums;
+}
+.font-variant-numeric-diagonal-fractions {
+    font-variant-numeric: diagonal-fractions;
+}
+.font-variant-numeric-stacked-fractions {
+    font-variant-numeric: stacked-fractions;
+}
+
+.font-variant-position-normal {
+    font-variant-position: normal;
+}
+.font-variant-position-sub {
+    font-variant-position: sub;
+}
+.font-variant-position-super {
+    font-variant-position: super;
+}
+
+.font-variant-historical-forms {
+    font-variant-alternates: historical-forms;
+}
+
+.text-no-decoration {
+    text-decoration: none;
+}
+.text-italic {
+    font-style: italic;
+}
+.text-underline {
+    text-decoration: underline;
+}
+.text-overline {
+    text-decoration: overline;
+}
+.text-line-through {
+    text-decoration: line-through;
+}
+
+.font-xx-small {
+    font-size: xx-small;
+}
+.font-x-small {
+    font-size: x-small;
+}
+.font-small {
+    font-size: small;
+}
+.font-medium {
+    font-size: medium;
+}
+.font-large {
+    font-size: large;
+}
+.font-x-large {
+    font-size: x-large;
+}
+.font-xx-large {
+    font-size: xx-large;
+}
+.font-xxx-large {
+    font-size: xxx-large;
+}
+.font-smaller {
+    font-size: smaller;
+}
+.font-larger {
+    font-size: larger;
+}

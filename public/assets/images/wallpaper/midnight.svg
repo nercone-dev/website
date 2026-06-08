@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_レイヤー_1" data-name="レイヤー 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 4px;
+      }
+
+      .cls-2 {
+        opacity: .25;
+      }
+    </style>
+  </defs>
+  <rect width="1920" height="1080"/>
+  <line class="cls-2" x1="1920" y1="540" y2="540"/>
+  <polyline class="cls-2" points="720 540 840 420 1080 660 1200 540"/>
+  <polyline class="cls-2" points="720 540 840 660 1080 420 1200 540"/>
+  <polyline class="cls-1" points="0 540 720 540 840 420 960 540 1080 420"/>
+</svg>

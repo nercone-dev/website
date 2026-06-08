@@ -30,7 +30,7 @@ async def welcome():
 ■  ■■ ■     ■  ■  ■     ■   ■ ■  ■■ ■
 ■   ■ ■■■■■ ■   ■  ■■■■  ■■■  ■   ■ ■■■■■
 
-nercone.dev ({Repositories.Server.version}+{Repositories.Contents.version})
+nercone.dev ({Repositories.Server.version})
 welcome to nercone.dev!
         """.strip() + "\n"
     )
@@ -44,7 +44,7 @@ async def status(request: Request):
     return JSONResponse(
         {
             "status": "ok",
-            "version": {"server": Repositories.Server.version, "content": Repositories.Contents.version},
+            "version": Repositories.Server.version,
             "counter": request.scope["accesscounter"].get()
         }
     )

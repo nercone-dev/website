@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_レイヤー_1" data-name="レイヤー 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke: #939393;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8, .cls-9, .cls-10, .cls-11, .cls-12 {
+        fill: none;
+        opacity: .5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 4px;
+      }
+
+      .cls-2 {
+        stroke: #c84040;
+      }
+
+      .cls-3 {
+        stroke: #9654c8;
+      }
+
+      .cls-4 {
+        stroke: #c854c8;
+      }
+
+      .cls-5 {
+        stroke: #4060c8;
+      }
+
+      .cls-6 {
+        stroke: #ffc800;
+      }
+
+      .cls-7 {
+        stroke: #c88c40;
+      }
+
+      .cls-8 {
+        stroke: #00c8c8;
+      }
+
+      .cls-9 {
+        stroke: #fa7800;
+      }
+
+      .cls-10 {
+        stroke: #00c878;
+      }
+
+      .cls-13 {
+        fill: #fff;
+      }
+
+      .cls-11 {
+        stroke: #1a1a1a;
+      }
+
+      .cls-12 {
+        stroke: #00c0ff;
+      }
+    </style>
+  </defs>
+  <rect class="cls-13" width="1920" height="1080"/>
+  <polyline class="cls-2" points="240 420 360 300 600 540 720 420"/>
+  <polyline class="cls-6" points="240 420 360 540 600 300 720 420"/>
+  <polyline class="cls-10" points="240 660 360 540 600 780 720 660"/>
+  <polyline class="cls-8" points="240 660 360 780 600 540 720 660"/>
+  <polyline class="cls-12" points="720 420 840 300 1080 540 1200 420"/>
+  <polyline class="cls-9" points="720 420 840 540 1080 300 1200 420"/>
+  <polyline class="cls-7" points="720 660 840 540 1080 780 1200 660"/>
+  <polyline class="cls-3" points="720 660 840 780 1080 540 1200 660"/>
+  <polyline class="cls-4" points="1200 420 1320 300 1560 540 1680 420"/>
+  <polyline class="cls-5" points="1200 420 1320 540 1560 300 1680 420"/>
+  <polyline class="cls-11" points="1200 660 1320 540 1560 780 1680 660"/>
+  <polyline class="cls-1" points="1200 660 1320 780 1560 540 1680 660"/>
+</svg>
