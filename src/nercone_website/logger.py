@@ -38,7 +38,7 @@ class Logger:
     @staticmethod
     def log_access(request: Request, response: Response | None = None, status_code: int | None = None):
         Logger.log(json.dumps(format_access(request, response)), path=Files.Logs.access)
-        Logger.log(f"[{request.scope['id'].compact_text}] STATUS {response.status_code if response is not None else status_code or '---'} FROM {request.scope['network'].host}:{request.scope['network'].port} TO {str(request.url)}")
+        Logger.log(f"[{request.scope['id'].compact_text}] STATUS {response.status_code if response is not None else status_code or '---'} FROM {request.scope["nercone.dev"]['network'].host}:{request.scope["nercone.dev"]['network'].port} TO {str(request.url)}")
 
     @staticmethod
     def log_error(id: FourWord, traceback: str):
