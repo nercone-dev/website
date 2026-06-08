@@ -49,10 +49,10 @@ def init_context(context: dict[str, Any], scope: Scope):
     context["this_year_in_heisei"] = datetime.now(ZoneInfo("Asia/Tokyo")).year - 1988
 
     if file := resolve_file("quotes.txt"):
-        seed = str(datetime.now(timezone.utc).date())
+        daily_seed = str(datetime.now(timezone.utc).date())
         with file.open("r") as f:
             quotes = f.read().strip().split("\n")
-        daily_quote = random.Random(seed).choice(quotes)
+        daily_quote = random.Random(daily_seed).choice(quotes)
     else:
         daily_quote = "GReeeeN KA-RA-DA"
     context["daily_quote"] = daily_quote

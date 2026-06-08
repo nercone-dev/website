@@ -137,12 +137,7 @@ class NetworkManager:
         self.address = address
         self.host = host
         self.port = port
-
-    @property
-    def trusted(self) -> bool:
-        if self.address is None:
-            return False
-        return any(self.address in network for network in self.trusted_networks)
+        self.trusted = (address is not None and any(address in network for network in self.trusted_networks))
 
 class OptionManager:
     options = {

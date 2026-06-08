@@ -72,6 +72,10 @@ async def fake_error_page(request: Request, status_code: str):
     else:
         return render_error_page(request=request, status_code=400, message="errorエンドポイントのパスには「server」またはHTTPレスポンスステータスコードのみが使用可能です。", joke_message="HTTP/1.1 600 Not Normal")
 
+css_re_charset = re.compile(r'@charset\s+[^;]+;', re.IGNORECASE)
+css_re_import = re.compile(r'@import\b[^;]*;', re.DOTALL)
+css_re_whitespace = re.compile(r'\s+')
+
 @app.api_route("/assets/css/merge", methods=["GET"])
 async def merge_css(request: Request) -> Response:
     path_param = request.query_params.get("path", "")
@@ -92,17 +96,17 @@ async def merge_css(request: Request) -> Response:
         except PermissionError:
             return render_error_page(request=request, status_code=403, message="ねえ、今CSSファイル統合用のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？新しく追加されたエンドポイントに脆弱性あるか気になっただけ？そんなこと関係ないよね。攻撃しようとしたのは事実でしょ？？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
 
-        m = re.search(r'@charset\s+[^;]+;', content, re.IGNORECASE)
+        m = css_re_charset.search(content)
         if m and charset is None:
             charset = m.group(0)
-        content = re.sub(r'@charset\s+[^;]+;', '', content, flags=re.IGNORECASE)
+        content = css_re_charset.sub('', content)
 
-        for imp in re.findall(r'@import\b[^;]*;', content, re.DOTALL):
-            key = re.sub(r'\s+', ' ', imp.strip())
+        for imp in css_re_import.findall(content):
+            key = css_re_whitespace.sub(' ', imp.strip())
             if key not in seen_imports:
                 seen_imports.add(key)
                 imports.append(key)
-        body = re.sub(r'@import\b[^;]*;', '', content, flags=re.DOTALL).strip()
+        body = css_re_import.sub('', content).strip()
         if body:
             bodies.append(body)
 

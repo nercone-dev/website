@@ -19,6 +19,14 @@ from .renderer import render_error_page
 from .constants import Directories, Files, Repository, Hostnames, Ports, TLS
 from .databases import AccessCounter
 
+templates = Jinja2Templates(directory=Directories.public)
+accesscounter = AccessCounter()
+
+scour_options = scour.generateDefaultOptions()
+scour_options.newlines = False
+scour_options.shorten_ids = True
+scour_options.strip_comments = True
+
 class Middleware:
     def __init__(self, app: ASGIApp):
         self.app = app
@@ -29,8 +37,6 @@ class Middleware:
                 await self.app(scope, receive, send)
                 return
 
-            headers = dict(scope.get("headers", []))
-
             scope.update({
                 "id": FourWord(),
                 "pp": PPManager(),
@@ -39,9 +45,6 @@ class Middleware:
                 "network": NetworkManager(address=ipaddress.ip_address(scope["client"][0]) if scope["client"][0] else None, host=scope["client"][0], port=scope["client"][1]),
                 "options": OptionManager(HTTPConnection(scope=scope)),
 
-                "templates": Jinja2Templates(directory=Directories.public),
-                "accesscounter": AccessCounter(),
-
                 "directories": Directories,
                 "files": Files,
                 "repository": Repository,
@@ -49,12 +52,16 @@ class Middleware:
                 "ports": Ports,
                 "tls": TLS,
 
+                "templates": templates,
+                "accesscounter": accesscounter,
+
+                "headers": dict(scope.get("headers", [])),
                 "logged": False
             })
 
             scope["timings"].start("total", "Total request processing time")
 
-            hostname = headers.get(b"host", b"").decode().split(":")[0].strip()
+            hostname = scope["headers"].get(b"host", b"").decode().split(":")[0].strip()
             if hostname.split(".")[-1] == "localhost":
                 subdomain = ".".join(hostname.split(".")[:-1])
             else:
@@ -74,7 +81,7 @@ class Middleware:
                 return
 
             if not scope["network"].trusted and scope["scheme"] == "http":
-                host = headers.get(b"host", b"").decode()
+                host = scope["headers"].get(b"host", b"").decode()
                 path = scope.get("path", "/")
                 query_string = scope.get("query_string", b"").decode()
                 url = f"https://{host}{path}" + (f"?{query_string}" if query_string else "")
@@ -162,50 +169,44 @@ class Middleware:
         content_type = response.headers.get("content-type", "")
 
         if "text/html" in content_type:
-            scope["timings"].start("minify", "HTML minification")
             try:
+                scope["timings"].start("minify", "HTML minification")
                 response.body = minify_html.minify(response.body.decode("utf-8", errors="replace"), minify_js=True, minify_css=True, keep_comments=True, keep_html_and_head_opening_tags=True).encode("utf-8")
+                scope["timings"].stop("minify")
             except Exception:
                 pass
-            scope["timings"].stop("minify")
 
         elif "text/css" in content_type:
-            scope["timings"].start("minify", "CSS minification")
             try:
+                scope["timings"].start("minify", "CSS minification")
                 response.body = rcssmin.cssmin(response.body.decode("utf-8", errors="replace")).encode("utf-8")
+                scope["timings"].stop("minify")
             except Exception:
                 pass
-            scope["timings"].stop("minify")
 
         elif any(content_type.startswith(t) for t in ["text/javascript", "application/javascript"]):
-            scope["timings"].start("minify", "JavaScript minification")
             try:
+                scope["timings"].start("minify", "JavaScript minification")
                 response.body = rjsmin.jsmin(response.body.decode("utf-8", errors="replace")).encode("utf-8")
+                scope["timings"].stop("minify")
             except Exception:
                 pass
-            scope["timings"].stop("minify")
 
         elif "image/svg" in content_type:
-            scope["timings"].start("minify", "SVG minification")
             try:
-                scour_options = scour.generateDefaultOptions()
-                scour_options.newlines = False
-                scour_options.shorten_ids = True
-                scour_options.strip_comments = True
+                scope["timings"].start("minify", "SVG minification")
                 response.body = scour.scourString(response.body.decode("utf-8", errors="replace"), scour_options).encode("utf-8")
+                scope["timings"].stop("minify")
             except Exception:
                 pass
-            scope["timings"].stop("minify")
 
         response.headers["Content-Length"] = str(len(response.body))
-
-        headers = dict(scope.get("headers", []))
 
         scope["timings"].start("etag", "ETag computation (SHA-256)")
         etag = '"' + hashlib.sha256(response.body).hexdigest() + '"'
         scope["timings"].stop("etag")
 
-        if headers.get(b"if-none-match", b"").decode() == etag:
+        if scope["headers"].get(b"if-none-match", b"").decode() == etag:
             response = Response(status_code=304)
 
         def set_header(key: str, value: str, override: bool = True):
@@ -234,7 +235,7 @@ class Middleware:
             set_header("Access-Control-Allow-Origin", "*", override=False)
 
         else:
-            origin = headers.get(b"origin", b"").decode().strip()
+            origin = scope["headers"].get(b"origin", b"").decode().strip()
             origin_host = origin.removeprefix("https://").removeprefix("http://").split("/")[0].split(":")[0]
 
             if any(origin_host == candidate or origin_host.endswith("." + candidate) for candidate in Hostnames.all):
