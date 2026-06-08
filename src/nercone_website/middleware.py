@@ -80,7 +80,7 @@ class Middleware:
                 "logged": False
             }})
 
-            scope["nercone.dev"]["timings"].start("total", "Total request processing time")
+            scope["nercone.dev"]["timings"].start("total", "Total")
 
             hostname = scope["nercone.dev"]["headers"].get(b"host", b"").decode().split(":")[0].strip()
             if hostname.split(".")[-1] == "localhost":
@@ -115,7 +115,7 @@ class Middleware:
                 await self.send(response, scope, receive, send)
                 return
 
-            scope["nercone.dev"]["timings"].start("recieve", "Reading request body")
+            scope["nercone.dev"]["timings"].start("recieve", "Read body")
             body = await self.read_body(receive)
             scope["nercone.dev"]["timings"].stop("recieve")
 
@@ -123,19 +123,19 @@ class Middleware:
                 return {"type": "http.request", "body": body, "more_body": False}
 
             if subdomain in ["", "www"]:
-                response = await self.get_response(scope, cached_receive, scope["path"], "app", "FastAPI app routing and handling (Total)")
+                response = await self.get_response(scope, cached_receive, scope["path"], "app", "ASGI App (Total)")
                 await self.send(response, scope, cached_receive, send)
 
             else:
                 original_path = scope["path"] if scope["path"].strip() else "/"
                 subdomain_path = f"/{'/'.join(subdomain.split('.')[::-1])}{original_path}"
 
-                response = await self.get_response(scope, cached_receive, subdomain_path, "app", "FastAPI app routing and handling (Total)")
+                response = await self.get_response(scope, cached_receive, subdomain_path, "app", "ASGI App (Total)")
                 if response.status_code < 400 or response.status_code >= 500:
                     await self.send(response, scope, cached_receive, send)
                     return
 
-                response = await self.get_response(scope, cached_receive, original_path, "app-retry", "FastAPI app routing and handling (Retry, Total)")
+                response = await self.get_response(scope, cached_receive, original_path, "app-retry", "ASGI App (Total, Retry)")
                 await self.send(response, scope, cached_receive, send)
 
         except Exception:
@@ -192,7 +192,7 @@ class Middleware:
 
         if "text/html" in content_type:
             try:
-                scope["nercone.dev"]["timings"].start("minify", "HTML minification")
+                scope["nercone.dev"]["timings"].start("minify", "HTML Minify")
                 response.body = minify_html(response.body)
                 scope["nercone.dev"]["timings"].stop("minify")
             except Exception:
@@ -200,7 +200,7 @@ class Middleware:
 
         elif "text/css" in content_type:
             try:
-                scope["nercone.dev"]["timings"].start("minify", "CSS minification")
+                scope["nercone.dev"]["timings"].start("minify", "CSS Minify")
                 response.body = minify_css(response.body)
                 scope["nercone.dev"]["timings"].stop("minify")
             except Exception:
@@ -208,7 +208,7 @@ class Middleware:
 
         elif content_type.startswith(("text/javascript", "application/javascript")):
             try:
-                scope["nercone.dev"]["timings"].start("minify", "JavaScript minification")
+                scope["nercone.dev"]["timings"].start("minify", "JavaScript Minify")
                 response.body = minify_js(response.body)
                 scope["nercone.dev"]["timings"].stop("minify")
             except Exception:
@@ -216,7 +216,7 @@ class Middleware:
 
         elif "image/svg" in content_type:
             try:
-                scope["nercone.dev"]["timings"].start("minify", "SVG minification")
+                scope["nercone.dev"]["timings"].start("minify", "SVG Minify")
                 response.body = minify_svg(response.body)
                 scope["nercone.dev"]["timings"].stop("minify")
             except Exception:
@@ -224,7 +224,7 @@ class Middleware:
 
         response.headers["Content-Length"] = str(len(response.body))
 
-        scope["nercone.dev"]["timings"].start("etag", "ETag computation (SHA-256)")
+        scope["nercone.dev"]["timings"].start("etag", "ETag (SHA-256)")
         etag = compute_etag(response.body)
         scope["nercone.dev"]["timings"].stop("etag")
 
