@@ -159,7 +159,7 @@ def default_response(path: str, request: Request, status_code: int = 200, count:
     for key, value in headers.items():
         response.headers[key.lower().strip()] = value
 
-    context["options"].apply(response)
+    request.scope["options"].apply(response)
     return response
 
 error_messages = {
