@@ -226,7 +226,7 @@ HTTPレスポンスの生成ロジック。
 - `CustomHTMLRenderer`: `mistune`のカスタムレンダラー。`block_code`でコードブロックのシンタックスハイライトを無効化、`block_quote`でアラート記法(`[!NOTE]`/`[!WARNING]`等)を`div.block-{type}`に変換する。
 - `htmlitdown`: `mistune`インスタンス。プラグイン: `table`/`strikethrough`/`task_lists`/`footnotes`。
 - `markitdown`: `MarkItDown()`インスタンス (HTML -> Markdownのリバース変換用)。
-- `init_context(context, scope)`: Jinja2テンプレートに渡すコンテキスト辞書を初期化する。`re_sub`ラムダ/`this_year()`/`this_year_in_heisei()`/`get_daily_quote()`を追加する。旧`templates.py`の役割を担う。
+- `init_context(context, scope)`: Jinja2テンプレートに渡すコンテキスト辞書を初期化する。`re_sub()`/`this_year`/`this_year_in_heisei`/`daily_quote`を追加する。旧`templates.py`の役割を担う。
 - `render_page(page, request, ...)`: 単一ページファイルのレンダリング。YAMLフロントマター解析 → Jinja2レンダリング → `{% extends %}`/`{% block %}`の自動生成の流れ。`markdown_mode`時は`BeautifulSoup`で`<main>`を抽出し`markitdown`でMarkdown変換。
 - `default_response(path, request, ...)`: メインのレスポンス生成関数。処理順序:
   1. `resolve_page`でページファイルを探索し`render_page`に渡す
@@ -325,7 +325,7 @@ Jinja2テンプレート内で利用可能なグローバル変数/関数:
 - `request`: Starletteの`Request`オブジェクト
 - `this_year()`: 日本時間の現在年
 - `this_year_in_heisei()`: 平成換算の現在年 (year - 1988)
-- `get_daily_quote()`: `quotes.txt`から日付をシードにして1日1エントリを返す (UTCの日付でシード)
+- `get_daily_quote`: `quotes.txt`から日付をシードにして1日1エントリ (UTCの日付でシード)
 - `re_sub(s, pattern, repl)`: 正規表現置換 (テンプレート内では `s | re_sub(pattern, repl)` の形で使用)
 - その他`scope`の全キー (`repositories`/`hostnames`/`accesscounter`等) もコンテキスト経由で参照可能
 

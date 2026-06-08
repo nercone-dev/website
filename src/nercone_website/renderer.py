@@ -45,24 +45,17 @@ def init_context(context: dict[str, Any], scope: Scope):
     context.update(scope)
 
     context["re_sub"] = lambda s, pattern, repl: re.sub(pattern, repl, s)
+    context["this_year"] = datetime.now(ZoneInfo("Asia/Tokyo")).year
+    context["this_year_in_heisei"] = datetime.now(ZoneInfo("Asia/Tokyo")).year - 1988
 
-    def this_year() -> int:
-        return datetime.now(ZoneInfo("Asia/Tokyo")).year
-    context["this_year"] = this_year
-
-    def this_year_in_heisei() -> int: # heysay is not ended.
-        return datetime.now(ZoneInfo("Asia/Tokyo")).year - 1988
-    context["this_year_in_heisei"] = this_year_in_heisei
-
-    def get_daily_quote() -> str:
-        if file := resolve_file("quotes.txt"):
-            seed = str(datetime.now(timezone.utc).date())
-            with file.open("r") as f:
-                quotes = f.read().strip().split("\n")
-            return random.Random(seed).choice(quotes)
-        else:
-            return "GReeeeN KA-RA-DA"
-    context["get_daily_quote"] = get_daily_quote
+    if file := resolve_file("quotes.txt"):
+        seed = str(datetime.now(timezone.utc).date())
+        with file.open("r") as f:
+            quotes = f.read().strip().split("\n")
+        daily_quote = random.Random(seed).choice(quotes)
+    else:
+        daily_quote = "GReeeeN KA-RA-DA"
+    context["daily_quote"] = daily_quote
 
 def render_page(page: str, request: Request, render: bool = True, status_code: int = 200, markdown_mode: bool = False, context: dict[str, Any] = {}):
     init_context(context, request.scope)
