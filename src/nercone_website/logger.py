@@ -43,3 +43,8 @@ class Logger:
     @staticmethod
     def log_error(id: FourWord, traceback: str):
         Logger.log(f"[{id.compact_text}]\n{traceback}", path=Files.Logs.error)
+
+    @staticmethod
+    def log_report(request: Request, body: dict | list, type: str):
+        Logger.log(json.dumps(format_access(request) | {"report": {"type": type, "body": body}}), path=Files.Logs.report)
+        Logger.log(f"[{request.scope['nercone.dev']['id'].compact_text}] {type} REPORT FROM {request.scope['nercone.dev']['network'].host}:{request.scope['nercone.dev']['network'].port} TO {str(request.url)}")

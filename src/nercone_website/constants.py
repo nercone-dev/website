@@ -19,6 +19,7 @@ class Files:
         app = Directories.logs.joinpath("app.log")
         access = Directories.logs.joinpath("access.log")
         error = Directories.logs.joinpath("error.log")
+        report = Directories.logs.joinpath("report.log")
 
 class Repository:
     url = subprocess.run(["/usr/bin/git", "remote", "get-url", "origin"], text=True, capture_output=True, cwd=Directories.base).stdout.strip()

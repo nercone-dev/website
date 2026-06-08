@@ -57,7 +57,8 @@ class CSPManager:
         "frame-ancestors": ["'self'"],
         "base-uri": ["'self'"],
         "form-action": ["'self'"],
-        "upgrade-insecure-requests": True
+        "upgrade-insecure-requests": True,
+        "report-to": "csp-endpoint"
     }
 
     def __init__(self):
@@ -82,6 +83,8 @@ class CSPManager:
         for key, value in self.directives.items():
             if isinstance(value, bool) and value:
                 parts.append(key)
+            elif isinstance(value, str) and value:
+                parts.append(f"{key} {value}")
             else:
                 parts.append(f"{key} {' '.join(value)}")
         return "; ".join(parts).strip()

@@ -255,6 +255,8 @@ class Middleware:
         set_header("Permissions-Policy", scope["nercone.dev"]["pp"].header)
         set_header("Content-Security-Policy", scope["nercone.dev"]["csp"].header)
 
+        set_header("Reporting-Endpoints", "csp-endpoint=\"https://nercone.dev/report/csp/\"")
+
         if scope.get("scheme") == "https":
             set_header("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
 
