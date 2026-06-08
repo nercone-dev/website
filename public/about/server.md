@@ -9,19 +9,21 @@ nercone.devへのHTTP(S)リクエストは、Python+Hypercorn+FastAPIで構築�
 
 サードパーティのソフトウェアや機密情報などの公開ができない/難しい箇所を除く、ほとんどの箇所はGitHubで公開しています。
 
-### HTTP
+## HTTP
 HTTP/1.1/2/3(QUIC)に対応しています。
 
-### TLS
+## TLS
 HypercornでTLSに対応しています。
 
 SSLの全バージョンを含む、TLS 1.1以前のSSL/TLSは無効化しています。TLS 1.2/1.3でのみアクセス可能です。
 
 証明書はCertbotを使用してLet's Encrypt様に発行してもらっています。プロファイルはtlsserverです。
 
-### PQC (ポスト量子暗号)
+## PQC (ポスト量子暗号)
 `X25519MLKEM768`などのハイブリッドPQCでの鍵交換に対応済みです。
 純粋なPQC(`MLKEM1024`/`MLKEM768`)にも対応済みですが、ハイブリッドPQCより優先順位を低くしています。
+
+HypercornがQUICに対応するために使用している`aioquic`は純粋なPQC/ハイブリッドPQC共に非対応のため、[フォークして](https://github.com/nercone-forks/aioquic/)対応しました。
 
 ## リポジトリ ([github.com:nercone-dev/website](https://github.com/nercone-dev/website/)@[{{ repository.version }}]({{ "https://github.com/nercone-dev/website/commit/" + repository.version }}))
 途中でGiteaに移動したり戻したり~~ラジバンダリ~~しましたが、現時点でサーバーのソースコードはここで管理しています。
