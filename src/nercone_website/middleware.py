@@ -1,4 +1,5 @@
 import hashlib
+import functools
 import traceback
 import ipaddress
 from fourword.lib import FourWord
@@ -8,9 +9,9 @@ from fastapi.templating import Jinja2Templates
 from starlette.requests import Request, HTTPConnection
 from starlette.types import ASGIApp, Scope, Receive, Send
 
+import minify_html as rhtmin
 import rjsmin
 import rcssmin
-import minify_html
 from scour import scour
 
 from .logger import Logger
@@ -26,6 +27,26 @@ scour_options = scour.generateDefaultOptions()
 scour_options.newlines = False
 scour_options.shorten_ids = True
 scour_options.strip_comments = True
+
+@functools.lru_cache(maxsize=512)
+def compute_etag(body: bytes) -> str:
+    return '"' + hashlib.sha256(body).hexdigest() + '"'
+
+@functools.lru_cache(maxsize=128)
+def minify_html(body: bytes) -> bytes:
+    return rhtmin.minify(body.decode("utf-8", errors="replace"), minify_js=True, minify_css=True, keep_comments=True, keep_html_and_head_opening_tags=True).encode("utf-8")
+
+@functools.lru_cache(maxsize=128)
+def minify_css(body: bytes) -> bytes:
+    return rcssmin.cssmin(body.decode("utf-8", errors="replace")).encode("utf-8")
+
+@functools.lru_cache(maxsize=128)
+def minify_js(body: bytes) -> bytes:
+    return rjsmin.jsmin(body.decode("utf-8", errors="replace")).encode("utf-8")
+
+@functools.lru_cache(maxsize=64)
+def minify_svg(body: bytes) -> bytes:
+    return scour.scourString(body.decode("utf-8", errors="replace"), scour_options).encode("utf-8")
 
 class Middleware:
     def __init__(self, app: ASGIApp):
@@ -171,7 +192,7 @@ class Middleware:
         if "text/html" in content_type:
             try:
                 scope["timings"].start("minify", "HTML minification")
-                response.body = minify_html.minify(response.body.decode("utf-8", errors="replace"), minify_js=True, minify_css=True, keep_comments=True, keep_html_and_head_opening_tags=True).encode("utf-8")
+                response.body = minify_html(response.body)
                 scope["timings"].stop("minify")
             except Exception:
                 pass
@@ -179,7 +200,7 @@ class Middleware:
         elif "text/css" in content_type:
             try:
                 scope["timings"].start("minify", "CSS minification")
-                response.body = rcssmin.cssmin(response.body.decode("utf-8", errors="replace")).encode("utf-8")
+                response.body = minify_css(response.body)
                 scope["timings"].stop("minify")
             except Exception:
                 pass
@@ -187,7 +208,7 @@ class Middleware:
         elif any(content_type.startswith(t) for t in ["text/javascript", "application/javascript"]):
             try:
                 scope["timings"].start("minify", "JavaScript minification")
-                response.body = rjsmin.jsmin(response.body.decode("utf-8", errors="replace")).encode("utf-8")
+                response.body = minify_js(response.body)
                 scope["timings"].stop("minify")
             except Exception:
                 pass
@@ -195,7 +216,7 @@ class Middleware:
         elif "image/svg" in content_type:
             try:
                 scope["timings"].start("minify", "SVG minification")
-                response.body = scour.scourString(response.body.decode("utf-8", errors="replace"), scour_options).encode("utf-8")
+                response.body = minify_svg(response.body)
                 scope["timings"].stop("minify")
             except Exception:
                 pass
@@ -203,7 +224,7 @@ class Middleware:
         response.headers["Content-Length"] = str(len(response.body))
 
         scope["timings"].start("etag", "ETag computation (SHA-256)")
-        etag = '"' + hashlib.sha256(response.body).hexdigest() + '"'
+        etag = compute_etag(response.body)
         scope["timings"].stop("etag")
 
         if scope["headers"].get(b"if-none-match", b"").decode() == etag:
