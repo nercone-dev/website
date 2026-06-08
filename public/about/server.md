@@ -17,7 +17,7 @@ HTTP/1.1/2/3(QUIC)に対応しています。
 ### TLS
 HypercornでTLSに対応しています。
 
-SSLの全バージョンを含む、TLS 1.1以前のSSL/TLSは無効化しています。TLS 1.2/1.3でのみアクセス可能です。
+SSLの全バージョンを含むTLS 1.1以前のSSL/TLSは無効化しています。TLS 1.2/1.3でのみアクセス可能です。
 
 証明書はCertbotを使用してLet's Encrypt様に発行してもらっています。アルゴリズムはECDSA、プロファイルはtlsserverです。
 
