@@ -65,6 +65,8 @@ def init_context(context: dict[str, Any], scope: Scope):
     context["get_daily_quote"] = get_daily_quote
 
 def render_page(page: str, request: Request, render: bool = True, status_code: int = 200, markdown_mode: bool = False, context: dict[str, Any] = {}):
+    init_context(context, request.scope)
+
     timings: TimingManager = request.scope["timings"]
     templates: Jinja2Templates = request.scope["templates"]
 
@@ -130,12 +132,10 @@ def render_page(page: str, request: Request, render: bool = True, status_code: i
         return response
 
 def default_response(path: str, request: Request, status_code: int = 200, count: bool = True, render: bool = True, context: dict[str, Any] = {}, headers: dict[str, str] = {}):
-    init_context(context, request.scope)
-
-    timings: TimingManager = request.scope["timings"]
-
     markdown_ua = ["curl", "claude-user", "chatgpt-user", "google-extended", "perplexity-user"]
     markdown_mode = any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), any([ua in request.headers.get("user-agent", "").lower() for ua in markdown_ua])])
+
+    timings: TimingManager = request.scope["timings"]
 
     try:
         if page := resolve_page(path, markdown_mode=markdown_mode, timings=timings):
