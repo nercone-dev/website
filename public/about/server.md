@@ -9,7 +9,7 @@ nercone.devへのHTTP(S)リクエストは、Python+Hypercorn+FastAPIで構築�
 
 サードパーティのソフトウェアや機密情報などの公開ができない/難しい箇所を除く、ほとんどの箇所は[github.com:nercone-dev/website](https://github.com/nercone-dev/website/)で公開しています。
 
-## 技術的な情報
+## 利用技術
 
 ### HTTP
 HTTP/1.1/2/3(QUIC)に対応しています。
@@ -44,7 +44,7 @@ GCPのCompute Engineを使用しています。マシンタイプはe2-mediumで
 LinuxディストリビューションはAlmaLinux 10.2を使用しています。
 
 ### メールサーバー
-GCPだと上りの25/tcpポートがスパム対策かなんかでブロックされるので、メールだけ別で用意したXServerのVPSで処理させています。
+GCPだと上りの25/tcpポートがスパム対策かなんかでブロックされるので、メールサーバーに限り別で用意したXServerのVPSで実行しています。
 
 ソフトウェアはPostfix+Dovecotの設定が面倒なのでPoste.ioに任せています。いつか移行予定です。
 
