@@ -93,6 +93,11 @@ class Middleware:
                 await self.send(response, scope, receive, send)
                 return
 
+            if len(scope.get("path", "")) + len(scope.get("query_string", b"")) > 1024:
+                response = render_error_page(Request(scope=scope, receive=receive), status_code=414)
+                await self.send(response, scope, receive, send)
+                return
+
             if scope["type"] == "websocket":
                 if subdomain not in ["", "www"]:
                     original_path = scope["path"] if scope["path"].strip() else "/"
@@ -253,10 +258,17 @@ class Middleware:
         if scope.get("scheme") == "https":
             set_header("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
 
+        if "text/html" in content_type:
+            set_header("Cross-Origin-Opener-Policy", "same-origin")
+            set_header("Cross-Origin-Embedder-Policy", "credentialless")
+
         if content_type.startswith(("font/", "image/", "text/css", "text/javascript", "application/javascript")):
             set_header("Access-Control-Allow-Origin", "*", override=False)
+            set_header("Cross-Origin-Resource-Policy", "cross-origin")
 
         else:
+            set_header("Cross-Origin-Resource-Policy", "same-origin")
+
             origin = scope["nercone.dev"]["headers"].get(b"origin", b"").decode().strip()
             origin_host = origin.removeprefix("https://").removeprefix("http://").split("/")[0].split(":")[0]
 
