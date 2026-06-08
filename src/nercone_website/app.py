@@ -37,7 +37,10 @@ welcome to nercone.dev!
 
 @app.api_route("/echo", methods=["GET"])
 async def echo(request: Request):
-    return JSONResponse(format_access(request))
+    if request.scope["nercone.dev"]["network"].trusted:
+        return JSONResponse(format_access(request))
+    else:
+        return render_error_page(request=request, status_code=403, message="/echoエンドポイントはデバッグ用途のため、信頼された接続元からのみ使用できます。", joke_message="悪いなのび太、このエンドポイント開発者専用なんだ")
 
 @app.api_route("/status", methods=["GET"])
 async def status(request: Request):

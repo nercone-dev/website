@@ -170,6 +170,6 @@ class OptionManager:
                 continue
             if key in self.options and not key.endswith(".once") and cookies.get(key) != queries.get(key):
                 if (queries.get(key) or cookies.get(key)) != self.options.get(key):
-                    response.set_cookie(key, queries[key], samesite="lax")
+                    response.set_cookie(key, queries[key], secure=True, samesite="lax")
                 else:
-                    response.delete_cookie(key, samesite="lax")
+                    response.delete_cookie(key, secure=True, samesite="lax")
