@@ -23,7 +23,7 @@ SSLの全バージョンを含む、TLS 1.1以前のSSL/TLSは無効化してい
 `X25519MLKEM768`などのハイブリッドPQCでの鍵交換に対応済みです。
 純粋なPQC(`MLKEM1024`/`MLKEM768`)にも対応済みですが、ハイブリッドPQCより優先順位を低くしています。
 
-HypercornがQUICに対応するために使用している`aioquic`は純粋なPQC/ハイブリッドPQC共に非対応のため、[フォークして](https://github.com/nercone-forks/aioquic/)対応しました。
+HypercornがQUICに対応するために使用している`aioquic`はPQCに対応していないため、[フォークして](https://github.com/nercone-forks/aioquic/)対応させました。
 
 ## リポジトリ ([github.com:nercone-dev/website](https://github.com/nercone-dev/website/)@[{{ repository.version }}]({{ "https://github.com/nercone-dev/website/commit/" + repository.version }}))
 途中でGiteaに移動したり戻したり~~ラジバンダリ~~しましたが、現時点でサーバーのソースコードはここで管理しています。
