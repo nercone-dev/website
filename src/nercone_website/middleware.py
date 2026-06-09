@@ -94,7 +94,7 @@ class Middleware:
                 await self.send(response, scope, receive, send)
                 return
 
-            if len(scope.get("path", "")) + len(scope.get("query_string", b"")) > 1024:
+            if len(scope.get("path", "")) + len(scope.get("query_string", b"")) > 256:
                 response = render_error_page(Request(scope=scope, receive=receive), status_code=414)
                 await self.send(response, scope, receive, send)
                 return
@@ -282,7 +282,7 @@ class Middleware:
             origin_host = origin.removeprefix("https://").removeprefix("http://").split("/")[0].split(":")[0]
 
             if any(origin_host == candidate or origin_host.endswith("." + candidate) for candidate in Hostnames.all):
-                vary = response.headers.get("vary", "") + ", Origin" if "vary" in response.headers else "Origin"
+                vary = response.headers.get("vary", "") + ", Origin, User-Agent" if "vary" in response.headers else "Origin, User-Agent"
                 set_header("Vary", vary)
 
                 set_header("Access-Control-Allow-Origin", origin, override=False)
