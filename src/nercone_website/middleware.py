@@ -15,7 +15,7 @@ import rcssmin
 from scour import scour
 
 from .logger import Logger
-from .manager import PPManager, CSPManager, TimingManager, NetworkManager, OptionManager
+from .manager import PPManager, CSPManager, CCManager, TimingManager, NetworkManager, OptionManager
 from .renderer import render_error_page
 from .constants import Directories, Files, Repository, Hostnames, Ports, TLS
 from .databases import AccessCounter
@@ -60,6 +60,7 @@ class Middleware:
 
             scope.update({"nercone.dev": {
                 "id": FourWord(),
+                "cc": CCManager(),
                 "pp": PPManager(),
                 "csp": CSPManager(),
                 "timings": TimingManager(),
@@ -240,16 +241,17 @@ class Middleware:
             if override or key.lower() not in response.headers:
                 response.headers[key.lower()] = value
 
-        set_header("ETag", etag)
-
-        set_header("X-Request-Id", scope["nercone.dev"]["id"].text)
-        set_header("X-Frame-Options", "SAMEORIGIN")
-        set_header("X-Content-Type-Options", "nosniff")
-
         set_header("Server", f"nercone.dev ({Repository.version})")
         set_header("Link", "<https://nercone.dev/sitemap.xml>; rel=\"sitemap\", <https://nercone.dev/robots.txt>; rel=\"robots\"")
 
-        set_header("Cache-Control", "no-cache", override=False)
+        set_header("ETag", etag)
+
+        if not scope["nercone.dev"]["cc"].initial:
+            set_header("Cache-Control", scope["nercone.dev"]["cc"].header)
+        elif content_type.startswith(("font/", "image/", "text/css", "text/javascript", "application/javascript")):
+            set_header("Cache-Control", "max-age=43200")
+        else:
+            set_header("Cache-Control", "no-cache")
 
         set_header("Referrer-Policy", "strict-origin-when-cross-origin")
         set_header("Permissions-Policy", scope["nercone.dev"]["pp"].header)
@@ -257,19 +259,23 @@ class Middleware:
 
         set_header("Reporting-Endpoints", "default=\"https://nercone.dev/report/\", csp-endpoint=\"https://nercone.dev/report/csp/\"")
 
+        set_header("X-Request-Id", scope["nercone.dev"]["id"].text)
+        set_header("X-Frame-Options", "SAMEORIGIN")
+        set_header("X-Content-Type-Options", "nosniff")
+
         if scope.get("scheme") == "https":
             set_header("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
 
         if "text/html" in content_type:
-            set_header("Cross-Origin-Opener-Policy", "same-origin")
-            set_header("Cross-Origin-Embedder-Policy", "credentialless")
+            set_header("Cross-Origin-Opener-Policy", "same-origin", override=False)
+            set_header("Cross-Origin-Embedder-Policy", "credentialless", override=False)
 
         if content_type.startswith(("font/", "image/", "text/css", "text/javascript", "application/javascript")):
             set_header("Access-Control-Allow-Origin", "*", override=False)
-            set_header("Cross-Origin-Resource-Policy", "cross-origin")
+            set_header("Cross-Origin-Resource-Policy", "cross-origin", override=False)
 
         else:
-            set_header("Cross-Origin-Resource-Policy", "same-origin")
+            set_header("Cross-Origin-Resource-Policy", "same-origin", override=False)
 
             origin = scope["nercone.dev"]["headers"].get(b"origin", b"").decode().strip()
             origin_host = origin.removeprefix("https://").removeprefix("http://").split("/")[0].split(":")[0]

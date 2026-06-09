@@ -6,32 +6,34 @@ from starlette.requests import Request, HTTPConnection
 from .constants import reserved_cookie_keys
 
 class PPManager:
-    defaults = {
-        "camera": [],
-        "microphone": [],
-        "geolocation": [],
-        "payment": [],
-        "usb": [],
-        "accelerometer": [],
-        "gyroscope": [],
-        "magnetometer": [],
-        "display-capture": []
-    }
-
     def __init__(self):
-        self.directives: dict[str, list[str]] = copy.deepcopy(self.defaults)
+        self.initial = True
+        self.directives: dict[str, list[str]] = {
+            "camera": [],
+            "microphone": [],
+            "geolocation": [],
+            "payment": [],
+            "usb": [],
+            "accelerometer": [],
+            "gyroscope": [],
+            "magnetometer": [],
+            "display-capture": []
+        }
 
     def set(self, key: str, value: list[str], override: bool = True):
         if override or key not in self.directives:
+            self.initial = False
             self.directives[key] = value
 
     def append(self, key: str, *values: str):
+        self.initial = False
         if key not in self.directives:
             self.directives[key] = list(values)
         else:
             self.directives[key] += list(values)
 
     def remove(self, key: str):
+        self.initial = False
         self.directives.pop(key, None)
 
     @property
@@ -47,34 +49,36 @@ class PPManager:
         return ", ".join(parts)
 
 class CSPManager:
-    defaults = {
-        "default-src": ["'self'", "assets.nercone.dev"],
-        "script-src": ["'self'", "assets.nercone.dev"],
-        "style-src": ["'self'", "assets.nercone.dev"],
-        "font-src": ["'self'", "assets.nercone.dev"],
-        "img-src": ["'self'", "assets.nercone.dev", "t3tra.dev", "drsb.f5.si", "data:"],
-        "connect-src": ["'self'"],
-        "frame-ancestors": ["'self'"],
-        "base-uri": ["'self'"],
-        "form-action": ["'self'"],
-        "upgrade-insecure-requests": True,
-        "report-to": "csp-endpoint"
-    }
-
     def __init__(self):
-        self.directives: dict[str, list[str] | bool] = copy.deepcopy(self.defaults)
+        self.initial = True
+        self.directives: dict[str, list[str] | bool] = {
+            "default-src": ["'self'", "assets.nercone.dev"],
+            "script-src": ["'self'", "assets.nercone.dev"],
+            "style-src": ["'self'", "assets.nercone.dev"],
+            "font-src": ["'self'", "assets.nercone.dev"],
+            "img-src": ["'self'", "assets.nercone.dev", "t3tra.dev", "drsb.f5.si", "data:"],
+            "connect-src": ["'self'"],
+            "frame-ancestors": ["'self'"],
+            "base-uri": ["'self'"],
+            "form-action": ["'self'"],
+            "upgrade-insecure-requests": True,
+            "report-to": "csp-endpoint"
+        }
 
     def set(self, key: str, value: list[str] | bool, override: bool = True):
         if override or key not in self.directives:
+            self.initial = False
             self.directives[key] = value
 
     def append(self, key: str, *values: str):
+        self.initial = False
         if key not in self.directives:
             self.directives[key] = list(values)
         else:
             self.directives[key] += list(values)
 
     def remove(self, key: str):
+        self.initial = False
         self.directives.pop(key, None)
 
     @property
@@ -88,6 +92,30 @@ class CSPManager:
             else:
                 parts.append(f"{key} {' '.join(value)}")
         return "; ".join(parts).strip()
+
+class CCManager:
+    def __init__(self):
+        self.initial = True
+        self.directives: dict[str, int | bool] = {}
+
+    def set(self, key: str, value: int | bool = True, override: bool = True):
+        if override or key not in self.directives:
+            self.initial = False
+            self.directives[key] = value
+
+    def remove(self, key: str):
+        self.initial = False
+        self.directives.pop(key, None)
+
+    @property
+    def header(self) -> str:
+        parts = []
+        for key, value in self.directives.items():
+            if value is True:
+                parts.append(key)
+            elif isinstance(value, int):
+                parts.append(f"{key}={value}")
+        return ", ".join(parts)
 
 class TimingManager:
     def __init__(self):

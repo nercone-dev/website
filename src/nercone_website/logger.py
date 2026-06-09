@@ -21,6 +21,7 @@ def format_access(request: Request, response: Response | None = None) -> dict:
             "response": dict(response.headers) if response is not None else {}
         },
         "managers": {
+            "cc": request.scope["nercone.dev"]["cc"].directives,
             "pp": request.scope["nercone.dev"]["pp"].directives,
             "csp": request.scope["nercone.dev"]["csp"].directives,
             "timings": request.scope["nercone.dev"]["timings"].timings,
