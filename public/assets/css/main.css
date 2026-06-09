@@ -9,6 +9,9 @@ html {
     font-style: normal;
     line-height: 1.19;
 
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+
     margin: 0;
     padding: 0;
 }
