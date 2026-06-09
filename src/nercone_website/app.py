@@ -1,9 +1,9 @@
 import re
-import json
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import PlainTextResponse, JSONResponse
 
-from .logger import format_access, Logger
+from .logger import format_access
+from .routes import add_report_route
 from .databases import MimeTypes
 from .constants import Repository
 from .middleware import Middleware
@@ -14,6 +14,9 @@ MimeTypes.load()
 
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 app.add_middleware(Middleware)
+
+add_report_route(app, "/report", "DEFAULT")
+add_report_route(app, "/report/csp", "CSP")
 
 @app.api_route("/ping", methods=["GET"])
 async def ping():
@@ -140,30 +143,6 @@ async def merge_js(request: Request) -> Response:
             return render_error_page(request=request, status_code=403, message="ねえ、今JSファイル統合用のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？新しく追加されたエンドポイントに脆弱性あるか気になっただけ？そんなこと関係ないよね。攻撃しようとしたのは事実でしょ？？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
 
     return Response(content=';\n'.join(c.strip() for c in contents if c.strip()), media_type="text/javascript")
-
-@app.api_route("/report/csp", methods=["POST"])
-async def report_csp(request: Request) -> Response:
-    content_type = request.headers.get("content-type", "")
-
-    if "application/reports+json" not in content_type and "application/csp-report" not in content_type:
-        return Response(status_code=415)
-
-    body = await request.body()
-    max_bytes = 65536
-
-    if len(body) > max_bytes:
-        return Response(status_code=413)
-
-    try:
-        data = json.loads(body)
-    except (json.JSONDecodeError, ValueError):
-        return Response(status_code=400)
-
-    if not isinstance(data, (dict, list)):
-        return Response(status_code=400)
-
-    Logger.log_report(request, data, "CSP")
-    return Response(status_code=204)
 
 @app.api_route("/{path:path}", methods=["GET", "POST", "HEAD"])
 async def default_route(request: Request, path: str) -> Response:

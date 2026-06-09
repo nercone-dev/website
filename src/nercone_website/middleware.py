@@ -136,7 +136,7 @@ class Middleware:
                 subdomain_path = f"/{'/'.join(subdomain.split('.')[::-1])}{original_path}"
 
                 response = await self.get_response(scope, cached_receive, subdomain_path, "app", "ASGI App Total")
-                if response.status_code < 400 or response.status_code >= 500:
+                if not 400 <= response.status_code < 500:
                     await self.send(response, scope, cached_receive, send)
                     return
 
@@ -255,7 +255,7 @@ class Middleware:
         set_header("Permissions-Policy", scope["nercone.dev"]["pp"].header)
         set_header("Content-Security-Policy", scope["nercone.dev"]["csp"].header)
 
-        set_header("Reporting-Endpoints", "csp-endpoint=\"https://nercone.dev/report/csp/\"")
+        set_header("Reporting-Endpoints", "default=\"https://nercone.dev/report/\", csp-endpoint=\"https://nercone.dev/report/csp/\"")
 
         if scope.get("scheme") == "https":
             set_header("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
