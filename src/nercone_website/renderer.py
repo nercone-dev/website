@@ -105,15 +105,15 @@ def render_page(page: str, request: Request, count: bool = True, render: bool = 
 
             if page.endswith(".html"):
                 if markdown_mode:
-                    response = PlainTextResponse(content, status_code=status_code, media_type="text/markdown")
-
-                else:
                     timings.start("convert", "HTML to Markdown")
                     soup = BeautifulSoup(content, "html.parser")
                     main = str(soup.find("main")) if soup.find("main") else content
                     content = markitdown.convert_stream(io.BytesIO(main.encode("utf-8")), file_extension=".html").text_content
                     response = PlainTextResponse(content, status_code=status_code, media_type="text/markdown")
                     timings.stop("convert")
+
+                else:
+                    response = PlainTextResponse(content, status_code=status_code, media_type="text/html")
 
             elif page.endswith(".md"):
                 if markdown_mode:
