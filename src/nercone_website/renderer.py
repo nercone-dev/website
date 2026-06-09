@@ -10,7 +10,7 @@ from http import HTTPStatus
 from bs4 import BeautifulSoup
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
-from markitdown import MarkItDown
+from markitdown import MarkItDown, StreamInfo
 from starlette.types import Scope
 from fastapi import Request, Response
 from fastapi.responses import PlainTextResponse, FileResponse, RedirectResponse
@@ -108,7 +108,7 @@ def render_page(page: str, request: Request, count: bool = True, render: bool = 
                     timings.start("convert", "HTML to Markdown")
                     soup = BeautifulSoup(content, "html.parser")
                     main = str(soup.find("main")) if soup.find("main") else content
-                    content = markitdown.convert_stream(io.BytesIO(main.encode("utf-8")), file_extension=".html").text_content
+                    content = markitdown.convert(io.BytesIO(main.encode("utf-8")), StreamInfo(mimetype="text/html", charset="utf-8")).text_content
                     response = PlainTextResponse(content, status_code=status_code, media_type="text/markdown")
                     timings.stop("convert")
 
