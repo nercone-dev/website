@@ -17,7 +17,7 @@ RUN OPENSSL_VERSION=$(curl -fsSL "https://api.github.com/repos/openssl/openssl/r
     && rm -rf /tmp/openssl-*
 
 
-FROM cgr.dev/chainguard/wolfi-base AS python-builder
+FROM cgr.dev/chainguard/wolfi-base AS builder
 
 WORKDIR /srv/website
 
@@ -56,7 +56,7 @@ COPY --from=openssl-builder /usr/local/lib/libcrypto.so* /usr/lib/
 RUN ln -sf /etc/ssl/certs /usr/local/etc/ssl/certs
 RUN ldconfig
 
-COPY --from=python-builder /srv/website/.venv ./.venv
+COPY --from=builder /srv/website/.venv ./.venv
 COPY src ./src
 
 ENV PATH="/srv/website/.venv/bin:$PATH"
