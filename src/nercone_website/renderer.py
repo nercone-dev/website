@@ -114,7 +114,7 @@ def render_page(page: str, request: Request, count: bool = True, render: bool = 
 
                 else:
                     timings.start("render", "Render Final HTML")
-                    content = render_html(main)
+                    content = render_html(content)
                     timings.stop("render")
 
                     response = PlainTextResponse(content, status_code=status_code, media_type="text/html")
