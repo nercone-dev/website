@@ -3,9 +3,9 @@ services:
     container_name: website
     build: .
     restart: unless-stopped
-    network_mode: host
+    ports:
+      - "80:80"
     volumes:
-      - "/etc/letsencrypt:/etc/letsencrypt:ro"
       - "./.git:/srv/website/.git:ro"
       - "./logs:/srv/website/logs"
       - "./databases:/srv/website/databases"

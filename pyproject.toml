@@ -27,6 +27,7 @@ dependencies = [
     "rjsmin",
     "scour",
 
+    "tzdata",
     "pyyaml",
     "fourword"
 ]
