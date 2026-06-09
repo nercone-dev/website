@@ -57,11 +57,15 @@ def init_context(context: dict[str, Any], scope: Scope):
         daily_quote = "GReeeeN KA-RA-DA"
     context["daily_quote"] = daily_quote
 
-def render_page(page: str, request: Request, render: bool = True, status_code: int = 200, markdown_mode: bool = False, context: dict[str, Any] = {}):
+def render_page(page: str, request: Request, count: bool = True, render: bool = True, status_code: int = 200, markdown_mode: bool | None = None, context: dict[str, Any] = {}):
     init_context(context, request.scope)
 
     timings: TimingManager = request.scope["nercone.dev"]["timings"]
     templates: Jinja2Templates = request.scope["nercone.dev"]["templates"]
+
+    if markdown_mode is None:
+        markdown_ua = ["curl", "claude-user", "chatgpt-user", "google-extended", "perplexity-user"]
+        markdown_mode = not any([path.endswith(".html")]) and any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), any([ua in request.headers.get("user-agent", "").lower() for ua in markdown_ua])])
 
     if path := resolve_file(page):
         with path.open("r") as f:
@@ -80,49 +84,60 @@ def render_page(page: str, request: Request, render: bool = True, status_code: i
                     front = yaml.safe_load(source[3:end]) or {}
                     body = source[end+4:].lstrip("\n")
 
-            timings.start("render", "Render template")
-            rendered = templates.env.from_string(body).render(request=request, **context)
+            timings.start("render", "Render Contents")
+            content = templates.env.from_string(body).render(request=request, **context)
             timings.stop("render")
 
-            if page.endswith(".html"):
-                html = rendered
-            elif page.endswith(".md"):
-                timings.start("convert", "Markdown to HTML")
-                html = htmlitdown(rendered)
-                timings.stop("convert")
-
-            if "base" in front:
-                if front["base"].startswith("/"):
-                    source = f"{{% extends \"{front['base']}\" %}}\n"
+            def render_html(html: str):
+                if "base" in front:
+                    if front["base"].startswith("/"):
+                        source = f"{{% extends \"{front['base']}\" %}}\n"
+                    else:
+                        source = f"{{% extends \"/base/{front['base']}.html\" %}}\n"
                 else:
-                    source = f"{{% extends \"/base/{front['base']}.html\" %}}\n"
-            else:
-                source = "{% extends \"/base/normal.html\" %}\n"
+                    source = "{% extends \"/base/normal.html\" %}\n"
 
-            for key, value in front.items():
-                source += f"{{% block {key} %}}{value}{{% endblock %}}\n"
+                for key, value in front.items():
+                    source += f"{{% block {key} %}}{value}{{% endblock %}}\n"
 
-            source += f"{{% block main %}}\n{html}\n{{% endblock %}}\n"
+                source += f"{{% block main %}}\n{html}\n{{% endblock %}}\n"
+                return templates.env.from_string(source).render(request=request, **context)
 
-            content = templates.env.from_string(source).render(request=request, **context)
-            response = PlainTextResponse(content, status_code=status_code, media_type="text/html")
+            if page.endswith(".html"):
+                if markdown_mode:
+                    response = PlainTextResponse(content, status_code=status_code, media_type="text/markdown")
 
-            if markdown_mode:
-                timings.start("convert", "HTML to Markdown")
+                else:
+                    timings.start("convert", "HTML to Markdown")
+                    soup = BeautifulSoup(content, "html.parser")
+                    main = str(soup.find("main")) if soup.find("main") else content
+                    content = markitdown.convert_stream(io.BytesIO(main.encode("utf-8")), file_extension=".html").text_content
+                    response = PlainTextResponse(content, status_code=status_code, media_type="text/markdown")
+                    timings.stop("convert")
 
-                soup = BeautifulSoup(content, "html.parser")
-                main = str(soup.find("main")) if soup.find("main") else content
-                content = markitdown.convert_stream(io.BytesIO(main.encode("utf-8")), file_extension=".html").text_content
-                response = PlainTextResponse(content, status_code=status_code, media_type="text/markdown")
+            elif page.endswith(".md"):
+                if markdown_mode:
+                    response = PlainTextResponse(content, status_code=status_code, media_type="text/markdown")
 
-                timings.stop("convert")
+                else:
+                    timings.start("convert", "Markdown to HTML")
+                    main = htmlitdown(content)
+                    timings.stop("convert")
+
+                    timings.start("render", "Render Final HTML")
+                    content = render_html(main)
+                    timings.stop("render")
+
+                    response = PlainTextResponse(content, status_code=status_code, media_type="text/html")
 
         else:
-            content = source
             if page.endswith(".html"):
-                response = PlainTextResponse(content, status_code=status_code, media_type="text/html")
+                response = PlainTextResponse(source, status_code=status_code, media_type="text/html")
             elif page.endswith(".md"):
-                response = PlainTextResponse(content, status_code=status_code, media_type="text/markdown")
+                response = PlainTextResponse(source, status_code=status_code, media_type="text/markdown")
+
+        if count:
+            request.scope["nercone.dev"]["accesscounter"].increase()
 
         return response
 
@@ -134,10 +149,7 @@ def default_response(path: str, request: Request, status_code: int = 200, count:
 
     try:
         if page := resolve_page(path, markdown_mode=markdown_mode, timings=timings):
-            response = render_page(page, request=request, render=render, status_code=status_code, markdown_mode=markdown_mode, context=context)
-
-            if count:
-                request.scope["nercone.dev"]["accesscounter"].increase()
+            response = render_page(page, request=request, count=count, render=render, status_code=status_code, markdown_mode=markdown_mode, context=context)
 
         elif file := resolve_file(path):
             response = FileResponse(file, status_code=status_code)
@@ -186,7 +198,7 @@ def render_error_page(request: Request, status_code: int = 500, status_name: str
         request.scope["nercone.dev"]["csp"].append("script-src", "'unsafe-inline'")
         request.scope["nercone.dev"]["csp"].append("style-src", "fonts.googleapis.com", "'unsafe-inline'")
         request.scope["nercone.dev"]["csp"].append("font-src", "fonts.gstatic.com")
-        return render_page("error/server.html", request=request, status_code=status_code, render=False)
+        return render_page("error/server.html", request=request, status_code=status_code, count=False, render=False)
     else:
         if status_name is None:
             try:
@@ -197,7 +209,7 @@ def render_error_page(request: Request, status_code: int = 500, status_name: str
             except ValueError:
                 status_name = "Unknown"
 
-        return render_page("error/client.md", request=request, status_code=status_code, context={
+        return render_page("error/client.md", request=request, status_code=status_code, count=False, context={
             "status_code": status_code,
             "status_name": status_name,
             "message": message or error_messages.get(status_code, {}).get("normal", "不明なエラーが発生しました。"),
