@@ -65,7 +65,7 @@ def render_page(page: str, request: Request, count: bool = True, render: bool = 
 
     if markdown_mode is None:
         markdown_ua = ["curl", "claude-user", "chatgpt-user", "google-extended", "perplexity-user"]
-        markdown_mode = not any([path.endswith(".html")]) and any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), any([ua in request.headers.get("user-agent", "").lower() for ua in markdown_ua])])
+        markdown_mode = not any([page.endswith(".html")]) and any([page.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), any([ua in request.headers.get("user-agent", "").lower() for ua in markdown_ua])])
 
     if path := resolve_file(page):
         with path.open("r") as f:
