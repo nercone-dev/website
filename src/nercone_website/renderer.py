@@ -181,20 +181,21 @@ error_messages = {
     426: {"normal": "このリクエストを処理するにはプロトコルのアップグレードが必要です。", "joke": "それに答えるには、まずWebSocketに移動したい。"}
 }
 
-def render_error_page(request: Request, status_code: int = 500, message: str | None = None, joke_message: str | None = None) -> Response:
+def render_error_page(request: Request, status_code: int = 500, status_name: str | None = None, message: str | None = None, joke_message: str | None = None) -> Response:
     if status_code in range(500, 599):
         request.scope["nercone.dev"]["csp"].append("script-src", "'unsafe-inline'")
         request.scope["nercone.dev"]["csp"].append("style-src", "fonts.googleapis.com", "'unsafe-inline'")
         request.scope["nercone.dev"]["csp"].append("font-src", "fonts.gstatic.com")
         return render_page("error/server.html", request=request, status_code=status_code, render=False)
     else:
-        try:
-            if status_code == 600:
-                status_name = "Not Normal"
-            else:
-                status_name = HTTPStatus(status_code).phrase
-        except ValueError:
-            status_name = "Unknown"
+        if status_name is None:
+            try:
+                if status_code == 600:
+                    status_name = "Not Normal"
+                else:
+                    status_name = HTTPStatus(status_code).phrase
+            except ValueError:
+                status_name = "Unknown"
 
         return render_page("error/client.md", request=request, status_code=status_code, context={
             "status_code": status_code,
