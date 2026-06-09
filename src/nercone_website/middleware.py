@@ -1,7 +1,11 @@
+import gzip
+import zlib
 import hashlib
 import functools
 import traceback
 import ipaddress
+import zstandard
+import brotlicffi
 from fourword.lib import FourWord
 from fastapi import Response
 from fastapi.responses import PlainTextResponse, RedirectResponse
@@ -31,6 +35,22 @@ scour_options.strip_comments = True
 @functools.lru_cache(maxsize=512)
 def compute_etag(body: bytes) -> str:
     return '"' + hashlib.sha256(body).hexdigest() + '"'
+
+@functools.lru_cache(maxsize=128)
+def compress_zstd(body: bytes) -> bytes:
+    return zstandard.ZstdCompressor(level=3).compress(body)
+
+@functools.lru_cache(maxsize=128)
+def compress_brotli(body: bytes) -> bytes:
+    return brotlicffi.compress(body, quality=4)
+
+@functools.lru_cache(maxsize=128)
+def compress_gzip(body: bytes) -> bytes:
+    return gzip.compress(body, compresslevel=6)
+
+@functools.lru_cache(maxsize=128)
+def compress_deflate(body: bytes) -> bytes:
+    return zlib.compress(body, level=6)
 
 @functools.lru_cache(maxsize=128)
 def minify_html(body: bytes) -> bytes:
@@ -78,7 +98,8 @@ class Middleware:
                 "accesscounter": accesscounter,
 
                 "headers": dict(scope.get("headers", [])),
-                "logged": False
+                "logged": False,
+                "compression": True
             }})
 
             scope["nercone.dev"]["timings"].start("total", "Total")
@@ -227,6 +248,32 @@ class Middleware:
                 scope["nercone.dev"]["timings"].stop("minify")
             except Exception:
                 pass
+
+        if scope["nercone.dev"]["compression"] and response.body:
+            accept_encoding = [encoding.strip().split(";")[0].strip() for encoding in scope["nercone.dev"]["headers"].get(b"accept-encoding", b"").decode().split(",")]
+
+            scope["nercone.dev"]["timings"].start("compress", "Compress")
+
+            if "zstd" in accept_encoding:
+                response.body = compress_zstd(response.body)
+                response.headers["Content-Encoding"] = "zstd"
+
+            elif "br" in accept_encoding:
+                response.body = compress_brotli(response.body)
+                response.headers["Content-Encoding"] = "br"
+
+            elif "gzip" in accept_encoding:
+                response.body = compress_gzip(response.body)
+                response.headers["Content-Encoding"] = "gzip"
+
+            elif "deflate" in accept_encoding:
+                response.body = compress_deflate(response.body)
+                response.headers["Content-Encoding"] = "deflate"
+
+            scope["nercone.dev"]["timings"].stop("compress")
+
+            if "content-encoding" in response.headers:
+                response.headers["Vary"] = response.headers["vary"] + ", Accept-Encoding" if response.headers.get("vary") else "Accept-Encoding"
 
         response.headers["Content-Length"] = str(len(response.body))
 

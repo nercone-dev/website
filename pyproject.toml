@@ -22,6 +22,9 @@ dependencies = [
     "mistune",
     "markitdown",
 
+    "zstandard",
+    "brotlicffi",
+
     "minify-html",
     "rcssmin",
     "rjsmin",

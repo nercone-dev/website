@@ -71,19 +71,19 @@ def render_page(page: str, request: Request, count: bool = True, render: bool = 
         with path.open("r") as f:
             source = f.read()
 
-        if render:
-            if not source.startswith("---"):
+        if not source.startswith("---"):
+            front = {}
+            body = source
+        else:
+            end = source.find("\n---", 3)
+            if end == -1:
                 front = {}
                 body = source
             else:
-                end = source.find("\n---", 3)
-                if end == -1:
-                    front = {}
-                    body = source
-                else:
-                    front = yaml.safe_load(source[3:end]) or {}
-                    body = source[end+4:].lstrip("\n")
+                front = yaml.safe_load(source[3:end]) or {}
+                body = source[end+4:].lstrip("\n")
 
+        if render:
             timings.start("render", "Render Contents")
             content = templates.env.from_string(body).render(request=request, **context)
             timings.stop("render")
@@ -139,6 +139,12 @@ def render_page(page: str, request: Request, count: bool = True, render: bool = 
                 response = PlainTextResponse(source, status_code=status_code, media_type="text/html")
             elif page.endswith(".md"):
                 response = PlainTextResponse(source, status_code=status_code, media_type="text/markdown")
+
+        if "compression" in front:
+            if front["compression"].lower() == "true":
+                request.scope["nercone.dev"]["compression"] = True
+            elif front["compression"].lower() == "false":
+                request.scope["nercone.dev"]["compression"] = False
 
         if count:
             request.scope["nercone.dev"]["accesscounter"].increase()
