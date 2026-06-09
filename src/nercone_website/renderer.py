@@ -108,7 +108,7 @@ def render_page(page: str, request: Request, count: bool = True, render: bool = 
                     timings.start("convert", "HTML to Markdown")
                     soup = BeautifulSoup(content, "html.parser")
                     main = str(soup.find("main")) if soup.find("main") else content
-                    content = markitdown.convert(io.BytesIO(main.encode("utf-8")), StreamInfo(mimetype="text/html", charset="utf-8")).text_content
+                    content = markitdown.convert(io.BytesIO(main.encode("utf-8")), stream_info=StreamInfo(mimetype="text/html", charset="utf-8")).text_content
                     response = PlainTextResponse(content, status_code=status_code, media_type="text/markdown")
                     timings.stop("convert")
 
