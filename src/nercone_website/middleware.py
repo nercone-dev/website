@@ -244,6 +244,11 @@ class Middleware:
         set_header("Server", f"nercone.dev ({Repository.version})")
         set_header("Link", "<https://nercone.dev/sitemap.xml>; rel=\"sitemap\", <https://nercone.dev/robots.txt>; rel=\"robots\"")
 
+        set_header("X-Request-Id", scope["nercone.dev"]["id"].text)
+        set_header("X-Powered-By", "nercone.dev")
+        set_header("X-Frame-Options", "SAMEORIGIN")
+        set_header("X-Content-Type-Options", "nosniff")
+
         set_header("ETag", etag)
 
         if not scope["nercone.dev"]["cc"].initial:
@@ -258,10 +263,6 @@ class Middleware:
         set_header("Content-Security-Policy", scope["nercone.dev"]["csp"].header)
 
         set_header("Reporting-Endpoints", "default=\"https://nercone.dev/report/\", csp-endpoint=\"https://nercone.dev/report/csp/\"")
-
-        set_header("X-Request-Id", scope["nercone.dev"]["id"].text)
-        set_header("X-Frame-Options", "SAMEORIGIN")
-        set_header("X-Content-Type-Options", "nosniff")
 
         if scope.get("scheme") == "https":
             set_header("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
