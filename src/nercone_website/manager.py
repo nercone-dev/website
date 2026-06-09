@@ -1,4 +1,3 @@
-import copy
 import time
 import ipaddress
 from fastapi import Response
@@ -52,11 +51,12 @@ class CSPManager:
     def __init__(self):
         self.initial = True
         self.directives: dict[str, list[str] | bool] = {
-            "default-src": ["'self'", "assets.nercone.dev"],
+            "default-src": ["'none'"],
             "script-src": ["'self'", "assets.nercone.dev"],
             "style-src": ["'self'", "assets.nercone.dev"],
             "font-src": ["'self'", "assets.nercone.dev"],
-            "img-src": ["'self'", "assets.nercone.dev", "t3tra.dev", "drsb.f5.si", "data:"],
+            "img-src": ["'self'", "assets.nercone.dev", "t3tra.dev", "drsb.f5.si"],
+            "object-src": ["'none'"],
             "connect-src": ["'self'"],
             "frame-ancestors": ["'self'"],
             "base-uri": ["'self'"],
