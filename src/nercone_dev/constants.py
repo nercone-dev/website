@@ -15,12 +15,6 @@ class Files:
     mime_types = Directories.databases.joinpath("mime.types")
     access_counter = Directories.databases.joinpath("access_counter.txt")
 
-    class Logs:
-        app = Directories.logs.joinpath("app.log")
-        access = Directories.logs.joinpath("access.log")
-        error = Directories.logs.joinpath("error.log")
-        report = Directories.logs.joinpath("report.log")
-
 class Repository:
     url = subprocess.run(["/usr/bin/git", "remote", "get-url", "origin"], text=True, capture_output=True, cwd=Directories.base).stdout.strip()
     version = subprocess.run(["/usr/bin/git", "rev-parse", "--short", "HEAD"], text=True, capture_output=True, cwd=Directories.base).stdout.strip()

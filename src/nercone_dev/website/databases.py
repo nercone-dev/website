@@ -1,10 +1,10 @@
 import httpx
 import fcntl
+import logging
+import traceback
 import mimetypes
-from fourword.lib import FourWord
 from datetime import datetime, timedelta
 
-from ..logger import Logger
 from ..constants import Files
 
 class MimeTypes:
@@ -23,7 +23,8 @@ class MimeTypes:
                 response.raise_for_status()
             Files.mime_types.write_text(response.text, encoding="utf-8")
         except Exception as e:
-            Logger.log(FourWord(), f"Failed to fetch mime.types: {e}")
+            logger = logging.getLogger("nercone_dev.website.mimetypes")
+            logger.error(f"MimeTypes: Failed to fetch mime.types\n" + traceback.format_exc())
 
     @staticmethod
     def load():

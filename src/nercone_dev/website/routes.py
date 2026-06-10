@@ -1,6 +1,8 @@
 import json
+import logging
 from fastapi import FastAPI, Request, Response
-from ..logger import Logger
+
+from .logger import log_report
 
 def add_report_route(app: FastAPI, path: str, report_type: str):
     async def report_route(request: Request) -> Response:
@@ -23,7 +25,8 @@ def add_report_route(app: FastAPI, path: str, report_type: str):
         if not isinstance(data, (dict, list)):
             return Response(status_code=400)
 
-        Logger.log_report(request.scope["nercone.dev"]["id"], request, data, report_type)
+        logger = logging.getLogger("nercone_dev.website.report")
+        log_report(request.scope["nercone.dev"]["id"], logger, request, data, report_type)
         return Response(status_code=204)
 
     app.add_api_route(path=path, name=f"report_{report_type.lower()}", methods=["POST"], endpoint=report_route)

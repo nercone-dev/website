@@ -2,8 +2,8 @@ import re
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import PlainTextResponse, JSONResponse
 
-from ..logger import format_access
 from ..constants import Repository
+from .logger import format_access
 from .routes import add_report_route
 from .databases import MimeTypes
 from .middleware import Middleware
