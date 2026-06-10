@@ -18,7 +18,7 @@ def main():
     file_handler = logging.FileHandler(Directories.logs.joinpath(f"{id.readable_text}.log"))
     file_handler.setFormatter(logging.Formatter("%(levelname)s %(name)s: %(message)s"))
 
-    console = Console() if sys.stdout.isatty() else Console(width=128)
+    console = Console() if sys.stdout.isatty() else Console(width=117)
     listener = logging.handlers.QueueListener(queue, RichHandler(console=console), file_handler, respect_handler_level=True)
     listener.start()
 
