@@ -7,12 +7,12 @@
     "background_color": "#1A1A1A",
     "icons": [
         {
-            "src": "https://assets.nercone.dev/images/favicon.png",
+            "src": "/assets/images/favicon.png",
             "type": "image/png",
             "sizes": "384x384"
         },
         {
-            "src": "https://assets.nercone.dev/images/favicon.svg",
+            "src": "/assets/images/favicon.svg",
             "type": "image/svg+xml",
             "sizes": "384x384"
         }

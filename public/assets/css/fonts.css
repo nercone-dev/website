@@ -1,27 +1,27 @@
 @font-face {
     font-family: "Nercone Sans JP";
-    src: local("Nercone Sans JP"), url("https://assets.nercone.dev/fonts/NerconeSansJP-Regular.woff2") format("woff2");
+    src: local("Nercone Sans JP"), url("/assets/fonts/NerconeSansJP-Regular.woff2") format("woff2");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: "Nercone Sans JP";
-    src: local("Nercone Sans JP"), url("https://assets.nercone.dev/fonts/NerconeSansJP-Italic.woff2") format("woff2");
+    src: local("Nercone Sans JP"), url("/assets/fonts/NerconeSansJP-Italic.woff2") format("woff2");
     font-weight: 400;
     font-style: italic;
     font-display: swap;
 }
 @font-face {
     font-family: "Nercone Sans JP";
-    src: local("Nercone Sans JP"), url("https://assets.nercone.dev/fonts/NerconeSansJP-Bold.woff2") format("woff2");
+    src: local("Nercone Sans JP"), url("/assets/fonts/NerconeSansJP-Bold.woff2") format("woff2");
     font-weight: 700;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: "Nercone Sans JP";
-    src: local("Nercone Sans JP"), url("https://assets.nercone.dev/fonts/NerconeSansJP-BoldItalic.woff2") format("woff2");
+    src: local("Nercone Sans JP"), url("/assets/fonts/NerconeSansJP-BoldItalic.woff2") format("woff2");
     font-weight: 700;
     font-style: italic;
     font-display: swap;
@@ -29,28 +29,28 @@
 
 @font-face {
     font-family: "Nercone Sans SC";
-    src: local("Nercone Sans SC"), url("https://assets.nercone.dev/fonts/NerconeSansSC-Regular.woff2") format("woff2");
+    src: local("Nercone Sans SC"), url("/assets/fonts/NerconeSansSC-Regular.woff2") format("woff2");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: "Nercone Sans SC";
-    src: local("Nercone Sans SC"), url("https://assets.nercone.dev/fonts/NerconeSansSC-Italic.woff2") format("woff2");
+    src: local("Nercone Sans SC"), url("/assets/fonts/NerconeSansSC-Italic.woff2") format("woff2");
     font-weight: 400;
     font-style: italic;
     font-display: swap;
 }
 @font-face {
     font-family: "Nercone Sans SC";
-    src: local("Nercone Sans SC"), url("https://assets.nercone.dev/fonts/NerconeSansSC-Bold.woff2") format("woff2");
+    src: local("Nercone Sans SC"), url("/assets/fonts/NerconeSansSC-Bold.woff2") format("woff2");
     font-weight: 700;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: "Nercone Sans SC";
-    src: local("Nercone Sans SC"), url("https://assets.nercone.dev/fonts/NerconeSansSC-BoldItalic.woff2") format("woff2");
+    src: local("Nercone Sans SC"), url("/assets/fonts/NerconeSansSC-BoldItalic.woff2") format("woff2");
     font-weight: 700;
     font-style: italic;
     font-display: swap;
@@ -58,28 +58,28 @@
 
 @font-face {
     font-family: "Nercone Sans TC";
-    src: local("Nercone Sans TC"), url("https://assets.nercone.dev/fonts/NerconeSansTC-Regular.woff2") format("woff2");
+    src: local("Nercone Sans TC"), url("/assets/fonts/NerconeSansTC-Regular.woff2") format("woff2");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: "Nercone Sans TC";
-    src: local("Nercone Sans TC"), url("https://assets.nercone.dev/fonts/NerconeSansTC-Italic.woff2") format("woff2");
+    src: local("Nercone Sans TC"), url("/assets/fonts/NerconeSansTC-Italic.woff2") format("woff2");
     font-weight: 400;
     font-style: italic;
     font-display: swap;
 }
 @font-face {
     font-family: "Nercone Sans TC";
-    src: local("Nercone Sans TC"), url("https://assets.nercone.dev/fonts/NerconeSansTC-Bold.woff2") format("woff2");
+    src: local("Nercone Sans TC"), url("/assets/fonts/NerconeSansTC-Bold.woff2") format("woff2");
     font-weight: 700;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: "Nercone Sans TC";
-    src: local("Nercone Sans TC"), url("https://assets.nercone.dev/fonts/NerconeSansTC-BoldItalic.woff2") format("woff2");
+    src: local("Nercone Sans TC"), url("/assets/fonts/NerconeSansTC-BoldItalic.woff2") format("woff2");
     font-weight: 700;
     font-style: italic;
     font-display: swap;
@@ -87,28 +87,28 @@
 
 @font-face {
     font-family: "Nercone Sans KR";
-    src: local("Nercone Sans KR"), url("https://assets.nercone.dev/fonts/NerconeSansKR-Regular.woff2") format("woff2");
+    src: local("Nercone Sans KR"), url("/assets/fonts/NerconeSansKR-Regular.woff2") format("woff2");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: "Nercone Sans KR";
-    src: local("Nercone Sans KR"), url("https://assets.nercone.dev/fonts/NerconeSansKR-Italic.woff2") format("woff2");
+    src: local("Nercone Sans KR"), url("/assets/fonts/NerconeSansKR-Italic.woff2") format("woff2");
     font-weight: 400;
     font-style: italic;
     font-display: swap;
 }
 @font-face {
     font-family: "Nercone Sans KR";
-    src: local("Nercone Sans KR"), url("https://assets.nercone.dev/fonts/NerconeSansKR-Bold.woff2") format("woff2");
+    src: local("Nercone Sans KR"), url("/assets/fonts/NerconeSansKR-Bold.woff2") format("woff2");
     font-weight: 700;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: "Nercone Sans KR";
-    src: local("Nercone Sans KR"), url("https://assets.nercone.dev/fonts/NerconeSansKR-BoldItalic.woff2") format("woff2");
+    src: local("Nercone Sans KR"), url("/assets/fonts/NerconeSansKR-BoldItalic.woff2") format("woff2");
     font-weight: 700;
     font-style: italic;
     font-display: swap;
@@ -116,28 +116,28 @@
 
 @font-face {
     font-family: "Nercone Mono JP";
-    src: local("Nercone Mono JP"), url("https://assets.nercone.dev/fonts/NerconeMonoJP-Regular.woff2") format("woff2");
+    src: local("Nercone Mono JP"), url("/assets/fonts/NerconeMonoJP-Regular.woff2") format("woff2");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: "Nercone Mono JP";
-    src: local("Nercone Mono JP"), url("https://assets.nercone.dev/fonts/NerconeMonoJP-Italic.woff2") format("woff2");
+    src: local("Nercone Mono JP"), url("/assets/fonts/NerconeMonoJP-Italic.woff2") format("woff2");
     font-weight: 400;
     font-style: italic;
     font-display: swap;
 }
 @font-face {
     font-family: "Nercone Mono JP";
-    src: local("Nercone Mono JP"), url("https://assets.nercone.dev/fonts/NerconeMonoJP-Bold.woff2") format("woff2");
+    src: local("Nercone Mono JP"), url("/assets/fonts/NerconeMonoJP-Bold.woff2") format("woff2");
     font-weight: 700;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: "Nercone Mono JP";
-    src: local("Nercone Mono JP"), url("https://assets.nercone.dev/fonts/NerconeMonoJP-BoldItalic.woff2") format("woff2");
+    src: local("Nercone Mono JP"), url("/assets/fonts/NerconeMonoJP-BoldItalic.woff2") format("woff2");
     font-weight: 700;
     font-style: italic;
     font-display: swap;
