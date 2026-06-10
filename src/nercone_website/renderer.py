@@ -168,10 +168,10 @@ def default_response(path: str, request: Request, status_code: int = 200, count:
             response = RedirectResponse(url, status_code=status_code if 299 < status_code < 400 else 307)
 
         else:
-            response = render_error_page(request, 404, "リクエストしたページは現在ご利用になれません。削除/移動されたか、URLが間違っている可能性があります。", "そんなページ知らないっ！")
+            response = render_error_page(request, 404, message="リクエストしたページは現在ご利用になれません。削除/移動されたか、URLが間違っている可能性があります。", joke_message="そんなページ知らないっ！")
 
     except PermissionError:
-        response = render_error_page(request, 403, "何をしてるんです？脆弱性報告のためならいいのですが、データ盗んで悪用するためなら今すぐにやめてくださいね？", "ディレクトリトラバーサルね、知ってる。公開してないところ覗きたいの？えっt")
+        response = render_error_page(request, 403, message="何をしてるんです？脆弱性報告のためならいいのですが、データ盗んで悪用するためなら今すぐにやめてくださいね？", joke_message="ディレクトリトラバーサルね、知ってる。公開してないところ覗きたいの？えっt")
 
     for key, value in headers.items():
         response.headers[key.lower().strip()] = value
