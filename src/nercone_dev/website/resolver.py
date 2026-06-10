@@ -42,27 +42,27 @@ def resolve_page(path: str, markdown_mode: bool = False, timings: TimingManager 
 
     return None
 
-def resolve_shorturl(path: str, timings: TimingManager | None = None) -> str | None:
+def resolve_redirects(path: str, timings: TimingManager | None = None) -> str | None:
     if timings:
-        timings.start("resolve", "Resolve Short URL")
+        timings.start("resolve", "Resolve Redirects")
 
-    max_retry = 10
-
-    if file := resolve_file("shorturls.json"):
+    if file := resolve_file("redirects.json"):
         with file.open("r", encoding="utf-8") as f:
-            shorturls = json.load(f)
+            redirects = json.load(f)
+
+        max_retry = 10
 
         current = path.strip("/")
         visited = set()
 
         for _ in range(max_retry):
-            if current in visited or current not in shorturls:
+            if current in visited or current not in redirects:
                 timings.stop("resolve")
                 return None
 
             visited.add(current)
 
-            entry = shorturls[current]
+            entry = redirects[current]
             if entry["type"] == "redirect":
                 timings.stop("resolve")
                 return entry["content"]

@@ -18,7 +18,7 @@ from fastapi.templating import Jinja2Templates
 
 from ..constants import Directories
 from .manager import TimingManager
-from .resolver import resolve_file, resolve_page, resolve_shorturl
+from .resolver import resolve_file, resolve_page, resolve_redirects
 
 class CustomHTMLRenderer(mistune.HTMLRenderer):
     _alert_re = re.compile(r'^\s*<p>\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\](?:\n(.*?))?</p>\s*', re.IGNORECASE | re.DOTALL,)
@@ -158,14 +158,14 @@ def default_response(path: str, request: Request, status_code: int = 200, count:
     timings: TimingManager = request.scope["nercone.dev"]["timings"]
 
     try:
-        if page := resolve_page(path, markdown_mode=markdown_mode, timings=timings):
+        if url := resolve_redirects(path, timings=timings):
+            response = RedirectResponse(url, status_code=status_code if 300 <= status_code < 400 else 307)
+
+        elif page := resolve_page(path, markdown_mode=markdown_mode, timings=timings):
             response = render_page(page, request=request, count=count, render=render, status_code=status_code, markdown_mode=markdown_mode, context=context)
 
         elif file := resolve_file(path):
             response = FileResponse(file, status_code=status_code)
-
-        elif url := resolve_shorturl(path, timings=timings):
-            response = RedirectResponse(url, status_code=status_code if 299 < status_code < 400 else 307)
 
         else:
             response = render_error_page(request, 404, message="リクエストしたページは現在ご利用になれません。削除/移動されたか、URLが間違っている可能性があります。", joke_message="そんなページ知らないっ！")
@@ -204,7 +204,7 @@ error_messages = {
 }
 
 def render_error_page(request: Request, status_code: int = 500, status_name: str | None = None, message: str | None = None, joke_message: str | None = None) -> Response:
-    if status_code in range(500, 599):
+    if 500 <= status_code < 600:
         request.scope["nercone.dev"]["csp"].append("script-src", "'unsafe-inline'")
         request.scope["nercone.dev"]["csp"].append("style-src", "fonts.googleapis.com", "'unsafe-inline'")
         request.scope["nercone.dev"]["csp"].append("font-src", "fonts.gstatic.com")
