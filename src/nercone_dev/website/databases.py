@@ -4,8 +4,8 @@ import mimetypes
 from fourword.lib import FourWord
 from datetime import datetime, timedelta
 
-from .logger import Logger
-from .constants import Files
+from ..logger import Logger
+from ..constants import Files
 
 class MimeTypes:
     url = "https://raw.githubusercontent.com/apache/httpd/trunk/docs/conf/mime.types"
@@ -23,7 +23,7 @@ class MimeTypes:
                 response.raise_for_status()
             Files.mime_types.write_text(response.text, encoding="utf-8")
         except Exception as e:
-            Logger.log(f"[{FourWord().compact_text}] Failed to fetch mime.types: {e}")
+            Logger.log(FourWord(), f"Failed to fetch mime.types: {e}")
 
     @staticmethod
     def load():

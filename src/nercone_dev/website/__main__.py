@@ -2,14 +2,12 @@ import os
 import ssl
 import ctypes
 import ctypes.util
-from fourword.lib import FourWord
-from hypercorn.run import run
+from hypercorn.asyncio import serve
 from hypercorn.config import Config
-from importlib.metadata import version
 
-from .logger import Logger
-from .constants import Repository, Ports, TLS
+from ..constants import Ports, TLS
 from .databases import MimeTypes
+from .app import app
 
 def set_ssl_groups(context: ssl.SSLContext, groups: str) -> None:
     libssl_name = ctypes.util.find_library("ssl")
@@ -42,20 +40,8 @@ class HypercornConfig(Config):
 
         hypercorn_quic.QuicProtocol.__init__ = patched_init
 
-def main():
-    startup_id = FourWord().compact_text
-    Logger.log(f"[{startup_id}] nercone.dev ({Repository.version})")
-    Logger.log(f"{' ' * (len(startup_id) + 2)} with hypercorn {version('hypercorn')}")
-    Logger.log(f"{' ' * (len(startup_id) + 2)}      fastapi   {version('fastapi')}")
-    Logger.log(f"{' ' * (len(startup_id) + 2)}      jinja2    {version('jinja2')}")
-    Logger.log(f"{' ' * (len(startup_id) + 2)}      aioquic   {version('aioquic')}")
-    Logger.log(f"{' ' * (len(startup_id) + 2)}      fourword  {version('fourword')}")
-    Logger.log(f"{' ' * (len(startup_id) + 2)}      openssl   {ssl.OPENSSL_VERSION}")
-
-    MimeTypes.fetch()
-
+async def main():
     config = HypercornConfig()
-    config.application_path = "nercone_website.app:app"
     config.workers = 4
     config.worker_class = "uvloop"
     config.include_server_header = False
@@ -74,9 +60,6 @@ def main():
     else:
         config.bind = Ports.http
 
-    run(config)
+    MimeTypes.fetch()
 
-    Logger.log(f"[{startup_id}] STOP")
-
-if __name__ == "__main__":
-    main()
+    await serve(app, config)

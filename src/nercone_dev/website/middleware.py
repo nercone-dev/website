@@ -18,10 +18,10 @@ import rjsmin
 import rcssmin
 from scour import scour
 
-from .logger import Logger
+from ..logger import Logger
+from ..constants import Directories, Files, Repository, Hostnames, Ports, TLS
 from .manager import PPManager, CSPManager, CCManager, TimingManager, NetworkManager, OptionManager
 from .renderer import render_error_page
-from .constants import Directories, Files, Repository, Hostnames, Ports, TLS
 from .databases import AccessCounter
 
 templates = Jinja2Templates(directory=Directories.public)
@@ -167,9 +167,10 @@ class Middleware:
 
         except Exception:
             try:
-                Logger.log_error(scope.get("id", FourWord()), traceback.format_exc())
+                id = scope.get("nercone.dev", {}).get("id", FourWord())
+                Logger.log_error(id, traceback.format_exc())
                 if not scope.get("nercone.dev", {}).get("logged", False):
-                    Logger.log_access(Request(scope=scope, receive=receive), status_code=500)
+                    Logger.log_access(id, Request(scope=scope, receive=receive), status_code=500)
                     scope["nercone.dev"]["logged"] = True
                 await self.send(render_error_page(Request(scope=scope, receive=receive), status_code=500), scope, cached_receive, send)
             except Exception:
@@ -344,7 +345,7 @@ class Middleware:
         set_header("Server-Timing", scope["nercone.dev"]["timings"].header)
 
         if not scope.get("nercone.dev", {}).get("logged", False):
-            Logger.log_access(request=Request(scope=scope, receive=receive), response=response)
+            Logger.log_access(scope["nercone.dev"]["id"], Request(scope=scope, receive=receive), response)
             scope["nercone.dev"]["logged"] = True
 
         await response(scope, receive, send)

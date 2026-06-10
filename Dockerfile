@@ -63,4 +63,4 @@ ENV PATH="/srv/website/.venv/bin:$PATH"
 ENV LD_LIBRARY_PATH="/usr/local/lib"
 ENV OPENSSL_CONF="/usr/local/etc/ssl/openssl.cnf"
 
-CMD ["nercone-website"]
+CMD ["nercone-dev"]

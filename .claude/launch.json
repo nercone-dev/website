@@ -2,9 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "nercone-website",
+      "name": "nercone-dev",
       "runtimeExecutable": "uv",
-      "runtimeArgs": ["run", "nercone-website"],
+      "runtimeArgs": ["run", "nercone-dev"],
       "port": 80
     }
   ]

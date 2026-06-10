@@ -2,7 +2,7 @@ import time
 import ipaddress
 from fastapi import Response
 from starlette.requests import Request, HTTPConnection
-from .constants import reserved_cookie_keys
+from ..constants import reserved_cookie_keys
 
 class PPManager:
     def __init__(self):

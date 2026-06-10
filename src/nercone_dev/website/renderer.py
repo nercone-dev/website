@@ -16,9 +16,9 @@ from fastapi import Request, Response
 from fastapi.responses import PlainTextResponse, FileResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
+from ..constants import Directories
 from .manager import TimingManager
 from .resolver import resolve_file, resolve_page, resolve_shorturl
-from .constants import Directories
 
 class CustomHTMLRenderer(mistune.HTMLRenderer):
     _alert_re = re.compile(r'^\s*<p>\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\](?:\n(.*?))?</p>\s*', re.IGNORECASE | re.DOTALL,)
