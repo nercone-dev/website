@@ -104,11 +104,10 @@ class Middleware:
 
             scope["nercone.dev"]["timings"].start("total", "Total")
 
-            hostname = scope["nercone.dev"]["headers"].get(b"host", b"").decode().split(":")[0].strip()
-            if hostname.split(".")[-1] == "localhost":
-                subdomain = ".".join(hostname.split(".")[:-1])
-            else:
-                subdomain = ".".join(hostname.split(".")[:-2])
+            host = scope["nercone.dev"]["headers"].get(b"host", b"").decode()
+            hostname = host.split(":")[0].strip()
+
+            subdomain = next((hostname[:-(len(candidate) + 1)] for candidate in Hostnames.all if hostname.endswith("." + candidate)), "")
 
             if not scope["nercone.dev"]["network"].trusted and not any([hostname == candidate or hostname.endswith("." + candidate) for candidate in Hostnames.public]):
                 response = PlainTextResponse("許可されていないホスト名でのアクセスです。", status_code=403)
@@ -129,7 +128,6 @@ class Middleware:
                 return
 
             if not scope["nercone.dev"]["network"].trusted and scope["scheme"] == "http":
-                host = scope["nercone.dev"]["headers"].get(b"host", b"").decode()
                 path = scope.get("path", "/")
                 query_string = scope.get("query_string", b"").decode()
                 url = f"https://{host}{path}" + (f"?{query_string}" if query_string else "")
