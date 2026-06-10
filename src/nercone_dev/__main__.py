@@ -11,7 +11,7 @@ from .website.__main__ import main as website_main
 def main():
     id = FourWord()
 
-    queue = multiprocessing.Queue()
+    queue = multiprocessing.get_context("spawn").Queue()
 
     file_handler = logging.FileHandler(Directories.logs.joinpath(f"{id.readable_text}.log"))
     file_handler.setFormatter(logging.Formatter("%(levelname)s %(name)s: %(message)s"))
