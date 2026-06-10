@@ -353,4 +353,7 @@ class Middleware:
             log_access(scope["nercone.dev"]["logger"], Request(scope=scope, receive=receive), response)
             scope["nercone.dev"]["logged"] = True
 
-        await response(scope, receive, send)
+        try:
+            await response(scope, receive, send)
+        except:
+            pass
