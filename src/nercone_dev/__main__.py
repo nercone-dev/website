@@ -1,8 +1,10 @@
+import sys
 import asyncio
 import logging
 import logging.handlers
 import multiprocessing
 from fourword.lib import FourWord
+from rich.console import Console
 from rich.logging import RichHandler
 
 from .constants import Directories, Repository
@@ -16,7 +18,8 @@ def main():
     file_handler = logging.FileHandler(Directories.logs.joinpath(f"{id.readable_text}.log"))
     file_handler.setFormatter(logging.Formatter("%(levelname)s %(name)s: %(message)s"))
 
-    listener = logging.handlers.QueueListener(queue, RichHandler(), file_handler, respect_handler_level=True)
+    console = Console() if sys.stdout.isatty() else Console(width=128)
+    listener = logging.handlers.QueueListener(queue, RichHandler(console=console), file_handler, respect_handler_level=True)
     listener.start()
 
     queue_handler = logging.handlers.QueueHandler(queue)
