@@ -7,8 +7,8 @@ extra_imports: <link rel="stylesheet" href="/assets/css/pages/color-palette.css"
 ---
 
 <div class="flex flex-wrap">
-    <img src="/assets/images/other/color-palette/2001.png">
-    <img src="/assets/images/other/color-palette/2011.png">
+    <img src="/assets/images/other/color-palette/v1/2001.png">
+    <img src="/assets/images/other/color-palette/v1/2011.png">
 </div>
 
 ## Nercone's Color Palette
