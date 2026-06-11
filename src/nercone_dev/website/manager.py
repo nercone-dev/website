@@ -56,7 +56,7 @@ class CSPManager:
             "style-src": ["'self'", "assets.nercone.dev"],
             "font-src": ["'self'", "assets.nercone.dev"],
             "img-src": ["'self'", "assets.nercone.dev", "t3tra.dev", "drsb.f5.si"],
-            "object-src": ["'none'"],
+            "manifest-src": ["'self'"],
             "connect-src": ["'self'"],
             "frame-ancestors": ["'self'"],
             "base-uri": ["'self'"],
