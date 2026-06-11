@@ -4,7 +4,7 @@ import http.cookies
 from pathlib import Path
 from fourword.lib import FourWord
 
-startup_id = FourWord()
+startup_id = FourWord(os.environ.get("STARTUP_ID"))
 reserved_cookie_keys = frozenset(http.cookies.Morsel._reserved)
 
 class Directories:
@@ -19,7 +19,7 @@ class Files:
 
     class Logs:
         main = Directories.logs.joinpath(startup_id.readable_text + ".log")
-        error = Directories.logs.joinpath(startup_id.readable_text + "-error.log")
+        error = Directories.logs.joinpath(startup_id.readable_text+ "-error.log")
         access = Directories.logs.joinpath(startup_id.readable_text + "-access.log")
         reports = Directories.logs.joinpath(startup_id.readable_text + "-reports.log")
         warnings = Directories.logs.joinpath(startup_id.readable_text + "-warnings.log")
