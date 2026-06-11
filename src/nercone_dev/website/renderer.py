@@ -57,7 +57,7 @@ def init_context(context: dict[str, Any], scope: Scope):
         daily_quote = "GReeeeN KA-RA-DA"
     context["daily_quote"] = daily_quote
 
-def render_page(page: str, request: Request, count: bool = True, render: bool = True, status_code: int = 200, markdown_mode: bool | None = None, context: dict[str, Any] = {}):
+def render_page(page: str, path: str, request: Request, count: bool = True, render: bool = True, status_code: int = 200, markdown_mode: bool | None = None, context: dict[str, Any] = {}):
     init_context(context, request.scope)
 
     timings: TimingManager = request.scope["nercone.dev"]["timings"]
@@ -65,10 +65,10 @@ def render_page(page: str, request: Request, count: bool = True, render: bool = 
 
     if markdown_mode is None:
         markdown_ua = ["curl", "claude-user", "chatgpt-user", "google-extended", "perplexity-user"]
-        markdown_mode = page.endswith(".md") or (not any([page.endswith(".html"), "text/html" in request.headers.get("accept", "").lower()]) and any(["text/markdown" in request.headers.get("accept", "").lower(), any([ua in request.headers.get("user-agent", "").lower() for ua in markdown_ua])]))
+        markdown_mode = path.endswith(".md") or (not any([path.endswith(".html"), "text/html" in request.headers.get("accept", "").lower()]) and any(["text/markdown" in request.headers.get("accept", "").lower(), any([ua in request.headers.get("user-agent", "").lower() for ua in markdown_ua])]))
 
-    if path := resolve_file(page):
-        with path.open("r") as f:
+    if filepath := resolve_file(page):
+        with filepath.open("r") as f:
             source = f.read()
 
         if not source.startswith("---"):
@@ -162,7 +162,7 @@ def default_response(path: str, request: Request, status_code: int = 200, count:
             response = RedirectResponse(url, status_code=status_code if 300 <= status_code < 400 else 307)
 
         elif page := resolve_page(path, markdown_mode=markdown_mode, timings=timings):
-            response = render_page(page, request=request, count=count, render=render, status_code=status_code, markdown_mode=markdown_mode, context=context)
+            response = render_page(page, path, request=request, count=count, render=render, status_code=status_code, markdown_mode=markdown_mode, context=context)
 
         elif file := resolve_file(path):
             response = FileResponse(file, status_code=status_code)
@@ -208,7 +208,7 @@ def render_error_page(request: Request, status_code: int = 500, status_name: str
         request.scope["nercone.dev"]["csp"].append("script-src", "'unsafe-inline'")
         request.scope["nercone.dev"]["csp"].append("style-src", "fonts.googleapis.com", "'unsafe-inline'")
         request.scope["nercone.dev"]["csp"].append("font-src", "fonts.gstatic.com")
-        return render_page("error/server.html", request=request, status_code=status_code, count=False, render=False)
+        return render_page("error/server.html", "error/server", request=request, status_code=status_code, count=False, render=False)
     else:
         if status_name is None:
             try:
@@ -219,7 +219,7 @@ def render_error_page(request: Request, status_code: int = 500, status_name: str
             except ValueError:
                 status_name = "Unknown"
 
-        return render_page("error/client.md", request=request, status_code=status_code, count=False, context={
+        return render_page("error/client.md", "error/client", request=request, status_code=status_code, count=False, context={
             "status_code": status_code,
             "status_name": status_name,
             "message": message or error_messages.get(status_code, {}).get("normal", "不明なエラーが発生しました。"),
