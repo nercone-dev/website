@@ -1,7 +1,7 @@
 import json
-from fourword.lib import FourWord
-from nercone_modern import Logging
 from fastapi import Request, Response
+from fourword.lib import FourWord
+from nercone_modern.logging import Logging, LoggingLevel
 
 from ..constants import Files
 
@@ -39,8 +39,8 @@ def log_access(request: Request, response: Response | None = None, status_code: 
     logger_access.log(json.dumps(format_access(request, response)))
 
 def log_report(request: Request, body: dict | list, report_type: str):
-    logger_warnings.log(f"{request.scope['nercone.dev']['id'].compact_text} REPORT {report_type} FROM {request.scope['nercone.dev']['network'].host}:{request.scope['nercone.dev']['network'].port}")
-    logger_reports.log(json.dumps(format_access(request) | {"report": body}))
+    logger_warnings.log(f"{request.scope['nercone.dev']['id'].compact_text} REPORT {report_type} FROM {request.scope['nercone.dev']['network'].host}:{request.scope['nercone.dev']['network'].port}", level=LoggingLevel.WARNING)
+    logger_reports.log(json.dumps(format_access(request) | {"report": body}), level=LoggingLevel.WARNING)
 
 def log_error(id: FourWord, traceback: str):
-    logger_error.log(f"{id.compact_text} An exception occurred on processing request:\n" + traceback)
+    logger_error.log(f"{id.compact_text} An exception occurred on processing request:\n" + traceback, level=LoggingLevel.ERROR)
