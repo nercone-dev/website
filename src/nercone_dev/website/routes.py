@@ -24,7 +24,7 @@ def add_report_route(app: FastAPI, path: str, report_type: str):
         if not isinstance(data, (dict, list)):
             return Response(status_code=400)
 
-        log_report(request.scope["nercone.dev"]["id"], request, data, report_type)
+        log_report(request, data, report_type)
         return Response(status_code=204)
 
     app.add_api_route(path=path, name=f"report_{report_type.lower()}", methods=["POST"], endpoint=report_route)

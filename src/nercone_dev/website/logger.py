@@ -35,12 +35,12 @@ def format_access(request: Request, response: Response | None = None) -> dict:
     }
 
 def log_access(request: Request, response: Response | None = None, status_code: int | None = None):
-    logger_main.log(f"STATUS {response.status_code if response is not None else status_code or '---'} FROM {request.scope['nercone.dev']['network'].host}:{request.scope['nercone.dev']['network'].port} TO {str(request.url)}")
+    logger_main.log(f"{request.scope['nercone.dev']['id'].compact_text} STATUS {response.status_code if response is not None else status_code or '---'} FROM {request.scope['nercone.dev']['network'].host}:{request.scope['nercone.dev']['network'].port} TO {str(request.url)}")
     logger_access.log(json.dumps(format_access(request, response)))
 
-def log_error(id: FourWord, traceback: str):
-    logger_error.log(f"An exception occurred on processing request ({id.text}):\n" + traceback)
+def log_report(request: Request, body: dict | list, report_type: str):
+    logger_warnings.log(f"{request.scope['nercone.dev']['id'].compact_text} REPORT {report_type} FROM {request.scope['nercone.dev']['network'].host}:{request.scope['nercone.dev']['network'].port}")
+    logger_reports.log(json.dumps(format_access(request) | {"report": body}))
 
-def log_report(id: FourWord, request: Request, body: dict | list, report_type: str):
-    logger_warnings.log(f"{report_type} Report Received ({id.text})")
-    logger_reports.log(f"{report_type} Report Received ({id.text}):\n" + json.dumps(format_access(request) | {"report": {"type": report_type, "body": body}}))
+def log_error(id: FourWord, traceback: str):
+    logger_error.log(f"{id.compact_text} An exception occurred on processing request:\n" + traceback)
