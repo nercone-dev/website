@@ -23,8 +23,8 @@ class MimeTypes:
                 response.raise_for_status()
             Files.mime_types.write_text(response.text, encoding="utf-8")
         except Exception:
-            Logging("MimeTypes", filepath=Files.Logs.main).log("Failed to fetch mime.types")
-            Logging("MimeTypes", filepath=Files.Logs.error).log("Failed to fetch mime.types\n" + traceback.format_exc())
+            Logging("mimetypes", filepath=Files.Logs.main).log("Failed to fetch mime.types")
+            Logging("mimetypes", filepath=Files.Logs.error).log("Failed to fetch mime.types\n" + traceback.format_exc())
 
     @staticmethod
     def load():

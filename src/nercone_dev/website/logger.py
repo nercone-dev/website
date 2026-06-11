@@ -5,11 +5,11 @@ from nercone_modern.logging import Logging, LoggingLevel
 
 from ..constants import Files
 
-logger_main = Logging("Website", filepath=Files.Logs.main)
-logger_access = Logging("Website", filepath=Files.Logs.access)
-logger_reports = Logging("Website", filepath=Files.Logs.reports)
-logger_warnings = Logging("Website", filepath=Files.Logs.warnings)
-logger_error = Logging("Website", filepath=Files.Logs.error)
+logger_main = Logging("website", filepath=Files.Logs.main)
+logger_access = Logging("website", filepath=Files.Logs.access)
+logger_reports = Logging("website", filepath=Files.Logs.reports)
+logger_warnings = Logging("website", filepath=Files.Logs.warnings)
+logger_error = Logging("website", filepath=Files.Logs.error)
 
 def format_access(request: Request, response: Response | None = None) -> dict:
     return {
@@ -35,7 +35,8 @@ def format_access(request: Request, response: Response | None = None) -> dict:
     }
 
 def log_access(request: Request, response: Response | None = None, status_code: int | None = None):
-    logger_main.log(f"{request.scope['nercone.dev']['id'].compact_text} STATUS {response.status_code if response is not None else status_code or '---'} FROM {request.scope['nercone.dev']['network'].host}:{request.scope['nercone.dev']['network'].port} TO {str(request.url)}")
+    status_code = response.status_code if response is not None else status_code
+    logger_main.log(f"{request.scope['nercone.dev']['id'].compact_text} STATUS {status_code or '---'} FROM {request.scope['nercone.dev']['network'].host}:{request.scope['nercone.dev']['network'].port} TO {str(request.url)}", level=LoggingLevel.INFO if (status_code or 500) < 400 else LoggingLevel.WARNING)
     logger_access.log(json.dumps(format_access(request, response)))
 
 def log_report(request: Request, body: dict | list, report_type: str):
