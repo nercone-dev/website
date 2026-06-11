@@ -1,0 +1,36 @@
+import httpx
+import traceback
+import mimetypes
+from fourword.lib import FourWord
+from nercone_modern import Logging
+from datetime import datetime, timedelta
+
+from .constants import Files
+
+class MimeTypes:
+    url = "https://raw.githubusercontent.com/apache/httpd/trunk/docs/conf/mime.types"
+    max_age = timedelta(days=30)
+
+    @staticmethod
+    def fetch():
+        if Files.mime_types.exists():
+            age = datetime.now() - datetime.fromtimestamp(Files.mime_types.stat().st_mtime)
+            if age < MimeTypes.max_age:
+                return
+        try:
+            with httpx.Client(http2=True, timeout=30) as client:
+                response = client.get(MimeTypes.url)
+                response.raise_for_status()
+            Files.mime_types.write_text(response.text, encoding="utf-8")
+        except Exception:
+            Logging("MimeTypes", filepath=Files.Logs.main).log("Failed to fetch mime.types")
+            Logging("MimeTypes", filepath=Files.Logs.error).log("Failed to fetch mime.types\n" + traceback.format_exc())
+
+    @staticmethod
+    def load():
+        if not Files.mime_types.exists():
+            return
+        extra = mimetypes.read_mime_types(str(Files.mime_types))
+        if extra:
+            for ext, mime in extra.items():
+                mimetypes.add_type(mime, ext)

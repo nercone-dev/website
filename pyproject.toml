@@ -30,7 +30,7 @@ dependencies = [
     "rjsmin",
     "scour",
 
-    "rich",
+    "nercone-modern",
     "tzdata",
     "pyyaml",
     "fourword"

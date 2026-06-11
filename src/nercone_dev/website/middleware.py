@@ -1,7 +1,6 @@
 import gzip
 import zlib
 import hashlib
-import logging
 import functools
 import traceback
 import ipaddress
@@ -79,15 +78,12 @@ class Middleware:
                 await self.app(scope, receive, send)
                 return
 
-            logger = logging.getLogger("nercone_dev.website")
-
             scope.update({"nercone.dev": {
                 "id": FourWord(),
 
                 "logged": False,
                 "compression": True,
 
-                "logger": logger,
                 "templates": templates,
                 "accesscounter": accesscounter,
 
@@ -172,10 +168,9 @@ class Middleware:
         except Exception:
             try:
                 id = scope.get("nercone.dev", {}).get("id", FourWord())
-                logger = scope.get("nercone.dev", {}).get("logger", logging.getLogger("nercone_dev.website"))
-                log_error(id, logger, traceback.format_exc())
+                log_error(id, traceback.format_exc())
                 if not scope.get("nercone.dev", {}).get("logged", False):
-                    log_access(logger, Request(scope=scope, receive=receive), status_code=500)
+                    log_access(Request(scope=scope, receive=receive), status_code=500)
                     scope["nercone.dev"]["logged"] = True
                 await self.send(render_error_page(Request(scope=scope, receive=receive), status_code=500), scope, cached_receive, send)
             except Exception:
@@ -350,7 +345,7 @@ class Middleware:
         set_header("Server-Timing", scope["nercone.dev"]["timings"].header)
 
         if not scope.get("nercone.dev", {}).get("logged", False):
-            log_access(scope["nercone.dev"]["logger"], Request(scope=scope, receive=receive), response)
+            log_access(Request(scope=scope, receive=receive), response)
             scope["nercone.dev"]["logged"] = True
 
         try:

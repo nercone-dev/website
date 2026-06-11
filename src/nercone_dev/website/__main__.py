@@ -4,14 +4,11 @@ import signal
 import asyncio
 import ctypes
 import ctypes.util
-import functools
-import logging.handlers
 import multiprocessing
 from hypercorn.run import run
 from hypercorn.config import Config
 
 from ..constants import Ports, TLS
-from .databases import MimeTypes
 
 def set_ssl_groups(context: ssl.SSLContext, groups: str) -> None:
     libssl_name = ctypes.util.find_library("ssl")
@@ -51,7 +48,7 @@ class HypercornConfig(Config):
         if self.needs_quic_patch:
             self.patch_quic_ssl_groups()
 
-async def main(log_queue=None):
+async def main():
     config = HypercornConfig()
     config.workers = 4
     config.worker_class = "uvloop"
@@ -71,23 +68,6 @@ async def main(log_queue=None):
         config.needs_quic_patch = True
     else:
         config.bind = Ports.http
-
-    if log_queue is not None:
-        config.logconfig_dict = {
-            "version": 1,
-            "disable_existing_loggers": False,
-            "handlers": {
-                "queue": {
-                    "()": functools.partial(logging.handlers.QueueHandler, log_queue),
-                },
-            },
-            "root": {"handlers": ["queue"], "level": "INFO"},
-            "loggers": {
-                "hypercorn.error": {"handlers": [], "propagate": True, "level": "INFO"},
-            }
-        }
-
-    MimeTypes.fetch()
 
     loop = asyncio.get_running_loop()
     shutdown_event = asyncio.Event()
