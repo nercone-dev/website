@@ -65,7 +65,7 @@ def render_page(page: str, request: Request, count: bool = True, render: bool = 
 
     if markdown_mode is None:
         markdown_ua = ["curl", "claude-user", "chatgpt-user", "google-extended", "perplexity-user"]
-        markdown_mode = not any([page.endswith(".html"), "text/html" in request.headers.get("accept", "").lower()]) and any([page.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), any([ua in request.headers.get("user-agent", "").lower() for ua in markdown_ua])])
+        markdown_mode = path.endswith(".md") or not any([page.endswith(".html"), "text/html" in request.headers.get("accept", "").lower()]) and any(["text/markdown" in request.headers.get("accept", "").lower(), any([ua in request.headers.get("user-agent", "").lower() for ua in markdown_ua])])
 
     if path := resolve_file(page):
         with path.open("r") as f:
@@ -153,7 +153,7 @@ def render_page(page: str, request: Request, count: bool = True, render: bool = 
 
 def default_response(path: str, request: Request, status_code: int = 200, count: bool = True, render: bool = True, context: dict[str, Any] = {}, headers: dict[str, str] = {}):
     markdown_ua = ["curl", "claude-user", "chatgpt-user", "google-extended", "perplexity-user"]
-    markdown_mode = not any([path.endswith(".html"), "text/html" in request.headers.get("accept", "").lower()]) and any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), any([ua in request.headers.get("user-agent", "").lower() for ua in markdown_ua])])
+    markdown_mode = path.endswith(".md") or not any([path.endswith(".html"), "text/html" in request.headers.get("accept", "").lower()]) and any(["text/markdown" in request.headers.get("accept", "").lower(), any([ua in request.headers.get("user-agent", "").lower() for ua in markdown_ua])])
 
     timings: TimingManager = request.scope["nercone.dev"]["timings"]
 
