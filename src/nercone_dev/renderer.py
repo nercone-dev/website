@@ -5,9 +5,9 @@ import random
 import mistune
 import resvg_py
 from typing import Any
+from bs4 import BeautifulSoup
 from html import escape
 from http import HTTPStatus
-from bs4 import BeautifulSoup
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 from markitdown import MarkItDown, StreamInfo
@@ -16,7 +16,7 @@ from fastapi import Request, Response
 from fastapi.responses import PlainTextResponse, FileResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from ..constants import Directories
+from .constants import Directories
 from .manager import TimingManager
 from .resolver import resolve_file, resolve_page, resolve_redirects
 

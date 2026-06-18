@@ -2,13 +2,13 @@ import re
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import PlainTextResponse, JSONResponse
 
-from ..databases import MimeTypes
-from ..constants import Repository
 from .logger import format_access
 from .routes import add_report_route
-from .middleware import Middleware
 from .resolver import resolve_file
 from .renderer import default_response, render_error_page, render_thumbnail_png
+from .databases import MimeTypes
+from .constants import Repository
+from .middleware import Middleware
 
 MimeTypes.load()
 

@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from ..constants import Directories
+from .constants import Directories
 from .manager import TimingManager
 
 def resolve_file(path: str) -> Path | None:

@@ -3,13 +3,13 @@ from fastapi import Request, Response
 from fourword.lib import FourWord
 from nercone_modern.logging import Logging, LoggingLevel
 
-from ..constants import Files
+from .constants import Files
 
 logger_main = Logging("website", filepath=Files.Logs.main)
+logger_error = Logging("website", filepath=Files.Logs.error)
 logger_access = Logging("website", filepath=Files.Logs.access)
 logger_reports = Logging("website", filepath=Files.Logs.reports)
 logger_warnings = Logging("website", filepath=Files.Logs.warnings)
-logger_error = Logging("website", filepath=Files.Logs.error)
 
 def format_access(request: Request, response: Response | None = None) -> dict:
     return {
