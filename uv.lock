@@ -646,7 +646,19 @@ wheels = [
 ]
 
 [[package]]
-name = "nercone-dev"
+name = "nercone-modern"
+version = "2.6.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "strip-ansi" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a6/3d/b3b94b036b13d98363e784397dec95621df7a4912c1e0e1a2c4dd90e5fe5/nercone_modern-2.6.2.tar.gz", hash = "sha256:bcb0d33064658d3fa28edba457f2c392bc8082470951866a86febf3f80748430", size = 4753, upload-time = "2026-06-13T03:46:47.408Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ab/2f/6bf1c2f7208d0246056a32dc256fbef64fdc1960ca50d3a29e5538c0c2c9/nercone_modern-2.6.2-py3-none-any.whl", hash = "sha256:2a5e59637d72fb018429cdbb3af2e98ef4ccd868249d3634cdb9732f01b537b2", size = 6799, upload-time = "2026-06-13T03:46:46.361Z" },
+]
+
+[[package]]
+name = "nercone-website"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [
@@ -694,18 +706,6 @@ requires-dist = [
     { name = "tzdata" },
     { name = "websockets" },
     { name = "zstandard" },
-]
-
-[[package]]
-name = "nercone-modern"
-version = "2.6.2"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "strip-ansi" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/a6/3d/b3b94b036b13d98363e784397dec95621df7a4912c1e0e1a2c4dd90e5fe5/nercone_modern-2.6.2.tar.gz", hash = "sha256:bcb0d33064658d3fa28edba457f2c392bc8082470951866a86febf3f80748430", size = 4753, upload-time = "2026-06-13T03:46:47.408Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/ab/2f/6bf1c2f7208d0246056a32dc256fbef64fdc1960ca50d3a29e5538c0c2c9/nercone_modern-2.6.2-py3-none-any.whl", hash = "sha256:2a5e59637d72fb018429cdbb3af2e98ef4ccd868249d3634cdb9732f01b537b2", size = 6799, upload-time = "2026-06-13T03:46:46.361Z" },
 ]
 
 [[package]]
