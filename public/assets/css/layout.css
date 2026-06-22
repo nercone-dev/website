@@ -12,7 +12,7 @@ blockquote {
 .hero {
     position: relative;
     overflow: hidden;
-    background-color: black;
+    background-color: var(--color-dark-grey);
 
     display: flex;
     flex-direction: column;
