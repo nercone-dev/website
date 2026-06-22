@@ -3,14 +3,18 @@
   <defs>
     <style>
       .cls-1 {
-        fill: #9654c8;
+        fill: #272727;
       }
 
       .cls-2 {
-        fill: #fff;
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: square;
+        stroke-miterlimit: 10;
+        stroke-width: 64px;
       }
     </style>
   </defs>
   <rect class="cls-1" x="0" y="0" width="1024" height="1024"/>
-  <polygon class="cls-2" points="176 176 176 560 752 560 752 752 176 752 176 848 848 848 848 464 272 464 272 272 848 272 848 176 176 176"/>
+  <path class="cls-2" d="M816,208h-456c-83.95,0-152,68.05-152,152h0c0,83.95,68.05,152,152,152h304c83.95,0,152,68.05,152,152h0c0,83.95-68.05,152-152,152H208"/>
 </svg>

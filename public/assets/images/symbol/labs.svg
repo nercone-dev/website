@@ -3,29 +3,25 @@
   <defs>
     <style>
       .cls-1 {
-        opacity: .5;
+        fill: #272727;
       }
 
-      .cls-1, .cls-2 {
-        fill: #fff;
+      .cls-2 {
+        opacity: .75;
       }
 
-      .cls-3 {
-        fill: #00c878;
+      .cls-2, .cls-3 {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: square;
+        stroke-miterlimit: 10;
+        stroke-width: 64px;
       }
     </style>
   </defs>
-  <rect class="cls-3" x="0" y="0" width="1024" height="1024"/>
+  <rect class="cls-1" x="0" width="1024" height="1024"/>
   <g>
-    <rect class="cls-2" x="271.88" y="752" width="480.17" height="96"/>
-    <rect class="cls-2" x="176" y="560" width="96" height="192"/>
-    <rect class="cls-2" x="272" y="464" width="96" height="96"/>
-    <rect class="cls-2" x="368" y="272" width="96" height="192"/>
-    <rect class="cls-2" x="272" y="176" width="96" height="96"/>
-    <rect class="cls-2" x="752" y="560" width="96" height="192" transform="translate(1600 1312) rotate(180)"/>
-    <rect class="cls-2" x="656" y="464" width="96" height="96" transform="translate(1408 1024) rotate(180)"/>
-    <rect class="cls-2" x="560" y="272" width="96" height="192" transform="translate(1216 736) rotate(180)"/>
-    <rect class="cls-2" x="656" y="176" width="96" height="96"/>
-    <polygon class="cls-1" points="752 560 752 752 272 752 272 560 368 560 368 464 656 464 656 560 752 560"/>
+    <path class="cls-3" d="M208,208v456c0,83.95,68.05,152,152,152h456"/>
+    <path class="cls-2" d="M392,208h272c83.95,0,152,68.05,152,152v456h-424v-152c0-83.95,68.05-152,152-152h272"/>
   </g>
 </svg>

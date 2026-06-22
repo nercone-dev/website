@@ -3,21 +3,21 @@
   <defs>
     <style>
       .cls-1 {
-        opacity: .75;
+        fill: #272727;
       }
 
-      .cls-1, .cls-2 {
-        fill: #fff;
-      }
-
-      .cls-3 {
-        fill: #fa7800;
+      .cls-2 {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: square;
+        stroke-miterlimit: 10;
+        stroke-width: 64px;
       }
     </style>
   </defs>
-  <rect class="cls-3" x="0" y="0" width="1024" height="1024"/>
+  <rect class="cls-1" x="0" width="1024" height="1024"/>
   <g>
-    <rect class="cls-2" x="-16" y="464" width="672" height="96" transform="translate(-192 832) rotate(-90)"/>
-    <polygon class="cls-1" points="752 176 752 656 368 656 368 560 656 560 656 176 752 176"/>
+    <path class="cls-2" d="M208,816v-456c0-83.95,68.05-152,152-152h456"/>
+    <line class="cls-2" x1="208" y1="512" x2="664" y2="512"/>
   </g>
 </svg>
