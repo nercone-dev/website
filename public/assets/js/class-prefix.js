@@ -1,7 +1,7 @@
 (() => {
     const CONFIG = [
-        { prefix: 'small',  media: '(max-width: 512px)' },
-        { prefix: 'medium', media: '(min-width: 512px) and (max-width: 1080px)' },
+        { prefix: 'small',  media: '(max-width: 768px)' },
+        { prefix: 'medium', media: '(min-width: 769px) and (max-width: 1080px)' },
         { prefix: 'large',  media: '(min-width: 1081px)' }
     ];
 
