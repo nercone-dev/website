@@ -5,7 +5,7 @@ sidebar: <ul>
              <li class="section">
                  <span>Other</span>
                  <ul>
-                     <li><a href="test/">Test</a></li>
+                     <li><a href="/docs/test/">Test</a></li>
                  </ul>
              </li>
          </ul>
