@@ -5,17 +5,17 @@ description: nercone.devのサーバーの詳細情報
 ---
 
 # nercone.dev ({{ repository.version }})
-nercone.devへのHTTP(S)リクエストは、Python+Hypercorn+FastAPIで構築されたWebサーバーによって処理されています。
+nercone.devへのHTTP(S)リクエストは、Python+Uvicorn+FastAPIで構築されたWebサーバーによって処理されています。
 
 サードパーティのソフトウェアや機密情報などの公開ができない/難しい箇所を除く、ほとんどの箇所は[github.com:nercone-dev/website](https://github.com/nercone-dev/website/)で公開しています。
 
-## 利用技術
+## 技術
 
 ### HTTP
 HTTP/1.1/2/3(QUIC)に対応しています。
 
 ### TLS
-HypercornでTLSに対応しています。
+NginxでTLSに対応しています。
 
 SSLの全バージョンを含むTLS 1.1以前のSSL/TLSは無効化しています。TLS 1.2/1.3でのみアクセス可能です。
 
@@ -23,9 +23,8 @@ SSLの全バージョンを含むTLS 1.1以前のSSL/TLSは無効化していま
 
 ### PQC (ポスト量子暗号)
 `X25519MLKEM768`などのハイブリッドPQCでの鍵交換に対応済みです。
-純粋なPQC(`MLKEM1024`/`MLKEM768`)にも対応済みですが、ハイブリッドPQCより優先順位を低くしています。
 
-HypercornがQUICに対応するために使用している`aioquic`はPQCに対応していないため、[フォークして](https://github.com/nercone-forks/aioquic/)対応させました。
+純粋なPQC(`MLKEM1024`/`MLKEM768`)にも対応済みですが、ハイブリッドPQCより優先順位を低くしています。
 
 ## その他の情報
 
@@ -41,7 +40,7 @@ GCPのCompute Engineを使用しています。マシンタイプはe2-mediumで
 リージョンはasia-northeast2 (大阪)です。
 日本なのでレイテンシが低く、かつ東京より安いためです。
 
-LinuxディストリビューションはAlmaLinux 10.2を使用しています。
+LinuxディストリビューションはAlmaLinux 10.2です。Fedora/RHEL系は至高。
 
 ### メールサーバー
 GCPだと上りの25/tcpポートがスパム対策かなんかでブロックされるので、メールサーバーに限り別で用意したXServerのVPSで実行しています。
