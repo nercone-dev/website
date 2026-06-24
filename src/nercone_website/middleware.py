@@ -93,7 +93,7 @@ class Middleware:
                 "pp": PPManager(),
                 "csp": CSPManager(),
                 "timings": TimingManager(),
-                "network": NetworkManager(address=ipaddress.ip_address(scope["client"][0]) if scope["client"][0] else None, host=scope["client"][0], port=scope["client"][1]),
+                "network": NetworkManager(address=ipaddress.ip_address(scope["client"][0]) if scope["client"] and scope["client"][0] else None, host=scope["client"][0] if scope["client"] else None, port=scope["client"][1] if scope["client"] else None),
                 "options": OptionManager(HTTPConnection(scope=scope)),
 
                 "directories": Directories,
@@ -170,9 +170,9 @@ class Middleware:
                 if not scope.get("nercone.dev", {}).get("logged", False):
                     log_access(Request(scope=scope, receive=receive), status_code=500)
                     scope["nercone.dev"]["logged"] = True
-                await self.send(render_error_page(Request(scope=scope, receive=receive), status_code=500), scope, cached_receive, send)
+                await self.send(render_error_page(Request(scope=scope, receive=receive), status_code=500), scope, receive, send)
             except Exception:
-                await self.send(PlainTextResponse("Internal Server Error", status_code=500), scope, cached_receive, send)
+                await self.send(PlainTextResponse("Internal Server Error", status_code=500), scope, receive, send)
 
     async def get_response(self, scope: Scope, receive: Receive, path: str, key: str, description: str | None = None) -> Response:
         if path != "/" and path.endswith("/"):
