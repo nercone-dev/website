@@ -18,7 +18,7 @@ import rjsmin
 import rcssmin
 from scour import scour
 
-from .constants import Directories, Files, Repository, Hostnames, unix_socket
+from .constants import Directories, Files, Repository, Hostnames
 from .logger import log_access, log_error
 from .manager import PPManager, CSPManager, CCManager, TimingManager, NetworkManager, OptionManager
 from .renderer import render_error_page
