@@ -3,8 +3,10 @@ services:
     container_name: website
     build: .
     restart: unless-stopped
-    network_mode: host
+    environment:
+      WEBSITE_UDS: /run/website/app.sock
     volumes:
+      - "/run/website:/run/website"
       - "/etc/letsencrypt:/etc/letsencrypt:ro"
       - "./.git:/srv/website/.git:ro"
       - "./logs:/srv/website/logs"

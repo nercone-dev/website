@@ -1,8 +1,10 @@
 import time
 import ipaddress
+from pathlib import Path
 from fastapi import Response
 from starlette.requests import Request, HTTPConnection
-from .constants import reserved_cookie_keys
+
+from .constants import unix_socket, reserved_cookie_keys
 
 class PPManager:
     def __init__(self):
@@ -168,7 +170,7 @@ class NetworkManager:
         self.address = address
         self.host = host
         self.port = port
-        self.trusted = (address is not None and any(address in network for network in self.trusted_networks))
+        self.trusted = not Path(unix_socket).is_socket()
 
 class OptionManager:
     options = {

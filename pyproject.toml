@@ -7,12 +7,12 @@ name = "nercone-website"
 version = "1.0.0"
 requires-python = ">=3.12"
 dependencies = [
-    "websockets",
     "httpx[http2]",
     "aioquic",
+    "websockets",
 
     "fastapi",
-    "hypercorn[h3,uvloop]",
+    "uvicorn[standard]",
 
     "beautifulsoup4",
 
