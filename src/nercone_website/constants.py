@@ -5,7 +5,7 @@ from pathlib import Path
 from fourword.lib import FourWord
 
 startup_id = FourWord(os.environ.setdefault("STARTUP_ID", FourWord().text))
-unix_socket = os.environ.get("WEBSITE_UDS", "/run/website/app.sock")
+unix_socket = os.environ.get("WEBSITE_UDS")
 reserved_cookie_keys = frozenset(http.cookies.Morsel._reserved)
 
 class Directories:

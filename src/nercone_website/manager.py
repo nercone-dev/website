@@ -1,6 +1,5 @@
 import time
 import ipaddress
-from pathlib import Path
 from fastapi import Response
 from starlette.requests import Request, HTTPConnection
 
@@ -170,7 +169,7 @@ class NetworkManager:
         self.address = address
         self.host = host
         self.port = port
-        self.trusted = not Path(unix_socket).is_socket()
+        self.trusted = not unix_socket
 
 class OptionManager:
     options = {
