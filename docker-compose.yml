@@ -3,7 +3,10 @@ services:
     container_name: website
     build: .
     restart: unless-stopped
+    ports:
+      - "8080:8080"
     environment:
+      WEBSITE_TCP: 8080
       WEBSITE_UDS: /run/website/app.sock
     volumes:
       - "/run/website:/run/website"
