@@ -18,7 +18,7 @@ import rjsmin
 import rcssmin
 from scour import scour
 
-from .constants import Directories, Files, Repository, Hostnames
+from .constants import Directories, Files, Repository, Hostnames, unix_socket
 from .logger import log_access, log_error
 from .manager import PPManager, CSPManager, CCManager, TimingManager, NetworkManager, OptionManager
 from .renderer import render_error_page
@@ -127,7 +127,7 @@ class Middleware:
                 await self.app(scope, receive, send)
                 return
 
-            if not scope["nercone.dev"]["network"].trusted and scope["scheme"] == "http":
+            if not unix_socket and not scope["nercone.dev"]["network"].trusted and scope["scheme"] == "http":
                 path = scope.get("path", "/")
                 query_string = scope.get("query_string", b"").decode()
                 url = f"https://{host}{path}" + (f"?{query_string}" if query_string else "")
