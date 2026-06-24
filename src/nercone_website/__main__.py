@@ -17,6 +17,7 @@ def main():
 
     if Ports.uds:
         os.umask(0o000)
+        os.unlink(Ports.uds)
         uds = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         uds.bind(Ports.uds)
         sockets.append(uds)
