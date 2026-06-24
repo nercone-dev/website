@@ -169,7 +169,10 @@ class NetworkManager:
         self.address = address
         self.host = host
         self.port = port
-        self.trusted = not unix_socket
+        if unix_socket:
+            self.trusted = True
+        else:
+            self.trusted = any(self.address in network for network in self.trusted_networks) if self.address else False
 
 class OptionManager:
     options = {
