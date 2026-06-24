@@ -127,14 +127,6 @@ class Middleware:
                 await self.app(scope, receive, send)
                 return
 
-            if not unix_socket and not scope["nercone.dev"]["network"].trusted and scope["scheme"] == "http":
-                path = scope.get("path", "/")
-                query_string = scope.get("query_string", b"").decode()
-                url = f"https://{host}{path}" + (f"?{query_string}" if query_string else "")
-                response = RedirectResponse(url=url, status_code=301)
-                await self.send(response, scope, receive, send)
-                return
-
             if scope.get("method") == "OPTIONS":
                 response = Response(status_code=204)
                 await self.send(response, scope, receive, send)
