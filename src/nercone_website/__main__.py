@@ -13,7 +13,7 @@ def main():
 
     tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     tcp.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    tcp.bind(("127.0.0.1" if Ports.uds else "0.0.0.0", Ports.tcp))
+    tcp.bind(("0.0.0.0", Ports.tcp))
     tcp.set_inheritable(True)
     sockets.append(tcp)
 
