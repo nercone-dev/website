@@ -5,7 +5,7 @@ from pathlib import Path
 from fourword.lib import FourWord
 
 startup_id = FourWord(os.environ.setdefault("STARTUP_ID", FourWord().text))
-unix_socket = os.environ.get("WEBSITE_UDS")
+
 reserved_cookie_keys = frozenset(http.cookies.Morsel._reserved)
 
 class Directories:
@@ -33,3 +33,7 @@ class Hostnames:
     public = ["nercone.dev", "nerc1.dev", "diamondgotcat.net", "d-g-c.net"]
     local = ["localhost", "127.0.0.1"]
     all = local + public
+
+class Ports:
+    tcp = int(os.environ.get("WEBSITE_TCP", "8080"))
+    uds = os.environ.get("WEBSITE_UDS")
