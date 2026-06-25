@@ -49,6 +49,7 @@
         {% block extra_head %}{% endblock %}
     </head>
     <body>
+        {% block body %}
         <div id="cursor"></div>
         <div id="loading-overlay" aria-hidden="true">
             <svg viewBox="96 256 832 512" xmlns="http://www.w3.org/2000/svg">
@@ -110,6 +111,7 @@
                 </footer>
             </div>
         </div>
+        {% endblock %}
         <!-- Stylesheets / Scripts -->
         <script src="/assets/js/merge/?path=cursor,class-prefix,pages/sidebar,components/dropdown" defer></script>
         <link rel="stylesheet" href="/assets/css/merge/?path=fonts,cursor,layout,miscellaneous,pages/sidebar,components/button,components/dropdown">
