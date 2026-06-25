@@ -12,7 +12,7 @@ blockquote {
 .hero {
     position: relative;
     overflow: hidden;
-    background-color: var(--color-bright-dark-grey);
+    background-color: color-mix(in srgb, var(--theme-color-background) 80%, black);
 
     display: flex;
     flex-direction: column;
@@ -33,7 +33,7 @@ blockquote {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    filter: brightness(0.8) blur(4px);
+    filter: brightness(0.8) blur(2px);
 }
 main > .hero {
     margin-top: -24px;
@@ -42,12 +42,9 @@ main > .hero {
     position: relative;
     margin: 0;
 }
-.hero > h1, .hero > h2 {
+.hero > h1 {
     padding-bottom: 0;
     border-bottom: none;
-}
-.hero > p {
-    color: var(--theme-color-text-alt);
 }
 
 .flex {
