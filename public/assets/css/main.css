@@ -83,6 +83,11 @@ h1, h2 {
     border-bottom: 1px solid var(--theme-color-text-headline-underline);
 }
 
+/* Image */
+img.border {
+    border: solid var(--theme-color-text-headline-underline) 1px;
+}
+
 /* Code */
 pre {
     background-color: var(--theme-color-background-pre);

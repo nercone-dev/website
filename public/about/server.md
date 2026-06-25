@@ -35,17 +35,7 @@ SSLの全バージョンを含むTLS 1.1以前のSSL/TLSは無効化していま
 ドメイン移管前からCloudflareを使用しています。
 
 ### サーバー(物理)
-GCPのCompute Engineを使用しています。マシンタイプはe2-mediumです。
-
-リージョンはasia-northeast2 (大阪)です。
-日本なのでレイテンシが低く、かつ東京より安いためです。
-
-LinuxディストリビューションはAlmaLinux 10.2です。Fedora/RHEL系は至高。
-
-### メールサーバー
-GCPだと上りの25/tcpポートがスパム対策かなんかでブロックされるので、メールサーバーに限り別で用意したXServerのVPSで実行しています。
-
-ソフトウェアはPostfix+Dovecotの設定が面倒なのでPoste.ioに任せています。いつか移行予定です。
+nercone.devについての情報は[こ↑こ↓](/infra/)に書いてあります。
 
 ### 今年
 今年は西暦で{{ this_year }}年、つまり平成{{ this_year_in_heisei }}年です。時の流れは速いですねぇ。

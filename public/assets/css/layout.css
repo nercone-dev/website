@@ -39,7 +39,7 @@ blockquote {
     background-size: cover;
     background-position: center;
 
-    mask-image: linear-gradient(to bottom, black, rgba(0,0,0,0.25));
+    mask-image: linear-gradient(to bottom, black, rgba(0,0,0,0.2));
     filter: brightness(0.8) blur(1px);
 }
 main > .hero {
@@ -52,6 +52,9 @@ main > .hero {
 .hero > h1 {
     padding-bottom: 0;
     border-bottom: none;
+}
+.hero > p {
+    color: var(--theme-color-text-alt);
 }
 
 .flex {
@@ -137,4 +140,21 @@ main > .hero {
 }
 .overflow-scroll {
     overflow: scroll;
+}
+
+.limited-width {
+    width: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+.limited-width > img {
+    max-width: 100%;
+}
+.limited-width > img:first-child {
+    margin-top: 24px;
+}
+@media (min-width: 769px) {
+    .limited-width {
+        width: 75vh;
+    }
 }
