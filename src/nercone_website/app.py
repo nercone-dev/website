@@ -41,7 +41,7 @@ welcome to nercone.dev!
 
 @app.api_route("/echo", methods=["GET"])
 async def echo(request: Request):
-    if request.scope["nercone.dev"]["network"].trusted:
+    if request.scope["website"]["network"].trusted:
         return JSONResponse(format_access(request))
     else:
         return render_error_page(request=request, status_code=403, message="/echoエンドポイントはデバッグ用途のため、信頼された接続元からのみ使用できます。", joke_message="悪いなのび太、このエンドポイント開発者専用なんだ")
@@ -52,7 +52,7 @@ async def status(request: Request):
         {
             "status": "ok",
             "version": Repository.version,
-            "counter": request.scope["nercone.dev"]["accesscounter"].get()
+            "counter": request.scope["website"]["accesscounter"].get()
         }
     )
 

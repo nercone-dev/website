@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 from .constants import Directories
-from .manager import TimingManager
+from .models import TimingManager
 
 def resolve_file(path: str) -> Path | None:
     full_path = Directories.public.joinpath(path.lstrip("/")).resolve()

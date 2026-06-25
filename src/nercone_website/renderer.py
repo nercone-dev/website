@@ -17,7 +17,7 @@ from fastapi.responses import PlainTextResponse, FileResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from .constants import Directories
-from .manager import TimingManager
+from .models import TimingManager
 from .resolver import resolve_file, resolve_page, resolve_redirects
 
 class CustomHTMLRenderer(mistune.HTMLRenderer):
@@ -42,7 +42,7 @@ markitdown = MarkItDown()
 htmlitdown = mistune.create_markdown(renderer=CustomHTMLRenderer(escape=False), plugins=["table", "strikethrough", "task_lists", "footnotes"])
 
 def init_context(context: dict[str, Any], scope: Scope):
-    context.update(scope["nercone.dev"])
+    context.update(scope["website"])
 
     context["re_sub"] = lambda s, pattern, repl: re.sub(pattern, repl, s)
     context["this_year"] = datetime.now(ZoneInfo("Asia/Tokyo")).year
@@ -60,8 +60,8 @@ def init_context(context: dict[str, Any], scope: Scope):
 def render_page(page: str, path: str, request: Request, count: bool = True, render: bool = True, status_code: int = 200, markdown_mode: bool | None = None, context: dict[str, Any] = {}):
     init_context(context, request.scope)
 
-    timings: TimingManager = request.scope["nercone.dev"]["timings"]
-    templates: Jinja2Templates = request.scope["nercone.dev"]["templates"]
+    timings: TimingManager = request.scope["website"]["timings"]
+    templates: Jinja2Templates = request.scope["website"]["templates"]
 
     if markdown_mode is None:
         markdown_ua = ["curl", "claude-user", "chatgpt-user", "google-extended", "perplexity-user"]
@@ -142,12 +142,12 @@ def render_page(page: str, path: str, request: Request, count: bool = True, rend
 
         if "compression" in front:
             if front["compression"].lower() == "true":
-                request.scope["nercone.dev"]["compression"] = True
+                request.scope["website"]["compression"] = True
             elif front["compression"].lower() == "false":
-                request.scope["nercone.dev"]["compression"] = False
+                request.scope["website"]["compression"] = False
 
         if count:
-            request.scope["nercone.dev"]["accesscounter"].increase()
+            request.scope["website"]["accesscounter"].increase()
 
         return response
 
@@ -155,7 +155,7 @@ def default_response(path: str, request: Request, status_code: int = 200, count:
     markdown_ua = ["curl", "claude-user", "chatgpt-user", "google-extended", "perplexity-user"]
     markdown_mode = path.endswith(".md") or (not any([path.endswith(".html"), "text/html" in request.headers.get("accept", "").lower()]) and any(["text/markdown" in request.headers.get("accept", "").lower(), any([ua in request.headers.get("user-agent", "").lower() for ua in markdown_ua])]))
 
-    timings: TimingManager = request.scope["nercone.dev"]["timings"]
+    timings: TimingManager = request.scope["website"]["timings"]
 
     try:
         if url := resolve_redirects(path, timings=timings):
@@ -176,7 +176,7 @@ def default_response(path: str, request: Request, status_code: int = 200, count:
     for key, value in headers.items():
         response.headers[key.lower().strip()] = value
 
-    request.scope["nercone.dev"]["options"].apply(response)
+    request.scope["website"]["options"].apply(response)
     return response
 
 error_messages = {
@@ -205,9 +205,9 @@ error_messages = {
 
 def render_error_page(request: Request, status_code: int = 500, status_name: str | None = None, message: str | None = None, joke_message: str | None = None) -> Response:
     if 500 <= status_code < 600:
-        request.scope["nercone.dev"]["csp"].append("script-src", "'unsafe-inline'")
-        request.scope["nercone.dev"]["csp"].append("style-src", "fonts.googleapis.com", "'unsafe-inline'")
-        request.scope["nercone.dev"]["csp"].append("font-src", "fonts.gstatic.com")
+        request.scope["website"]["csp"].append("script-src", "'unsafe-inline'")
+        request.scope["website"]["csp"].append("style-src", "fonts.googleapis.com", "'unsafe-inline'")
+        request.scope["website"]["csp"].append("font-src", "fonts.gstatic.com")
         return render_page("error/server.html", "error/server", request=request, status_code=status_code, count=False, render=False)
     else:
         if status_name is None:

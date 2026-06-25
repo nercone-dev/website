@@ -20,7 +20,7 @@ from scour import scour
 
 from .constants import Directories, Files, Repository, Hostnames
 from .logger import log_access, log_error
-from .manager import PPManager, CSPManager, CCManager, TimingManager, NetworkManager, OptionManager
+from .models import PPManager, CSPManager, CCManager, TimingManager, NetworkManager, OptionManager
 from .renderer import render_error_page
 from .databases import AccessCounter
 
@@ -78,7 +78,7 @@ class Middleware:
                 await self.app(scope, receive, send)
                 return
 
-            scope.update({"nercone.dev": {
+            scope.update({"website": {
                 "id": FourWord(),
 
                 "logged": False,
@@ -87,11 +87,10 @@ class Middleware:
                 "templates": templates,
                 "accesscounter": accesscounter,
 
-                "headers": dict(scope.get("headers", [])),
-
                 "cc": CCManager(),
                 "pp": PPManager(),
                 "csp": CSPManager(),
+                "headers": dict(scope.get("headers", [])),
                 "timings": TimingManager(),
                 "network": NetworkManager(address=ipaddress.ip_address(scope["client"][0]) if scope["client"] and scope["client"][0] else None, host=scope["client"][0] if scope["client"] else None, port=scope["client"][1] if scope["client"] else None),
                 "options": OptionManager(HTTPConnection(scope=scope)),
@@ -102,14 +101,14 @@ class Middleware:
                 "hostnames": Hostnames
             }})
 
-            scope["nercone.dev"]["timings"].start("total", "Total")
+            scope["website"]["timings"].start("total", "Total")
 
-            host = scope["nercone.dev"]["headers"].get(b"host", b"").decode()
+            host = scope["website"]["headers"].get(b"host", b"").decode()
             hostname = host.split(":")[0].strip()
 
             subdomain = next((hostname[:-(len(candidate) + 1)] for candidate in Hostnames.all if hostname.endswith("." + candidate)), "")
 
-            if not scope["nercone.dev"]["network"].trusted and not any([hostname == candidate or hostname.endswith("." + candidate) for candidate in Hostnames.public]):
+            if not scope["website"]["network"].trusted and not any([hostname == candidate or hostname.endswith("." + candidate) for candidate in Hostnames.public]):
                 response = PlainTextResponse("許可されていないホスト名でのアクセスです。", status_code=403)
                 await self.send(response, scope, receive, send)
                 return
@@ -132,9 +131,9 @@ class Middleware:
                 await self.send(response, scope, receive, send)
                 return
 
-            scope["nercone.dev"]["timings"].start("receive", "Read body")
+            scope["website"]["timings"].start("receive", "Read body")
             body = await self.read_body(receive)
-            scope["nercone.dev"]["timings"].stop("receive")
+            scope["website"]["timings"].stop("receive")
 
             async def cached_receive():
                 return {"type": "http.request", "body": body, "more_body": False}
@@ -157,11 +156,11 @@ class Middleware:
 
         except Exception:
             try:
-                id = scope.get("nercone.dev", {}).get("id", FourWord())
+                id = scope.get("website", {}).get("id", FourWord())
                 log_error(id, traceback.format_exc())
-                if not scope.get("nercone.dev", {}).get("logged", False):
+                if not scope.get("website", {}).get("logged", False):
                     log_access(Request(scope=scope, receive=receive), status_code=500)
-                    scope["nercone.dev"]["logged"] = True
+                    scope["website"]["logged"] = True
                 await self.send(render_error_page(Request(scope=scope, receive=receive), status_code=500), scope, receive, send)
             except Exception:
                 await self.send(PlainTextResponse("Internal Server Error", status_code=500), scope, receive, send)
@@ -184,9 +183,9 @@ class Middleware:
             elif message["type"] == "http.response.body":
                 body_parts.append(message.get("body", b""))
 
-        scope["nercone.dev"]["timings"].start(key, description)
+        scope["website"]["timings"].start(key, description)
         await self.app(new_scope, receive, capture_send)
-        scope["nercone.dev"]["timings"].stop(key)
+        scope["website"]["timings"].stop(key)
 
         response = Response(content=b"".join(body_parts), status_code=status_code)
 
@@ -210,40 +209,40 @@ class Middleware:
 
         if "text/html" in content_type:
             try:
-                scope["nercone.dev"]["timings"].start("minify", "Minify HTML")
+                scope["website"]["timings"].start("minify", "Minify HTML")
                 response.body = minify_html(response.body)
-                scope["nercone.dev"]["timings"].stop("minify")
+                scope["website"]["timings"].stop("minify")
             except Exception:
                 pass
 
         elif "text/css" in content_type:
             try:
-                scope["nercone.dev"]["timings"].start("minify", "Minify CSS")
+                scope["website"]["timings"].start("minify", "Minify CSS")
                 response.body = minify_css(response.body)
-                scope["nercone.dev"]["timings"].stop("minify")
+                scope["website"]["timings"].stop("minify")
             except Exception:
                 pass
 
         elif content_type.startswith(("text/javascript", "application/javascript")):
             try:
-                scope["nercone.dev"]["timings"].start("minify", "Minify JavaScript")
+                scope["website"]["timings"].start("minify", "Minify JavaScript")
                 response.body = minify_js(response.body)
-                scope["nercone.dev"]["timings"].stop("minify")
+                scope["website"]["timings"].stop("minify")
             except Exception:
                 pass
 
         elif "image/svg" in content_type:
             try:
-                scope["nercone.dev"]["timings"].start("minify", "Minify SVG")
+                scope["website"]["timings"].start("minify", "Minify SVG")
                 response.body = minify_svg(response.body)
-                scope["nercone.dev"]["timings"].stop("minify")
+                scope["website"]["timings"].stop("minify")
             except Exception:
                 pass
 
-        if scope["nercone.dev"]["compression"] and response.body:
-            accept_encoding = [encoding.strip().split(";")[0].strip() for encoding in scope["nercone.dev"]["headers"].get(b"accept-encoding", b"").decode().split(",")]
+        if scope["website"]["compression"] and response.body:
+            accept_encoding = [encoding.strip().split(";")[0].strip() for encoding in scope["website"]["headers"].get(b"accept-encoding", b"").decode().split(",")]
 
-            scope["nercone.dev"]["timings"].start("compress", "Compress")
+            scope["website"]["timings"].start("compress", "Compress")
 
             if "zstd" in accept_encoding:
                 response.body = compress_zstd(response.body)
@@ -261,67 +260,95 @@ class Middleware:
                 response.body = compress_deflate(response.body)
                 response.headers["Content-Encoding"] = "deflate"
 
-            scope["nercone.dev"]["timings"].stop("compress")
+            scope["website"]["timings"].stop("compress")
 
             if "content-encoding" in response.headers:
                 response.headers["Vary"] = response.headers["vary"] + ", Accept-Encoding" if response.headers.get("vary") else "Accept-Encoding"
 
         response.headers["Content-Length"] = str(len(response.body))
 
-        scope["nercone.dev"]["timings"].start("etag", "ETag (SHA-256)")
+        scope["website"]["timings"].start("etag", "ETag (SHA-256)")
         etag = compute_etag(response.body)
-        scope["nercone.dev"]["timings"].stop("etag")
+        scope["website"]["timings"].stop("etag")
 
-        if scope["nercone.dev"]["headers"].get(b"if-none-match", b"").decode() == etag:
-            response = Response(status_code=304)
-
-        def set_header(key: str, value: str, override: bool = True):
-            if override or key.lower() not in response.headers:
+        def set_header(key: str, value: str, override: bool = True, condition: bool = True):
+            if condition and override or key.lower() not in response.headers:
                 response.headers[key.lower()] = value
 
-        set_header("Server", f"nercone.dev ({Repository.version})")
-        set_header("Link", "<https://nercone.dev/sitemap.xml>; rel=\"sitemap\", <https://nercone.dev/robots.txt>; rel=\"robots\"")
+        def add_vary(*headers: str, condition: bool = True):
+            if condition:
+                vary = [v.strip() for v in response.headers.get("vary", "").split(",") if v.strip()]
 
-        set_header("X-Request-Id", scope["nercone.dev"]["id"].text)
-        set_header("X-Powered-By", "nercone.dev")
-        set_header("X-Frame-Options", "SAMEORIGIN")
-        set_header("X-Content-Type-Options", "nosniff")
+                if "*" in vary:
+                    return
+
+                for header in headers:
+                    if header == "*":
+                        set_header("Vary", "*")
+                        break
+
+                    if not any(v.lower() == header.lower() for v in vary):
+                        vary.append(header)
+
+                set_header("Vary", ", ".join(vary))
+
+        # ETag / 304 Not Modified
+        if scope["website"]["headers"].get(b"if-none-match", b"").decode() == etag:
+            response = Response(status_code=304)
 
         set_header("ETag", etag)
 
-        if not scope["nercone.dev"]["cc"].initial:
-            set_header("Cache-Control", scope["nercone.dev"]["cc"].header)
+        # Informations
+        set_header("Server", f"nercone.dev ({Repository.version})")
+        set_header("X-Powered-By", "nercone.dev")
+
+        set_header("X-Request-Id", scope["website"]["id"].text)
+
+        set_header("Link", "<https://nercone.dev/sitemap.xml>; rel=\"sitemap\", <https://nercone.dev/robots.txt>; rel=\"robots\"")
+
+        # Proxy
+        set_header("X-Content-Type-Options", "nosniff")
+
+        # Report
+        set_header("Reporting-Endpoints", "default=\"https://nercone.dev/report/\", csp-endpoint=\"https://nercone.dev/report/csp/\"")
+
+        # Cache
+        if not scope["website"]["cc"].initial:
+            set_header("Cache-Control", scope["website"]["cc"].header)
         elif content_type.startswith(("font/", "image/", "text/css", "text/javascript", "application/javascript")):
             set_header("Cache-Control", "max-age=43200")
         else:
             set_header("Cache-Control", "no-cache")
 
+        # Security
         set_header("Referrer-Policy", "strict-origin-when-cross-origin")
-        set_header("Permissions-Policy", scope["nercone.dev"]["pp"].header)
-        set_header("Content-Security-Policy", scope["nercone.dev"]["csp"].header)
+        set_header("Permissions-Policy", scope["website"]["pp"].header)
+        set_header("Content-Security-Policy", scope["website"]["csp"].header)
 
-        set_header("Reporting-Endpoints", "default=\"https://nercone.dev/report/\", csp-endpoint=\"https://nercone.dev/report/csp/\"")
+        set_header("X-Frame-Options", "SAMEORIGIN")
 
-        if scope.get("scheme") == "https":
-            set_header("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
+        # Security: HSTS
+        set_header("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload", condition=(scope.get("scheme") == "https"))
+
+        # Security: Cross-Origin
+        origin = scope["website"]["headers"].get(b"origin", b"").decode().strip()
+        origin_host = origin.removeprefix("https://").removeprefix("http://").split("/")[0].split(":")[0]
+
+        add_vary("Origin")
 
         if "text/html" in content_type:
             set_header("Cross-Origin-Opener-Policy", "same-origin", override=False)
             set_header("Cross-Origin-Embedder-Policy", "credentialless", override=False)
 
-        if content_type.startswith(("font/", "image/", "text/css", "text/javascript", "application/javascript")):
+        if content_type.startswith(("text/css", "text/javascript", "application/javascript", "font/", "image/")):
             set_header("Access-Control-Allow-Origin", "*", override=False)
             set_header("Cross-Origin-Resource-Policy", "cross-origin", override=False)
 
         else:
             set_header("Cross-Origin-Resource-Policy", "same-origin", override=False)
 
-            origin = scope["nercone.dev"]["headers"].get(b"origin", b"").decode().strip()
-            origin_host = origin.removeprefix("https://").removeprefix("http://").split("/")[0].split(":")[0]
-
             if any(origin_host == candidate or origin_host.endswith("." + candidate) for candidate in Hostnames.all):
-                vary = response.headers.get("vary", "") + ", Origin, User-Agent" if "vary" in response.headers else "Origin, User-Agent"
-                set_header("Vary", vary)
+                add_vary("Origin")
 
                 set_header("Access-Control-Allow-Origin", origin, override=False)
                 set_header("Access-Control-Allow-Credentials", "true", override=False)
@@ -331,12 +358,13 @@ class Middleware:
                     set_header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With", override=False)
                     set_header("Access-Control-Max-Age", "86400", override=False)
 
-        scope["nercone.dev"]["timings"].stop("total")
-        set_header("Server-Timing", scope["nercone.dev"]["timings"].header)
+        # Debug
+        scope["website"]["timings"].stop("total")
+        set_header("Server-Timing", scope["website"]["timings"].header)
 
-        if not scope.get("nercone.dev", {}).get("logged", False):
+        if not scope.get("website", {}).get("logged", False):
             log_access(Request(scope=scope, receive=receive), response)
-            scope["nercone.dev"]["logged"] = True
+            scope["website"]["logged"] = True
 
         try:
             await response(scope, receive, send)
