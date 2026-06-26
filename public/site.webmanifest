@@ -7,6 +7,11 @@
     "background_color": "#1A1A1A",
     "icons": [
         {
+            "src": "/assets/images/favicon.webp",
+            "type": "image/webp",
+            "sizes": "384x384"
+        },
+        {
             "src": "/assets/images/favicon.png",
             "type": "image/png",
             "sizes": "384x384"
@@ -15,33 +20,6 @@
             "src": "/assets/images/favicon.svg",
             "type": "image/svg+xml",
             "sizes": "384x384"
-        }
-    ],
-    "shortcuts": [
-        {
-            "name": "About Nercone",
-            "short_name": "About",
-            "url": "/about"
-        },
-        {
-            "name": "Links",
-            "url": "/links"
-        },
-        {
-            "name": "Projects",
-            "url": "/projects"
-        },
-        {
-            "name": "Public Keys",
-            "url": "/public-key"
-        },
-        {
-            "name": "Daily Quote",
-            "url": "/daily-quote"
-        },
-        {
-            "name": "Access Counter",
-            "url": "/access-counter"
         }
     ]
 }
