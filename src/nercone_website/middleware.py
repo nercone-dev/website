@@ -315,7 +315,9 @@ class Middleware:
         # Cache
         if not scope["website"]["cc"].initial:
             set_header("Cache-Control", scope["website"]["cc"].header)
-        elif content_type.startswith(("font/", "image/", "text/css", "text/javascript", "application/javascript")):
+        elif content_type.startswith("font/"):
+            set_header("Cache-Control", "max-age=604800")
+        elif content_type.startswith(("text/css", "text/javascript", "application/javascript")):
             set_header("Cache-Control", "max-age=43200")
         else:
             set_header("Cache-Control", "no-cache")
