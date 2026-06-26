@@ -32,6 +32,7 @@ blockquote {
 .hero::before {
     content: "";
     position: absolute;
+    inset: -10px;
 
     background-image: var(--hero-image, none);
     background-repeat: no-repeat;
