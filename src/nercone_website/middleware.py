@@ -207,8 +207,6 @@ class Middleware:
         return b"".join(parts)
 
     async def send(self, response: Response, scope, receive, send):
-        response.headers.raw = [(k.title().encode("latin-1"), v.encode("latin-1")) for k, v in response.headers.items()]
-
         def set_header(key: str, value: str, override: bool = True, condition: bool = True):
             if condition and override or key.title() not in response.headers:
                 response.headers[key.title()] = value
@@ -368,6 +366,8 @@ class Middleware:
         if not scope.get("website", {}).get("logged", False):
             log_access(Request(scope=scope, receive=receive), response)
             scope["website"]["logged"] = True
+
+        response.headers.raw = [(k.title().encode("latin-1"), v.encode("latin-1")) for k, v in response.headers.items()]
 
         try:
             await response(scope, receive, send)
