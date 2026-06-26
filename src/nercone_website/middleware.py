@@ -7,11 +7,13 @@ import ipaddress
 import zstandard
 import brotlicffi
 from fourword.lib import FourWord
+from collections.abc import Mapping
 from fastapi import Response
-from fastapi.responses import PlainTextResponse, RedirectResponse
+from fastapi.responses import PlainTextResponse
 from fastapi.templating import Jinja2Templates
-from starlette.requests import Request, HTTPConnection
 from starlette.types import ASGIApp, Scope, Receive, Send
+from starlette.requests import Request, HTTPConnection
+from starlette.datastructures import MutableHeaders
 
 import minify_html as rhtmin
 import rjsmin
@@ -205,6 +207,29 @@ class Middleware:
         return b"".join(parts)
 
     async def send(self, response: Response, scope, receive, send):
+        response.headers.raw = [(k.title().encode("latin-1"), v.encode("latin-1")) for k, v in response.headers.items()]
+
+        def set_header(key: str, value: str, override: bool = True, condition: bool = True):
+            if condition and override or key.title() not in response.headers:
+                response.headers[key.title()] = value
+
+        def add_vary(*headers: str, condition: bool = True):
+            if condition:
+                vary = [v.strip() for v in response.headers.get("vary", "").split(",") if v.strip()]
+
+                if "*" in vary:
+                    return
+
+                for header in headers:
+                    if header == "*":
+                        set_header("Vary", "*")
+                        break
+
+                    if not any(v.title() == header.title() for v in vary):
+                        vary.append(header)
+
+                set_header("Vary", ", ".join(vary))
+
         content_type = response.headers.get("content-type", "")
 
         if "text/html" in content_type:
@@ -263,34 +288,13 @@ class Middleware:
             scope["website"]["timings"].stop("compress")
 
             if "content-encoding" in response.headers:
-                response.headers["Vary"] = response.headers["vary"] + ", Accept-Encoding" if response.headers.get("vary") else "Accept-Encoding"
+                add_vary("Accept-Encoding")
 
         response.headers["Content-Length"] = str(len(response.body))
 
         scope["website"]["timings"].start("etag", "ETag (SHA-256)")
         etag = compute_etag(response.body)
         scope["website"]["timings"].stop("etag")
-
-        def set_header(key: str, value: str, override: bool = True, condition: bool = True):
-            if condition and override or key.lower() not in response.headers:
-                response.headers[key.lower()] = value
-
-        def add_vary(*headers: str, condition: bool = True):
-            if condition:
-                vary = [v.strip() for v in response.headers.get("vary", "").split(",") if v.strip()]
-
-                if "*" in vary:
-                    return
-
-                for header in headers:
-                    if header == "*":
-                        set_header("Vary", "*")
-                        break
-
-                    if not any(v.lower() == header.lower() for v in vary):
-                        vary.append(header)
-
-                set_header("Vary", ", ".join(vary))
 
         # ETag / 304 Not Modified
         if scope["website"]["headers"].get(b"if-none-match", b"").decode() == etag:
@@ -328,9 +332,6 @@ class Middleware:
         set_header("Content-Security-Policy", scope["website"]["csp"].header)
 
         set_header("X-Frame-Options", "SAMEORIGIN")
-
-        # Security: HSTS
-        set_header("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload", condition=(scope.get("scheme") == "https"))
 
         # Security: Cross-Origin
         origin = scope["website"]["headers"].get(b"origin", b"").decode().strip()
