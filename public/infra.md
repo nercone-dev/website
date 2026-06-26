@@ -10,7 +10,7 @@ extra_imports: <link rel="stylesheet" href="/assets/css/pages/infra.css">
 
 <div class="limited-width">
 
-<img src="/assets/images/other/infra.svg" class="border">
+<img src="/assets/images/other/infra.webp" class="border">
 
 このページではnercone.devの構成について紹介します。
 
