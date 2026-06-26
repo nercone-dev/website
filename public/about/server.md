@@ -35,7 +35,7 @@ SSLの全バージョンを含むTLS 1.1以前のSSL/TLSは無効化していま
 ドメイン移管前からCloudflareを使用しています。
 
 ### サーバー(物理)
-nercone.devについての情報は[こ↑こ↓](/infra/)に書いてあります。
+nercone.devの構成については[こ↑こ↓](/infra/)に書いてあります。
 
 ### 今年
 今年は西暦で{{ this_year }}年、つまり平成{{ this_year_in_heisei }}年です。時の流れは速いですねぇ。
