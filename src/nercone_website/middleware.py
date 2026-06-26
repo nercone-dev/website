@@ -367,7 +367,7 @@ class Middleware:
             log_access(Request(scope=scope, receive=receive), response)
             scope["website"]["logged"] = True
 
-        response.headers.raw = [(k.title().encode("latin-1"), v.encode("latin-1")) for k, v in response.headers.items()]
+        response.headers._list[:] = [(k.title().encode("latin-1"), v.encode("latin-1")) for k, v in response.headers.items()]
 
         try:
             await response(scope, receive, send)
