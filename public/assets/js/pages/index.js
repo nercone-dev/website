@@ -16,7 +16,7 @@
     }
 
     el.addEventListener('touchend', (e) => {
-        e.preventDefault();
+        if (e.cancelable) e.preventDefault();
         lastTouch = Date.now();
         onTap();
     }, { passive: false });
