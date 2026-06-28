@@ -32,7 +32,8 @@ dependencies = [
     "nercone-modern",
     "tzdata",
     "pyyaml",
-    "fourword"
+    "fourword",
+    "xxhash"
 ]
 
 [project.scripts]

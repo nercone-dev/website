@@ -1,19 +1,17 @@
 import gzip
 import zlib
-import hashlib
+import xxhash
 import functools
 import traceback
 import ipaddress
 import zstandard
 import brotlicffi
 from fourword.lib import FourWord
-from collections.abc import Mapping
 from fastapi import Response
 from fastapi.responses import PlainTextResponse
 from fastapi.templating import Jinja2Templates
 from starlette.types import ASGIApp, Scope, Receive, Send
 from starlette.requests import Request, HTTPConnection
-from starlette.datastructures import MutableHeaders
 
 import minify_html as rhtmin
 import rjsmin
@@ -36,7 +34,7 @@ scour_options.strip_comments = True
 
 @functools.lru_cache(maxsize=512)
 def compute_etag(body: bytes) -> str:
-    return '"' + hashlib.sha256(body).hexdigest() + '"'
+    return '"' + xxhash.xxh3_128(body).hexdigest() + '"'
 
 @functools.lru_cache(maxsize=128)
 def compress_zstd(body: bytes) -> bytes:
@@ -290,7 +288,7 @@ class Middleware:
 
         response.headers["Content-Length"] = str(len(response.body))
 
-        scope["website"]["timings"].start("etag", "ETag (SHA-256)")
+        scope["website"]["timings"].start("etag", "ETag (xxHash3)")
         etag = compute_etag(response.body)
         scope["website"]["timings"].stop("etag")
 
