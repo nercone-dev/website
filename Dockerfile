@@ -1,8 +1,10 @@
 FROM cgr.dev/chainguard/wolfi-base AS python-builder
 
-ARG PYTHON_VERSION
+ARG PACKAGES_VERSION
 
 RUN apk add --no-cache curl build-base linux-headers ca-certificates libffi-dev openssl-dev zlib-dev bzip2-dev readline-dev sqlite-dev ncurses-dev xz-dev
+
+ARG PYTHON_VERSION
 
 RUN curl -fsSL "https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz" -o /tmp/cpython.tar.xz \
     && tar -xf /tmp/cpython.tar.xz -C /tmp \
@@ -20,6 +22,8 @@ RUN curl -fsSL "https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYT
 FROM cgr.dev/chainguard/wolfi-base AS builder
 
 WORKDIR /srv/website
+
+ARG PACKAGES_VERSION
 
 RUN apk add --no-cache git build-base linux-headers ca-certificates libffi openssl zlib bzip2 readline sqlite-libs ncurses xz
 
@@ -39,6 +43,8 @@ RUN uv sync --frozen --no-dev
 FROM cgr.dev/chainguard/wolfi-base
 
 WORKDIR /srv/website
+
+ARG PACKAGES_VERSION
 
 RUN apk add --no-cache curl git ca-certificates libffi openssl zlib bzip2 readline sqlite-libs ncurses xz libstdc++
 
