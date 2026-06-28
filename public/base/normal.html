@@ -39,13 +39,13 @@
         <meta name="twitter:description" content="{{ self.description() }}">
         <meta name="twitter:image" content="{{ thumbnail_final_url }}">
         <!-- PWA (Progressive Web App) -->
-        <link rel="manifest" href="/site.webmanifest">
-        <link rel="apple-touch-icon" href="/assets/images/favicon.png" sizes="384x384">
-        <link rel="icon" type="image/png" href="/assets/images/favicon.png" sizes="384x384">
-        <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" sizes="384x384">
+        <link rel="manifest" href="https://nercone.dev/site.webmanifest">
+        <link rel="apple-touch-icon" href="https://assets.nercone.dev/images/favicon.png" sizes="384x384">
+        <link rel="icon" type="image/png" href="https://assets.nercone.dev/images/favicon.png" sizes="384x384">
+        <link rel="icon" type="image/svg+xml" href="https://assets.nercone.dev/images/favicon.svg" sizes="384x384">
         <!-- Stylesheets / Scripts -->
-        <script src="/assets/js/merge/?path=main,loading-overlay,view-transition" defer></script>
-        <link rel="stylesheet" href="/assets/css/merge/?path=main,colors,loading-overlay,view-transition,themes/{{ options.get('dev.nercone.options.appearance.theme') }}">
+        <script src="https://assets.nercone.dev/js/merge/?path=main,loading-overlay,view-transition" defer></script>
+        <link rel="stylesheet" href="https://assets.nercone.dev/css/merge/?path=main,colors,loading-overlay,view-transition,themes/{{ options.get('dev.nercone.options.appearance.theme') }}">
         {% block extra_head %}{% endblock %}
     </head>
     <body>
@@ -96,11 +96,11 @@
                     {% endblock %}
                 </div>
                 <div class="flex">
-                    <a href="/github/"><img alt="github" src="/assets/images/3rd-party/icons/github.svg" class="small-icon"></a>
-                    <a href="/twitter/"><img alt="twitter" src="/assets/images/3rd-party/icons/twitter.svg" class="small-icon"></a>
-                    <a href="/orcid/"><img alt="orcid" src="/assets/images/3rd-party/icons/orcid.svg" class="small-icon"></a>
-                    <a href="/qiita/"><img alt="qiita" src="/assets/images/3rd-party/icons/qiita.svg" class="small-icon"></a>
-                    <a href="/zenn/"><img alt="zenn" src="/assets/images/3rd-party/icons/zenn.svg" class="small-icon"></a>
+                    <a href="/github/"><img alt="github" src="https://assets.nercone.dev/images/3rd-party/icons/github.svg" class="small-icon"></a>
+                    <a href="/twitter/"><img alt="twitter" src="https://assets.nercone.dev/images/3rd-party/icons/twitter.svg" class="small-icon"></a>
+                    <a href="/orcid/"><img alt="orcid" src="https://assets.nercone.dev/images/3rd-party/icons/orcid.svg" class="small-icon"></a>
+                    <a href="/qiita/"><img alt="qiita" src="https://assets.nercone.dev/images/3rd-party/icons/qiita.svg" class="small-icon"></a>
+                    <a href="/zenn/"><img alt="zenn" src="https://assets.nercone.dev/images/3rd-party/icons/zenn.svg" class="small-icon"></a>
                     <!--                         qiita            kotonai -->
                     <a href="/about/server/" class="text-no-decoration font-bold small:hide">{{ repository.version }}</a>
                 </div>
@@ -110,9 +110,9 @@
         {% endblock %}
         {% endblock %}
         <!-- Stylesheets / Scripts -->
-        <script src="/assets/js/merge/?path=cursor,class-prefix,components/dropdown" defer></script>
-        <link rel="stylesheet" href="/assets/css/merge/?path=fonts,cursor,layout,miscellaneous,components/button,components/dropdown">
-        <noscript><link rel="stylesheet" href="/assets/css/noscript.css"></noscript>
+        <script src="https://assets.nercone.dev/js/merge/?path=cursor,class-prefix,components/dropdown" defer></script>
+        <link rel="stylesheet" href="https://assets.nercone.dev/css/merge/?path=fonts,cursor,layout,miscellaneous,components/button,components/dropdown">
+        <noscript><link rel="stylesheet" href="https://assets.nercone.dev/css/noscript.css"></noscript>
         {% block extra_imports %}{% endblock %}
     </body>
 </html>

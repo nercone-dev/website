@@ -3,7 +3,7 @@ title: Nercone Color Palette
 thumbnail_title: Color Palette
 header_desc: ただのカラーパレット
 description: Nerconeが制作したカラーパレット
-extra_imports: <link rel="stylesheet" href="/assets/css/pages/color-palette.css">
+extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/css/pages/color-palette.css">
 ---
 
 <div class="hero">
@@ -11,7 +11,7 @@ extra_imports: <link rel="stylesheet" href="/assets/css/pages/color-palette.css"
     <p>Nerconeが制作したカラーパレット</p>
 </div>
 
-<p class="text-alt"><b>Download</b> <a href="/assets/images/other/color-palette/v2.ai" class="text-no-decoration" download>adobe-illustrator</a> / <a href="/assets/images/other/color-palette/v2.svg" class="text-no-decoration" download>svg</a> / <a href="/assets/images/other/color-palette/v2.png" class="text-no-decoration" download>png</a> / <a href="/assets/images/other/color-palette/v2.webp" class="text-no-decoration" download>webp</a></p>
+<p class="text-alt"><b>Download</b> <a href="https://assets.nercone.dev/images/other/color-palette/v2.ai" class="text-no-decoration" download>adobe-illustrator</a> / <a href="https://assets.nercone.dev/images/other/color-palette/v2.svg" class="text-no-decoration" download>svg</a> / <a href="https://assets.nercone.dev/images/other/color-palette/v2.png" class="text-no-decoration" download>png</a> / <a href="https://assets.nercone.dev/images/other/color-palette/v2.webp" class="text-no-decoration" download>webp</a></p>
 
 これはNerconeが制作したカラーパレットの紹介ページです。
 

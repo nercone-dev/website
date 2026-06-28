@@ -45,4 +45,4 @@ print(requests.get("https://nercone.dev/welcome").text)
 
 **HTML埋め込み(`<img>`タグ):**
 
-<img src="/assets/images/dotgirl/icon.png" width="256px">
+<img src="https://assets.nercone.dev/images/dotgirl/icon.png" width="256px">

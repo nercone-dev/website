@@ -53,11 +53,11 @@ class CSPManager:
         self.initial = True
         self.directives: dict[str, list[str] | bool] = {
             "default-src": ["'none'"],
-            "script-src": ["'self'", "assets.nercone.dev"],
-            "style-src": ["'self'", "assets.nercone.dev"],
-            "font-src": ["'self'", "assets.nercone.dev"],
-            "img-src": ["'self'", "assets.nercone.dev", "t3tra.dev", "drsb.f5.si"],
-            "manifest-src": ["'self'"],
+            "script-src": ["assets.nercone.dev"],
+            "style-src": ["assets.nercone.dev"],
+            "font-src": ["assets.nercone.dev"],
+            "img-src": ["assets.nercone.dev", "t3tra.dev", "drsb.f5.si"],
+            "manifest-src": ["nercone.dev"],
             "connect-src": ["'self'"],
             "frame-ancestors": ["'self'"],
             "base-uri": ["'self'"],
