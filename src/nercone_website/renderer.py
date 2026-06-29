@@ -64,8 +64,7 @@ def render_page(page: str, path: str, request: Request, count: bool = True, rend
     templates: Jinja2Templates = request.scope["website"]["templates"]
 
     if markdown_mode is None:
-        markdown_ua = ["curl", "claude-user", "chatgpt-user", "google-extended", "perplexity-user"]
-        markdown_mode = path.endswith(".md") or (not any([path.endswith(".html"), "text/html" in request.headers.get("accept", "").lower()]) and any(["text/markdown" in request.headers.get("accept", "").lower(), any([ua in request.headers.get("user-agent", "").lower() for ua in markdown_ua])]))
+        markdown_mode = any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), request.headers.get("user-agent", "").lower().startswith("curl")])
 
     if filepath := resolve_file(page):
         with filepath.open("r") as f:
@@ -152,8 +151,7 @@ def render_page(page: str, path: str, request: Request, count: bool = True, rend
         return response
 
 def default_response(path: str, request: Request, status_code: int = 200, count: bool = True, render: bool = True, context: dict[str, Any] = {}, headers: dict[str, str] = {}):
-    markdown_ua = ["curl", "claude-user", "chatgpt-user", "google-extended", "perplexity-user"]
-    markdown_mode = path.endswith(".md") or (not any([path.endswith(".html"), "text/html" in request.headers.get("accept", "").lower()]) and any(["text/markdown" in request.headers.get("accept", "").lower(), any([ua in request.headers.get("user-agent", "").lower() for ua in markdown_ua])]))
+    markdown_mode = any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), request.headers.get("user-agent", "").lower().startswith("curl")])
 
     timings: TimingManager = request.scope["website"]["timings"]
 
@@ -162,7 +160,7 @@ def default_response(path: str, request: Request, status_code: int = 200, count:
             response = RedirectResponse(url, status_code=status_code if 300 <= status_code < 400 else 307)
 
         elif page := resolve_page(path, markdown_mode=markdown_mode, timings=timings):
-            response = render_page(page, path, request=request, count=count, render=render, status_code=status_code, markdown_mode=markdown_mode, context=context)
+            response = render_page(page, path=path, request=request, count=count, render=render, status_code=status_code, markdown_mode=markdown_mode, context=context)
 
         elif file := resolve_file(path):
             response = FileResponse(file, status_code=status_code)
@@ -228,10 +226,27 @@ def render_error_page(request: Request, status_code: int = 500, status_name: str
 
 thumbnail_font_dir = Directories.public.joinpath("assets", "fonts")
 thumbnail_font_files = [
+    # Nercone Sans JP
     str(thumbnail_font_dir / "NerconeSansJP-Regular.ttf"),
     str(thumbnail_font_dir / "NerconeSansJP-Italic.ttf"),
     str(thumbnail_font_dir / "NerconeSansJP-Bold.ttf"),
     str(thumbnail_font_dir / "NerconeSansJP-BoldItalic.ttf"),
+    # Nercone Sans SC
+    str(thumbnail_font_dir / "NerconeSansSC-Regular.ttf"),
+    str(thumbnail_font_dir / "NerconeSansSC-Italic.ttf"),
+    str(thumbnail_font_dir / "NerconeSansSC-Bold.ttf"),
+    str(thumbnail_font_dir / "NerconeSansSC-BoldItalic.ttf"),
+    # Nercone Sans TC
+    str(thumbnail_font_dir / "NerconeSansTC-Regular.ttf"),
+    str(thumbnail_font_dir / "NerconeSansTC-Italic.ttf"),
+    str(thumbnail_font_dir / "NerconeSansTC-Bold.ttf"),
+    str(thumbnail_font_dir / "NerconeSansTC-BoldItalic.ttf"),
+    # Nercone Sans KR
+    str(thumbnail_font_dir / "NerconeSansKR-Regular.ttf"),
+    str(thumbnail_font_dir / "NerconeSansKR-Italic.ttf"),
+    str(thumbnail_font_dir / "NerconeSansKR-Bold.ttf"),
+    str(thumbnail_font_dir / "NerconeSansKR-BoldItalic.ttf"),
+    # Nercone Mono JP
     str(thumbnail_font_dir / "NerconeMonoJP-Regular.ttf"),
     str(thumbnail_font_dir / "NerconeMonoJP-Italic.ttf"),
     str(thumbnail_font_dir / "NerconeMonoJP-Bold.ttf"),
