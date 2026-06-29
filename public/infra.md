@@ -1,6 +1,6 @@
 ---
 title: インフラについて - Nercone
-extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/css/pages/infra.css">
+extra_imports: <link rel="stylesheet" href="https://cf.nerc1.dev/assets/css/pages/infra.css">
 ---
 
 <div class="hero">
@@ -10,7 +10,7 @@ extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/css/pages
 
 <div class="limited-width">
 
-<img src="https://assets.nercone.dev/images/other/infra.webp" class="border">
+<img src="https://cf.nerc1.dev/assets/images/other/infra.webp" class="border">
 
 このページではnercone.devの構成について紹介します。
 
