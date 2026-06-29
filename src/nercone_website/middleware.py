@@ -341,6 +341,7 @@ class Middleware:
 
         if content_type.startswith(("text/css", "text/javascript", "application/javascript", "font/", "image/")):
             set_header("Access-Control-Allow-Origin", "*", override=False)
+            set_header("Access-Control-Allow-Headers", "*", override=False)
             set_header("Cross-Origin-Resource-Policy", "cross-origin", override=False)
 
         else:
