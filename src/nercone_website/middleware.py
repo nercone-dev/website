@@ -340,9 +340,10 @@ class Middleware:
             set_header("Cross-Origin-Embedder-Policy", "credentialless", override=False)
 
         if content_type.startswith(("text/css", "text/javascript", "application/javascript", "font/", "image/")):
+            set_header("Cross-Origin-Resource-Policy", "cross-origin", override=False)
+
             set_header("Access-Control-Allow-Origin", "*", override=False)
             set_header("Access-Control-Allow-Headers", "*", override=False)
-            set_header("Cross-Origin-Resource-Policy", "cross-origin", override=False)
 
         else:
             set_header("Cross-Origin-Resource-Policy", "same-origin", override=False)
@@ -355,7 +356,7 @@ class Middleware:
 
                 if scope.get("method") == "OPTIONS":
                     set_header("Access-Control-Allow-Methods", "GET, POST, HEAD, OPTIONS", override=False)
-                    set_header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With", override=False)
+                    set_header("Access-Control-Allow-Headers", scope["website"]["headers"].get(b"access-control-request-headers", b"").decode() or "Content-Type, Authorization, X-Requested-With", override=False)
                     set_header("Access-Control-Max-Age", "86400", override=False)
 
         # Debug
