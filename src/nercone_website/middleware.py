@@ -18,7 +18,7 @@ import rjsmin
 import rcssmin
 from scour import scour
 
-from .constants import Directories, Files, Repository, Hostnames
+from .constants import Directories, Files, Repository, Hostnames, Ports, Startup
 from .logger import log_access, log_error
 from .models import PPManager, CSPManager, CCManager, TimingManager, NetworkManager, OptionManager
 from .renderer import render_error_page
@@ -102,6 +102,10 @@ class Middleware:
             }})
 
             scope["website"]["timings"].start("total", "Total")
+
+            if Startup.dev:
+                for key in ("script-src", "style-src", "font-src", "img-src"):
+                    scope["website"]["csp"].append(key, f"localhost:{Ports.tcp}")
 
             host = scope["website"]["headers"].get(b"host", b"").decode()
             hostname = host.split(":")[0].strip()
@@ -228,7 +232,10 @@ class Middleware:
 
         content_type = response.headers.get("content-type", "")
 
-        if "text/html" in content_type:
+        if content_type.startswith(("text/html", "text/css", "text/javascript", "application/javascript", "text/svg")) and Startup.dev:
+            response.body = response.body.replace(b"https://cf.nerc1.dev/assets/", f"http://localhost:{Ports.tcp}/assets/".encode())
+
+        if content_type.startswith("text/html"):
             try:
                 scope["website"]["timings"].start("minify", "Minify HTML")
                 response.body = minify_html(response.body)
@@ -236,7 +243,7 @@ class Middleware:
             except Exception:
                 pass
 
-        elif "text/css" in content_type:
+        elif content_type.startswith("text/css"):
             try:
                 scope["website"]["timings"].start("minify", "Minify CSS")
                 response.body = minify_css(response.body)
@@ -252,7 +259,7 @@ class Middleware:
             except Exception:
                 pass
 
-        elif "image/svg" in content_type:
+        elif content_type.startswith("text/svg"):
             try:
                 scope["website"]["timings"].start("minify", "Minify SVG")
                 response.body = minify_svg(response.body)

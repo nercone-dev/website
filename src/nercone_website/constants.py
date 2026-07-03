@@ -4,14 +4,16 @@ import http.cookies
 from pathlib import Path
 from fourword.lib import FourWord
 
-startup_id = FourWord(os.environ.setdefault("STARTUP_ID", FourWord().text))
-
 reserved_cookie_keys = frozenset(http.cookies.Morsel._reserved)
+
+class Startup:
+    id = FourWord(os.environ.setdefault("WEBSITE_ID", os.environ.get("WEBSITE_ID", FourWord().text)))
+    dev = os.environ.get("WEBSITE_DEV") == "1"
 
 class Directories:
     base = Path.cwd()
-    public = base.joinpath("public")
     logs = base.joinpath("logs")
+    public = base.joinpath("public")
     databases = base.joinpath("databases")
 
 class Files:
@@ -19,11 +21,11 @@ class Files:
     access_counter = Directories.databases.joinpath("access_counter.txt")
 
     class Logs:
-        main = Directories.logs.joinpath(startup_id.readable_text + ".log")
-        error = Directories.logs.joinpath(startup_id.readable_text+ "-error.log")
-        access = Directories.logs.joinpath(startup_id.readable_text + "-access.log")
-        reports = Directories.logs.joinpath(startup_id.readable_text + "-reports.log")
-        warnings = Directories.logs.joinpath(startup_id.readable_text + "-warnings.log")
+        main = Directories.logs.joinpath("main.log")
+        error = Directories.logs.joinpath("error.log")
+        access = Directories.logs.joinpath("access.log")
+        reports = Directories.logs.joinpath("reports.log")
+        warnings = Directories.logs.joinpath("warnings.log")
 
 class Repository:
     url = subprocess.run(["/usr/bin/git", "remote", "get-url", "origin"], text=True, capture_output=True, cwd=Directories.base).stdout.strip()

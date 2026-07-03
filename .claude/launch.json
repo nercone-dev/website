@@ -4,7 +4,7 @@
     {
       "name": "nercone-website",
       "runtimeExecutable": "uv",
-      "runtimeArgs": ["run", "nercone-website"],
+      "runtimeArgs": ["run", "nercone-website", "dev"],
       "port": 8080
     }
   ]

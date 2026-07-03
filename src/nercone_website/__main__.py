@@ -1,5 +1,6 @@
 import os
 import socket
+import argparse
 import uvicorn
 from uvicorn.supervisors import Multiprocess
 
@@ -7,7 +8,16 @@ from .databases import MimeTypes
 from .constants import Ports
 
 def main():
+    parser = argparse.ArgumentParser(prog="nercone-website")
+    parser.add_argument("command", nargs="?", choices=["dev"])
+    args = parser.parse_args()
+
     MimeTypes.fetch()
+
+    if args.command == "dev":
+        os.environ["WEBSITE_DEV"] = "1"
+        uvicorn.run("nercone_website.app:app", host="localhost", port=Ports.tcp, reload=True, server_header=False)
+        return
 
     sockets = []
 
