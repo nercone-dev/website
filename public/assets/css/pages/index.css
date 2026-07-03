@@ -1,8 +1,10 @@
-body {
-    background-image: url("https://cf.nerc1.dev/assets/images/wallpaper/fusion.svg");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+@media (not (hover: none)) and (not (pointer: coarse)) {
+    body {
+        background-image: url("https://cf.nerc1.dev/assets/images/wallpaper/fusion.svg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
 }
 
 main {
