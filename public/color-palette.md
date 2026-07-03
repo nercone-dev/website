@@ -1,7 +1,6 @@
 ---
 title: Nercone Color Palette
 thumbnail_title: Color Palette
-header_desc: ただのカラーパレット
 description: Nerconeが制作したカラーパレット
 extra_imports: <link rel="stylesheet" href="https://cf.nerc1.dev/assets/css/pages/color-palette.css">
 ---

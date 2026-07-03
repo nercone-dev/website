@@ -1,6 +1,5 @@
 ---
 title: nercone.devの設定
-header_desc: このウェブサイトの設定
 ---
 
 # nercone.dev の設定

@@ -1,10 +1,9 @@
 ---
 title: サーバーについて - Nercone
-header_desc: このサーバーの詳細情報
 description: nercone.devのサーバーの詳細情報
 ---
 
-# nercone.dev ({{ repository.version }})
+# Version {{ repository.version }}
 nercone.devへのHTTP(S)リクエストは、Python+Uvicorn+FastAPIで構築されたWebサーバーによって処理されています。
 
 サードパーティのソフトウェアや機密情報などの公開ができない/難しい箇所を除く、ほとんどの箇所は[github.com:nercone-dev/website](https://github.com/nercone-dev/website/)で公開しています。

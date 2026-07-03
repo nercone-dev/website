@@ -1,6 +1,5 @@
 ---
 title: アクセスカウンタ - Nercone
-header_desc: ただのアクセスカウンタ
 ---
 
 # あなたは <span class="font-variant-numeric-tabular">{{ accesscounter.get() }}</span> 番目の訪問者です。

@@ -1,6 +1,5 @@
 ---
 title: バナーのダウンロード - Nercone
-header_desc: Nerconeのバナー画像をダウンロード
 description: Nerconeのバナー画像をダウンロード
 ---
 
