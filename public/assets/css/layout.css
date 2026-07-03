@@ -76,6 +76,7 @@ main > .hero {
 }
 
 .block {
+    position: relative;
     border: solid 1px var(--theme-color-border);
 
     padding: 16px;
@@ -87,33 +88,41 @@ main > .hero {
 .block > *:last-child {
     margin-bottom: 0;
 }
+.block::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 4px;
+}
 
-.block-note {
-    border-left: solid 4px var(--color-bright-blue);
+.block-note::before {
+    background-color: var(--color-bright-blue);
 }
 .block-note > b:first-child {
     color: var(--color-bright-blue);
 }
-.block-tip {
-    border-left: solid 4px var(--color-bright-green);
+.block-tip::before {
+    background-color: var(--color-bright-green);
 }
 .block-tip > b:first-child {
     color: var(--color-bright-green);
 }
-.block-important {
-    border-left: solid 4px var(--color-bright-purple);
+.block-important::before {
+    background-color: var(--color-bright-purple);
 }
 .block-important > b:first-child {
     color: var(--color-bright-purple);
 }
-.block-warning {
-    border-left: solid 4px var(--color-bright-yellow);
+.block-warning::before {
+    background-color: var(--color-bright-yellow);
 }
 .block-warning > b:first-child {
     color: var(--color-bright-yellow);
 }
-.block-caution {
-    border-left: solid 4px var(--color-bright-red);
+.block-caution::before {
+    background-color: var(--color-bright-red);
 }
 .block-caution > b:first-child {
     color: var(--color-bright-red);
