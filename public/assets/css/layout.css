@@ -126,11 +126,11 @@ main > .hero {
     margin-bottom: 0px;
 }
 
-.show {
-    display: block;
-}
 .hide {
     display: none;
+}
+.show {
+    display: block;
 }
 
 .overflow-show {
