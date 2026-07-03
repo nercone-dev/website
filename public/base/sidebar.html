@@ -56,27 +56,24 @@
                 <polyline points="872 572.75 152 332 152 692 512 692 872 332 872 692 684.5 692" fill="none" stroke="currentColor" stroke-width="48" stroke-miterlimit="10"/>
             </svg>
         </div>
-        {% block header %}
+        {% block header_outer %}
         <header class="flex">
             <div class="flex-1 flex">
-                <p id="header-title" translate="no">
-                    {% block header_title %}
-                    {% block header_title_prefix %}{% endblock %}
-                    {% block header_title_prefix_separator %} {% endblock %}
-                    {% set segments = request.url.path.strip('/').split('/') | select | list %}
-                    <a href="/" class="text-no-decoration text-stark small:font-bold">nercone.dev</a>
-                    {% for segment in segments %}
-                    {% set href = '/' + segments[:loop.index] | join('/') %}
-                    / <a href="{{ href }}" class="text-no-decoration">{{ segment }}</a>
-                    {% endfor %}
-                    {% block header_title_suffix %}{% endblock %}
-                    {% block header_title_suffix_separator %} {% endblock %}
-                    {% endblock %}
-                </p>
-                <p class="text-alt small:hide">{% block header_desc %}<a href="/daily-quote/" class="text-no-decoration small:hide medium:hide">{{ daily_quote }}</a>{% endblock %}</p>
+                <a id="header-title" href="/" class="text-no-decoration" translate="no">nercone.dev</a>
+                {% block header_links %}
+                <a href="/about/" class="text-no-decoration small:hide">about</a>
+                <a href="/links/" class="text-no-decoration small:hide">links</a>
+                <a href="/projects/" class="text-no-decoration small:hide">projects</a>
+                <a href="/public-key/" class="text-no-decoration small:hide">public-key</a>
+                {% endblock %}
+                {% block extra_header_links %}{% endblock %}
             </div>
             <div class="flex">
-                <a href="/access-counter/" class="text-no-decoration font-variant-numeric-tabular small:text-stark small:font-bold">{{ accesscounter.get() }}</a>
+                <a href="/about/" class="text-no-decoration hide small:show">about</a>
+                <a href="/links/" class="text-no-decoration hide small:show">links</a>
+                <a href="/projects/" class="text-no-decoration hide small:show">projects</a>
+                <a href="/access-counter/" class="text-no-decoration font-variant-numeric-tabular small:hide" translate="no">{{ accesscounter.get() }}</a>
+                <a href="/about/server/" class="text-no-decoration small:hide" translate="no">{{ repository.version }}</a>
             </div>
         </header>
         {% endblock %}
@@ -84,31 +81,11 @@
             <div id="sidebar" class="overflow-scroll">{% block sidebar %}{% endblock %}</div>
             <div id="sidebar-content" class="flex-1 overflow-scroll">
                 <main>{% block main %}{% endblock %}</main>
+                {% block footer_outer %}
                 <footer>
-                    <div class="flex text-alt">
-                        <div class="flex-1 flex">
-                            <a href="/" class="text-no-decoration font-bold small:hide" translate="no">{% block footer_domain_prefix %}{% endblock %}nercone.dev{% block footer_domain_suffix %}{% endblock %}</a>
-                            {% block footer_links %}
-                            <a href="/about/" class="text-no-decoration small:font-bold">about</a>
-                            <a href="/links/" class="text-no-decoration small:font-bold">links</a>
-                            <a href="/projects/" class="text-no-decoration small:font-bold">projects</a>
-                            <a href="mailto:nercone@nercone.dev" class="text-no-decoration small:hide">email</a>
-                            <a href="/public-key/" class="text-no-decoration small:hide">public-key</a>
-                            {% block extra_footer_links %}{% endblock %}
-                            {% endblock %}
-                        </div>
-                        <div class="flex">
-                            <a href="/github/"><img alt="github" src="https://cf.nerc1.dev/assets/images/3rd-party/icons/github.svg" class="small-icon" width="12pt" height="12pt"></a>
-                            <a href="/twitter/"><img alt="twitter" src="https://cf.nerc1.dev/assets/images/3rd-party/icons/twitter.svg" class="small-icon" width="12pt" height="12pt"></a>
-                            <a href="/orcid/"><img alt="orcid" src="https://cf.nerc1.dev/assets/images/3rd-party/icons/orcid.svg" class="small-icon" width="12pt" height="12pt"></a>
-                            <a href="/qiita/"><img alt="qiita" src="https://cf.nerc1.dev/assets/images/3rd-party/icons/qiita.svg" class="small-icon" width="12pt" height="12pt"></a>
-                            <a href="/zenn/"><img alt="zenn" src="https://cf.nerc1.dev/assets/images/3rd-party/icons/zenn.svg" class="small-icon" width="12pt" height="12pt"></a>
-                            <!--                         qiita            kotonai -->
-                            <a href="/about/server/" class="text-no-decoration font-bold small:hide">{{ repository.version }}</a>
-                        </div>
-                    </div>
-                    {% block extra_footer_sections %}{% endblock %}
+                    {% block footer %}{% endblock %}
                 </footer>
+                {% endblock %}
             </div>
         </div>
         {% endblock %}

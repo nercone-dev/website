@@ -3,21 +3,26 @@
     --theme-color-loading-overlay-logo: var(--color-black);
 
     --theme-color-text: var(--color-dark-grey);
-    --theme-color-text-alt: var(--color-light-grey-alt);
+    --theme-color-text-alt: var(--color-light-grey);
     --theme-color-text-headline: var(--color-black);
     --theme-color-text-headline-underline: var(--color-bright-light-grey);
 
-    --theme-color-background: #F0F0F0;
-    --theme-color-background-pre: var(--color-white);
-    --theme-color-background-alt: transparent;
+    --theme-color-background: var(--color-white);
+    --theme-color-background-pre: var(--color-bright-light-grey-alt);
+    --theme-color-background-alt: var(--color-bright-light-grey-alt);
 
-    --theme-color-border-header: var(--color-bright-light-grey);
+    --theme-color-border: var(--color-bright-light-grey);
+    --theme-color-border-header: var(--color-bright-light-grey-alt);
 
     --theme-color-background-table-top: var(--color-light-grey);
     --theme-color-background-table-row: var(--color-light-grey-alt);
     --theme-color-background-table-row-hover: var(--color-bright-light-grey);
     --theme-color-border-table-top: var(--color-bright-light-grey);
     --theme-color-border-table-row: var(--color-bright-light-grey);
+
+    --theme-color-background-dropdown: var(--color-bright-light-grey-alt);
+    --theme-color-background-dropdown-active: var(--color-bright-light-grey-alt);
+    --theme-color-border-dropdown: var(--color-bright-light-grey-alt);
 
     --theme-color-background-cursor: color-mix(in srgb, var(--color-black) 25%, transparent);
     --theme-color-background-cursor-on-link: color-mix(in srgb, var(--color-black) 12.5%, transparent);

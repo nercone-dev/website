@@ -1,3 +1,9 @@
+body {
+    background-image: url("https://cf.nerc1.dev/assets/images/wallpaper/fusion.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 main {
     flex: 1;
     display: flex;

@@ -90,7 +90,7 @@ img.border {
 
 /* Code */
 pre {
-    background-color: var(--theme-color-background-pre);
+    border: solid 1px var(--theme-color-border);
 
     font-family: var(--font-family-mono);
     font-size: smaller;
@@ -104,9 +104,6 @@ pre {
 
     overflow-x: auto;
     white-space: pre;
-}
-.block pre {
-    background-color: var(--theme-color-background);
 }
 
 code {

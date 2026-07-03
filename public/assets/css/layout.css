@@ -10,7 +10,7 @@ blockquote {
 }
 
 .hero {
-    background-color: color-mix(in srgb, var(--theme-color-background) 80%, black);
+    background-color: color-mix(in srgb, var(--theme-color-background) 90%, var(--theme-color-stark));
 
     position: relative;
     overflow: hidden;
@@ -76,7 +76,8 @@ main > .hero {
 }
 
 .block {
-    background-color: var(--theme-color-background-pre);
+    border: solid 1px var(--theme-color-border);
+
     padding: 16px;
     margin-bottom: 16px;
 }
