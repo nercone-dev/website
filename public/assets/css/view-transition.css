@@ -4,9 +4,6 @@ header {
 main {
     view-transition-name: main-content;
 }
-footer {
-    view-transition-name: footer-content;
-}
 
 @keyframes vt-fade-out {
     from { opacity: 1; }
@@ -28,9 +25,7 @@ footer {
     ::view-transition-old(header-content),
     ::view-transition-new(header-content),
     ::view-transition-old(main-content),
-    ::view-transition-new(main-content),
-    ::view-transition-old(footer-content),
-    ::view-transition-new(footer-content) {
+    ::view-transition-new(main-content) {
         z-index: 1;
         pointer-events: none;
     }

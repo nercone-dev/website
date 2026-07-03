@@ -81,11 +81,6 @@
             <div id="sidebar" class="overflow-scroll">{% block sidebar %}{% endblock %}</div>
             <div id="sidebar-content" class="flex-1 overflow-scroll">
                 <main>{% block main %}{% endblock %}</main>
-                {% block footer_outer %}
-                <footer>
-                    {% block footer %}{% endblock %}
-                </footer>
-                {% endblock %}
             </div>
         </div>
         {% endblock %}

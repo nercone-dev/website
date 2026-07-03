@@ -67,13 +67,10 @@
 
             if (curLayout && !newLayout) {
                 const main = document.querySelector('main');
-                const footer = document.querySelector('footer');
                 document.querySelector('header').after(main);
-                main.after(footer);
                 curLayout.remove();
             } else if (!curLayout && newLayout) {
                 const main = document.querySelector('main');
-                const footer = document.querySelector('footer');
                 const newSidebarEl = newLayout.querySelector('#sidebar');
                 const newContentEl = newLayout.querySelector('#sidebar-content');
                 const layout = document.createElement('div');
@@ -88,7 +85,6 @@
                     [...newContentEl.attributes].forEach((a) => contentEl.setAttribute(a.name, a.value));
                 }
                 contentEl.appendChild(main);
-                contentEl.appendChild(footer);
                 layout.appendChild(sidebarEl);
                 layout.appendChild(contentEl);
                 document.querySelector('header').after(layout);

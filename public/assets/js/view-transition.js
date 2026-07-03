@@ -126,7 +126,7 @@
             const deferredScripts = await preloadAssets(doc);
             updateHead(doc);
 
-            for (const tag of ['header', 'main', 'footer']) {
+            for (const tag of ['header', 'main']) {
                 const newEl = doc.querySelector(tag);
                 const curEl = document.querySelector(tag);
                 if (!newEl || !curEl) { location.href = url.href; return; }
