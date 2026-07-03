@@ -26,9 +26,15 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
         <style>
-            *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+            *, *::before, *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
 
-            html, body { height: 100%; }
+            html, body {
+                height: 100%;
+            }
 
             body {
                 background-color: #000000;
@@ -83,12 +89,24 @@
                 word-break: keep-all;
             }
 
-            .br-mobile { display: none; }
+            .br-mobile {
+                display: none;
+            }
 
             @media (max-width: 480px) {
-                .icon-wrapper { width: 96px; height: 96px; }
-                .icon-wrapper svg.icon { width: 96px; height: 96px; }
-                .br-mobile { display: block; }
+                .icon-wrapper {
+                    width: 96px;
+                    height: 96px;
+                }
+
+                .icon-wrapper svg.icon {
+                    width: 96px;
+                    height: 96px;
+                }
+
+                .br-mobile {
+                    display: block;
+                }
             }
         </style>
     </head>
