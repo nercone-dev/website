@@ -242,7 +242,7 @@
             <p>少し待ってからページを再読み込みしてください。<br class="br-mobile">HTTPレスポンスステータスコードは <span id="status-code">500</span> です。</p>
         </main>
         <script>
-            console.log("このページは、nercone.devのサーバーで何らかの問題が発生し、正常な応答ができない場合に表示されます。\nすぐには修正されない場合があるため、コーヒーか何かを飲んで待つか、Nerconeを叩き起こして修正させる必要があります。\nさて、このメッセージを見ているということは...おそらく技術者でしょう？良ければネッ友になりませんか？\nP.S. 暇つぶしにソースコードでもいかがです？\n        https://github.com/nercone-dev/website/\n        https://github.com/nercone-dev/website-contents/")
+            console.log("このページは、nercone.devのサーバーで何らかの問題が発生し、正常な応答ができない場合に表示されます。\nすぐには修正されない場合があるため、コーヒーか何かを飲んで待つか、Nerconeを叩き起こして修正させる必要があります。\nさて、このメッセージを見ているということは...おそらく技術者でしょう？良ければネッ友になりませんか？\nP.S. 暇つぶしにソースコードでもいかがです？ https://github.com/nercone-dev/website/")
             document.getElementById("hostname").textContent = location.hostname;
             const nav = performance.getEntriesByType("navigation")[0];
             if (nav?.responseStatus) document.getElementById("status-code").textContent = nav.responseStatus;
