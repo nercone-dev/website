@@ -27,7 +27,7 @@
         <meta name="author" content="Nercone a.k.a. DiamondGotCat">
         <meta name="theme-color" content="#1A1A1A">
         <!-- Thumbnail -->
-        {% set thumbnail_final_url %}{% block thumbnail_url %}https://assets.nercone.dev/assets/images/thumbnail/template/{% block thumbnail_template %}normal{% endblock %}{% endblock %}?path={{ request.url.path.strip('/') or 'index' | urlencode }}&title={% block thumbnail_title %}{{ re_sub(self.title(), ' - Nercone.*$', '') | urlencode }}{% endblock %}&description={% block thumbnail_description %}{{ self.description() | urlencode }}{% endblock %}{% endset %}
+        {% set thumbnail_final_url %}{% block thumbnail_url %}https://assets.nercone.dev/images/thumbnail/template/{% block thumbnail_template %}normal{% endblock %}{% endblock %}?path={{ request.url.path.strip('/') or 'index' | urlencode }}&title={% block thumbnail_title %}{{ re_sub(self.title(), ' - Nercone.*$', '') | urlencode }}{% endblock %}&description={% block thumbnail_description %}{{ self.description() | urlencode }}{% endblock %}{% endset %}
         <meta property="og:site_name" content="nercone's website">
         <meta property="og:title" content="{{ self.title() }}">
         <meta property="og:description" content="{{ self.description() }}">
@@ -40,12 +40,12 @@
         <meta name="twitter:image" content="{{ thumbnail_final_url }}">
         <!-- PWA (Progressive Web App) -->
         <link rel="manifest" href="/site.webmanifest">
-        <link rel="apple-touch-icon" href="https://assets.nercone.dev/assets/images/favicon.png" sizes="384x384">
-        <link rel="icon" type="image/png" href="https://assets.nercone.dev/assets/images/favicon.png" sizes="384x384">
-        <link rel="icon" type="image/svg+xml" href="https://assets.nercone.dev/assets/images/favicon.svg" sizes="384x384">
+        <link rel="apple-touch-icon" href="https://assets.nercone.dev/images/favicon.png" sizes="384x384">
+        <link rel="icon" type="image/png" href="https://assets.nercone.dev/images/favicon.png" sizes="384x384">
+        <link rel="icon" type="image/svg+xml" href="https://assets.nercone.dev/images/favicon.svg" sizes="384x384">
         <!-- Stylesheets / Scripts -->
-        <script src="https://assets.nercone.dev/assets/js/merge/?path=main,loading-overlay,view-transition" defer></script>
-        <link rel="stylesheet" href="https://assets.nercone.dev/assets/css/merge/?path=main,colors,loading-overlay,view-transition,themes/{{ options.get('dev.nercone.options.appearance.theme') }}">
+        <script src="https://assets.nercone.dev/js/merge/?path=main,loading-overlay,view-transition" defer></script>
+        <link rel="stylesheet" href="https://assets.nercone.dev/css/merge/?path=main,colors,loading-overlay,view-transition,themes/{{ options.get('dev.nercone.options.appearance.theme') }}">
         {% block extra_head %}{% endblock %}
     </head>
     <body>
@@ -85,9 +85,9 @@
         </div>
         {% endblock %}
         <!-- Stylesheets / Scripts -->
-        <script src="https://assets.nercone.dev/assets/js/merge/?path=cursor,class-prefix,pages/sidebar,components/dropdown" defer></script>
-        <link rel="stylesheet" href="https://assets.nercone.dev/assets/css/merge/?path=fonts,cursor,layout,miscellaneous,pages/sidebar,components/button,components/dropdown">
-        <noscript><link rel="stylesheet" href="https://assets.nercone.dev/assets/css/noscript.css"></noscript>
+        <script src="https://assets.nercone.dev/js/merge/?path=cursor,class-prefix,pages/sidebar,components/dropdown" defer></script>
+        <link rel="stylesheet" href="https://assets.nercone.dev/css/merge/?path=fonts,cursor,layout,miscellaneous,pages/sidebar,components/button,components/dropdown">
+        <noscript><link rel="stylesheet" href="https://assets.nercone.dev/css/noscript.css"></noscript>
         {% block extra_imports %}{% endblock %}
     </body>
 </html>
