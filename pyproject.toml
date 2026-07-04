@@ -7,33 +7,21 @@ name = "nercone-website"
 version = "1.0.0"
 requires-python = ">=3.12"
 dependencies = [
+    "nercone-aki",
     "httpx[http2]",
-    "websockets",
-
-    "fastapi",
-    "uvicorn[standard]",
 
     "beautifulsoup4",
-
     "jinja2",
     "resvg-py",
 
     "mistune",
     "markitdown",
 
-    "zstandard",
-    "brotlicffi",
-
-    "minify-html",
-    "rcssmin",
-    "rjsmin",
-    "scour",
-
-    "nercone-modern",
-    "tzdata",
     "pyyaml",
+    "tzdata",
     "fourword",
-    "xxhash"
+
+    "nercone-modern"
 ]
 
 [project.scripts]

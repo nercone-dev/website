@@ -1,29 +1,22 @@
 import re
-from fastapi import FastAPI, Request, Response
-from fastapi.responses import PlainTextResponse, JSONResponse
+from aki import Aki, Request, Response, Headers, PlainTextResponse, JSONResponse
 
 from .logger import format_access
-from .routes import add_report_route
 from .resolver import resolve_file
 from .renderer import default_response, render_error_page, render_thumbnail_png
-from .databases import MimeTypes
 from .constants import Repository
-from .middleware import Middleware
+from .databases import AccessCounter
+from .middleware import middleware
 
-MimeTypes.load()
+app = Aki()
+app.add_middleware(middleware)
 
-app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
-app.add_middleware(Middleware)
-
-add_report_route(app, "/report", "DEFAULT")
-add_report_route(app, "/report/csp", "CSP")
-
-@app.api_route("/ping", methods=["GET"])
-async def ping():
+@app.route("/ping", methods=["GET"])
+async def ping(request: Request):
     return PlainTextResponse("pong!")
 
-@app.api_route("/welcome", methods=["GET"])
-async def welcome():
+@app.route("/welcome", methods=["GET"])
+async def welcome(request: Request):
     return PlainTextResponse(
         f"""
 ■   ■ ■■■■■ ■■■■   ■■■■  ■■■  ■   ■ ■■■■■
@@ -39,38 +32,39 @@ welcome to nercone.dev!
         """.strip() + "\n"
     )
 
-@app.api_route("/echo", methods=["GET"])
+@app.route("/echo", methods=["GET"])
 async def echo(request: Request):
-    if request.scope["website"]["network"].trusted:
+    if request.scope["network"].trusted:
         return JSONResponse(format_access(request))
     else:
         return render_error_page(request=request, status_code=403, message="/echoエンドポイントはデバッグ用途のため、信頼された接続元からのみ使用できます。", joke_message="悪いなのび太、このエンドポイント開発者専用なんだ")
 
-@app.api_route("/status", methods=["GET"])
+@app.route("/status", methods=["GET"])
 async def status(request: Request):
     return JSONResponse(
         {
             "status": "ok",
             "version": Repository.version,
-            "counter": request.scope["website"]["accesscounter"].get()
+            "counter": AccessCounter().get()
         }
     )
 
-@app.api_route("/assets/images/thumbnail/template/{template}", methods=["GET"])
+@app.route("/assets/images/thumbnail/template/{template}", methods=["GET"])
 async def thumbnail(request: Request, template: str) -> Response:
-    path = request.query_params.get("path", "/")
-    title = request.query_params.get("title", "Untitled Page")
-    description = request.query_params.get("description", "No description.")
+    query_params = {key: values[0] for key, values in request.url.params.items()}
+    path = query_params.get("path", "/")
+    title = query_params.get("title", "Untitled Page")
+    description = query_params.get("description", "No description.")
 
     try:
         png = render_thumbnail_png(path=path, title=title, description=description, template=template)
-        return Response(content=png, media_type="image/png")
+        return Response(body=png, headers=Headers([("Content-Type", ["image/png"])]))
     except FileNotFoundError:
         return render_error_page(request=request, status_code=404, message="サムネイルの生成に必要なテンプレートが見つかりません。", joke_message="はにゃ？")
     except PermissionError:
         return render_error_page(request=request, status_code=403, message="ねえ、今サムネイル生成のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
 
-@app.api_route("/error/{status_code}", methods=["GET"])
+@app.route("/error/{status_code}", methods=["GET"])
 async def fake_error_page(request: Request, status_code: str):
     if status_code.isdecimal():
         return render_error_page(request=request, status_code=int(status_code))
@@ -83,9 +77,9 @@ css_re_charset = re.compile(r'@charset\s+[^;]+;', re.IGNORECASE)
 css_re_import = re.compile(r'@import\b[^;]*;', re.DOTALL)
 css_re_whitespace = re.compile(r'\s+')
 
-@app.api_route("/assets/css/merge", methods=["GET"])
+@app.route("/assets/css/merge", methods=["GET"])
 async def merge_css(request: Request) -> Response:
-    path_param = request.query_params.get("path", "")
+    path_param = request.url.params.get("path", [""])[0]
     if not path_param:
         return render_error_page(request=request, status_code=400, message="pathパラメータが必要です。")
 
@@ -124,11 +118,11 @@ async def merge_css(request: Request) -> Response:
         parts.append('\n'.join(imports))
     parts.extend(bodies)
 
-    return Response(content='\n\n'.join(parts), media_type="text/css")
+    return Response(body='\n\n'.join(parts).encode(), headers=Headers([("Content-Type", ["text/css"])]))
 
-@app.api_route("/assets/js/merge", methods=["GET"])
+@app.route("/assets/js/merge", methods=["GET"])
 async def merge_js(request: Request) -> Response:
-    path_param = request.query_params.get("path", "")
+    path_param = request.url.params.get("path", [""])[0]
     if not path_param:
         return render_error_page(request=request, status_code=400, message="pathパラメータが必要です。")
 
@@ -142,8 +136,8 @@ async def merge_js(request: Request) -> Response:
         except PermissionError:
             return render_error_page(request=request, status_code=403, message="ねえ、今JSファイル統合用のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？新しく追加されたエンドポイントに脆弱性あるか気になっただけ？そんなこと関係ないよね。攻撃しようとしたのは事実でしょ？？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
 
-    return Response(content=';\n'.join(c.strip() for c in contents if c.strip()), media_type="text/javascript")
+    return Response(body=';\n'.join(c.strip() for c in contents if c.strip()).encode(), headers=Headers([("Content-Type", ["text/javascript"])]))
 
-@app.api_route("/{path:path}", methods=["GET", "POST", "HEAD"])
+@app.route("/{path:path}", methods=["GET", "POST", "HEAD"])
 async def default_route(request: Request, path: str) -> Response:
     return default_response(path, request=request)

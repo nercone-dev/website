@@ -1,6 +1,7 @@
 import io
 import re
 import yaml
+import jinja2
 import random
 import mistune
 import resvg_py
@@ -11,14 +12,15 @@ from http import HTTPStatus
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 from markitdown import MarkItDown, StreamInfo
-from starlette.types import Scope
-from fastapi import Request, Response
-from fastapi.responses import PlainTextResponse, FileResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
 
-from .constants import Directories
+from aki import Request, Response, Headers, PlainTextResponse, HTMLResponse, FileResponse, RedirectResponse
+
 from .models import TimingManager
 from .resolver import resolve_file, resolve_page, resolve_redirects
+from .databases import AccessCounter
+from .constants import Directories, Repository
+
+templates = jinja2.Environment(loader=jinja2.FileSystemLoader(Directories.public), autoescape=False)
 
 class CustomHTMLRenderer(mistune.HTMLRenderer):
     _alert_re = re.compile(r'^\s*<p>\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\](?:\n(.*?))?</p>\s*', re.IGNORECASE | re.DOTALL,)
@@ -41,8 +43,11 @@ class CustomHTMLRenderer(mistune.HTMLRenderer):
 markitdown = MarkItDown()
 htmlitdown = mistune.create_markdown(renderer=CustomHTMLRenderer(escape=False), plugins=["table", "strikethrough", "task_lists", "footnotes"])
 
-def init_context(context: dict[str, Any], scope: Scope):
-    context.update(scope["website"])
+def init_context(context: dict[str, Any], request: Request):
+    context.update(request.scope)
+
+    context["repository"] = Repository
+    context["accesscounter"] = AccessCounter()
 
     context["re_sub"] = lambda s, pattern, repl: re.sub(pattern, repl, s)
     context["this_year"] = datetime.now(ZoneInfo("Asia/Tokyo")).year
@@ -58,10 +63,7 @@ def init_context(context: dict[str, Any], scope: Scope):
     context["daily_quote"] = daily_quote
 
 def render_page(page: str, path: str, request: Request, count: bool = True, render: bool = True, status_code: int = 200, markdown_mode: bool | None = None, context: dict[str, Any] = {}):
-    init_context(context, request.scope)
-
-    timings: TimingManager = request.scope["website"]["timings"]
-    templates: Jinja2Templates = request.scope["website"]["templates"]
+    init_context(context, request)
 
     if markdown_mode is None:
         markdown_mode = any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), request.headers.get("user-agent", "").lower().startswith("curl")])
@@ -83,9 +85,9 @@ def render_page(page: str, path: str, request: Request, count: bool = True, rend
                 body = source[end+4:].lstrip("\n")
 
         if render:
-            timings.start("render", "Render Contents")
-            content = templates.env.from_string(body).render(request=request, **context)
-            timings.stop("render")
+            request.scope["timings"].start("render", "Render Contents")
+            content = templates.from_string(body).render(request=request, **context)
+            request.scope["timings"].stop("render")
 
             def render_html(html: str):
                 if "base" in front:
@@ -100,66 +102,64 @@ def render_page(page: str, path: str, request: Request, count: bool = True, rend
                     source += f"{{% block {key} %}}{value}{{% endblock %}}\n"
 
                 source += f"{{% block main %}}\n{html}\n{{% endblock %}}\n"
-                return templates.env.from_string(source).render(request=request, **context)
+                return templates.from_string(source).render(request=request, **context)
 
             if page.endswith(".html"):
                 if markdown_mode:
-                    timings.start("convert", "HTML to Markdown")
+                    request.scope["timings"].start("convert", "HTML to Markdown")
                     soup = BeautifulSoup(content, "html.parser")
                     main = str(soup.find("main")) if soup.find("main") else content
                     content = markitdown.convert(io.BytesIO(main.encode("utf-8")), stream_info=StreamInfo(mimetype="text/html", charset="utf-8")).text_content
-                    response = PlainTextResponse(content, status_code=status_code, media_type="text/markdown")
-                    timings.stop("convert")
+                    response = Response(body=content.encode(), status_code=status_code, headers=Headers([("Content-Type", ["text/markdown"])]))
+                    request.scope["timings"].stop("convert")
 
                 else:
-                    timings.start("render", "Render Final HTML")
+                    request.scope["timings"].start("render", "Render Final HTML")
                     content = render_html(content)
-                    timings.stop("render")
+                    request.scope["timings"].stop("render")
 
-                    response = PlainTextResponse(content, status_code=status_code, media_type="text/html")
+                    response = HTMLResponse(content, status_code=status_code)
 
             elif page.endswith(".md"):
                 if markdown_mode:
-                    response = PlainTextResponse(content, status_code=status_code, media_type="text/markdown")
+                    response = Response(body=content.encode(), status_code=status_code, headers=Headers([("Content-Type", ["text/markdown"])]))
 
                 else:
-                    timings.start("convert", "Markdown to HTML")
+                    request.scope["timings"].start("convert", "Markdown to HTML")
                     main = htmlitdown(content)
-                    timings.stop("convert")
+                    request.scope["timings"].stop("convert")
 
-                    timings.start("render", "Render Final HTML")
+                    request.scope["timings"].start("render", "Render Final HTML")
                     content = render_html(main)
-                    timings.stop("render")
+                    request.scope["timings"].stop("render")
 
-                    response = PlainTextResponse(content, status_code=status_code, media_type="text/html")
+                    response = HTMLResponse(content, status_code=status_code)
 
         else:
             if page.endswith(".html"):
-                response = PlainTextResponse(source, status_code=status_code, media_type="text/html")
+                response = HTMLResponse(source, status_code=status_code)
             elif page.endswith(".md"):
-                response = PlainTextResponse(source, status_code=status_code, media_type="text/markdown")
+                response = Response(body=source.encode(), status_code=status_code, headers=Headers([("Content-Type", ["text/markdown"])]))
 
         if "compression" in front:
             if front["compression"].lower() == "true":
-                request.scope["website"]["compression"] = True
+                response.compression = True
             elif front["compression"].lower() == "false":
-                request.scope["website"]["compression"] = False
+                response.compression = False
 
         if count:
-            request.scope["website"]["accesscounter"].increase()
+            AccessCounter().increase()
 
         return response
 
 def default_response(path: str, request: Request, status_code: int = 200, count: bool = True, render: bool = True, context: dict[str, Any] = {}, headers: dict[str, str] = {}):
     markdown_mode = any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), request.headers.get("user-agent", "").lower().startswith("curl")])
 
-    timings: TimingManager = request.scope["website"]["timings"]
-
     try:
-        if url := resolve_redirects(path, timings=timings):
+        if url := resolve_redirects(path, timings=request.scope["timings"]):
             response = RedirectResponse(url, status_code=status_code if 300 <= status_code < 400 else 307)
 
-        elif page := resolve_page(path, markdown_mode=markdown_mode, timings=timings):
+        elif page := resolve_page(path, markdown_mode=markdown_mode, timings=request.scope["timings"]):
             response = render_page(page, path=path, request=request, count=count, render=render, status_code=status_code, markdown_mode=markdown_mode, context=context)
 
         elif file := resolve_file(path):
@@ -174,7 +174,7 @@ def default_response(path: str, request: Request, status_code: int = 200, count:
     for key, value in headers.items():
         response.headers[key.lower().strip()] = value
 
-    request.scope["website"]["options"].apply(response)
+    request.scope["options"].apply(response)
     return response
 
 error_messages = {
@@ -203,9 +203,9 @@ error_messages = {
 
 def render_error_page(request: Request, status_code: int = 500, status_name: str | None = None, message: str | None = None, joke_message: str | None = None) -> Response:
     if 500 <= status_code < 600:
-        request.scope["website"]["csp"].append("script-src", "'unsafe-inline'")
-        request.scope["website"]["csp"].append("style-src", "fonts.googleapis.com", "'unsafe-inline'")
-        request.scope["website"]["csp"].append("font-src", "fonts.gstatic.com")
+        request.scope["csp"].append("script-src", "'unsafe-inline'")
+        request.scope["csp"].append("style-src", "fonts.googleapis.com", "'unsafe-inline'")
+        request.scope["csp"].append("font-src", "fonts.gstatic.com")
         return render_page("error/server.html", "error/server", request=request, status_code=status_code, count=False, render=False)
     else:
         if status_name is None:

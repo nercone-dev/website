@@ -1,7 +1,7 @@
 import time
 import ipaddress
-from fastapi import Response
-from starlette.requests import Request, HTTPConnection
+
+from aki import Request, Response
 
 from .constants import reserved_cookie_keys
 
@@ -176,32 +176,31 @@ class OptionManager:
         "dev.nercone.options.appearance.theme": "dark"
     }
 
-    def __init__(self, request: HTTPConnection | Request):
+    def __init__(self, request: Request):
         self.request = request
 
     def __contains__(self, key: str):
-        return key in self.request.query_params or key in self.request.cookies
+        return key in self.request.url.params or key in self.request.cookies
 
     def __len__(self):
-        return len(self.request.cookies | self.request.query_params)
+        return len(set(self.request.cookies) | set(self.request.url.params.items()))
 
     def get(self, key: str, default: str | None = None):
-        once = self.request.query_params.get(key + ".once", None)
-        query = self.request.query_params.get(key, None)
+        once = self.request.url.params.get(key + ".once", None)[0]
+        query = self.request.url.params.get(key, None)[0]
         cookie = self.request.cookies.get(key, None)
         return once or query or cookie or default or self.options.get(key)
 
     def set(self, response: Response, key: str, value: str):
-        response.set_cookie(key, value, samesite="lax")
+        response.set_cookie(key, value, samesite="Lax")
 
     def apply(self, response: Response):
-        queries = self.request.query_params
         cookies = self.request.cookies
-        for key in queries:
+        for key in self.request.url.params:
             if key.lower() in reserved_cookie_keys:
                 continue
-            if key in self.options and not key.endswith(".once") and cookies.get(key) != queries.get(key):
-                if (queries.get(key) or cookies.get(key)) != self.options.get(key):
-                    response.set_cookie(key, queries[key], secure=True, samesite="lax")
+            if key in self.options and not key.endswith(".once") and cookies.get(key) != self.request.url.params.get(key)[0]:
+                if (self.request.url.params.get(key)[0] or cookies.get(key)) != self.options.get(key):
+                    response.set_cookie(key, self.request.url.params[key], secure=True, samesite="Lax")
                 else:
-                    response.delete_cookie(key, secure=True, samesite="lax")
+                    response.delete_cookie(key, secure=True, samesite="Lax")

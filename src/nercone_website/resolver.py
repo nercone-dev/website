@@ -1,8 +1,8 @@
 import json
 from pathlib import Path
 
-from .constants import Directories
 from .models import TimingManager
+from .constants import Directories
 
 def resolve_file(path: str) -> Path | None:
     full_path = Directories.public.joinpath(path.lstrip("/")).resolve()
