@@ -11,7 +11,7 @@
     --theme-color-background-pre: var(--color-bright-light-grey-alt);
     --theme-color-background-alt: var(--color-bright-light-grey-alt);
 
-    --theme-color-border: var(--color-bright-light-grey);
+    --theme-color-border: color-mix(in srgb, var(--color-black) 10%, transparent);
     --theme-color-border-header: color-mix(in srgb, var(--color-black) 10%, transparent);
 
     --theme-color-background-table-top: var(--color-light-grey);

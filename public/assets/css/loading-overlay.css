@@ -1,26 +1,34 @@
 #loading-overlay {
     view-transition-name: none;
-    position: fixed;
-    inset: 0;
-    z-index: 100000;
+
+    background: linear-gradient(to bottom, var(--theme-color-background), color-mix(in srgb, var(--theme-color-background) 75%, var(--color-blue)));
+    backdrop-filter: blur(40px);
+
+    opacity: 1;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--theme-color-background);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
+
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+
     pointer-events: none;
-    opacity: 1;
 }
 #loading-overlay svg {
+    will-change: opacity, filter, transform;
+
     color: var(--theme-color-loading-overlay-logo);
+    filter: blur(20px);
+
+    opacity: 0;
+
     --size: clamp(340px, 28vmin, 380px);
     width: var(--size);
     height: calc(var(--size) * 512 / 832);
-    opacity: 0;
-    filter: blur(20px);
+
     transform: scale(1);
-    will-change: opacity, filter, transform;
 }
 #loading-overlay polyline {
     will-change: stroke-dashoffset;
