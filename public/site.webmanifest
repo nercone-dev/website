@@ -7,17 +7,17 @@
     "background_color": "#1A1A1A",
     "icons": [
         {
-            "src": "https://cf.nerc1.dev/assets/images/favicon.webp",
+            "src": "https://assets.nercone.dev/assets/images/favicon.webp",
             "type": "image/webp",
             "sizes": "384x384"
         },
         {
-            "src": "https://cf.nerc1.dev/assets/images/favicon.png",
+            "src": "https://assets.nercone.dev/assets/images/favicon.png",
             "type": "image/png",
             "sizes": "384x384"
         },
         {
-            "src": "https://cf.nerc1.dev/assets/images/favicon.svg",
+            "src": "https://assets.nercone.dev/assets/images/favicon.svg",
             "type": "image/svg+xml",
             "sizes": "384x384"
         }

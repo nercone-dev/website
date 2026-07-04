@@ -233,7 +233,7 @@ class Middleware:
         content_type = response.headers.get("content-type", "")
 
         if content_type.startswith(("text/html", "text/css", "text/javascript", "application/javascript", "text/svg")) and Startup.dev:
-            response.body = response.body.replace(b"https://cf.nerc1.dev/assets/", f"http://localhost:{Ports.tcp}/assets/".encode())
+            response.body = response.body.replace(b"https://assets.nercone.dev/assets/", f"http://localhost:{Ports.tcp}/assets/".encode())
 
         if content_type.startswith("text/html"):
             try:
