@@ -34,7 +34,8 @@ def resolve_page(path: str, markdown_mode: bool = False, timings: TimingManager 
 
     for candidate in candidates:
         if file := resolve_file(candidate):
-            timings.stop("resolve")
+            if timings:
+                timings.stop("resolve")
             return str(file.relative_to(Directories.public))
 
     if timings:
@@ -57,14 +58,16 @@ def resolve_redirects(path: str, timings: TimingManager | None = None) -> str | 
 
         for _ in range(max_retry):
             if current in visited or current not in redirects:
-                timings.stop("resolve")
+                if timings:
+                    timings.stop("resolve")
                 return None
 
             visited.add(current)
 
             entry = redirects[current]
             if entry["type"] == "redirect":
-                timings.stop("resolve")
+                if timings:
+                    timings.stop("resolve")
                 return entry["content"]
             elif entry["type"] == "alias":
                 current = entry["content"]
