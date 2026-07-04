@@ -186,8 +186,10 @@ class OptionManager:
         return len(set(self.request.cookies) | set(self.request.url.params.items()))
 
     def get(self, key: str, default: str | None = None):
-        once = self.request.url.params.get(key + ".once", None)[0]
-        query = self.request.url.params.get(key, None)[0]
+        once_values = self.request.url.params.get(key + ".once")
+        once = once_values[0] if once_values else None
+        query_values = self.request.url.params.get(key)
+        query = query_values[0] if query_values else None
         cookie = self.request.cookies.get(key, None)
         return once or query or cookie or default or self.options.get(key)
 
@@ -201,6 +203,6 @@ class OptionManager:
                 continue
             if key in self.options and not key.endswith(".once") and cookies.get(key) != self.request.url.params.get(key)[0]:
                 if (self.request.url.params.get(key)[0] or cookies.get(key)) != self.options.get(key):
-                    response.set_cookie(key, self.request.url.params[key], secure=True, samesite="Lax")
+                    response.set_cookie(key, self.request.url.params[key][0], secure=True, samesite="Lax")
                 else:
                     response.delete_cookie(key, secure=True, samesite="Lax")
