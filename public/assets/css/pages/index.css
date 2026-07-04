@@ -15,16 +15,20 @@ main {
 }
 
 #big-text {
+    font-size: 64pt;
+
     margin: 0;
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+    padding-top: 0px;
+    padding-bottom: 0px;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 64pt;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    margin-top: 0px;
-    margin-bottom: 0px;
     text-box: trim-both cap alphabetic;
+
 }
 
 @media (max-width: 512px) {
