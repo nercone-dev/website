@@ -788,7 +788,7 @@ wheels = [
 
 [[package]]
 name = "rear-momiji"
-version = "3.3.2"
+version = "3.3.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "brotlicffi" },
@@ -800,9 +800,9 @@ dependencies = [
     { name = "xxhash" },
     { name = "zstandard" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d1/de/68f7dcc451fbe83a383e81a1c35a15221e7a47e15d4f5215800e35042e78/rear_momiji-3.3.2.tar.gz", hash = "sha256:b884bc6a86f07d1ef16111e9ace783c7b062a052263de730cacd9123d6f1b3db", size = 19217, upload-time = "2026-07-04T23:17:23.884Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/2d/03/4031bea5b68991f85896a9b566e03bac2027e4f86eb74339670cd256a07c/rear_momiji-3.3.3.tar.gz", hash = "sha256:38108cb4c42c9c707e4f3a3c35187f7ae015072f7751f8b82f83c0f05881ca4b", size = 19219, upload-time = "2026-07-04T23:40:33.692Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/3a/89/29d01a52dae8a444137f36b3b315ea28e1671a620fcc6ab40cf521dac6cb/rear_momiji-3.3.2-py3-none-any.whl", hash = "sha256:0354bc0b849e11fb27514930a6e9abbec9b89ee53187cb29846ed7031e48633c", size = 23522, upload-time = "2026-07-04T23:17:22.801Z" },
+    { url = "https://files.pythonhosted.org/packages/68/2b/1200ad60d1f9566085274e7d4861789bade3d0b282a083a66f5f30f8ce8a/rear_momiji-3.3.3-py3-none-any.whl", hash = "sha256:c89d9f84fcb077850e75a6264a778c090207ff9382193104ff351b64cb117f2a", size = 23504, upload-time = "2026-07-04T23:40:31.762Z" },
 ]
 
 [[package]]
