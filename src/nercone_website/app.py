@@ -2,6 +2,7 @@ import re
 from aki import Aki, Request, Response, Headers, PlainTextResponse, JSONResponse
 
 from .logger import format_access
+from .routes import add_report_route
 from .resolver import resolve_file
 from .renderer import default_response, render_error_page, render_thumbnail_png
 from .constants import Repository
@@ -10,6 +11,9 @@ from .middleware import middleware
 
 app = Aki()
 app.add_middleware(middleware)
+
+add_report_route(app, "/report", "DEFAULT")
+add_report_route(app, "/report/csp", "CSP")
 
 @app.route("/ping", methods=["GET"])
 async def ping(request: Request):

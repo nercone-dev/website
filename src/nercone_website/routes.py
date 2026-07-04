@@ -1,0 +1,30 @@
+import json
+from aki import Aki, Request, Response
+
+from .logger import log_report
+
+def add_report_route(app: Aki, path: str, report_type: str):
+    async def report_route(request: Request) -> Response:
+        content_type = request.headers.get("content-type", "")
+
+        if "application/reports+json" not in content_type and "application/csp-report" not in content_type:
+            return Response(status_code=415)
+
+        body = await request.body()
+        max_bytes = 65536
+
+        if len(body) > max_bytes:
+            return Response(status_code=413)
+
+        try:
+            data = json.loads(body)
+        except (json.JSONDecodeError, ValueError):
+            return Response(status_code=400)
+
+        if not isinstance(data, (dict, list)):
+            return Response(status_code=400)
+
+        log_report(request, data, report_type)
+        return Response(status_code=204)
+
+    app.add_route(path=path, methods=["POST"], callback=report_route)
