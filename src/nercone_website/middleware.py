@@ -170,4 +170,5 @@ async def finalize(request: Request, response: Response) -> Response:
         log_access(request, response)
         request.scope["logged"] = True
 
+    response.minification = True
     return response
