@@ -21,6 +21,7 @@ nercone.devの動作を変更できます。
         <div class="dropdown">
             <button class="dropdown-item">{{ options.get('dev.nercone.options.appearance.theme') }}</button>
             <div class="dropdown-menu">
+                <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'system' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=system">system</a>
                 <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'dark' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=dark">dark</a>
                 <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'light' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=light">light</a>
             </div>

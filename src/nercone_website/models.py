@@ -174,7 +174,7 @@ class NetworkManager:
 
 class OptionManager:
     options = {
-        "dev.nercone.options.appearance.theme": "dark"
+        "dev.nercone.options.appearance.theme": "system"
     }
 
     def __init__(self, request: Request):
