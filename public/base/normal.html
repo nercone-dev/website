@@ -61,12 +61,20 @@
         <div id="snowflake-toast" class="snowflake-toast cursor-system">
             <div class="snowflake-toast-header">
                 <span>Snowflake</span>
-                <button type="button" class="snowflake-toast-close" aria-label="閉じる">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="6" y1="6" x2="18" y2="18"/>
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                    </svg>
-                </button>
+                <div class="snowflake-toast-actions">
+                    <button type="button" class="snowflake-toast-minimize" aria-label="非表示" aria-pressed="false">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="6" y1="12" x2="18" y2="12"/>
+                            <line class="snowflake-toast-minimize-vertical" x1="12" y1="6" x2="12" y2="18"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="snowflake-toast-close" aria-label="閉じる">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
             <iframe src="https://snowflake.torproject.org/embed.html" width="320" height="262" frameborder="0" scrolling="no" title="Snowflake"></iframe>
         </div>

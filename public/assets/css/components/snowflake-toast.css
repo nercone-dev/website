@@ -21,6 +21,14 @@
     color: var(--theme-color-text);
 }
 
+.snowflake-toast-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.snowflake-toast-minimize,
 .snowflake-toast-close {
     display: inline-flex;
     align-items: center;
@@ -33,15 +41,25 @@
     border: none;
     flex-shrink: 0;
 }
+.snowflake-toast-minimize, .snowflake-toast-minimize *,
 .snowflake-toast-close, .snowflake-toast-close * {
     cursor: pointer;
 }
+.snowflake-toast-minimize:hover,
 .snowflake-toast-close:hover {
     color: var(--theme-color-stark);
 }
+.snowflake-toast-minimize svg,
 .snowflake-toast-close svg {
     width: 16px;
     height: 16px;
+}
+
+.snowflake-toast-minimize-vertical {
+    display: none;
+}
+.snowflake-toast.is-minimized .snowflake-toast-minimize-vertical {
+    display: inline;
 }
 
 .snowflake-toast iframe {
@@ -50,6 +68,12 @@
     height: 262px;
     max-width: 100%;
     border: none;
+}
+.snowflake-toast.is-minimized iframe {
+    height: 0;
+    min-height: 0;
+    overflow: hidden;
+    pointer-events: none;
 }
 
 @media (max-width: 512px) {
