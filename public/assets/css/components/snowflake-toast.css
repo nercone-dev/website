@@ -31,6 +31,7 @@
     color: var(--theme-color-text);
     background: none;
     border: none;
+    cursor: pointer;
     flex-shrink: 0;
 }
 .snowflake-toast-close:hover {
