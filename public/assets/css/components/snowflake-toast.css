@@ -5,9 +5,7 @@
     z-index: 1000;
     width: 320px;
     max-width: calc(100vw - 32px);
-    background-color: var(--theme-color-background);
-    border: 1px solid var(--theme-color-border-dropdown);
-    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-black) 25%, transparent);
+    background-color: #38383d;
 }
 .snowflake-toast.is-hidden {
     display: none;
@@ -21,7 +19,6 @@
     padding: 6px 8px;
     font-size: smaller;
     color: var(--theme-color-text);
-    border-bottom: 1px solid var(--theme-color-border-dropdown);
 }
 
 .snowflake-toast-close {
@@ -40,8 +37,8 @@
     color: var(--theme-color-stark);
 }
 .snowflake-toast-close svg {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
 }
 
 .snowflake-toast iframe {
