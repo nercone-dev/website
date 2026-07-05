@@ -1,4 +1,10 @@
-* { cursor: none; }
+* {
+    cursor: none;
+}
+.cursor-system, .cursor-system * {
+    cursor: auto;
+}
+
 #cursor {
     view-transition-name: none;
     position: fixed;
