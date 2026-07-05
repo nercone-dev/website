@@ -52,12 +52,15 @@
     </head>
     <body>
         {% block body %}
+
         <div id="cursor"></div>
+
         <div id="loading-overlay" aria-hidden="true">
             <svg viewBox="96 256 832 512" xmlns="http://www.w3.org/2000/svg">
                 <polyline points="872 572.75 152 332 152 692 512 692 872 332 872 692 684.5 692" fill="none" stroke="currentColor" stroke-width="48" stroke-miterlimit="10"/>
             </svg>
         </div>
+
         <div id="snowflake-toast" class="snowflake-toast cursor-system">
             <div class="snowflake-toast-header">
                 <span>Snowflake</span>
@@ -78,33 +81,47 @@
             </div>
             <iframe src="https://snowflake.torproject.org/embed.html" width="320" height="262" frameborder="0" scrolling="no" title="Snowflake"></iframe>
         </div>
+
         {% block header_outer %}
         <header class="flex">
             <div class="flex-1 flex">
                 <a id="header-title" href="/" class="text-no-decoration" translate="no">nercone.dev</a>
-                {% block header_links %}
+                {% block header_start_before %}{% endblock %}
+                {% block header_start %}
                 <a href="/about/" class="text-no-decoration small:hide">about</a>
                 <a href="/links/" class="text-no-decoration small:hide">links</a>
                 <a href="/projects/" class="text-no-decoration small:hide">projects</a>
                 <a href="/public-key/" class="text-no-decoration small:hide">public-key</a>
                 {% endblock %}
-                {% block extra_header_links %}{% endblock %}
+                {% block header_start_after %}{% endblock %}
             </div>
             <div class="flex">
+                {% block header_end_before %}{% endblock %}
+                {% block header_end %}
                 <a href="/about/" class="text-no-decoration hide small:show">about</a>
                 <a href="/links/" class="text-no-decoration hide small:show">links</a>
                 <a href="/projects/" class="text-no-decoration hide small:show">projects</a>
+
+                <a href="/daily-quote/" class="text-no-decoration text-alt small:hide">{{ daily_quote }}</a>
                 <a href="/access-counter/" class="text-no-decoration font-variant-numeric-tabular small:hide" translate="no">{{ accesscounter.get() }}</a>
                 <a href="/about/server/" class="text-no-decoration small:hide" translate="no">{{ repository.version }}</a>
+                {% endblock %}
+                {% block header_end_after %}{% endblock %}
             </div>
         </header>
         {% endblock %}
+
+        {% block main_outer %}
         <main>{% block main %}{% endblock %}</main>
         {% endblock %}
-        <!-- Stylesheets / Scripts -->
+
+        {% block imports %}
         <script src="https://assets.nercone.dev/js/merge/?path=cursor,class-prefix,components/dropdown,components/snowflake-toast" defer></script>
         <link rel="stylesheet" href="https://assets.nercone.dev/css/merge/?path=fonts,cursor,layout,miscellaneous,components/button,components/dropdown,components/snowflake-toast">
         <noscript><link rel="stylesheet" href="https://assets.nercone.dev/css/noscript.css"></noscript>
+        {% endblock %}
         {% block extra_imports %}{% endblock %}
+
+        {% endblock %}
     </body>
 </html>
