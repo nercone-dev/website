@@ -1,5 +1,5 @@
 .snowflake-toast {
-    view-transition-name: none;
+    view-transition-name: snowflake-toast;
 
     background-color: var(--theme-color-background-snowflake);
 
