@@ -4,7 +4,7 @@ title: nercone.devの設定
 
 # nercone.dev の設定
 
-nercone.devの動作を変更できます。
+ここでnercone.devの動作を変更できます。
 これらの設定はCookieを使用してブラウザ上に保存されます。
 
 > [!WARNING]
@@ -17,13 +17,13 @@ nercone.devの動作を変更できます。
 <section id="appearance">
     <h2>外観</h2>
     <div class="flex">
-        <b>テーマ</b>
+        <p>テーマ</p>
         <div class="dropdown">
             <button class="dropdown-item">{{ options.get('dev.nercone.options.appearance.theme') }}</button>
             <div class="dropdown-menu">
-                <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'system' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=system">system</a>
-                <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'dark' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=dark">dark</a>
-                <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'light' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=light">light</a>
+                <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'system' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=system">システムと同期</a>
+                <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'dark' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=dark">ダーク</a>
+                <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'light' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=light">ライト</a>
             </div>
         </div>
     </div>
