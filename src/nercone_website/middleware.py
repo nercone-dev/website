@@ -106,16 +106,10 @@ async def finalize(request: Request, response: Response) -> Response:
         response.body = response.body.replace(b"https://assets.nercone.dev/", f"http://localhost:{Ports.tcp}/assets/".encode())
 
     # Informations
-    set_header("Server", f"nercone.dev ({Repository.version})")
-    set_header("X-Powered-By", "nercone.dev")
-
     set_header("Link", "<https://nercone.dev/sitemap.xml>; rel=\"sitemap\", <https://nercone.dev/robots.txt>; rel=\"robots\"")
 
     # Proxy
     set_header("X-Content-Type-Options", "nosniff")
-
-    # Report
-    set_header("Reporting-Endpoints", "default=\"https://nercone.dev/report/\", csp-endpoint=\"https://nercone.dev/report/csp/\"")
 
     # Cache
     if not request.scope["cc"].initial:
@@ -127,6 +121,9 @@ async def finalize(request: Request, response: Response) -> Response:
     else:
         set_header("Cache-Control", "no-cache")
 
+    # Report
+    set_header("Reporting-Endpoints", "default=\"https://nercone.dev/report/\", csp-endpoint=\"https://nercone.dev/report/csp/\"")
+
     # Security
     set_header("Referrer-Policy", "strict-origin-when-cross-origin")
     set_header("Permissions-Policy", request.scope["pp"].header)
@@ -136,7 +133,7 @@ async def finalize(request: Request, response: Response) -> Response:
 
     # Security: Cross-Origin
     origin = request.headers.get("origin", "").strip()
-    origin_host = origin.removeprefix("https://").removeprefix("http://").split("/")[0].split(":")[0]
+    origin_hostname = origin.removeprefix("https://").removeprefix("http://").split("/")[0].split(":")[0]
 
     add_vary("Origin")
 
@@ -152,7 +149,7 @@ async def finalize(request: Request, response: Response) -> Response:
     else:
         set_header("Cross-Origin-Resource-Policy", "same-origin", override=False)
 
-        if any(origin_host == candidate or origin_host.endswith("." + candidate) for candidate in Hostnames.all):
+        if any(origin_hostname == candidate or origin_hostname.endswith("." + candidate) for candidate in Hostnames.all):
             add_vary("Origin")
 
             set_header("Access-Control-Allow-Origin", origin, override=False)
