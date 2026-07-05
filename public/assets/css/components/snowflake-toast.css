@@ -16,33 +16,41 @@
 }
 
 .snowflake-toast-header {
+    color: var(--theme-color-text);
+
+    font-size: smaller;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     gap: 6px;
     padding: 6px 8px;
-    font-size: smaller;
-    color: var(--theme-color-text);
 }
 
 .snowflake-toast-actions {
     display: flex;
     align-items: center;
+
     gap: 2px;
     flex-shrink: 0;
 }
 
 .snowflake-toast-minimize,
 .snowflake-toast-close {
+    color: var(--theme-color-text);
+    background: none;
+
+    border: none;
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
+
     width: 20px;
     height: 20px;
+
     padding: 0;
-    color: var(--theme-color-text);
-    background: none;
-    border: none;
     flex-shrink: 0;
 }
 .snowflake-toast-minimize, .snowflake-toast-minimize *,
@@ -67,11 +75,11 @@
 }
 
 .snowflake-toast iframe {
+    border: none;
     display: block;
     width: 320px;
     height: 262px;
     max-width: 100%;
-    border: none;
 }
 .snowflake-toast.is-minimized iframe {
     height: 0;
