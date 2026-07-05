@@ -4,13 +4,26 @@ from pathlib import Path
 from .models import TimingManager
 from .constants import Directories
 
-def resolve_file(path: str) -> Path | None:
-    full_path = Directories.public.joinpath(path.lstrip("/")).resolve()
-    if not full_path.is_relative_to(Directories.public):
-        raise PermissionError()
-    return full_path if full_path.is_file() else None
+def resolve_file(path: str, *, timings: TimingManager | None = None) -> Path | None:
+    if timings:
+        timings.start("resolve", "Resolve File")
 
-def resolve_page(path: str, markdown_mode: bool = False, timings: TimingManager | None = None) -> str | None:
+    full_path = Directories.public.joinpath(path.lstrip("/")).resolve()
+
+    if not full_path.is_relative_to(Directories.public):
+        if timings:
+            timings.stop("resolve")
+        raise PermissionError()
+
+    if not full_path.is_file():
+        full_path = None
+
+    if timings:
+        timings.stop("resolve")
+
+    return full_path
+
+def resolve_page(path: str, markdown_mode: bool = False, *, timings: TimingManager | None = None) -> str | None:
     if timings:
         timings.start("resolve", "Resolve Page")
 
@@ -33,7 +46,7 @@ def resolve_page(path: str, markdown_mode: bool = False, timings: TimingManager 
         candidates = template_candidates + markdown_candidates
 
     for candidate in candidates:
-        if file := resolve_file(candidate):
+        if file := resolve_file(candidate, timings=timings):
             if timings:
                 timings.stop("resolve")
             return str(file.relative_to(Directories.public))
@@ -43,15 +56,12 @@ def resolve_page(path: str, markdown_mode: bool = False, timings: TimingManager 
 
     return None
 
-def resolve_redirects(path: str, timings: TimingManager | None = None) -> str | None:
+def resolve_redirects(path: str, *, max_retry: int = 10, timings: TimingManager | None = None) -> str | None:
     if timings:
         timings.start("resolve", "Resolve Redirects")
 
-    if file := resolve_file("redirects.json"):
-        with file.open("r", encoding="utf-8") as f:
-            redirects = json.load(f)
-
-        max_retry = 10
+    if file := resolve_file("redirects.json", timings=timings):
+        redirects = json.loads(file.read_text())
 
         current = path.strip("/")
         visited = set()

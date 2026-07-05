@@ -61,7 +61,7 @@ async def thumbnail(request: Request, template: str) -> Response:
     description = query_params.get("description", "No description.")
 
     try:
-        png = render_thumbnail_png(path=path, title=title, description=description, template=template)
+        png = render_thumbnail_png(path, title, description, template=template, timings=request.scope["timings"])
         return Response(body=png, headers=Headers([("Content-Type", ["image/png"])]))
     except FileNotFoundError:
         return render_error_page(request=request, status_code=404, message="サムネイルの生成に必要なテンプレートが見つかりません。", joke_message="はにゃ？")
@@ -94,7 +94,7 @@ async def merge_css(request: Request) -> Response:
 
     for name in (n.strip() for n in path_param.split(",")):
         try:
-            if file := resolve_file(f"assets/css/{name}.css"):
+            if file := resolve_file(f"assets/css/{name}.css", timings=request.scope["timings"]):
                 content = file.read_text(encoding="utf-8")
             else:
                 return render_error_page(request=request, status_code=404, message=f"ファイルが見つかりません: {name}.css")
@@ -133,7 +133,7 @@ async def merge_js(request: Request) -> Response:
     contents: list[str] = []
     for name in (n.strip() for n in path_param.split(",")):
         try:
-            if file := resolve_file(f"assets/js/{name}.js"):
+            if file := resolve_file(f"assets/js/{name}.js", timings=request.scope["timings"]):
                 contents.append(file.read_text(encoding="utf-8"))
             else:
                 return render_error_page(request=request, status_code=404, message=f"ファイルが見つかりません: {name}.js")

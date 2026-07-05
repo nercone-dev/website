@@ -2,6 +2,7 @@ import ipaddress
 from fourword.lib import FourWord
 
 from aki import Request, Response, Headers, PlainTextResponse
+from aki.models import Scope
 from momiji import CommaHeader
 
 from .logger import log_access
@@ -9,20 +10,17 @@ from .models import CCManager, PPManager, CSPManager, TimingManager, NetworkMana
 from .renderer import render_error_page
 from .constants import Startup, Hostnames, Repository, Ports
 
-def normalize_path(path: str):
-    return path.rstrip("/") if path != "/" and path.endswith("/") else path
-
-def clone_request(request: Request, new_target: str) -> Request:
+def clone_request(request: Request, *, method: str | None = None, target: str | None = None, client: tuple | None = None, scheme: str | None = None, secure: bool | None = None, protocol: str | None = None, headers: Headers | None = None, body: bytes | None = None, scope: Scope | None = None) -> Request:
     return Request(
-        method=request.method,
-        target=new_target,
-        client=request.client,
-        scheme=request.scheme,
-        secure=request.secure,
-        protocol=request.protocol,
-        headers=request.headers,
-        body=request.body,
-        scope=request.scope
+        method=method or request.method,
+        target=target or request.target,
+        client=client or request.client,
+        scheme=scheme or request.scheme,
+        secure=secure or request.secure,
+        protocol=protocol or request.protocol,
+        headers=headers or request.headers,
+        body=body or request.body,
+        scope=scope or request.scope
     )
 
 async def middleware(request: Request, next_handler):
@@ -51,27 +49,27 @@ async def middleware(request: Request, next_handler):
     if not request.scope["network"].trusted and not any([hostname == candidate or hostname.endswith("." + candidate) for candidate in Hostnames.public]):
         return await finalize(request, PlainTextResponse("許可されていないホスト名でのアクセスです。", status_code=403))
 
-    if len(request.target) > 256:
+    if len(request.target) > 512:
         return await finalize(request, render_error_page(request, status_code=414))
 
     if request.method == "OPTIONS":
         return await finalize(request, Response(status_code=204, headers=Headers([])))
 
-    original_path = normalize_path(request.url.path)
+    original_path = request.url.path.rstrip("/")
     query_suffix = f"?{request.url.query}" if request.url.query else ""
 
     if subdomain in ("", "www"):
-        dispatch_request = clone_request(request, original_path + query_suffix)
+        dispatch_request = clone_request(request, target=original_path + query_suffix)
 
         request.scope["timings"].start("app", "App Total")
         response = await next_handler(dispatch_request)
         request.scope["timings"].stop("app")
 
     else:
-        subdomain_path = normalize_path(f"/{'/'.join(subdomain.split('.')[::-1])}{original_path}")
+        subdomain_path = f"/{'/'.join(subdomain.split('.')[::-1])}{original_path.rstrip('/')}"
 
         request.scope["timings"].start("app", "App Total")
-        response = await next_handler(clone_request(request, subdomain_path + query_suffix))
+        response = await next_handler(clone_request(request, target=subdomain_path + query_suffix))
         request.scope["timings"].stop("app")
 
         if 400 <= response.status_code < 500:
@@ -84,7 +82,7 @@ async def middleware(request: Request, next_handler):
                     request.scope["csp"].append(key, f"localhost:{Ports.tcp}")
 
             request.scope["timings"].start("app-retry", "App Total (Retry)")
-            response = await next_handler(clone_request(request, original_path + query_suffix))
+            response = await next_handler(clone_request(request, target=original_path + query_suffix))
             request.scope["timings"].stop("app-retry")
 
     return await finalize(request, response)

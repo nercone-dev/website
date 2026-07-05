@@ -13,12 +13,12 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 from markitdown import MarkItDown, StreamInfo
 
-from aki import Request, Response, Headers, PlainTextResponse, HTMLResponse, FileResponse, RedirectResponse
+from aki import Request, Response, Headers, HTMLResponse, FileResponse, RedirectResponse
 
 from .models import TimingManager
 from .resolver import resolve_file, resolve_page, resolve_redirects
 from .databases import AccessCounter
-from .constants import Directories, Repository
+from .constants import Directories, Files, Repository
 
 templates = jinja2.Environment(loader=jinja2.FileSystemLoader(Directories.public), autoescape=False)
 
@@ -53,10 +53,10 @@ def init_context(context: dict[str, Any], request: Request):
     context["this_year"] = datetime.now(ZoneInfo("Asia/Tokyo")).year
     context["this_year_in_heisei"] = datetime.now(ZoneInfo("Asia/Tokyo")).year - 1988
 
-    if file := resolve_file("quotes.txt"):
+    if file := resolve_file("quotes.txt", timings=request.scope["timings"]):
+        quotes = file.read_text().strip().split("\n")
+
         daily_seed = str(datetime.now(timezone.utc).date())
-        with file.open("r") as f:
-            quotes = f.read().strip().split("\n")
         daily_quote = random.Random(daily_seed).choice(quotes)
     else:
         daily_quote = "GReeeeN KA-RA-DA"
@@ -68,7 +68,7 @@ def render_page(page: str, path: str, request: Request, count: bool = True, rend
     if markdown_mode is None:
         markdown_mode = any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), request.headers.get("user-agent", "").lower().startswith("curl")])
 
-    if filepath := resolve_file(page):
+    if filepath := resolve_file(page, timings=request.scope["timings"]):
         with filepath.open("r") as f:
             source = f.read()
 
@@ -159,10 +159,10 @@ def default_response(path: str, request: Request, status_code: int = 200, count:
         if url := resolve_redirects(path, timings=request.scope["timings"]):
             response = RedirectResponse(url, status_code=status_code if 300 <= status_code < 400 else 307)
 
-        elif page := resolve_page(path, markdown_mode=markdown_mode, timings=request.scope["timings"]):
+        elif page := resolve_page(path, markdown_mode, timings=request.scope["timings"]):
             response = render_page(page, path=path, request=request, count=count, render=render, status_code=status_code, markdown_mode=markdown_mode, context=context)
 
-        elif file := resolve_file(path):
+        elif file := resolve_file(path, timings=request.scope["timings"]):
             response = FileResponse(file, status_code=status_code)
 
         else:
@@ -224,47 +224,34 @@ def render_error_page(request: Request, status_code: int = 500, status_name: str
             "joke_message": joke_message or error_messages.get(status_code, {}).get("joke", "あんのーん")
         })
 
-thumbnail_font_dir = Directories.public.joinpath("assets", "fonts")
-thumbnail_font_files = [
-    # Nercone Sans JP
-    str(thumbnail_font_dir / "NerconeSansJP-Regular.ttf"),
-    str(thumbnail_font_dir / "NerconeSansJP-Italic.ttf"),
-    str(thumbnail_font_dir / "NerconeSansJP-Bold.ttf"),
-    str(thumbnail_font_dir / "NerconeSansJP-BoldItalic.ttf"),
-    # Nercone Sans SC
-    str(thumbnail_font_dir / "NerconeSansSC-Regular.ttf"),
-    str(thumbnail_font_dir / "NerconeSansSC-Italic.ttf"),
-    str(thumbnail_font_dir / "NerconeSansSC-Bold.ttf"),
-    str(thumbnail_font_dir / "NerconeSansSC-BoldItalic.ttf"),
-    # Nercone Sans TC
-    str(thumbnail_font_dir / "NerconeSansTC-Regular.ttf"),
-    str(thumbnail_font_dir / "NerconeSansTC-Italic.ttf"),
-    str(thumbnail_font_dir / "NerconeSansTC-Bold.ttf"),
-    str(thumbnail_font_dir / "NerconeSansTC-BoldItalic.ttf"),
-    # Nercone Sans KR
-    str(thumbnail_font_dir / "NerconeSansKR-Regular.ttf"),
-    str(thumbnail_font_dir / "NerconeSansKR-Italic.ttf"),
-    str(thumbnail_font_dir / "NerconeSansKR-Bold.ttf"),
-    str(thumbnail_font_dir / "NerconeSansKR-BoldItalic.ttf"),
-    # Nercone Mono JP
-    str(thumbnail_font_dir / "NerconeMonoJP-Regular.ttf"),
-    str(thumbnail_font_dir / "NerconeMonoJP-Italic.ttf"),
-    str(thumbnail_font_dir / "NerconeMonoJP-Bold.ttf"),
-    str(thumbnail_font_dir / "NerconeMonoJP-BoldItalic.ttf")
-]
+def render_thumbnail_svg(path: str = "/", title: str = "Untitled Page", description: str = "No description.", *, template: str = "normal", timings: TimingManager | None = None) -> str:
+    if file := resolve_file(f"/assets/images/thumbnail/template/{template}.svg", timings=timings):
+        if timings:
+            timings.start("render", "Render Thumbnail SVG")
 
-def render_thumbnail_svg(path: str = "/", title: str = "Untitled Page", description: str = "No description.", template: str = "normal") -> str:
-    if file := resolve_file(f"/assets/images/thumbnail/template/{template}.svg"):
         parts = [p for p in path.strip("/").split("/") if p]
         svg = file.read_text(encoding="utf-8")
         svg = svg.replace("__PATH__", escape("nercone.dev/" + "/".join(parts) if parts else "nercone.dev"))
         svg = svg.replace("__TITLE__", escape(title))
         svg = svg.replace("__DESCRIPTION__", escape(description))
+
+        if timings:
+            timings.stop("render")
+
         return svg
+
     else:
         raise FileNotFoundError()
 
-def render_thumbnail_png(path: str = "/", title: str = "Untitled Page", description: str = "No description.", template: str = "normal") -> bytes:
-    svg = render_thumbnail_svg(path=path, title=title, description=description, template=template)
-    png = resvg_py.svg_to_bytes(svg, font_files=thumbnail_font_files, width=1280, height=640)
+def render_thumbnail_png(path: str = "/", title: str = "Untitled Page", description: str = "No description.", *, width=1280, height=640, template: str = "normal", timings: TimingManager | None = None) -> bytes:
+    svg = render_thumbnail_svg(path, title, description, template=template, timings=timings)
+
+    if timings:
+        timings.start("render", "Render Thumbnail PNG")
+
+    png = resvg_py.svg_to_bytes(svg, font_files=[str(file.resolve()) for file in Files.Fonts.ttf], width=1280, height=640)
+
+    if timings:
+        timings.stop("render")
+
     return png

@@ -20,6 +20,11 @@ class Files:
     mime_types = Directories.databases.joinpath("mime.types")
     access_counter = Directories.databases.joinpath("access_counter.txt")
 
+    class Fonts:
+        ttf   = list(Directories.public.joinpath("assets", "fonts").glob("*.ttf"))
+        woff2 = list(Directories.public.joinpath("assets", "fonts").glob("*.woff2"))
+        all   = ttf + woff2
+
     class Logs:
         main = Directories.logs.joinpath("main.log")
         error = Directories.logs.joinpath("error.log")
