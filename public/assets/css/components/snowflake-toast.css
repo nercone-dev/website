@@ -28,6 +28,10 @@
     padding: 6px;
 }
 
+.snowflake-toast-link {
+    cursor: pointer;
+}
+
 .snowflake-toast-actions {
     display: flex;
     align-items: center;

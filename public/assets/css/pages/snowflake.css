@@ -1,0 +1,16 @@
+body, header {
+    background: var(--theme-color-background-snowflake);
+}
+
+#snowflake-toast {
+    border: 1px solid var(--theme-color-border-header);
+    top: 50%;
+    bottom: auto;
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, -50%);
+}
+
+#snowflake-toast .snowflake-toast-header {
+    display: none;
+}
