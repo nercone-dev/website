@@ -1,0 +1,54 @@
+.snowflake-toast {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 1000;
+    width: 320px;
+    max-width: calc(100vw - 32px);
+    background-color: var(--theme-color-background);
+    border: 1px solid var(--theme-color-border-dropdown);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-black) 25%, transparent);
+}
+.snowflake-toast.is-hidden {
+    display: none;
+}
+
+.snowflake-toast-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 6px 8px;
+    font-size: smaller;
+    color: var(--theme-color-text);
+    border-bottom: 1px solid var(--theme-color-border-dropdown);
+}
+
+.snowflake-toast-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    color: var(--theme-color-text);
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.snowflake-toast-close:hover {
+    color: var(--theme-color-stark);
+}
+.snowflake-toast-close svg {
+    width: 14px;
+    height: 14px;
+}
+
+.snowflake-toast iframe {
+    display: block;
+    width: 320px;
+    height: 240px;
+    max-width: 100%;
+    border: none;
+}

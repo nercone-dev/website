@@ -169,6 +169,8 @@
         document.addEventListener('touchmove',  () => { lastTouchTime = Date.now(); hideCursor(); }, { passive: true, signal: sig });
         document.addEventListener('touchend',   () => { lastTouchTime = Date.now(); },               { passive: true, signal: sig });
 
+        document.addEventListener('mouseover', (e) => { if (e.target.tagName === 'IFRAME') hideCursor(); }, { signal: sig });
+
         document.addEventListener('mousemove', (e) => {
             if (isSyntheticMouse()) return;
             if (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) return;

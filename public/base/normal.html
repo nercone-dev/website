@@ -56,6 +56,18 @@
                 <polyline points="872 572.75 152 332 152 692 512 692 872 332 872 692 684.5 692" fill="none" stroke="currentColor" stroke-width="48" stroke-miterlimit="10"/>
             </svg>
         </div>
+        <div id="snowflake-toast" class="snowflake-toast">
+            <div class="snowflake-toast-header">
+                <span>Snowflake</span>
+                <button type="button" class="snowflake-toast-close" aria-label="閉じる">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <iframe src="https://snowflake.torproject.org/embed.html" width="320" height="240" frameborder="0" scrolling="no"></iframe>
+        </div>
         {% block header_outer %}
         <header class="flex">
             <div class="flex-1 flex">
@@ -80,8 +92,8 @@
         <main>{% block main %}{% endblock %}</main>
         {% endblock %}
         <!-- Stylesheets / Scripts -->
-        <script src="https://assets.nercone.dev/js/merge/?path=cursor,class-prefix,components/dropdown" defer></script>
-        <link rel="stylesheet" href="https://assets.nercone.dev/css/merge/?path=fonts,cursor,layout,miscellaneous,components/button,components/dropdown">
+        <script src="https://assets.nercone.dev/js/merge/?path=cursor,class-prefix,components/dropdown,components/snowflake-toast" defer></script>
+        <link rel="stylesheet" href="https://assets.nercone.dev/css/merge/?path=fonts,cursor,layout,miscellaneous,components/button,components/dropdown,components/snowflake-toast">
         <noscript><link rel="stylesheet" href="https://assets.nercone.dev/css/noscript.css"></noscript>
         {% block extra_imports %}{% endblock %}
     </body>

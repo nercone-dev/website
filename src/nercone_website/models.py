@@ -59,6 +59,7 @@ class CSPManager:
             "img-src": ["assets.nercone.dev", "t3tra.dev", "drsb.f5.si"],
             "manifest-src": ["nercone.dev"],
             "connect-src": ["'self'"],
+            "frame-src": ["snowflake.torproject.org", "embed-snowflake.torproject.org"],
             "frame-ancestors": ["'self'"],
             "base-uri": ["'self'"],
             "form-action": ["'self'"],

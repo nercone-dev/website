@@ -144,7 +144,6 @@ async def finalize(request: Request, response: Response) -> Response:
 
     if "text/html" in content_type:
         set_header("Cross-Origin-Opener-Policy", "same-origin", override=False)
-        set_header("Cross-Origin-Embedder-Policy", "credentialless", override=False)
 
     if content_type.startswith(("text/css", "text/javascript", "application/javascript", "font/", "image/")):
         set_header("Cross-Origin-Resource-Policy", "cross-origin", override=False)

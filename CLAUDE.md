@@ -262,7 +262,7 @@ HTTP→HTTPSのリダイレクトやTLS証明書の扱いはこのミドルウ�
 - コンテンツ最小化 (`minify`スパン): `text/html` -> `minify_html`(`minify_js`/`minify_css`有効, コメント保持) / `text/css` -> `rcssmin.cssmin` / `text/javascript`,`application/javascript` -> `rjsmin.jsmin` / `text/svg` -> `scour`(ID短縮/コメント除去)。各変換関数は`functools.lru_cache`でキャッシュされる。
 - レスポンス圧縮 (`compress`スパン): `scope["website"]["compression"]`が`True`かつボディが空でない場合のみ実行。`Accept-Encoding`に応じて zstd(`zstandard`, level=3) / brotli(`brotlicffi`, quality=4) / gzip(level=6) / deflate(level=6) の優先順で圧縮しキャッシュ。`Content-Encoding`と`Vary: Accept-Encoding`を付与。フロントマター`compression: false`で個別ページから無効化可能。
 - ETag計算 (`etag`スパン): `xxhash.xxh3_128`でETagを計算(`lru_cache`でキャッシュ)し、`If-None-Match`と一致すれば304を返す
-- レスポンスヘッダー付与: `Content-Length`/`ETag`/`Server`/`X-Powered-By`/`X-Request-Id`/`Link`(sitemap/robots)/`X-Content-Type-Options`/`Reporting-Endpoints`/`Cache-Control`(font=604800s、css/js=43200s、その他はno-cache、`CCManager`側で設定済みなら優先)/`Referrer-Policy`/`Permissions-Policy`/`Content-Security-Policy`/`X-Frame-Options`/`Cross-Origin-Opener-Policy`・`Cross-Origin-Embedder-Policy`(HTMLのみ)/`Cross-Origin-Resource-Policy`/`Access-Control-*`(静的アセット系は`*`許可、それ以外は`Hostnames.all`に一致するOriginのみ許可)
+- レスポンスヘッダー付与: `Content-Length`/`ETag`/`Server`/`X-Powered-By`/`X-Request-Id`/`Link`(sitemap/robots)/`X-Content-Type-Options`/`Reporting-Endpoints`/`Cache-Control`(font=604800s、css/js=43200s、その他はno-cache、`CCManager`側で設定済みなら優先)/`Referrer-Policy`/`Permissions-Policy`/`Content-Security-Policy`/`X-Frame-Options`/`Cross-Origin-Opener-Policy`(HTMLのみ)/`Cross-Origin-Resource-Policy`/`Access-Control-*`(静的アセット系は`*`許可、それ以外は`Hostnames.all`に一致するOriginのみ許可)
 - `Server-Timing` を最後に付与 (`stop("total")` の後)
 - `log_access()` でアクセスログを記録 (`scope["website"]["logged"]`で二重記録を防止)
 
