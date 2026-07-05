@@ -31,7 +31,6 @@
     color: var(--theme-color-text);
     background: none;
     border: none;
-    cursor: pointer;
     flex-shrink: 0;
 }
 .snowflake-toast-close:hover {
@@ -40,6 +39,7 @@
 .snowflake-toast-close svg {
     width: 16px;
     height: 16px;
+    cursor: pointer;
 }
 
 .snowflake-toast iframe {
