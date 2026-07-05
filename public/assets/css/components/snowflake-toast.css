@@ -52,3 +52,11 @@
     max-width: 100%;
     border: none;
 }
+
+@media (max-width: 512px) {
+    .snowflake-toast {
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
