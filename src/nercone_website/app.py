@@ -6,8 +6,10 @@ from .routes import add_report_route
 from .resolver import resolve_file
 from .renderer import default_response, render_error_page, render_thumbnail_png
 from .constants import Repository
-from .databases import AccessCounter
+from .databases import MimeTypes, AccessCounter
 from .middleware import middleware
+
+MimeTypes.load()
 
 app = Aki()
 app.add_middleware(middleware)
