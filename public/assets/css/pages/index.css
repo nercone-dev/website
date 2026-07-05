@@ -24,8 +24,8 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    text-box: trim-both cap alphabetic;
 
+    text-box: trim-both cap alphabetic;
 }
 
 @media (max-width: 512px) {
