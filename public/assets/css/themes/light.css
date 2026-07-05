@@ -26,4 +26,6 @@
 
     --theme-color-background-cursor: color-mix(in srgb, var(--color-black) 25%, transparent);
     --theme-color-background-cursor-on-link: color-mix(in srgb, var(--color-black) 12.5%, transparent);
+
+    --theme-color-background-snowflake: #f9f9fa;
 }
