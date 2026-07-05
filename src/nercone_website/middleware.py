@@ -109,8 +109,6 @@ async def finalize(request: Request, response: Response) -> Response:
     set_header("Server", f"nercone.dev ({Repository.version})")
     set_header("X-Powered-By", "nercone.dev")
 
-    set_header("X-Request-Id", request.scope["id"].text)
-
     set_header("Link", "<https://nercone.dev/sitemap.xml>; rel=\"sitemap\", <https://nercone.dev/robots.txt>; rel=\"robots\"")
 
     # Proxy
@@ -166,6 +164,8 @@ async def finalize(request: Request, response: Response) -> Response:
                 set_header("Access-Control-Max-Age", "86400", override=False)
 
     # Debug
+    set_header("X-Request-Id", request.scope["id"].text)
+
     request.scope["timings"].stop("total")
     set_header("Server-Timing", request.scope["timings"].header)
 
