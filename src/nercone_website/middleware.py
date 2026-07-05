@@ -112,7 +112,9 @@ async def finalize(request: Request, response: Response) -> Response:
     set_header("X-Content-Type-Options", "nosniff")
 
     # Cache
-    if not request.scope["cc"].initial:
+    if Startup.dev:
+        set_header("Cache-Control", "no-store")
+    elif not request.scope["cc"].initial:
         set_header("Cache-Control", request.scope["cc"].header)
     elif content_type.startswith("font/"):
         set_header("Cache-Control", "max-age=604800")

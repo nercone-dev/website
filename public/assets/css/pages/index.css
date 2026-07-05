@@ -4,26 +4,35 @@ main {
     display: flex;
 }
 
-.inner {
+.outer {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+.inner {
+    flex-direction: column;
+}
+
 #big-text {
     font-size: 64pt;
-
     margin: 0;
-    margin-top: 0px;
-    margin-bottom: 0px;
-
-    padding-top: 0px;
-    padding-bottom: 0px;
 
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+#daily-quote {
+    font-size: 12pt;
+}
+
+#big-text, #daily-quote {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 
     text-box: trim-both cap alphabetic;
 }
