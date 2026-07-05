@@ -95,31 +95,17 @@ async def finalize(request: Request, response: Response) -> Response:
             response.headers[key.title()] = value
 
     def add_vary(*headers: str, condition: bool = True):
-        vary = CommaHeader(response.headers.get("Vary", ""))
-        for header in headers:
-            vary.append(header)
-        set_header("Vary", vary.build())
+        if condition:
+            vary = CommaHeader(response.headers.get("Vary", ""))
+            for header in headers:
+                vary.append(header)
+            set_header("Vary", vary.build())
 
     content_type = response.headers.get("content-type", "")
 
     # Development
     if content_type.startswith(("text/html", "text/css", "text/javascript", "application/javascript", "text/svg")) and Startup.dev and isinstance(response.body, bytes):
         response.body = response.body.replace(b"https://assets.nercone.dev/", f"http://localhost:{Ports.tcp}/assets/".encode())
-
-    # Minification
-    request.scope["timings"].start("minify", "Minify")
-    response.minify()
-    request.scope["timings"].stop("minify")
-
-    # ETag / 304 Not Modified
-    request.scope["timings"].start("etag", "ETag")
-    etag = response.etag
-    request.scope["timings"].stop("etag")
-
-    if request.headers.get("if-none-match") == str(etag):
-        response = Response(status_code=304, headers=Headers([]))
-
-    set_header("ETag", str(etag))
 
     # Informations
     set_header("Server", f"nercone.dev ({Repository.version})")
