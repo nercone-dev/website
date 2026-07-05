@@ -13,7 +13,7 @@
 }
 
 .small-icon {
-    width: 12pt;
-    height: 12pt;
+    width: var(--font-size);
+    height: var(--font-size);
     display: block;
 }
