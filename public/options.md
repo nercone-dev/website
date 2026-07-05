@@ -19,7 +19,15 @@ title: nercone.devの設定
     <div class="flex">
         <p>テーマ</p>
         <div class="dropdown">
-            <button class="dropdown-item">{{ options.get('dev.nercone.options.appearance.theme') }}</button>
+            <button class="dropdown-item">
+            {% if options.get('dev.nercone.options.appearance.theme') == 'system' %}
+                システムと同期
+            {% elif options.get('dev.nercone.options.appearance.theme') == 'dark' %}
+                ダーク
+            {% elif options.get('dev.nercone.options.appearance.theme') == 'light' %}
+                ライト
+            {% endif %}
+            </button>
             <div class="dropdown-menu">
                 <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'system' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=system">システムと同期</a>
                 <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'dark' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=dark">ダーク</a>
