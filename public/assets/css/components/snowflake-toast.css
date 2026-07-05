@@ -94,8 +94,11 @@
 }
 
 @media (prefers-color-scheme: light) {
+    :root {
+        --color-scheme-background-snowflake: #f9f9fa;
+    }
     .snowflake-toast {
-        background: #f9f9fa;
+        background: var(--color-scheme-background-snowflake);
     }
     .snowflake-toast * {
         color: #000000;
@@ -103,8 +106,11 @@
 }
 
 @media (prefers-color-scheme: dark) {
+    :root {
+        --color-scheme-background-snowflake: #38383d;
+    }
     .snowflake-toast {
-        background: #38383d;
+        background: var(--color-scheme-background-snowflake);
     }
     .snowflake-toast * {
         color: #ffffff;

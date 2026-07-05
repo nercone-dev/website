@@ -1,5 +1,5 @@
 body, header {
-    background: var(--theme-color-background-snowflake);
+    background: var(--color-scheme-background-snowflake);
 }
 
 #snowflake-toast {
