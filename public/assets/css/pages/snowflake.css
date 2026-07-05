@@ -3,7 +3,6 @@ body, header {
 }
 
 #snowflake-toast {
-    border: 1px solid var(--theme-color-border-header);
     top: 50%;
     bottom: auto;
     left: 50%;

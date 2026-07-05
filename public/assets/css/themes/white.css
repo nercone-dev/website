@@ -7,8 +7,8 @@
     --theme-color-text-headline: var(--color-black);
     --theme-color-text-headline-underline: color-mix(in srgb, var(--color-black) 10%, transparent);
 
-    --theme-color-background: #f9f9fa;
-    --theme-color-background-alt: #d7d7db;
+    --theme-color-background: var(--color-white);
+    --theme-color-background-alt: var(--color-bright-light-grey-alt);
 
     --theme-color-border: color-mix(in srgb, var(--color-black) 10%, transparent);
     --theme-color-border-header: color-mix(in srgb, var(--color-black) 10%, transparent);
@@ -19,8 +19,8 @@
     --theme-color-border-table-top: var(--color-bright-light-grey);
     --theme-color-border-table-row: var(--color-bright-light-grey);
 
-    --theme-color-background-dropdown: #d7d7db;
-    --theme-color-background-dropdown-active: #d7d7db;
+    --theme-color-background-dropdown: var(--color-bright-light-grey-alt);
+    --theme-color-background-dropdown-active: var(--color-bright-light-grey-alt);
 
     --theme-color-background-cursor: color-mix(in srgb, var(--color-black) 25%, transparent);
     --theme-color-background-cursor-on-link: color-mix(in srgb, var(--color-black) 12.5%, transparent);

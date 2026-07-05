@@ -24,7 +24,7 @@
     background-color: color-mix(in srgb, var(--theme-color-stark) 16%, transparent);
 }
 .button.is-active {
-    background-color: var(--theme-color-background-pre);
+    background-color: var(--theme-color-background-alt);
     color: var(--theme-color-stark);
     border-color: var(--theme-color-text-alt);
     font-weight: 600;

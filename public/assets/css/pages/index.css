@@ -1,5 +1,4 @@
 main {
-    background: linear-gradient(to bottom, var(--theme-color-background), color-mix(in srgb, var(--theme-color-background) 75%, var(--color-blue)));
     flex: 1;
     display: flex;
 }

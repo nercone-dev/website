@@ -2,12 +2,7 @@
 title: nercone.devの設定
 ---
 
-<h1>nercone.dev の設定</h1>
-
-ここでnercone.devの動作を変更できます。
-これらの設定はCookieを使用してブラウザ上に保存されます。
-
-<div class="alert alert-warning">
+<div class="block block-warning">
     <b>この機能はテスト段階です。自己責任でご使用ください。</b>
     <ul>
         <li>この機能を使用すると、nercone.devの一部または全ての機能が正常に動作しなくなる場合があります。</li>
@@ -15,6 +10,11 @@ title: nercone.devの設定
         <li>一部の問題はこのサイトのCookieやキャッシュなどをブラウザから削除することで解決できる場合があります。</li>
     </ul>
 </div>
+
+<h1>nercone.dev の設定</h1>
+
+<p>ここでnercone.devの動作を変更できます。</p>
+<p>これらの設定はCookieを使用してブラウザ上に保存されます。</p>
 
 <section id="appearance">
     <h2>外観</h2>
@@ -24,16 +24,34 @@ title: nercone.devの設定
             <button class="dropdown-item">
             {% if options.get('dev.nercone.options.appearance.theme') == 'system' %}
                 システムと同期
+            {% elif options.get('dev.nercone.options.appearance.theme') == 'system-grey-on-dark' %}
+                システムと同期 (ダーク時グレー)
+            {% elif options.get('dev.nercone.options.appearance.theme') == 'system-grey-on-light' %}
+                システムと同期 (ライト時グレー)
+            {% elif options.get('dev.nercone.options.appearance.theme') == 'system-stark' %}
+                システムと同期 (高コントラスト)
+            {% elif options.get('dev.nercone.options.appearance.theme') == 'grey' %}
+                グレー
             {% elif options.get('dev.nercone.options.appearance.theme') == 'dark' %}
                 ダーク
+            {% elif options.get('dev.nercone.options.appearance.theme') == 'black' %}
+                ブラック
             {% elif options.get('dev.nercone.options.appearance.theme') == 'light' %}
                 ライト
+            {% elif options.get('dev.nercone.options.appearance.theme') == 'white' %}
+                ホワイト
             {% endif %}
             </button>
             <div class="dropdown-menu">
                 <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'system' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=system">システムと同期</a>
+                <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'system-grey-on-dark' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=system-grey-on-dark">システムと同期 (ダーク時グレー)</a>
+                <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'system-grey-on-light' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=system-grey-on-light">システムと同期 (ライト時グレー)</a>
+                <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'system-stark' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=system-stark">システムと同期 (高コントラスト)</a>
+                <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'grey' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=grey">グレー</a>
                 <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'dark' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=dark">ダーク</a>
+                <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'black' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=black">ブラック</a>
                 <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'light' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=light">ライト</a>
+                <a class="dropdown-item{% if options.get('dev.nercone.options.appearance.theme') == 'white' %} is-active{% endif %}" href="?dev.nercone.options.appearance.theme=white">ホワイト</a>
             </div>
         </div>
     </div>

@@ -1,7 +1,7 @@
 #loading-overlay {
     view-transition-name: none;
 
-    background: linear-gradient(to bottom, var(--theme-color-background), color-mix(in srgb, var(--theme-color-background) 75%, var(--color-blue)));
+    background: var(--theme-color-background);
     backdrop-filter: blur(40px);
 
     opacity: 1;

@@ -1,7 +1,7 @@
 .snowflake-toast {
     view-transition-name: snowflake-toast;
 
-    background-color: var(--theme-color-background-snowflake);
+    border: 1px solid var(--theme-color-border-header);
 
     width: 320px;
     max-width: calc(100vw - 32px);
@@ -16,8 +16,6 @@
 }
 
 .snowflake-toast-header {
-    color: var(--theme-color-text);
-
     font-size: smaller;
 
     display: flex;
@@ -42,7 +40,6 @@
 
 .snowflake-toast-minimize,
 .snowflake-toast-close {
-    color: var(--theme-color-text);
     background: none;
 
     border: none;
@@ -60,10 +57,6 @@
 .snowflake-toast-minimize, .snowflake-toast-minimize *,
 .snowflake-toast-close, .snowflake-toast-close * {
     cursor: pointer;
-}
-.snowflake-toast-minimize:hover,
-.snowflake-toast-close:hover {
-    color: var(--theme-color-stark);
 }
 .snowflake-toast-minimize svg,
 .snowflake-toast-close svg {
@@ -97,5 +90,23 @@
         right: auto;
         left: 50%;
         transform: translateX(-50%);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .snowflake-toast {
+        background: #f9f9fa;
+    }
+    .snowflake-toast * {
+        color: #000000;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .snowflake-toast {
+        background: #38383d;
+    }
+    .snowflake-toast * {
+        color: #ffffff;
     }
 }

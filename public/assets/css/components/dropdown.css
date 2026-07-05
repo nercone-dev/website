@@ -26,7 +26,7 @@
     left: 0;
     min-width: 100%;
     background-color: var(--theme-color-background);
-    border: 1px solid var(--theme-color-border-dropdown);
+    border: 1px solid var(--theme-color-border);
     margin-top: 2px;
     z-index: 100;
 }
@@ -49,10 +49,6 @@
     white-space: nowrap;
     box-sizing: border-box;
     transition: background-color 0.15s, color 0.15s;
-}
-.dropdown-item:hover {
-    background-color: color-mix(in srgb, var(--theme-color-stark) 8%, transparent);
-    color: var(--theme-color-stark);
 }
 .dropdown-item.is-active {
     background-color: var(--theme-color-background-dropdown-active);
