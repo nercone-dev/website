@@ -31,8 +31,10 @@
     color: var(--theme-color-text);
     background: none;
     border: none;
-    cursor: pointer;
     flex-shrink: 0;
+}
+.snowflake-toast-close, .snowflake-toast-close * {
+    cursor: pointer;
 }
 .snowflake-toast-close:hover {
     color: var(--theme-color-stark);
@@ -40,7 +42,6 @@
 .snowflake-toast-close svg {
     width: 16px;
     height: 16px;
-    cursor: pointer;
 }
 
 .snowflake-toast iframe {
