@@ -20,7 +20,6 @@
         if (ac) ac.abort();
         if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
         document.documentElement.style.cursor = '';
-        if (cursor) cursor.classList.remove('on-link', 'on-text');
         currentLinkEl = null;
     };
 
