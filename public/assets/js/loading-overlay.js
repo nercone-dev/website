@@ -10,7 +10,7 @@
     line.style.strokeDasharray = length;
     line.style.strokeDashoffset = length;
 
-    const ease = 'cubic-bezier(0.22, 1, 0.36, 1)';
+    const ease = 'cubic-bezier(0.125,1,0.25,1)';
     const PHASE_IN = 3000;
     const PHASE_WAIT = 1000;
     const PHASE_OUT = 1000;
@@ -44,4 +44,3 @@
         setTimeout(() => overlay.remove(), PHASE_OUT);
     }, PHASE_IN + PHASE_WAIT);
 })();
-
