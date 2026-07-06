@@ -8,7 +8,7 @@
         if (tapCount >= 3) {
             clearTimeout(tapTimer);
             tapCount = 0;
-            typeof window.__navigate === 'function' ? window.__navigate('/qr-code/') : (location.href = '/qr-code/');
+            window.nercone?.navigate ? window.nercone.navigate('/qr-code/') : (location.href = '/qr-code/');
             return;
         }
         clearTimeout(tapTimer);

@@ -1,46 +1,56 @@
 (() => {
-    const overlay = document.getElementById('loading-overlay');
-    if (!overlay) return;
+    class LoadingOverlay {
+        static EASE = 'cubic-bezier(0.125,1,0.25,1)';
+        static PHASE = {
+            in:   3000,
+            wait: 1000,
+            out:  1000
+        };
 
-    const svg = overlay.querySelector('svg');
-    const line = overlay.querySelector('polyline');
-    if (!svg || !line) { overlay.remove(); return; }
+        init() {
+            const overlay = document.getElementById('loading-overlay');
+            if (!overlay) return;
 
-    const length = line.getTotalLength();
-    line.style.strokeDasharray = length;
-    line.style.strokeDashoffset = length;
+            const svg = overlay.querySelector('svg');
+            const line = overlay.querySelector('polyline');
+            if (!svg || !line) { overlay.remove(); return; }
 
-    const ease = 'cubic-bezier(0.125,1,0.25,1)';
-    const PHASE_IN = 3000;
-    const PHASE_WAIT = 1000;
-    const PHASE_OUT = 1000;
-    const opts = (d) => ({ duration: d, easing: ease, fill: 'forwards' });
+            const length = line.getTotalLength();
+            line.style.strokeDasharray = length;
+            line.style.strokeDashoffset = length;
 
-    svg.animate([
-        { opacity: 0, transform: 'scale(1)',   filter: 'blur(20px)' },
-        { opacity: 1, transform: 'scale(0.5)', filter: 'blur(0px)'  }
-    ], opts(PHASE_IN));
-    line.animate([
-        { strokeDashoffset: length },
-        { strokeDashoffset: 0 }
-    ], opts(PHASE_IN));
+            const opts = (d) => ({ duration: d, easing: LoadingOverlay.EASE, fill: 'forwards' });
 
-    setTimeout(() => {
-        svg.animate([
-            { opacity: 1, transform: 'scale(0.5)',  filter: 'blur(0px)'  },
-            { opacity: 0, transform: 'scale(0.75)', filter: 'blur(20px)' }
-        ], opts(PHASE_OUT));
+            svg.animate([
+                { opacity: 0, transform: 'scale(1)',   filter: 'blur(20px)' },
+                { opacity: 1, transform: 'scale(0.5)', filter: 'blur(0px)'  }
+            ], opts(LoadingOverlay.PHASE.in));
+            line.animate([
+                { strokeDashoffset: length },
+                { strokeDashoffset: 0 }
+            ], opts(LoadingOverlay.PHASE.in));
 
-        line.animate([
-            { strokeDashoffset: 0 },
-            { strokeDashoffset: length }
-        ], opts(PHASE_OUT));
+            setTimeout(() => {
+                svg.animate([
+                    { opacity: 1, transform: 'scale(0.5)',  filter: 'blur(0px)'  },
+                    { opacity: 0, transform: 'scale(0.75)', filter: 'blur(20px)' }
+                ], opts(LoadingOverlay.PHASE.out));
 
-        overlay.animate([
-            { opacity: 1, backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)' },
-            { opacity: 0, backdropFilter: 'blur(0px)',  WebkitBackdropFilter: 'blur(0px)'  }
-        ], opts(PHASE_OUT));
+                line.animate([
+                    { strokeDashoffset: 0 },
+                    { strokeDashoffset: length }
+                ], opts(LoadingOverlay.PHASE.out));
 
-        setTimeout(() => overlay.remove(), PHASE_OUT);
-    }, PHASE_IN + PHASE_WAIT);
+                overlay.animate([
+                    { opacity: 1, backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)' },
+                    { opacity: 0, backdropFilter: 'blur(0px)',  WebkitBackdropFilter: 'blur(0px)'  }
+                ], opts(LoadingOverlay.PHASE.out));
+
+                setTimeout(() => overlay.remove(), LoadingOverlay.PHASE.out);
+            }, LoadingOverlay.PHASE.in + LoadingOverlay.PHASE.wait);
+        }
+    }
+
+    const loadingOverlay = new LoadingOverlay();
+    window.nercone.register('loading-overlay', { init: () => loadingOverlay.init() });
 })();

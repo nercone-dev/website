@@ -1,126 +1,108 @@
 (() => {
-    const CONFIG = [
-        { prefix: 'small',  media: '(max-width: 768px)' },
-        { prefix: 'medium', media: '(min-width: 769px) and (max-width: 1080px)' },
-        { prefix: 'large',  media: '(min-width: 1081px)' }
-    ];
+    class ClassPrefix {
+        static CONFIG = [
+            { prefix: 'small',  media: '(max-width: 768px)' },
+            { prefix: 'medium', media: '(min-width: 769px) and (max-width: 1080px)' },
+            { prefix: 'large',  media: '(min-width: 1081px)' }
+        ];
 
-    function buildResolvers(config, onAnyChange) {
-        const resolvers = new Map();
-        const unsubscribers = [];
-
-        config.forEach((entry) => {
-            if (entry.media) {
-                const mq = window.matchMedia(entry.media);
-                resolvers.set(entry.prefix, () => mq.matches);
-                const h = () => onAnyChange();
-                mq.addEventListener('change', h);
-                unsubscribers.push(() => mq.removeEventListener('change', h));
-
-            } else if (entry.attr) {
-                const { selector, name: attrName, value: attrValue } = entry.attr;
-                const target = document.querySelector(selector) || document.documentElement;
-                resolvers.set(entry.prefix, () => target.getAttribute(attrName) === attrValue);
-                const obs = new MutationObserver(() => onAnyChange());
-                obs.observe(target, { attributes: true, attributeFilter: [attrName] });
-                unsubscribers.push(() => obs.disconnect());
-
-            } else if (entry.fn) {
-                resolvers.set(entry.prefix, entry.fn);
-            }
-        });
-
-        return { resolvers, unsubscribers };
-    }
-
-    function buildSelector(prefixes) {
-        return prefixes.map(p => `[class*="${p}:"]`).join(',');
-    }
-
-    function applyToElement(el, resolvers) {
-        if (!(el instanceof Element)) return;
-        for (const cls of el.classList) {
-            const i = cls.indexOf(':');
-            if (i === -1) continue;
-            const prefix = cls.slice(0, i);
-            const resolver = resolvers.get(prefix);
-            if (!resolver) continue;
-            const name = cls.slice(i + 1);
-            if (!name) continue;
-            el.classList.toggle(name, resolver());
-        }
-    }
-
-    let state = null;
-
-    function init() {
-        const config = window.__classPrefixConfig || CONFIG;
-        const prefixes = config.map(e => e.prefix);
-        const selector = buildSelector(prefixes);
-
-        function applyToSubtree(root) {
-            if (root instanceof Element) applyToElement(root, state.resolvers);
-            if (root.querySelectorAll) {
-                root.querySelectorAll(selector).forEach(el => applyToElement(el, state.resolvers));
-            }
+        constructor(config = ClassPrefixManager.CONFIG) {
+            this.config = config;
+            this.prefixes = config.map(e => e.prefix);
+            this.selector = this.prefixes.map(p => `[class*="${p}:"]`).join(',');
+            this.resolvers = new Map();
+            this.unsubscribers = [];
+            this.bodyObserver = null;
         }
 
-        function applyAll() {
-            if (document.body) applyToSubtree(document.body);
-        }
+        buildResolvers() {
+            for (const entry of this.config) {
+                if (entry.media) {
+                    const mq = window.matchMedia(entry.media);
+                    this.resolvers.set(entry.prefix, () => mq.matches);
+                    const h = () => this.applyAll();
+                    mq.addEventListener('change', h);
+                    this.unsubscribers.push(() => mq.removeEventListener('change', h));
 
-        const built = buildResolvers(config, applyAll);
+                } else if (entry.attr) {
+                    const { selector, name: attrName, value: attrValue } = entry.attr;
+                    const target = document.querySelector(selector) || document.documentElement;
+                    this.resolvers.set(entry.prefix, () => target.getAttribute(attrName) === attrValue);
+                    const obs = new MutationObserver(() => this.applyAll());
+                    obs.observe(target, { attributes: true, attributeFilter: [attrName] });
+                    this.unsubscribers.push(() => obs.disconnect());
 
-        const bodyObserver = new MutationObserver((mutations) => {
-            for (const m of mutations) {
-                if (m.type === 'childList') {
-                    for (const node of m.addedNodes) {
-                        applyToSubtree(node);
-                    }
-                } else if (m.type === 'attributes') {
-                    const el = m.target;
-                    const oldSet = new Set((m.oldValue || '').split(/\s+/).filter(Boolean));
-                    let hasNew = false;
-                    for (const cls of el.classList) {
-                        const idx = cls.indexOf(':');
-                        if (idx !== -1 && state.resolvers.has(cls.slice(0, idx)) && !oldSet.has(cls)) {
-                            hasNew = true;
-                            break;
-                        }
-                    }
-                    if (hasNew) applyToElement(el, state.resolvers);
+                } else if (entry.fn) {
+                    this.resolvers.set(entry.prefix, entry.fn);
                 }
             }
-        });
+        }
 
-        bodyObserver.observe(document.body, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-            attributeFilter: ['class'],
-            attributeOldValue: true,
-        });
+        applyToElement(el) {
+            if (!(el instanceof Element)) return;
+            for (const cls of el.classList) {
+                const i = cls.indexOf(':');
+                if (i === -1) continue;
 
-        state = {
-            resolvers: built.resolvers,
-            unsubscribers: built.unsubscribers,
-            bodyObserver,
-            applyAll,
-        };
+                const resolver = this.resolvers.get(cls.slice(0, i));
+                if (!resolver) continue;
 
-        applyAll();
+                const name = cls.slice(i + 1);
+                if (!name) continue;
+
+                el.classList.toggle(name, resolver());
+            }
+        }
+
+        applyToSubtree(root) {
+            if (root instanceof Element) this.applyToElement(root);
+            if (root.querySelectorAll) {
+                root.querySelectorAll(this.selector).forEach(el => this.applyToElement(el));
+            }
+        }
+
+        applyAll() {
+            if (document.body) this.applyToSubtree(document.body);
+        }
+
+        init() {
+            this.buildResolvers();
+
+            this.bodyObserver = new MutationObserver((mutations) => {
+                for (const m of mutations) {
+                    if (m.type === 'childList') {
+                        for (const node of m.addedNodes) this.applyToSubtree(node);
+
+                    } else if (m.type === 'attributes') {
+                        const el = m.target;
+                        const oldSet = new Set((m.oldValue || '').split(/\s+/).filter(Boolean));
+
+                        let hasNew = false;
+                        for (const cls of el.classList) {
+                            const idx = cls.indexOf(':');
+                            if (idx !== -1 && this.resolvers.has(cls.slice(0, idx)) && !oldSet.has(cls)) {
+                                hasNew = true;
+                                break;
+                            }
+                        }
+
+                        if (hasNew) this.applyToElement(el);
+                    }
+                }
+            });
+
+            this.bodyObserver.observe(document.body, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['class'],
+                attributeOldValue: true
+            });
+
+            this.applyAll();
+        }
     }
 
-    function cleanup() {
-        if (!state) return;
-        state.bodyObserver.disconnect();
-        state.unsubscribers.forEach(unsub => unsub());
-        state = null;
-    }
-
-    init();
-
-    window.__classPrefixApply   = () => { if (state) state.applyAll(); };
-    window.__classPrefixCleanup = cleanup;
-    window.__classPrefixReinit  = () => { cleanup(); init(); };
+    const responsive = new ClassPrefix(window.nercone.responsiveConfig || ClassPrefix.CONFIG);
+    window.nercone.register('responsive', { init: () => responsive.init() });
 })();

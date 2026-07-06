@@ -4,12 +4,8 @@
     let abortController = null;
 
     function preloadAssets(newDoc) {
-        const curStyleHrefs = new Set(
-            [...document.querySelectorAll('link[rel="stylesheet"]')].map(l => l.href)
-        );
-        const curScriptSrcs = new Set(
-            [...document.querySelectorAll('script[src]')].map(s => s.src)
-        );
+        const curStyleHrefs = new Set([...document.querySelectorAll('link[rel="stylesheet"]')].map(l => l.href));
+        const curScriptSrcs = new Set([...document.querySelectorAll('script[src]')].map(s => s.src));
 
         const tasks = [];
 
@@ -101,6 +97,7 @@
         abortController = ac;
 
         document.startViewTransition(async () => {
+            // Fetch
             let response;
             try {
                 response = await fetch(url.href, {
@@ -118,21 +115,27 @@
             const html = await response.text();
             const doc = new DOMParser().parseFromString(html, 'text/html');
 
-            if (typeof window.__cursorCleanup === 'function') {
-                window.__cursorCleanup();
-            }
-            window.__sidebarCleanup?.();
+            // Cleanup
+            window.nercone.cleanup();
 
+            // Head
             const deferredScripts = await preloadAssets(doc);
             updateHead(doc);
 
+            // Swap
             for (const tag of ['header', 'main']) {
                 const newEl = doc.querySelector(tag);
                 const curEl = document.querySelector(tag);
-                if (!newEl || !curEl) { location.href = url.href; return; }
+
+                if (!newEl || !curEl) {
+                    location.href = url.href; return;
+                }
+
                 [...curEl.attributes].forEach(a => curEl.removeAttribute(a.name));
                 [...newEl.attributes].forEach(a => curEl.setAttribute(a.name, a.value));
+
                 curEl.innerHTML = newEl.innerHTML;
+
                 curEl.querySelectorAll('script').forEach((old) => {
                     const s = document.createElement('script');
                     [...old.attributes].forEach(a => s.setAttribute(a.name, a.value));
@@ -141,6 +144,7 @@
                 });
             }
 
+            // Deferred scripts
             deferredScripts.forEach((script) => {
                 const s = document.createElement('script');
                 [...script.attributes].forEach(a => s.setAttribute(a.name, a.value));
@@ -149,15 +153,12 @@
 
             if (pushHistory) history.pushState(null, '', response.url);
 
-            if (typeof window.__cursorReinit === 'function') {
-                window.__cursorReinit();
-            }
-            window.__sidebarReinit?.(doc);
-            window.__dropdownReinit?.();
+            // Reinit
+            window.nercone.reinit(doc);
         });
     }
 
-    window.__navigate = (href) => {
+    window.nercone.navigate = (href) => {
         let url;
         try { url = new URL(href, location.href); } catch (_) { location.href = href; return; }
         if (url.origin !== location.origin) { location.href = href; return; }

@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 from markitdown import MarkItDown, StreamInfo
 
-from aki import Request, Response, Headers, HTMLResponse, FileResponse, RedirectResponse
+from aki import Request, Response, HTMLResponse, MarkdownResponse, FileResponse, RedirectResponse
 
 from .models import TimingManager
 from .resolver import resolve_file, resolve_page, resolve_redirects
@@ -110,7 +110,7 @@ def render_page(page: str, path: str, request: Request, count: bool = True, rend
                     soup = BeautifulSoup(content, "html.parser")
                     main = str(soup.find("main")) if soup.find("main") else content
                     content = markitdown.convert(io.BytesIO(main.encode("utf-8")), stream_info=StreamInfo(mimetype="text/html", charset="utf-8")).text_content
-                    response = Response(body=content.encode(), status_code=status_code, headers=Headers([("Content-Type", ["text/markdown"])]))
+                    response = MarkdownResponse(content, status_code=status_code)
                     request.scope["timings"].stop("convert")
 
                 else:
@@ -122,7 +122,7 @@ def render_page(page: str, path: str, request: Request, count: bool = True, rend
 
             elif page.endswith(".md"):
                 if markdown_mode:
-                    response = Response(body=content.encode(), status_code=status_code, headers=Headers([("Content-Type", ["text/markdown"])]))
+                    response = MarkdownResponse(content, status_code=status_code)
 
                 else:
                     request.scope["timings"].start("convert", "Markdown to HTML")
@@ -139,7 +139,7 @@ def render_page(page: str, path: str, request: Request, count: bool = True, rend
             if page.endswith(".html"):
                 response = HTMLResponse(source, status_code=status_code)
             elif page.endswith(".md"):
-                response = Response(body=source.encode(), status_code=status_code, headers=Headers([("Content-Type", ["text/markdown"])]))
+                response = MarkdownResponse(source, status_code=status_code)
 
         if "compression" in front:
             if front["compression"].lower() == "true":
