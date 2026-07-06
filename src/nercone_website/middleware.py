@@ -1,12 +1,13 @@
+import traceback
 import ipaddress
 from fourword.lib import FourWord
 
 from aki import Request, Response, Scope, Headers, CommaHeader, PlainTextResponse
 
-from .logger import log_access
+from .logger import log_access, log_error
 from .models import CCManager, PPManager, CSPManager, TimingManager, NetworkManager, OptionManager
 from .renderer import render_error_page
-from .constants import Startup, Hostnames, Repository, Ports
+from .constants import Startup, Hostnames, Ports
 
 def clone_request(request: Request, *, method: str | None = None, target: str | None = None, client: tuple | None = None, scheme: str | None = None, secure: bool | None = None, protocol: str | None = None, headers: Headers | None = None, body: bytes | None = None, scope: Scope | None = None) -> Request:
     return Request(
@@ -22,68 +23,85 @@ def clone_request(request: Request, *, method: str | None = None, target: str | 
     )
 
 async def middleware(request: Request, next_handler):
-    request.scope.update({
-        "id": FourWord(),
-        "logged": False,
+    try:
+        request.scope.update({
+            "id": FourWord(),
+            "logged": False,
 
-        "cc": CCManager(),
-        "pp": PPManager(),
-        "csp": CSPManager(),
-        "timings": TimingManager(),
-        "network": NetworkManager(address=ipaddress.ip_address(request.client[0]) if request.client and request.client[0] else None, host=request.client[0] if request.client else None, port=request.client[1] if request.client else None),
-        "options": OptionManager(request)
-    })
+            "cc": CCManager(),
+            "pp": PPManager(),
+            "csp": CSPManager(),
+            "timings": TimingManager(),
+            "network": NetworkManager(address=ipaddress.ip_address(request.client[0]) if request.client and request.client[0] else None, host=request.client[0] if request.client else None, port=request.client[1] if request.client else None),
+            "options": OptionManager(request)
+        })
 
-    request.scope["timings"].start("total", "Total")
+        request.scope["timings"].start("total", "Total")
 
-    if Startup.dev:
-        for key in ("script-src", "style-src", "font-src", "img-src"):
-            request.scope["csp"].append(key, f"localhost:{Ports.tcp}")
+        if Startup.dev:
+            for key in ("script-src", "style-src", "font-src", "img-src"):
+                request.scope["csp"].append(key, f"localhost:{Ports.tcp}")
 
-    host = request.headers.get("host", "")
-    hostname = host.split(":")[0].strip()
-    subdomain = next((hostname[:-(len(candidate) + 1)] for candidate in Hostnames.all if hostname.endswith("." + candidate)), "")
+        host = request.headers.get("host", "")
+        hostname = host.split(":")[0].strip()
+        subdomain = next((hostname[:-(len(candidate) + 1)] for candidate in Hostnames.all if hostname.endswith("." + candidate)), "")
 
-    if not request.scope["network"].trusted and not any([hostname == candidate or hostname.endswith("." + candidate) for candidate in Hostnames.public]):
-        return await finalize(request, PlainTextResponse("許可されていないホスト名でのアクセスです。", status_code=403))
+        if not request.scope["network"].trusted and not any([hostname == candidate or hostname.endswith("." + candidate) for candidate in Hostnames.public]):
+            return await finalize(request, PlainTextResponse("許可されていないホスト名でのアクセスです。", status_code=403))
 
-    if len(request.target) > 512:
-        return await finalize(request, render_error_page(request, status_code=414))
+        if len(request.target) > 512:
+            return await finalize(request, render_error_page(request, status_code=414))
 
-    if request.method == "OPTIONS":
-        return await finalize(request, Response(status_code=204, headers=Headers([])))
+        if request.method == "OPTIONS":
+            return await finalize(request, Response(status_code=204, headers=Headers([])))
 
-    original_path = request.url.path.rstrip("/")
-    query_suffix = f"?{request.url.query}" if request.url.query else ""
+        original_path = request.url.path.rstrip("/")
+        query_suffix = f"?{request.url.query}" if request.url.query else ""
 
-    if subdomain in ("", "www"):
-        dispatch_request = clone_request(request, target=original_path + query_suffix)
+        if subdomain in ("", "www"):
+            dispatch_request = clone_request(request, target=original_path + query_suffix)
 
-        request.scope["timings"].start("app", "App Total")
-        response = await next_handler(dispatch_request)
-        request.scope["timings"].stop("app")
+            request.scope["timings"].start("app", "App Total")
+            response = await next_handler(dispatch_request)
+            request.scope["timings"].stop("app")
 
-    else:
-        subdomain_path = f"/{'/'.join(subdomain.split('.')[::-1])}{original_path.rstrip('/')}"
+        else:
+            subdomain_path = f"/{'/'.join(subdomain.split('.')[::-1])}{original_path.rstrip('/')}"
 
-        request.scope["timings"].start("app", "App Total")
-        response = await next_handler(clone_request(request, target=subdomain_path + query_suffix))
-        request.scope["timings"].stop("app")
+            request.scope["timings"].start("app", "App Total")
+            response = await next_handler(clone_request(request, target=subdomain_path + query_suffix))
+            request.scope["timings"].stop("app")
 
-        if 400 <= response.status_code < 500:
-            request.scope["cc"] = CCManager()
-            request.scope["pp"] = PPManager()
-            request.scope["csp"] = CSPManager()
+            if 400 <= response.status_code < 500:
+                request.scope["cc"] = CCManager()
+                request.scope["pp"] = PPManager()
+                request.scope["csp"] = CSPManager()
 
-            if Startup.dev:
-                for key in ("script-src", "style-src", "font-src", "img-src"):
-                    request.scope["csp"].append(key, f"localhost:{Ports.tcp}")
+                if Startup.dev:
+                    for key in ("script-src", "style-src", "font-src", "img-src"):
+                        request.scope["csp"].append(key, f"localhost:{Ports.tcp}")
 
-            request.scope["timings"].start("app-retry", "App Total (Retry)")
-            response = await next_handler(clone_request(request, target=original_path + query_suffix))
-            request.scope["timings"].stop("app-retry")
+                request.scope["timings"].start("app-retry", "App Total (Retry)")
+                response = await next_handler(clone_request(request, target=original_path + query_suffix))
+                request.scope["timings"].stop("app-retry")
 
-    return await finalize(request, response)
+        return await finalize(request, response)
+
+    except Exception:
+        try:
+            if not "id" in request.scope:
+                request.scope["id"] = FourWord()
+
+            log_error(request.scope["id"], traceback.format_exc())
+
+            if not request.scope.get("logged", False):
+                log_access(request, status_code=500)
+                request.scope["logged"] = True
+
+            return await finalize(request, render_error_page(request, status_code=500))
+
+        except Exception:
+            return PlainTextResponse("Internal Server Error", status_code=500)
 
 async def finalize(request: Request, response: Response) -> Response:
     def set_header(key: str, value: str, override: bool = True, condition: bool = True):
