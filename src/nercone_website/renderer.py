@@ -62,7 +62,7 @@ def init_context(context: dict[str, Any], request: Request):
         daily_quote = "GReeeeN KA-RA-DA"
     context["daily_quote"] = daily_quote
 
-def render_page(page: str, path: str, request: Request, count: bool = True, render: bool = True, status_code: int = 200, markdown_mode: bool | None = None, context: dict[str, Any] = {}):
+def render_page(page: str, path: str, request: Request, render: bool = True, status_code: int = 200, markdown_mode: bool | None = None, context: dict[str, Any] = {}):
     init_context(context, request)
 
     if markdown_mode is None:
@@ -147,12 +147,9 @@ def render_page(page: str, path: str, request: Request, count: bool = True, rend
             elif front["compression"].lower() == "false":
                 response.compression = False
 
-        if count:
-            AccessCounter().increase()
-
         return response
 
-def default_response(path: str, request: Request, status_code: int = 200, count: bool = True, render: bool = True, context: dict[str, Any] = {}, headers: dict[str, str] = {}):
+def default_response(path: str, request: Request, status_code: int = 200, render: bool = True, context: dict[str, Any] = {}, headers: dict[str, str] = {}):
     markdown_mode = any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), request.headers.get("user-agent", "").lower().startswith("curl")])
 
     try:
@@ -160,7 +157,7 @@ def default_response(path: str, request: Request, status_code: int = 200, count:
             response = RedirectResponse(url, status_code=status_code if 300 <= status_code < 400 else 307)
 
         elif page := resolve_page(path, markdown_mode, timings=request.scope["timings"]):
-            response = render_page(page, path=path, request=request, count=count, render=render, status_code=status_code, markdown_mode=markdown_mode, context=context)
+            response = render_page(page, path=path, request=request, render=render, status_code=status_code, markdown_mode=markdown_mode, context=context)
 
         elif file := resolve_file(path, timings=request.scope["timings"]):
             response = FileResponse(file, status_code=status_code)

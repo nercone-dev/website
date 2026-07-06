@@ -1,5 +1,5 @@
 import re
-from aki import Aki, Request, Response, Headers, PlainTextResponse, JSONResponse
+from aki import Aki, Request, Response, Headers, PlainTextResponse, JSONResponse, FileResponse
 
 from .logger import format_access
 from .routes import add_report_route
@@ -143,6 +143,18 @@ async def merge_js(request: Request) -> Response:
             return render_error_page(request=request, status_code=403, message="ねえ、今JSファイル統合用のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？新しく追加されたエンドポイントに脆弱性あるか気になっただけ？そんなこと関係ないよね。攻撃しようとしたのは事実でしょ？？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
 
     return Response(body=';\n'.join(c.strip() for c in contents if c.strip()).encode(), headers=Headers([("Content-Type", ["text/javascript"])]))
+
+@app.route("/assets/images/counter.png", methods=["GET"])
+async def access_counter(request: Request) -> Response:
+    try:
+        if file := resolve_file("/assets/images/counter.png", timings=request.scope["timings"]):
+            AccessCounter().increase()
+            request.scope["cc"].set("no-store")
+            return FileResponse(file)
+        else:
+            return PlainTextResponse("Not Found: counter.png", 404)
+    except PermissionError:
+        return PlainTextResponse("Permission Error: counter.png", 403)
 
 @app.route("/{path:path}", methods=["GET", "POST", "HEAD"])
 async def default_route(request: Request, path: str) -> Response:
