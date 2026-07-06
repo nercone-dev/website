@@ -1,0 +1,43 @@
+.hero {
+    margin-bottom: 24px;
+}
+
+.sitemap-section {
+    margin-bottom: 32px;
+}
+.sitemap-section-title {
+    font-size: smaller;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--theme-color-text-alt);
+    margin: 0 0 12px 0;
+}
+
+.sitemap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.sitemap-card {
+    position: relative;
+    display: block;
+    background-color: var(--theme-color-background-alt);
+    padding: 14px 16px;
+    text-decoration: none;
+    color: var(--theme-color-text);
+}
+
+.sitemap-card-name {
+    display: block;
+    color: var(--theme-color-text-headline);
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+.sitemap-card-path {
+    display: block;
+    font-family: var(--font-family-mono);
+    font-size: smaller;
+    color: var(--theme-color-text-alt);
+}

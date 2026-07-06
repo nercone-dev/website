@@ -44,4 +44,32 @@
         <loc>https://nercone.dev/color-palette/</loc>
         <priority>0.8</priority>
     </url>
+    <url>
+        <loc>https://nercone.dev/docs/</loc>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://nercone.dev/access-counter/</loc>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://nercone.dev/daily-quote/</loc>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://nercone.dev/qr-code/</loc>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://nercone.dev/sitemap/</loc>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://nercone.dev/options/</loc>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://nercone.dev/snowflake/</loc>
+        <priority>0.6</priority>
+    </url>
 </urlset>
