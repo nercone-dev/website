@@ -203,7 +203,7 @@ def render_error_page(request: Request, status_code: int = 500, status_name: str
         request.scope["csp"].append("script-src", "'unsafe-inline'")
         request.scope["csp"].append("style-src", "fonts.googleapis.com", "'unsafe-inline'")
         request.scope["csp"].append("font-src", "fonts.gstatic.com")
-        return render_page("error/server.html", "error/server", request=request, status_code=status_code, count=False, render=False)
+        return render_page("error/server.html", "error/server", request=request, status_code=status_code, render=False)
     else:
         if status_name is None:
             try:
@@ -214,7 +214,7 @@ def render_error_page(request: Request, status_code: int = 500, status_name: str
             except ValueError:
                 status_name = "Unknown"
 
-        return render_page("error/client.md", "error/client", request=request, status_code=status_code, count=False, context={
+        return render_page("error/client.md", "error/client", request=request, status_code=status_code, context={
             "status_code": status_code,
             "status_name": status_name,
             "message": message or error_messages.get(status_code, {}).get("normal", "不明なエラーが発生しました。"),
