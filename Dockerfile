@@ -1,10 +1,10 @@
-FROM cgr.dev/chainguard/wolfi-base AS builder
+FROM debian:bookworm-slim AS builder
 
 WORKDIR /srv/website
 
 ARG PACKAGES_VERSION
 
-RUN apk add --no-cache git build-base linux-headers ca-certificates libffi openssl zlib bzip2 readline sqlite-libs ncurses xz
+RUN apt update && apt install --no-install-recommends -y git build-essential ca-certificates curl libffi-dev libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses-dev liblzma-dev && rm -rf /var/lib/apt/lists/*
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
@@ -20,18 +20,26 @@ COPY src ./src
 RUN uv sync --frozen --no-dev --python "${PYTHON_VERSION}"
 
 
-FROM cgr.dev/chainguard/wolfi-base
+FROM gcr.io/distroless/base-debian12
 
 WORKDIR /srv/website
 
 ARG PACKAGES_VERSION
 
-RUN apk add --no-cache curl git ca-certificates libffi openssl zlib bzip2 readline sqlite-libs ncurses xz libstdc++
+COPY src /srv/website/src
 
-COPY --from=builder /opt/uv/python /opt/uv/python
-COPY --from=builder /srv/website/.venv ./.venv
-COPY src ./src
+COPY --from=builder /opt/uv/python      /opt/uv/python
+COPY --from=builder /srv/website/.venv  /srv/website/.venv
 
-ENV PATH="/srv/website/.venv/bin:$PATH"
+COPY --from=builder /etc/ssl/certs      /etc/ssl/certs
+COPY --from=builder /etc/nsswitch.conf  /etc/nsswitch.conf
+
+COPY --from=builder /usr/bin            /usr/bin
+COPY --from=builder /usr/lib            /usr/lib
+COPY --from=builder /usr/local/bin      /usr/local/bin
+COPY --from=builder /usr/local/lib      /usr/local/lib
+COPY --from=builder /usr/share/git-core /usr/share/git-core
+
+ENV PATH="/srv/website/.venv/bin:/usr/local/bin:/usr/bin:$PATH"
 
 CMD ["nercone-website"]

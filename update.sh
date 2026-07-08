@@ -18,25 +18,13 @@ echo "Python ${PYTHON_VERSION}"
 
 echo "> VERSION Packages"
 
-PACKAGE_NAMES=$(grep -oE 'apk add --no-cache .+' Dockerfile \
-    | sed 's/apk add --no-cache //' \
-    | tr ' ' '\n' \
-    | grep -v '^$' \
-    | sort -u)
+MAIN_RELEASE=$(curl -fsSL "http://deb.debian.org/debian/dists/bookworm/Release")
+MAIN_HASH=$(echo "${MAIN_RELEASE}" | awk '/^SHA256:/{in_sha=1; next} in_sha && / main\/binary-amd64\/Packages$/{print $1; exit}')
 
-PACKAGES_VERSION=$(curl -fsSL "https://packages.wolfi.dev/os/x86_64/APKINDEX.tar.gz" \
-    | tar -xzO APKINDEX \
-    | awk -v pkgs="$(echo "$PACKAGE_NAMES" | tr '\n' ':')" '
-        BEGIN { n=split(pkgs, arr, ":"); for (i=1; i<=n; i++) if (arr[i] != "") wanted[arr[i]] = 1 }
-        /^$/ { if (name in wanted) print name "=" ver ":" chk; name=""; ver=""; chk="" }
-        /^P:/ { name=substr($0,3) }
-        /^V:/ { ver=substr($0,3) }
-        /^C:/ { chk=substr($0,3) }
-        END { if (name in wanted) print name "=" ver ":" chk }
-    ' \
-    | sort \
-    | sha256sum \
-    | cut -d' ' -f1)
+SECURITY_RELEASE=$(curl -fsSL "https://security.debian.org/debian-security/dists/bookworm-security/Release")
+SECURITY_HASH=$(echo "${SECURITY_RELEASE}" | awk '/^SHA256:/{in_sha=1; next} in_sha && / main\/binary-amd64\/Packages$/{print $1; exit}')
+
+PACKAGES_VERSION="${MAIN_HASH:0:16}-${SECURITY_HASH:0:16}"
 
 echo "Packages ${PACKAGES_VERSION}"
 
