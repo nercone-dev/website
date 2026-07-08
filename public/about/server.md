@@ -4,9 +4,9 @@ description: nercone.devのサーバーの詳細情報
 ---
 
 # Version {{ repository.version }}
-nercone.devへのHTTP(S)リクエストは、Python+Uvicorn+FastAPIで構築されたWebサーバーによって処理されています。
+nercone.devへのHTTP(S)リクエストは、Pythonで構築されたWebサーバーによって処理されています。
 
-サードパーティのソフトウェアや機密情報などの公開ができない/難しい箇所を除く、ほとんどの箇所は[github.com:nercone-dev/website](https://github.com/nercone-dev/website/)で公開しています。
+サードパーティのソフトウェアや機密情報などの理由により公開ができない、または難しい箇所を除く、ほとんどの箇所は[github.com:nercone-dev/website](https://github.com/nercone-dev/website/)で公開しています。
 
 ## 技術
 

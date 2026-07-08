@@ -12,8 +12,11 @@ def main():
     from aki import Server, Listener, IPVersion
 
     from .app import app
+    from .logger import logger_main
     from .databases import MimeTypes
-    from .constants import Ports
+    from .constants import Startup, Repository, Ports
+
+    logger_main.log(f"[STARTED] ID={Startup.id.text} MODE={'DEV' if Startup.dev else 'PRODUCTION'} nercone.dev ({Repository.version})")
 
     MimeTypes.fetch()
 
@@ -24,6 +27,8 @@ def main():
     listeners: list[Listener] = [Listener(ip_version=IPVersion.IPv4, port=Ports.tcp)] + ([Listener(path=Ports.uds)] if Ports.uds else [])
 
     Server(handler=app).run(listeners, workers=4)
+
+    logger_main.log(f"[STOPPED] ID={Startup.id.text} MODE={'DEV' if Startup.dev else 'PRODUCTION'} nercone.dev ({Repository.version})")
 
 if __name__ == "__main__":
     main()

@@ -79,8 +79,8 @@ async def fake_error_page(request: Request, status_code: str):
     else:
         return render_error_page(request=request, status_code=400, message="errorエンドポイントのパスには「server」またはHTTPレスポンスステータスコードのみが使用可能です。", joke_message="HTTP/1.1 600 Not Normal")
 
-css_re_charset = re.compile(r'@charset\s+[^;]+;', re.IGNORECASE)
-css_re_import = re.compile(r'@import\b[^;]*;', re.DOTALL)
+css_re_charset    = re.compile(r'@charset\s+[^;]+;', re.IGNORECASE)
+css_re_import     = re.compile(r'@import\b[^;]*;', re.DOTALL)
 css_re_whitespace = re.compile(r'\s+')
 
 @app.route("/assets/css/merge", methods=["GET"])
