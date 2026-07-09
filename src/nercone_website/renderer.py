@@ -1,3 +1,4 @@
+import os
 import io
 import re
 import yaml
@@ -16,13 +17,15 @@ from typing import Any, Optional, Literal, Dict
 from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from markitdown import MarkItDown, StreamInfo
+from urllib.parse import urlsplit
 
-from aki import Request, Response, HTMLResponse, MarkdownResponse, FileResponse, RedirectResponse
+from aki import Request, Response, Headers, HTMLResponse, MarkdownResponse, FileResponse, RedirectResponse
+from momiji.url import URL
 
 from .models import TimingManager
 from .resolver import resolve_file, resolve_page, resolve_redirects
 from .databases import AccessCounter
-from .constants import Directories, Files, Repository, Startup, Ports
+from .constants import Directories, Files, Repository, Hostnames
 
 templates = jinja2.Environment(loader=jinja2.FileSystemLoader(Directories.public), autoescape=False)
 
@@ -63,15 +66,37 @@ async def compute_integrity(url: str) -> Optional[str]:
         if cached and datetime.now(timezone.utc) - cached[1] < integrity_max_age:
             return cached[0]
 
-        target = url
-        if Startup.dev and target.startswith("https://assets.nercone.dev/"):
-            target = target.replace("https://assets.nercone.dev/", f"http://localhost:{Ports.tcp}/assets/", 1)
-
         try:
-            response = await integrity_client.get(target)
-            response.raise_for_status()
-            digest = base64.b64encode(hashlib.sha384(response.content).digest()).decode()
-            value = f"sha384-{digest}"
+            parsed = URL(url)
+
+            if any(parsed.host == candidate or parsed.host.endswith("." + candidate) for candidate in Hostnames.public):
+                from .app import app
+
+                headers = Headers({"Host": parsed.netloc})
+                target = parsed.path + (f"?{parsed.query}" if parsed.query else "")
+
+                request = Request(method="GET", target=target, client=("127.0.0.1", 0), scheme="https", secure=True, headers=headers)
+
+                response = await app.on_request(request)
+                response.minify()
+
+                body = response.body
+                if not isinstance(body, (str, os.PathLike)) and body is not None:
+                    with open(body, "rb") as f:
+                        body = f.read()
+
+                if response.status_code >= 400 or not isinstance(body, bytes):
+                    value = None
+                else:
+                    digest = base64.b64encode(hashlib.sha384(body).digest()).decode()
+                    value = f"sha384-{digest}"
+
+            else:
+                response = await integrity_client.get(url)
+                response.raise_for_status()
+                digest = base64.b64encode(hashlib.sha384(response.content).digest()).decode()
+                value = f"sha384-{digest}"
+
         except Exception:
             value = None
 
