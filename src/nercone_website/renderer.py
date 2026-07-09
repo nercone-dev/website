@@ -65,8 +65,13 @@ def init_context(context: Dict[str, Any], request: Request):
 def render_page(page: str, path: str, request: Request, render: bool = True, status_code: int = 200, context: Dict[str, Any] = {}, mode: Optional[Literal["html", "markdown"]] = None):
     init_context(context, request)
 
-    if markdown_mode is None:
-        markdown_mode = any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), request.headers.get("user-agent", "").lower().startswith("curl")])
+    if mode is None:
+        if any([path.endswith(".html"), "text/html" in request.headers.get("accept", "").lower()]):
+            mode = "html"
+        elif any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), request.headers.get("user-agent", "").lower().startswith("curl")]):
+            mode = "markdown"
+        else:
+            mode = "html"
 
     if filepath := resolve_file(page, timings=request.scope["timings"]):
         with filepath.open("r") as f:
@@ -105,26 +110,24 @@ def render_page(page: str, path: str, request: Request, render: bool = True, sta
                 return templates.from_string(source).render(request=request, **context)
 
             if page.endswith(".html"):
-                if markdown_mode:
-                    request.scope["timings"].start("convert", "HTML to Markdown")
-                    soup = BeautifulSoup(content, "html.parser")
-                    main = str(soup.find("main")) if soup.find("main") else content
-                    content = markitdown.convert(io.BytesIO(main.encode("utf-8")), stream_info=StreamInfo(mimetype="text/html", charset="utf-8")).text_content
-                    response = MarkdownResponse(content, status_code=status_code)
-                    request.scope["timings"].stop("convert")
-
-                else:
+                if mode == "html":
                     request.scope["timings"].start("render", "Render Final HTML")
                     content = render_html(content)
                     request.scope["timings"].stop("render")
 
                     response = HTMLResponse(content, status_code=status_code)
 
-            elif page.endswith(".md"):
-                if markdown_mode:
+                elif mode == "markdown":
+                    request.scope["timings"].start("convert", "HTML to Markdown")
+                    soup = BeautifulSoup(content, "html.parser")
+                    main = str(soup.find("main")) if soup.find("main") else content
+                    content = markitdown.convert(io.BytesIO(main.encode("utf-8")), stream_info=StreamInfo(mimetype="text/html", charset="utf-8")).text_content
+                    request.scope["timings"].stop("convert")
+
                     response = MarkdownResponse(content, status_code=status_code)
 
-                else:
+            elif page.endswith(".md"):
+                if mode == "html":
                     request.scope["timings"].start("convert", "Markdown to HTML")
                     main = htmlitdown(content)
                     request.scope["timings"].stop("convert")
@@ -134,6 +137,9 @@ def render_page(page: str, path: str, request: Request, render: bool = True, sta
                     request.scope["timings"].stop("render")
 
                     response = HTMLResponse(content, status_code=status_code)
+
+                elif mode == "markdown":
+                    response = MarkdownResponse(content, status_code=status_code)
 
         else:
             if page.endswith(".html"):
