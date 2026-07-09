@@ -8,6 +8,9 @@ version = "1.0.0"
 requires-python = ">=3.12"
 dependencies = [
     "nercone-aki",
+    "nercone-modern",
+    "fourword",
+
     "httpx[http2]",
 
     "beautifulsoup4",
@@ -18,10 +21,7 @@ dependencies = [
     "markitdown",
 
     "pyyaml",
-    "tzdata",
-    "fourword",
-
-    "nercone-modern"
+    "tzdata"
 ]
 
 [project.scripts]

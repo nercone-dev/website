@@ -1,15 +1,16 @@
 import traceback
 import ipaddress
-from fourword.lib import FourWord
+from typing import Optional
 
 from aki import Request, Response, Scope, Headers, CommaHeader, PlainTextResponse
+from fourword import FourWord
 
 from .logger import log_access, log_error
 from .models import CCManager, PPManager, CSPManager, TimingManager, NetworkManager, OptionManager
 from .renderer import render_error_page
 from .constants import Startup, Hostnames, Ports
 
-def clone_request(request: Request, *, method: str | None = None, target: str | None = None, client: tuple | None = None, scheme: str | None = None, secure: bool | None = None, protocol: str | None = None, headers: Headers | None = None, body: bytes | None = None, scope: Scope | None = None) -> Request:
+def clone_request(request: Request, *, method: Optional[str] = None, target: Optional[str] = None, client: Optional[tuple] = None, scheme: Optional[str] = None, secure: Optional[bool] = None, protocol: Optional[str] = None, headers: Optional[Headers] = None, body: Optional[bytes] = None, scope: Optional[Scope] = None) -> Request:
     return Request(
         method=method or request.method,
         target=target or request.target,
@@ -53,7 +54,7 @@ async def middleware(request: Request, next_handler):
             return await finalize(request, render_error_page(request, status_code=414))
 
         if request.method == "OPTIONS":
-            return await finalize(request, Response(status_code=204, headers=Headers([])))
+            return await finalize(request, Response(204, headers=Headers([])))
 
         original_path = request.url.path.rstrip("/")
         query_suffix = f"?{request.url.query}" if request.url.query else ""

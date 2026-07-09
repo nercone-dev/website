@@ -1,5 +1,6 @@
 import time
 import ipaddress
+from typing import Optional, Union, List, Dict
 
 from aki import Request, Response
 
@@ -8,7 +9,7 @@ from .constants import reserved_cookie_keys
 class PPManager:
     def __init__(self):
         self.initial = True
-        self.directives: dict[str, list[str]] = {
+        self.directives: Dict[str, List[str]] = {
             "camera": [],
             "microphone": [],
             "geolocation": [],
@@ -20,7 +21,7 @@ class PPManager:
             "display-capture": []
         }
 
-    def set(self, key: str, value: list[str], override: bool = True):
+    def set(self, key: str, value: List[str], override: bool = True):
         if override or key not in self.directives:
             self.initial = False
             self.directives[key] = value
@@ -51,7 +52,7 @@ class PPManager:
 class CSPManager:
     def __init__(self):
         self.initial = True
-        self.directives: dict[str, list[str] | bool] = {
+        self.directives: Dict[str, Union[List[str], bool]] = {
             "default-src": ["'none'"],
             "script-src": ["assets.nercone.dev"],
             "style-src": ["assets.nercone.dev"],
@@ -67,7 +68,7 @@ class CSPManager:
             "report-to": "csp-endpoint"
         }
 
-    def set(self, key: str, value: list[str] | bool, override: bool = True):
+    def set(self, key: str, value: Union[List[str], bool], override: bool = True):
         if override or key not in self.directives:
             self.initial = False
             self.directives[key] = value
@@ -98,9 +99,9 @@ class CSPManager:
 class CCManager:
     def __init__(self):
         self.initial = True
-        self.directives: dict[str, int | bool] = {}
+        self.directives: Dict[str, Union[int, bool]] = {}
 
-    def set(self, key: str, value: int | bool = True, override: bool = True):
+    def set(self, key: str, value: Union[int, bool] = True, override: bool = True):
         if override or key not in self.directives:
             self.initial = False
             self.directives[key] = value
@@ -121,9 +122,9 @@ class CCManager:
 
 class TimingManager:
     def __init__(self):
-        self.timings: dict[str, list[float, float | None, str | None]] = {}
+        self.timings: Dict[str, List[float, Optional[float], Optional[str]]] = {}
 
-    def start(self, key: str, description: str | None = None) -> float:
+    def start(self, key: str, description: Optional[str] = None) -> float:
         if key in self.timings:
             n = 1
             while f"{key}-{n}" in self.timings:
@@ -133,7 +134,7 @@ class TimingManager:
         self.timings[key] = [now, None, description]
         return now
 
-    def stop(self, key: str, description: str | None = None) -> float:
+    def stop(self, key: str, description: Optional[str] = None) -> float:
         candidates = [k for k in self.timings if k == key or (k.startswith(f"{key}-") and k[len(key) + 1:].isdigit())]
         assert candidates
         key = max(candidates, key=lambda k: self.timings[k][0])
@@ -166,7 +167,7 @@ class NetworkManager:
         "fe80::/10"
     ]]
 
-    def __init__(self, address: ipaddress.IPv4Address | ipaddress.IPv6Address | None, host: str | None, port: int | None):
+    def __init__(self, address: Optional[Union[ipaddress.IPv4Address, ipaddress.IPv6Address]], host: Optional[str], port: Optional[int]):
         self.address = address
         self.host = host
         self.port = port
@@ -186,7 +187,7 @@ class OptionManager:
     def __len__(self):
         return len(set(self.request.cookies) | set(self.request.url.params.items()))
 
-    def get(self, key: str, default: str | None = None):
+    def get(self, key: str, default: Optional[str] = None):
         once_values = self.request.url.params.get(key + ".once")
         once = once_values[0] if once_values else None
         query_values = self.request.url.params.get(key)

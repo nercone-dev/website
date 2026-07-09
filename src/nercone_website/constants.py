@@ -2,7 +2,7 @@ import os
 import subprocess
 import http.cookies
 from pathlib import Path
-from fourword.lib import FourWord
+from fourword import FourWord
 
 reserved_cookie_keys = frozenset(http.cookies.Morsel._reserved)
 

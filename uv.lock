@@ -262,11 +262,11 @@ wheels = [
 
 [[package]]
 name = "fourword"
-version = "2.3.0"
+version = "2.4.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/94/a7/8b3ea4d91b60463310f237161f1cc65a971eab1579d415a800c333b4b97a/fourword-2.3.0.tar.gz", hash = "sha256:25df6bb5e7dba764f9f6cf5de9d9e8aa5234fa98c1a6e16ed007d0a05c10fd45", size = 6550, upload-time = "2026-05-22T11:17:17.198Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/52/8f/5aeb6635e2e5734d8e5cb896a887cec2905365977215b8408f4b8fbc7ac6/fourword-2.4.0.tar.gz", hash = "sha256:dd894c697165b2a107f155b59d47be8e1372f6c23fcf2cbac9efb1f94239e15d", size = 6608, upload-time = "2026-07-09T14:15:45.016Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/50/ea/fe8b29d81d6e342d928a957d59bea721ffadeb89ad7d5d3aab416b0dc821/fourword-2.3.0-py3-none-any.whl", hash = "sha256:aa0f7bf156de71f9dfea5dae616deaf45c2cec389ff0a0c580d227ee9dcec157", size = 8046, upload-time = "2026-05-22T11:17:18.074Z" },
+    { url = "https://files.pythonhosted.org/packages/03/ba/78eed7863552649e5a8fb2424121b7edc35c934b149e77094ac77855e7e3/fourword-2.4.0-py3-none-any.whl", hash = "sha256:e0865b5efadc0f531b82ceccb4f37f25e60335b3ccce97299aacc259fe72283f", size = 8119, upload-time = "2026-07-09T14:15:44.087Z" },
 ]
 
 [[package]]
@@ -517,11 +517,11 @@ wheels = [
 
 [[package]]
 name = "mistune"
-version = "3.3.2"
+version = "3.3.3"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/04/5f/007786743f962224423753b78f7d7acb0f2ade46d1604f2e0fa2bedf9020/mistune-3.3.2.tar.gz", hash = "sha256:e12ee4f1e74336e91aa1141e35f913b337c40bdf7c0cc49f21fb853a27e8b62f", size = 111284, upload-time = "2026-06-23T00:29:28.568Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7b/a5/2dab368d6950e6808904dec98f54c7e726ee7be4a0c6afe00e6e011bd52d/mistune-3.3.3.tar.gz", hash = "sha256:c4c6c0c840b8637a2e9b8b6d607eb7c8f00888bf14c754409bcd339e848c2477", size = 115363, upload-time = "2026-07-09T06:18:05.268Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/44/43/894c2cbbcbdf53b57d1257a249811abe2ee9ab7ef76af301b40f1c054533/mistune-3.3.2-py3-none-any.whl", hash = "sha256:a678a56387d487db7368ede4647cb2ba1deff22ce61f92343e4ebe0ddfce4f2d", size = 61554, upload-time = "2026-06-23T00:29:27.088Z" },
+    { url = "https://files.pythonhosted.org/packages/89/70/b1e4737b84163db5bb1dfde6f216dbfbf32783330a9989c965e121172830/mistune-3.3.3-py3-none-any.whl", hash = "sha256:99de1585e42dcbd826faa9e11a202727a5e202e4e4722a4c69ac1ff615793dd7", size = 63569, upload-time = "2026-07-09T06:18:03.839Z" },
 ]
 
 [[package]]
@@ -547,14 +547,14 @@ wheels = [
 
 [[package]]
 name = "nercone-modern"
-version = "2.6.2"
+version = "3.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "strip-ansi" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a6/3d/b3b94b036b13d98363e784397dec95621df7a4912c1e0e1a2c4dd90e5fe5/nercone_modern-2.6.2.tar.gz", hash = "sha256:bcb0d33064658d3fa28edba457f2c392bc8082470951866a86febf3f80748430", size = 4753, upload-time = "2026-06-13T03:46:47.408Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/de/90/d278cf503f60cc39a9ebdedfc6e2a58ea5dd2450e83e90d4e2dc32bee4bc/nercone_modern-3.0.0.tar.gz", hash = "sha256:8f75e4646f08506c3aaeb15e2eed44112d374180eaf3e28fec821187bc373034", size = 4930, upload-time = "2026-07-09T14:36:49.992Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ab/2f/6bf1c2f7208d0246056a32dc256fbef64fdc1960ca50d3a29e5538c0c2c9/nercone_modern-2.6.2-py3-none-any.whl", hash = "sha256:2a5e59637d72fb018429cdbb3af2e98ef4ccd868249d3634cdb9732f01b537b2", size = 6799, upload-time = "2026-06-13T03:46:46.361Z" },
+    { url = "https://files.pythonhosted.org/packages/49/46/508a2f5fdae00fc73ccf14181b7f10d77e7c96884b04180fbc5ee5271b06/nercone_modern-3.0.0-py3-none-any.whl", hash = "sha256:2b77896c0d83c85c6ecb23f8daad67818a9ec57d637a8a9490fa2164931ad9eb", size = 6887, upload-time = "2026-07-09T14:36:50.759Z" },
 ]
 
 [[package]]

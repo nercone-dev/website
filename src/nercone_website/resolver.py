@@ -1,10 +1,11 @@
 import json
+from typing import Optional
 from pathlib import Path
 
 from .models import TimingManager
 from .constants import Directories
 
-def resolve_file(path: str, *, timings: TimingManager | None = None) -> Path | None:
+def resolve_file(path: str, *, timings: Optional[TimingManager] = None) -> Optional[Path]:
     if timings:
         timings.start("resolve", "Resolve File")
 
@@ -23,7 +24,7 @@ def resolve_file(path: str, *, timings: TimingManager | None = None) -> Path | N
 
     return full_path
 
-def resolve_page(path: str, markdown_mode: bool = False, *, timings: TimingManager | None = None) -> str | None:
+def resolve_page(path: str, markdown_mode: bool = False, *, timings: Optional[TimingManager] = None) -> Optional[str]:
     if timings:
         timings.start("resolve", "Resolve Page")
 
@@ -56,7 +57,7 @@ def resolve_page(path: str, markdown_mode: bool = False, *, timings: TimingManag
 
     return None
 
-def resolve_redirects(path: str, *, max_retry: int = 10, timings: TimingManager | None = None) -> str | None:
+def resolve_redirects(path: str, *, max_retry: int = 10, timings: Optional[TimingManager] = None) -> Optional[str]:
     if timings:
         timings.start("resolve", "Resolve Redirects")
 

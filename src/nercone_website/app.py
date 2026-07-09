@@ -1,4 +1,6 @@
 import re
+from typing import Optional, Set, List
+
 from aki import Aki, Request, Response, Headers, PlainTextResponse, JSONResponse, FileResponse
 
 from .logger import format_access
@@ -89,10 +91,10 @@ async def merge_css(request: Request) -> Response:
     if not path_param:
         return render_error_page(request=request, status_code=400, message="pathパラメータが必要です。")
 
-    charset: str | None = None
-    imports: list[str] = []
-    seen_imports: set[str] = set()
-    bodies: list[str] = []
+    charset: Optional[str] = None
+    imports: List[str] = []
+    seen_imports: Set[str] = set()
+    bodies: List[str] = []
 
     for name in (n.strip() for n in path_param.split(",")):
         try:
@@ -117,14 +119,14 @@ async def merge_css(request: Request) -> Response:
         if body:
             bodies.append(body)
 
-    parts: list[str] = []
+    parts: List[str] = []
     if charset:
         parts.append(charset)
     if imports:
         parts.append('\n'.join(imports))
     parts.extend(bodies)
 
-    return Response(body='\n\n'.join(parts).encode(), headers=Headers([("Content-Type", ["text/css"])]))
+    return PlainTextResponse('\n\n'.join(parts), headers=Headers([("Content-Type", ["text/css"])]))
 
 @app.route("/assets/js/merge", methods=["GET"])
 async def merge_js(request: Request) -> Response:
@@ -132,7 +134,7 @@ async def merge_js(request: Request) -> Response:
     if not path_param:
         return render_error_page(request=request, status_code=400, message="pathパラメータが必要です。")
 
-    contents: list[str] = []
+    contents: List[str] = []
     for name in (n.strip() for n in path_param.split(",")):
         try:
             if file := resolve_file(f"assets/js/{name}.js", timings=request.scope["timings"]):
@@ -142,7 +144,7 @@ async def merge_js(request: Request) -> Response:
         except PermissionError:
             return render_error_page(request=request, status_code=403, message="ねえ、今JSファイル統合用のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？新しく追加されたエンドポイントに脆弱性あるか気になっただけ？そんなこと関係ないよね。攻撃しようとしたのは事実でしょ？？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
 
-    return Response(body=';\n'.join(c.strip() for c in contents if c.strip()).encode(), headers=Headers([("Content-Type", ["text/javascript"])]))
+    return PlainTextResponse(';\n'.join(c.strip() for c in contents if c.strip()), headers=Headers([("Content-Type", ["text/javascript"])]))
 
 @app.route("/assets/images/counter.png", methods=["GET"])
 async def access_counter(request: Request) -> Response:

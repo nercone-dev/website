@@ -1,5 +1,6 @@
 import os
 import argparse
+from typing import List
 
 def main():
     parser = argparse.ArgumentParser(prog="nercone-website")
@@ -24,7 +25,7 @@ def main():
         Server(handler=app).run([Listener(IPVersion.IPv4, Ports.tcp)], workers=0)
         return
 
-    listeners: list[Listener] = [Listener(ip_version=IPVersion.IPv4, port=Ports.tcp)] + ([Listener(path=Ports.uds)] if Ports.uds else [])
+    listeners: List[Listener] = [Listener(ip_version=IPVersion.IPv4, port=Ports.tcp)] + ([Listener(path=Ports.uds)] if Ports.uds else [])
 
     Server(handler=app).run(listeners, workers=4)
 

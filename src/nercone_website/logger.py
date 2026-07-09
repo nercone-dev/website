@@ -1,7 +1,9 @@
 import json
+from typing import Optional, Union
+
 from aki import Request, Response
-from fourword.lib import FourWord
-from nercone_modern.logging import Logging, LoggingLevel
+from modern import Logging, LoggingLevel
+from fourword import FourWord
 
 from .constants import Files
 
@@ -11,7 +13,7 @@ logger_access = Logging("website", filepath=Files.Logs.access)
 logger_reports = Logging("website", filepath=Files.Logs.reports)
 logger_warnings = Logging("website", filepath=Files.Logs.warnings)
 
-def format_access(request: Request, response: Response | None = None) -> dict:
+def format_access(request: Request, response: Optional[Response] = None) -> dict:
     return {
         "id": request.scope["id"].text,
         "url": str(request.url),
@@ -34,12 +36,12 @@ def format_access(request: Request, response: Response | None = None) -> dict:
         }
     }
 
-def log_access(request: Request, response: Response | None = None, status_code: int | None = None):
+def log_access(request: Request, response: Optional[Response] = None, status_code: Optional[int] = None):
     status_code = response.status_code if response is not None else status_code
     logger_main.log(f"{request.scope['id'].compact_text} STATUS {status_code or '---'} FROM {request.scope['network'].host}:{request.scope['network'].port} TO {str(request.url)}", level=LoggingLevel.INFO if (status_code or 500) < 400 else LoggingLevel.WARNING)
     logger_access.log(json.dumps(format_access(request, response)))
 
-def log_report(request: Request, body: dict | list, report_type: str):
+def log_report(request: Request, body: Union[dict, list], report_type: str):
     logger_warnings.log(f"{request.scope['id'].compact_text} REPORT {report_type} FROM {request.scope['network'].host}:{request.scope['network'].port}", level=LoggingLevel.WARNING)
     logger_reports.log(json.dumps(format_access(request) | {"report": body}), level=LoggingLevel.WARNING)
 

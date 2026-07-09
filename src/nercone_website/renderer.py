@@ -5,10 +5,10 @@ import jinja2
 import random
 import mistune
 import resvg_py
-from typing import Any
 from bs4 import BeautifulSoup
 from html import escape
 from http import HTTPStatus
+from typing import Any, Optional, Literal, Dict
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 from markitdown import MarkItDown, StreamInfo
@@ -23,13 +23,13 @@ from .constants import Directories, Files, Repository
 templates = jinja2.Environment(loader=jinja2.FileSystemLoader(Directories.public), autoescape=False)
 
 class CustomHTMLRenderer(mistune.HTMLRenderer):
-    _alert_re = re.compile(r'^\s*<p>\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\](?:\n(.*?))?</p>\s*', re.IGNORECASE | re.DOTALL,)
+    alert_re = re.compile(r'^\s*<p>\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\](?:\n(.*?))?</p>\s*', re.IGNORECASE | re.DOTALL)
 
     def block_code(self, code, **attrs):
         return f'<pre>{mistune.escape(code)}</pre>\n'
 
     def block_quote(self, text):
-        m = self._alert_re.match(text)
+        m = self.alert_re.match(text)
         if m:
             alert_type = m.group(1).upper()
             inline_content = m.group(2)
@@ -43,7 +43,7 @@ class CustomHTMLRenderer(mistune.HTMLRenderer):
 markitdown = MarkItDown()
 htmlitdown = mistune.create_markdown(renderer=CustomHTMLRenderer(escape=False), plugins=["table", "strikethrough", "task_lists", "footnotes"])
 
-def init_context(context: dict[str, Any], request: Request):
+def init_context(context: Dict[str, Any], request: Request):
     context.update(request.scope)
 
     context["repository"] = Repository
@@ -62,7 +62,7 @@ def init_context(context: dict[str, Any], request: Request):
         daily_quote = "GReeeeN KA-RA-DA"
     context["daily_quote"] = daily_quote
 
-def render_page(page: str, path: str, request: Request, render: bool = True, status_code: int = 200, markdown_mode: bool | None = None, context: dict[str, Any] = {}):
+def render_page(page: str, path: str, request: Request, render: bool = True, status_code: int = 200, context: Dict[str, Any] = {}, mode: Optional[Literal["html", "markdown"]] = None):
     init_context(context, request)
 
     if markdown_mode is None:
@@ -149,7 +149,7 @@ def render_page(page: str, path: str, request: Request, render: bool = True, sta
 
         return response
 
-def default_response(path: str, request: Request, status_code: int = 200, render: bool = True, context: dict[str, Any] = {}, headers: dict[str, str] = {}):
+def default_response(path: str, request: Request, status_code: int = 200, render: bool = True, context: Dict[str, Any] = {}, headers: Dict[str, str] = {}):
     markdown_mode = any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), request.headers.get("user-agent", "").lower().startswith("curl")])
 
     try:
@@ -198,7 +198,7 @@ error_messages = {
     426: {"normal": "このリクエストを処理するにはプロトコルのアップグレードが必要です。", "joke": "それに答えるには、まずWebSocketに移動したい。"}
 }
 
-def render_error_page(request: Request, status_code: int = 500, status_name: str | None = None, message: str | None = None, joke_message: str | None = None) -> Response:
+def render_error_page(request: Request, status_code: int = 500, status_name: Optional[str] = None, message: Optional[str] = None, joke_message: Optional[str] = None) -> Response:
     if 500 <= status_code < 600:
         request.scope["csp"].append("script-src", "'unsafe-inline'")
         request.scope["csp"].append("style-src", "fonts.googleapis.com", "'unsafe-inline'")
@@ -221,7 +221,7 @@ def render_error_page(request: Request, status_code: int = 500, status_name: str
             "joke_message": joke_message or error_messages.get(status_code, {}).get("joke", "あんのーん")
         })
 
-def render_thumbnail_svg(path: str = "/", title: str = "Untitled Page", description: str = "No description.", *, template: str = "normal", timings: TimingManager | None = None) -> str:
+def render_thumbnail_svg(path: str = "/", title: str = "Untitled Page", description: str = "No description.", *, template: str = "normal", timings: Optional[TimingManager] = None) -> str:
     if file := resolve_file(f"/assets/images/thumbnail/template/{template}.svg", timings=timings):
         if timings:
             timings.start("render", "Render Thumbnail SVG")
@@ -240,7 +240,7 @@ def render_thumbnail_svg(path: str = "/", title: str = "Untitled Page", descript
     else:
         raise FileNotFoundError()
 
-def render_thumbnail_png(path: str = "/", title: str = "Untitled Page", description: str = "No description.", *, width=1280, height=640, template: str = "normal", timings: TimingManager | None = None) -> bytes:
+def render_thumbnail_png(path: str = "/", title: str = "Untitled Page", description: str = "No description.", *, width=1280, height=640, template: str = "normal", timings: Optional[TimingManager] = None) -> bytes:
     svg = render_thumbnail_svg(path, title, description, template=template, timings=timings)
 
     if timings:
