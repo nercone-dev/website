@@ -49,6 +49,7 @@ htmlitdown = mistune.create_markdown(renderer=CustomHTMLRenderer(escape=False), 
 
 integrity_client = httpx.AsyncClient(http2=True, timeout=10)
 integrity_cache: Dict[str, tuple[Optional[str], datetime]] = {}
+integrity_locks: Dict[str, asyncio.Lock] = {}
 integrity_max_age = timedelta(hours=1)
 
 async def compute_integrity(url: str) -> Optional[str]:
@@ -56,23 +57,29 @@ async def compute_integrity(url: str) -> Optional[str]:
     if cached and datetime.now(timezone.utc) - cached[1] < integrity_max_age:
         return cached[0]
 
-    target = url
-    if Startup.dev and target.startswith("https://assets.nercone.dev/"):
-        target = target.replace("https://assets.nercone.dev/", f"http://localhost:{Ports.tcp}/assets/", 1)
+    lock = integrity_locks.setdefault(url, asyncio.Lock())
+    async with lock:
+        cached = integrity_cache.get(url)
+        if cached and datetime.now(timezone.utc) - cached[1] < integrity_max_age:
+            return cached[0]
 
-    try:
-        response = await integrity_client.get(target)
-        response.raise_for_status()
-        digest = base64.b64encode(hashlib.sha384(response.content).digest()).decode()
-        value = f"sha384-{digest}"
-    except Exception:
-        value = None
+        target = url
+        if Startup.dev and target.startswith("https://assets.nercone.dev/"):
+            target = target.replace("https://assets.nercone.dev/", f"http://localhost:{Ports.tcp}/assets/", 1)
 
-    integrity_cache[url] = (value, datetime.now(timezone.utc))
-    return value
+        try:
+            response = await integrity_client.get(target)
+            response.raise_for_status()
+            digest = base64.b64encode(hashlib.sha384(response.content).digest()).decode()
+            value = f"sha384-{digest}"
+        except Exception:
+            value = None
+
+        integrity_cache[url] = (value, datetime.now(timezone.utc))
+        return value
 
 async def add_integrity(html: str) -> str:
-    soup = BeautifulSoup(html, "html.parser")
+    soup = BeautifulSoup(html, "lxml")
     tags = [tag for tag in soup.find_all("script", src=True)] + [tag for tag in soup.find_all("link", rel="stylesheet", href=True)]
     if not tags:
         return html
@@ -81,13 +88,15 @@ async def add_integrity(html: str) -> str:
     values = await asyncio.gather(*(compute_integrity(url) for url in urls))
     integrities = dict(zip(urls, values))
 
+    changed = False
     for tag in tags:
         url = tag.get("src") or tag.get("href")
         if integrities.get(url):
             tag["integrity"] = integrities[url]
             tag["crossorigin"] = "anonymous"
+            changed = True
 
-    return str(soup)
+    return str(soup) if changed else html
 
 def init_context(context: Dict[str, Any], request: Request):
     context.update(request.scope)
