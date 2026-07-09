@@ -62,16 +62,19 @@ def init_context(context: Dict[str, Any], request: Request):
         daily_quote = "GReeeeN KA-RA-DA"
     context["daily_quote"] = daily_quote
 
+def render_mode(request: Request) -> Literal["html", "markdown"]:
+    if any([request.url.path.endswith(".html"), "text/html" in request.headers.get("accept", "").lower()]):
+        return "html"
+    elif any([request.url.path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), request.headers.get("user-agent", "").lower().startswith("curl")]):
+        return "markdown"
+    else:
+        return "html"
+
 def render_page(page: str, path: str, request: Request, render: bool = True, status_code: int = 200, context: Dict[str, Any] = {}, mode: Optional[Literal["html", "markdown"]] = None):
     init_context(context, request)
 
     if mode is None:
-        if any([path.endswith(".html"), "text/html" in request.headers.get("accept", "").lower()]):
-            mode = "html"
-        elif any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), request.headers.get("user-agent", "").lower().startswith("curl")]):
-            mode = "markdown"
-        else:
-            mode = "html"
+        mode = render_mode(request)
 
     if filepath := resolve_file(page, timings=request.scope["timings"]):
         with filepath.open("r") as f:
@@ -156,14 +159,14 @@ def render_page(page: str, path: str, request: Request, render: bool = True, sta
         return response
 
 def default_response(path: str, request: Request, status_code: int = 200, render: bool = True, context: Dict[str, Any] = {}, headers: Dict[str, str] = {}):
-    markdown_mode = any([path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), request.headers.get("user-agent", "").lower().startswith("curl")])
+    mode = render_mode(request)
 
     try:
         if url := resolve_redirects(path, timings=request.scope["timings"]):
             response = RedirectResponse(url, status_code=status_code if 300 <= status_code < 400 else 307)
 
-        elif page := resolve_page(path, markdown_mode, timings=request.scope["timings"]):
-            response = render_page(page, path=path, request=request, render=render, status_code=status_code, markdown_mode=markdown_mode, context=context)
+        elif page := resolve_page(path, mode, timings=request.scope["timings"]):
+            response = render_page(page, path=path, request=request, render=render, status_code=status_code, mode=mode, context=context)
 
         elif file := resolve_file(path, timings=request.scope["timings"]):
             response = FileResponse(file, status_code=status_code)
