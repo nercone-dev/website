@@ -239,15 +239,16 @@ async def render_page(page: str, path: str, request: Request, render: bool = Tru
 
         return response
 
-async def default_response(path: str, request: Request, status_code: int = 200, render: bool = True, context: Dict[str, Any] = {}, headers: Dict[str, str] = {}):
-    mode = render_mode(request)
+async def default_response(path: str, request: Request, status_code: int = 200, render: bool = True, context: Dict[str, Any] = {}, headers: Dict[str, str] = {}, mode: Optional[Literal["html", "markdown"]] = None):
+    if mode is None:
+        mode = render_mode(request)
 
     try:
         if url := resolve_redirects(path, timings=request.scope["timings"]):
             response = RedirectResponse(url, status_code=status_code if 300 <= status_code < 400 else 307)
 
         elif page := resolve_page(path, mode, timings=request.scope["timings"]):
-            response = await render_page(page, path=path, request=request, render=render, status_code=status_code, mode=mode, context=context)
+            response = await render_page(page, path=path, request=request, render=render, status_code=status_code, context=context, mode=mode)
 
         elif file := resolve_file(path, timings=request.scope["timings"]):
             response = FileResponse(file, status_code=status_code)
