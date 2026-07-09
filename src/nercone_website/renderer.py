@@ -1,15 +1,19 @@
 import io
 import re
 import yaml
+import httpx
 import jinja2
+import base64
 import random
+import hashlib
+import asyncio
 import mistune
 import resvg_py
 from bs4 import BeautifulSoup
 from html import escape
 from http import HTTPStatus
 from typing import Any, Optional, Literal, Dict
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from markitdown import MarkItDown, StreamInfo
 
@@ -18,7 +22,7 @@ from aki import Request, Response, HTMLResponse, MarkdownResponse, FileResponse,
 from .models import TimingManager
 from .resolver import resolve_file, resolve_page, resolve_redirects
 from .databases import AccessCounter
-from .constants import Directories, Files, Repository
+from .constants import Directories, Files, Repository, Startup, Ports
 
 templates = jinja2.Environment(loader=jinja2.FileSystemLoader(Directories.public), autoescape=False)
 
@@ -42,6 +46,48 @@ class CustomHTMLRenderer(mistune.HTMLRenderer):
 
 markitdown = MarkItDown()
 htmlitdown = mistune.create_markdown(renderer=CustomHTMLRenderer(escape=False), plugins=["table", "strikethrough", "task_lists", "footnotes"])
+
+integrity_client = httpx.AsyncClient(http2=True, timeout=10)
+integrity_cache: Dict[str, tuple[Optional[str], datetime]] = {}
+integrity_max_age = timedelta(hours=1)
+
+async def compute_integrity(url: str) -> Optional[str]:
+    cached = integrity_cache.get(url)
+    if cached and datetime.now(timezone.utc) - cached[1] < integrity_max_age:
+        return cached[0]
+
+    target = url
+    if Startup.dev and target.startswith("https://assets.nercone.dev/"):
+        target = target.replace("https://assets.nercone.dev/", f"http://localhost:{Ports.tcp}/assets/", 1)
+
+    try:
+        response = await integrity_client.get(target)
+        response.raise_for_status()
+        digest = base64.b64encode(hashlib.sha384(response.content).digest()).decode()
+        value = f"sha384-{digest}"
+    except Exception:
+        value = None
+
+    integrity_cache[url] = (value, datetime.now(timezone.utc))
+    return value
+
+async def add_integrity(html: str) -> str:
+    soup = BeautifulSoup(html, "html.parser")
+    tags = [tag for tag in soup.find_all("script", src=True)] + [tag for tag in soup.find_all("link", rel="stylesheet", href=True)]
+    if not tags:
+        return html
+
+    urls = list({tag.get("src") or tag.get("href") for tag in tags})
+    values = await asyncio.gather(*(compute_integrity(url) for url in urls))
+    integrities = dict(zip(urls, values))
+
+    for tag in tags:
+        url = tag.get("src") or tag.get("href")
+        if integrities.get(url):
+            tag["integrity"] = integrities[url]
+            tag["crossorigin"] = "anonymous"
+
+    return str(soup)
 
 def init_context(context: Dict[str, Any], request: Request):
     context.update(request.scope)
@@ -70,7 +116,7 @@ def render_mode(request: Request) -> Literal["html", "markdown"]:
     else:
         return "html"
 
-def render_page(page: str, path: str, request: Request, render: bool = True, status_code: int = 200, context: Dict[str, Any] = {}, mode: Optional[Literal["html", "markdown"]] = None):
+async def render_page(page: str, path: str, request: Request, render: bool = True, status_code: int = 200, context: Dict[str, Any] = {}, mode: Optional[Literal["html", "markdown"]] = None):
     init_context(context, request)
 
     if mode is None:
@@ -118,6 +164,10 @@ def render_page(page: str, path: str, request: Request, render: bool = True, sta
                     content = render_html(content)
                     request.scope["timings"].stop("render")
 
+                    request.scope["timings"].start("integrity", "Compute Integrity")
+                    content = await add_integrity(content)
+                    request.scope["timings"].stop("integrity")
+
                     response = HTMLResponse(content, status_code=status_code)
 
                 elif mode == "markdown":
@@ -139,6 +189,10 @@ def render_page(page: str, path: str, request: Request, render: bool = True, sta
                     content = render_html(main)
                     request.scope["timings"].stop("render")
 
+                    request.scope["timings"].start("integrity", "Compute Integrity")
+                    content = await add_integrity(content)
+                    request.scope["timings"].stop("integrity")
+
                     response = HTMLResponse(content, status_code=status_code)
 
                 elif mode == "markdown":
@@ -158,7 +212,7 @@ def render_page(page: str, path: str, request: Request, render: bool = True, sta
 
         return response
 
-def default_response(path: str, request: Request, status_code: int = 200, render: bool = True, context: Dict[str, Any] = {}, headers: Dict[str, str] = {}):
+async def default_response(path: str, request: Request, status_code: int = 200, render: bool = True, context: Dict[str, Any] = {}, headers: Dict[str, str] = {}):
     mode = render_mode(request)
 
     try:
@@ -166,16 +220,16 @@ def default_response(path: str, request: Request, status_code: int = 200, render
             response = RedirectResponse(url, status_code=status_code if 300 <= status_code < 400 else 307)
 
         elif page := resolve_page(path, mode, timings=request.scope["timings"]):
-            response = render_page(page, path=path, request=request, render=render, status_code=status_code, mode=mode, context=context)
+            response = await render_page(page, path=path, request=request, render=render, status_code=status_code, mode=mode, context=context)
 
         elif file := resolve_file(path, timings=request.scope["timings"]):
             response = FileResponse(file, status_code=status_code)
 
         else:
-            response = render_error_page(request, 404, message="リクエストしたページは現在ご利用になれません。削除/移動されたか、URLが間違っている可能性があります。", joke_message="そんなページ知らないっ！")
+            response = await render_error_page(request, 404, message="リクエストしたページは現在ご利用になれません。削除/移動されたか、URLが間違っている可能性があります。", joke_message="そんなページ知らないっ！")
 
     except PermissionError:
-        response = render_error_page(request, 403, message="何をしてるんです？脆弱性報告のためならいいのですが、データ盗んで悪用するためなら今すぐにやめてくださいね？", joke_message="ディレクトリトラバーサルね、知ってる。公開してないところ覗きたいの？えっt")
+        response = await render_error_page(request, 403, message="何をしてるんです？脆弱性報告のためならいいのですが、データ盗んで悪用するためなら今すぐにやめてくださいね？", joke_message="ディレクトリトラバーサルね、知ってる。公開してないところ覗きたいの？えっt")
 
     for key, value in headers.items():
         response.headers[key.lower().strip()] = value
@@ -207,12 +261,12 @@ error_messages = {
     426: {"normal": "このリクエストを処理するにはプロトコルのアップグレードが必要です。", "joke": "それに答えるには、まずWebSocketに移動したい。"}
 }
 
-def render_error_page(request: Request, status_code: int = 500, status_name: Optional[str] = None, message: Optional[str] = None, joke_message: Optional[str] = None) -> Response:
+async def render_error_page(request: Request, status_code: int = 500, status_name: Optional[str] = None, message: Optional[str] = None, joke_message: Optional[str] = None) -> Response:
     if 500 <= status_code < 600:
         request.scope["csp"].append("script-src", "'unsafe-inline'")
         request.scope["csp"].append("style-src", "fonts.googleapis.com", "'unsafe-inline'")
         request.scope["csp"].append("font-src", "fonts.gstatic.com")
-        return render_page("error/server.html", "error/server", request=request, status_code=status_code, render=False)
+        return await render_page("error/server.html", "error/server", request=request, status_code=status_code, render=False)
     else:
         if status_name is None:
             try:
@@ -223,7 +277,7 @@ def render_error_page(request: Request, status_code: int = 500, status_name: Opt
             except ValueError:
                 status_name = "Unknown"
 
-        return render_page("error/client.md", "error/client", request=request, status_code=status_code, context={
+        return await render_page("error/client.md", "error/client", request=request, status_code=status_code, context={
             "status_code": status_code,
             "status_name": status_name,
             "message": message or error_messages.get(status_code, {}).get("normal", "不明なエラーが発生しました。"),

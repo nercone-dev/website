@@ -45,7 +45,7 @@ async def echo(request: Request):
     if request.scope["network"].trusted:
         return JSONResponse(format_access(request))
     else:
-        return render_error_page(request=request, status_code=403, message="/echoエンドポイントはデバッグ用途のため、信頼された接続元からのみ使用できます。", joke_message="悪いなのび太、このエンドポイント開発者専用なんだ")
+        return await render_error_page(request=request, status_code=403, message="/echoエンドポイントはデバッグ用途のため、信頼された接続元からのみ使用できます。", joke_message="悪いなのび太、このエンドポイント開発者専用なんだ")
 
 @app.route("/status", methods=["GET"])
 async def status(request: Request):
@@ -68,18 +68,18 @@ async def thumbnail(request: Request, template: str) -> Response:
         png = render_thumbnail_png(path, title, description, template=template, timings=request.scope["timings"])
         return Response(body=png, headers=Headers([("Content-Type", ["image/png"])]))
     except FileNotFoundError:
-        return render_error_page(request=request, status_code=404, message="サムネイルの生成に必要なテンプレートが見つかりません。", joke_message="はにゃ？")
+        return await render_error_page(request=request, status_code=404, message="サムネイルの生成に必要なテンプレートが見つかりません。", joke_message="はにゃ？")
     except PermissionError:
-        return render_error_page(request=request, status_code=403, message="ねえ、今サムネイル生成のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
+        return await render_error_page(request=request, status_code=403, message="ねえ、今サムネイル生成のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
 
 @app.route("/error/{status_code}", methods=["GET"])
 async def fake_error_page(request: Request, status_code: str):
     if status_code.isdecimal():
-        return render_error_page(request=request, status_code=int(status_code))
+        return await render_error_page(request=request, status_code=int(status_code))
     elif status_code == "server":
-        return render_error_page(request=request, status_code=500)
+        return await render_error_page(request=request, status_code=500)
     else:
-        return render_error_page(request=request, status_code=400, message="errorエンドポイントのパスには「server」またはHTTPレスポンスステータスコードのみが使用可能です。", joke_message="HTTP/1.1 600 Not Normal")
+        return await render_error_page(request=request, status_code=400, message="errorエンドポイントのパスには「server」またはHTTPレスポンスステータスコードのみが使用可能です。", joke_message="HTTP/1.1 600 Not Normal")
 
 css_re_charset    = re.compile(r'@charset\s+[^;]+;', re.IGNORECASE)
 css_re_import     = re.compile(r'@import\b[^;]*;', re.DOTALL)
@@ -89,7 +89,7 @@ css_re_whitespace = re.compile(r'\s+')
 async def merge_css(request: Request) -> Response:
     path_param = request.url.params.get("path", [""])[0]
     if not path_param:
-        return render_error_page(request=request, status_code=400, message="pathパラメータが必要です。")
+        return await render_error_page(request=request, status_code=400, message="pathパラメータが必要です。")
 
     charset: Optional[str] = None
     imports: List[str] = []
@@ -101,9 +101,9 @@ async def merge_css(request: Request) -> Response:
             if file := resolve_file(f"assets/css/{name}.css", timings=request.scope["timings"]):
                 content = file.read_text(encoding="utf-8")
             else:
-                return render_error_page(request=request, status_code=404, message=f"ファイルが見つかりません: {name}.css")
+                return await render_error_page(request=request, status_code=404, message=f"ファイルが見つかりません: {name}.css")
         except PermissionError:
-            return render_error_page(request=request, status_code=403, message="ねえ、今CSSファイル統合用のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？新しく追加されたエンドポイントに脆弱性あるか気になっただけ？そんなこと関係ないよね。攻撃しようとしたのは事実でしょ？？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
+            return await render_error_page(request=request, status_code=403, message="ねえ、今CSSファイル統合用のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？新しく追加されたエンドポイントに脆弱性あるか気になっただけ？そんなこと関係ないよね。攻撃しようとしたのは事実でしょ？？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
 
         m = css_re_charset.search(content)
         if m and charset is None:
@@ -132,7 +132,7 @@ async def merge_css(request: Request) -> Response:
 async def merge_js(request: Request) -> Response:
     path_param = request.url.params.get("path", [""])[0]
     if not path_param:
-        return render_error_page(request=request, status_code=400, message="pathパラメータが必要です。")
+        return await render_error_page(request=request, status_code=400, message="pathパラメータが必要です。")
 
     contents: List[str] = []
     for name in (n.strip() for n in path_param.split(",")):
@@ -140,9 +140,9 @@ async def merge_js(request: Request) -> Response:
             if file := resolve_file(f"assets/js/{name}.js", timings=request.scope["timings"]):
                 contents.append(file.read_text(encoding="utf-8"))
             else:
-                return render_error_page(request=request, status_code=404, message=f"ファイルが見つかりません: {name}.js")
+                return await render_error_page(request=request, status_code=404, message=f"ファイルが見つかりません: {name}.js")
         except PermissionError:
-            return render_error_page(request=request, status_code=403, message="ねえ、今JSファイル統合用のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？新しく追加されたエンドポイントに脆弱性あるか気になっただけ？そんなこと関係ないよね。攻撃しようとしたのは事実でしょ？？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
+            return await render_error_page(request=request, status_code=403, message="ねえ、今JSファイル統合用のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？新しく追加されたエンドポイントに脆弱性あるか気になっただけ？そんなこと関係ないよね。攻撃しようとしたのは事実でしょ？？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
 
     return PlainTextResponse(';\n'.join(c.strip() for c in contents if c.strip()), content_type="text/javascript")
 
@@ -160,4 +160,4 @@ async def access_counter(request: Request) -> Response:
 
 @app.route("/{path:path}", methods=["GET", "POST", "HEAD"])
 async def default_route(request: Request, path: str) -> Response:
-    return default_response(path, request=request)
+    return await default_response(path, request=request)

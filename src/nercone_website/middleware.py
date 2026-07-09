@@ -51,7 +51,7 @@ async def middleware(request: Request, next_handler):
             return await finalize(request, PlainTextResponse("許可されていないホスト名でのアクセスです。", status_code=403))
 
         if len(request.target) > 512:
-            return await finalize(request, render_error_page(request, status_code=414))
+            return await finalize(request, await render_error_page(request, status_code=414))
 
         if request.method == "OPTIONS":
             return await finalize(request, Response(204, headers=Headers([])))
@@ -99,7 +99,7 @@ async def middleware(request: Request, next_handler):
                 log_access(request, status_code=500)
                 request.scope["logged"] = True
 
-            return await finalize(request, render_error_page(request, status_code=500))
+            return await finalize(request, await render_error_page(request, status_code=500))
 
         except Exception:
             return PlainTextResponse("Internal Server Error", status_code=500)
