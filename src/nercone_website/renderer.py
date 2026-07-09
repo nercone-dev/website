@@ -17,7 +17,6 @@ from typing import Any, Optional, Literal, Dict
 from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from markitdown import MarkItDown, StreamInfo
-from urllib.parse import urlsplit
 
 from aki import Request, Response, Headers, HTMLResponse, MarkdownResponse, FileResponse, RedirectResponse
 from momiji.url import URL
@@ -66,39 +65,35 @@ async def compute_integrity(url: str) -> Optional[str]:
         if cached and datetime.now(timezone.utc) - cached[1] < integrity_max_age:
             return cached[0]
 
-        try:
-            parsed = URL(url)
+        parsed = URL.from_target(url)
 
-            if any(parsed.host == candidate or parsed.host.endswith("." + candidate) for candidate in Hostnames.public):
-                from .app import app
+        if any(parsed.host == candidate or parsed.host.endswith("." + candidate) for candidate in Hostnames.public):
+            from .app import app
 
-                headers = Headers({"Host": parsed.netloc})
-                target = parsed.path + (f"?{parsed.query}" if parsed.query else "")
+            headers = Headers({"Host": parsed.host if parsed.port is None else f"{parsed.host}:{parsed.port}"})
+            target = parsed.path + (f"?{parsed.query}" if parsed.query else "")
 
-                request = Request(method="GET", target=target, client=("127.0.0.1", 0), scheme="https", secure=True, headers=headers)
+            request = Request(method="GET", target=target, client=("127.0.0.1", 0), scheme="https", secure=True, headers=headers)
 
-                response = await app.on_request(request)
-                response.minify()
+            response = await app.on_request(request)
+            response.minify()
 
-                body = response.body
-                if not isinstance(body, (str, os.PathLike)) and body is not None:
-                    with open(body, "rb") as f:
-                        body = f.read()
+            body = response.body
+            if isinstance(body, (str, os.PathLike)):
+                with open(body, "rb") as f:
+                    body = f.read()
 
-                if response.status_code >= 400 or not isinstance(body, bytes):
-                    value = None
-                else:
-                    digest = base64.b64encode(hashlib.sha384(body).digest()).decode()
-                    value = f"sha384-{digest}"
-
+            if response.status_code >= 400 or not isinstance(body, bytes):
+                value = None
             else:
-                response = await integrity_client.get(url)
-                response.raise_for_status()
-                digest = base64.b64encode(hashlib.sha384(response.content).digest()).decode()
+                digest = base64.b64encode(hashlib.sha384(body).digest()).decode()
                 value = f"sha384-{digest}"
 
-        except Exception:
-            value = None
+        else:
+            response = await integrity_client.get(url)
+            response.raise_for_status()
+            digest = base64.b64encode(hashlib.sha384(response.content).digest()).decode()
+            value = f"sha384-{digest}"
 
         integrity_cache[url] = (value, datetime.now(timezone.utc))
         return value
