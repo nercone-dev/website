@@ -1,5 +1,5 @@
 import json
-from typing import Optional
+from typing import Optional, Literal
 from pathlib import Path
 
 from .models import TimingManager
@@ -24,27 +24,27 @@ def resolve_file(path: str, *, timings: Optional[TimingManager] = None) -> Optio
 
     return full_path
 
-def resolve_page(path: str, markdown_mode: bool = False, *, timings: Optional[TimingManager] = None) -> Optional[str]:
+def resolve_page(path: str, mode: Literal["html", "markdown"] = False, *, timings: Optional[TimingManager] = None) -> Optional[str]:
     if timings:
         timings.start("resolve", "Resolve Page")
 
     if path in ["", "/"]:
-        template_candidates = ["index.html", "README.html"]
-        markdown_candidates = ["index.md",   "README.md"]
+        candidates_html     = ["index.html", "README.html"]
+        candidates_markdown = ["index.md",   "README.md"]
     elif path.endswith(".html"):
-        template_candidates = [f"{path[:-5].strip('/')}.html", f"{path[:-5].strip('/')}/index.html", f"{path[:-5].strip('/')}/README.html"]
-        markdown_candidates = [f"{path[:-5].strip('/')}.md",   f"{path[:-5].strip('/')}/index.md",   f"{path[:-5].strip('/')}/README.md"]
+        candidates_html     = [f"{path[:-5].strip('/')}.html", f"{path[:-5].strip('/')}/index.html", f"{path[:-5].strip('/')}/README.html"]
+        candidates_markdown = [f"{path[:-5].strip('/')}.md",   f"{path[:-5].strip('/')}/index.md",   f"{path[:-5].strip('/')}/README.md"]
     elif path.endswith(".md"):
-        template_candidates = [f"{path[:-3].strip('/')}.html", f"{path[:-3].strip('/')}/index.html", f"{path[:-3].strip('/')}/README.html"]
-        markdown_candidates = [f"{path[:-3].strip('/')}.md",   f"{path[:-3].strip('/')}/index.md",   f"{path[:-3].strip('/')}/README.md"]
+        candidates_html     = [f"{path[:-3].strip('/')}.html", f"{path[:-3].strip('/')}/index.html", f"{path[:-3].strip('/')}/README.html"]
+        candidates_markdown = [f"{path[:-3].strip('/')}.md",   f"{path[:-3].strip('/')}/index.md",   f"{path[:-3].strip('/')}/README.md"]
     else:
-        template_candidates = [f"{path.strip('/')}.html", f"{path.strip('/')}/index.html", f"{path.strip('/')}/README.html"]
-        markdown_candidates = [f"{path.strip('/')}.md",   f"{path.strip('/')}/index.md",   f"{path.strip('/')}/README.md"]
+        candidates_html     = [f"{path.strip('/')}.html", f"{path.strip('/')}/index.html", f"{path.strip('/')}/README.html"]
+        candidates_markdown = [f"{path.strip('/')}.md",   f"{path.strip('/')}/index.md",   f"{path.strip('/')}/README.md"]
 
-    if markdown_mode:
-        candidates = markdown_candidates + template_candidates 
-    else:
-        candidates = template_candidates + markdown_candidates
+    if mode == "html":
+        candidates = candidates_html + candidates_markdown
+    elif mode == "markdown":
+        candidates = candidates_markdown + candidates_html 
 
     for candidate in candidates:
         if file := resolve_file(candidate, timings=timings):
