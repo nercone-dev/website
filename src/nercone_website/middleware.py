@@ -145,6 +145,7 @@ async def finalize(request: Request, response: Response) -> Response:
 
     # Security
     set_header("Referrer-Policy", "strict-origin-when-cross-origin")
+    set_header("Integrity-Policy", "blocked-destinations=(script style)", condition=("text/html" in content_type and response.status_code < 500))
     set_header("Permissions-Policy", request.scope["pp"].header)
     set_header("Content-Security-Policy", request.scope["csp"].header)
 
