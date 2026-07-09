@@ -138,9 +138,7 @@ def init_context(context: Dict[str, Any], request: Request):
     context["daily_quote"] = daily_quote
 
 def render_mode(request: Request) -> Literal["html", "markdown"]:
-    if any([request.url.path.endswith(".html"), "text/html" in request.headers.get("accept", "").lower()]):
-        return "html"
-    elif any([request.url.path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), request.headers.get("user-agent", "").lower().startswith("curl")]):
+    if any([request.url.path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), request.headers.get("user-agent", "").lower().startswith("curl")]):
         return "markdown"
     else:
         return "html"
