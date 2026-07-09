@@ -126,7 +126,7 @@ async def merge_css(request: Request) -> Response:
         parts.append('\n'.join(imports))
     parts.extend(bodies)
 
-    return PlainTextResponse('\n\n'.join(parts), headers=Headers([("Content-Type", ["text/css"])]))
+    return PlainTextResponse('\n\n'.join(parts), content_type="text/css")
 
 @app.route("/assets/js/merge", methods=["GET"])
 async def merge_js(request: Request) -> Response:
@@ -144,7 +144,7 @@ async def merge_js(request: Request) -> Response:
         except PermissionError:
             return render_error_page(request=request, status_code=403, message="ねえ、今JSファイル統合用のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？新しく追加されたエンドポイントに脆弱性あるか気になっただけ？そんなこと関係ないよね。攻撃しようとしたのは事実でしょ？？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
 
-    return PlainTextResponse(';\n'.join(c.strip() for c in contents if c.strip()), headers=Headers([("Content-Type", ["text/javascript"])]))
+    return PlainTextResponse(';\n'.join(c.strip() for c in contents if c.strip()), content_type="text/javascript")
 
 @app.route("/assets/images/counter.png", methods=["GET"])
 async def access_counter(request: Request) -> Response:
