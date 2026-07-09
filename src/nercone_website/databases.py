@@ -2,7 +2,7 @@ import httpx
 import fcntl
 import traceback
 import mimetypes
-from nercone_modern import Logging
+from modern import Logging
 from datetime import datetime, timedelta
 
 from .constants import Files
