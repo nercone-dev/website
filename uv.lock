@@ -627,14 +627,14 @@ wheels = [
 
 [[package]]
 name = "nercone-modern"
-version = "3.0.0"
+version = "4.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "strip-ansi" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/de/90/d278cf503f60cc39a9ebdedfc6e2a58ea5dd2450e83e90d4e2dc32bee4bc/nercone_modern-3.0.0.tar.gz", hash = "sha256:8f75e4646f08506c3aaeb15e2eed44112d374180eaf3e28fec821187bc373034", size = 4930, upload-time = "2026-07-09T14:36:49.992Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6f/5b/fc6836dd96066c86aba15226c0b1d653563ed82d79732426562ad087c1ad/nercone_modern-4.0.0.tar.gz", hash = "sha256:08f7ee50f919ff1a5f7830f27e49b70e952047f58954b6090f4290b339043241", size = 5852, upload-time = "2026-07-10T01:11:15.052Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/49/46/508a2f5fdae00fc73ccf14181b7f10d77e7c96884b04180fbc5ee5271b06/nercone_modern-3.0.0-py3-none-any.whl", hash = "sha256:2b77896c0d83c85c6ecb23f8daad67818a9ec57d637a8a9490fa2164931ad9eb", size = 6887, upload-time = "2026-07-09T14:36:50.759Z" },
+    { url = "https://files.pythonhosted.org/packages/07/27/fbc80448e31e18560296750d3ad5b3036c063b58d3596fce611499a14181/nercone_modern-4.0.0-py3-none-any.whl", hash = "sha256:158c683d3ae0e7ff0b4aa8327bea5cc472b0782134b4045e51b6805ddacdf1db", size = 8157, upload-time = "2026-07-10T01:11:13.802Z" },
 ]
 
 [[package]]
