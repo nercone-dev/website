@@ -615,26 +615,26 @@ wheels = [
 
 [[package]]
 name = "nercone-aki"
-version = "1.2.1"
+version = "1.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "rear-momiji" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f5/30/8ec0214034851d40b801a9b043fee58bbaf3c1f7bdeafc306293bb567288/nercone_aki-1.2.1.tar.gz", hash = "sha256:2cbed5fdd1dd9d2d633db6737c4f6a827d4672e4ff4ab4c90ddab4fa95921cc4", size = 3138, upload-time = "2026-07-06T10:51:09.576Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1b/56/efd4907c2eb0d5fe189cc3426a654a2153d4d671530160409b8243a4e7b7/nercone_aki-1.2.2.tar.gz", hash = "sha256:17daf291d496d7a823db5ff99a6a9ba72c299e2d180e2e49bae2d2e039bda153", size = 3134, upload-time = "2026-07-12T19:29:49.733Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5b/a8/046c211f5a2fa1b41b30ae40c341ece72509ec4a74062f9affed0d63c73a/nercone_aki-1.2.1-py3-none-any.whl", hash = "sha256:385b07e26a0e5148d2971e781d24bfae3c24a44253460eeb0a7ea050f9783b94", size = 4997, upload-time = "2026-07-06T10:51:08.613Z" },
+    { url = "https://files.pythonhosted.org/packages/8f/54/a2b972a78dadfa737395b71f6e19651d9b00d3dece18ee72903349645e5f/nercone_aki-1.2.2-py3-none-any.whl", hash = "sha256:6c6b4323d9546ea6df93123b567fd8ffe8fe1a7b9cf7cfaffb7b0048a2205e81", size = 4994, upload-time = "2026-07-12T19:29:50.645Z" },
 ]
 
 [[package]]
 name = "nercone-modern"
-version = "4.1.1"
+version = "5.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "strip-ansi" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a4/5b/29b1212d79a6850996b9adcf149bc5199266b324484c9140adee1f916d2a/nercone_modern-4.1.1.tar.gz", hash = "sha256:8b5db0c55136838936eacc6f2cc443337cbb5a62b832468cc60447c3cf8f7fae", size = 5912, upload-time = "2026-07-10T21:07:57.187Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/68/cb/2f59e936a7bda21d2cf853bdb9dc3eba8a9321f09b00db996ef4297c495b/nercone_modern-5.1.1.tar.gz", hash = "sha256:23f1b7e9d5a328014bc6a1e61ef436c47f03227837c1eee3614f4d3cc61eb42b", size = 6654, upload-time = "2026-07-12T18:15:04.444Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6f/60/d048fc56b35298bdfd96b23c3cedf7f815b3ad5002923a23e89b484491ac/nercone_modern-4.1.1-py3-none-any.whl", hash = "sha256:e983aab075f0e24d31782752148ba89ef27ce06c86da04c59ce71e976a0251a7", size = 8214, upload-time = "2026-07-10T21:07:56.13Z" },
+    { url = "https://files.pythonhosted.org/packages/0e/45/0767c198727d4eae28c3df660640fee4b10cc12b6a18a92006f9be5965a7/nercone_modern-5.1.1-py3-none-any.whl", hash = "sha256:4c1fe7b5364b22dac5203a6d10b8a99b9f9323f6de56c4997f762e17f6dc35e1", size = 8994, upload-time = "2026-07-12T18:15:03.467Z" },
 ]
 
 [[package]]
@@ -886,7 +886,7 @@ wheels = [
 
 [[package]]
 name = "rear-momiji"
-version = "3.4.6"
+version = "3.4.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "brotlicffi" },
@@ -898,9 +898,9 @@ dependencies = [
     { name = "xxhash" },
     { name = "zstandard" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/77/f4/52990f7abcfe7c5330432a3208efd84e498e26d1aab3226d605d8f2783ea/rear_momiji-3.4.6.tar.gz", hash = "sha256:994101c97fb09e549a5c74169cb70e8e1509ce8366e50dbd739c9aaa0aa62976", size = 19332, upload-time = "2026-07-09T16:38:31.301Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/93/97/9572cce2dc2d36dbf9c6c2926b8e35216a1d0fb049cd290e68f6b5faaf66/rear_momiji-3.4.7.tar.gz", hash = "sha256:e6686f047c9975b99d416549c9da97ba55a45c2677aef28972dffe76280336c8", size = 19343, upload-time = "2026-07-12T19:30:22.055Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/bf/ff/186621e65d127347ffb4df0e032b8b2631d05884e8523b490afd848a43e6/rear_momiji-3.4.6-py3-none-any.whl", hash = "sha256:6232aacb7cec803b8c3d13c76b2046b116e3c74fe49424bcb30462da9364c31d", size = 23629, upload-time = "2026-07-09T16:38:30.205Z" },
+    { url = "https://files.pythonhosted.org/packages/29/f8/c0c4c401811c48c6cb4bedd010e73174969662dc2ccf114717671363a5ed/rear_momiji-3.4.7-py3-none-any.whl", hash = "sha256:63f9849f43791ed9c64549bbeab2900c424ff0010d7eb519b52d9f0e6d2f725d", size = 23642, upload-time = "2026-07-12T19:30:20.79Z" },
 ]
 
 [[package]]
