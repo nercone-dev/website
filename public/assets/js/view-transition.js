@@ -3,6 +3,11 @@
 
     let abortController = null;
 
+    // DOMParser parses <noscript> contents as real elements, so they must never be taken over.
+    function queryActive(root, selector) {
+        return [...root.querySelectorAll(selector)].filter(el => !el.closest('noscript'));
+    }
+
     function preloadAssets(newDoc) {
         const curStyleHrefs = new Set([...document.querySelectorAll('link[rel="stylesheet"]')].map(l => l.href));
         const curScriptSrcs = new Set([...document.querySelectorAll('script[src]')].map(s => s.src));
@@ -10,8 +15,8 @@
         const tasks = [];
 
         const newStyles = [
-            ...newDoc.head.querySelectorAll('link[rel="stylesheet"]'),
-            ...newDoc.body.querySelectorAll(':scope > link[rel="stylesheet"]'),
+            ...queryActive(newDoc.head, 'link[rel="stylesheet"]'),
+            ...queryActive(newDoc.body, ':scope > link[rel="stylesheet"]'),
         ];
         newStyles
             .filter(l => !curStyleHrefs.has(new URL(l.href, location.href).href))
@@ -23,8 +28,8 @@
             })));
 
         const newScriptEls = [
-            ...newDoc.head.querySelectorAll('script[src]'),
-            ...newDoc.body.querySelectorAll(':scope > script[src]'),
+            ...queryActive(newDoc.head, 'script[src]'),
+            ...queryActive(newDoc.body, ':scope > script[src]'),
         ].filter(s => !curScriptSrcs.has(new URL(s.src, location.href).href));
 
         newScriptEls.forEach(script => tasks.push(new Promise(resolve => {
@@ -56,7 +61,7 @@
         const insertRef = head.querySelector(
             'link[rel="preconnect"], link[rel="stylesheet"], link[rel="manifest"], link[rel="icon"], script'
         );
-        newHead.querySelectorAll('meta[name], meta[property]').forEach((m) => {
+        queryActive(newHead, 'meta[name], meta[property]').forEach((m) => {
             const key = m.getAttribute('name') || m.getAttribute('property');
             if (!META_KEEP.has(key)) head.insertBefore(m.cloneNode(true), insertRef);
         });
@@ -66,8 +71,8 @@
         if (nc && cc) cc.href = nc.href;
 
         const newStyleHrefs = new Set([
-            ...newHead.querySelectorAll('link[rel="stylesheet"]'),
-            ...newDoc.body.querySelectorAll(':scope > link[rel="stylesheet"]'),
+            ...queryActive(newHead, 'link[rel="stylesheet"]'),
+            ...queryActive(newDoc.body, ':scope > link[rel="stylesheet"]'),
         ].map(l => new URL(l.href, location.href).href));
         head.querySelectorAll('link[rel="stylesheet"]').forEach((l) => {
             if (!newStyleHrefs.has(l.href)) l.remove();
@@ -77,8 +82,8 @@
         });
 
         const newScriptSrcs = new Set([
-            ...newHead.querySelectorAll('script[src]'),
-            ...newDoc.body.querySelectorAll(':scope > script[src]'),
+            ...queryActive(newHead, 'script[src]'),
+            ...queryActive(newDoc.body, ':scope > script[src]'),
         ].map(s => new URL(s.src, location.href).href));
         head.querySelectorAll('script[src]').forEach((s) => {
             if (!newScriptSrcs.has(s.src)) s.remove();
@@ -88,7 +93,7 @@
         });
 
         head.querySelectorAll('style').forEach(s => s.remove());
-        newHead.querySelectorAll('style').forEach(s => head.appendChild(s.cloneNode(true)));
+        queryActive(newHead, 'style').forEach(s => head.appendChild(s.cloneNode(true)));
     }
 
     async function navigate(url, pushHistory = true) {

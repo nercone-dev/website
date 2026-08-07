@@ -10,7 +10,7 @@ extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/css/pages
     <p>Nerconeが制作したカラーパレット</p>
 </div>
 
-<p class="text-alt"><b>Download</b> <a href="https://assets.nercone.dev/images/other/color-palette/v2.ai" class="text-no-decoration" download>adobe-illustrator</a> / <a href="https://assets.nercone.dev/images/other/color-palette/v2.svg" class="text-no-decoration" download>svg</a> / <a href="https://assets.nercone.dev/images/other/color-palette/v2.png" class="text-no-decoration" download>png</a> / <a href="https://assets.nercone.dev/images/other/color-palette/v2.webp" class="text-no-decoration" download>webp</a></p>
+<p class="text-color-alt"><b>Download</b> <a href="https://assets.nercone.dev/images/other/color-palette/v2.ai" class="text-decoration-none" download>adobe-illustrator</a> / <a href="https://assets.nercone.dev/images/other/color-palette/v2.svg" class="text-decoration-none" download>svg</a> / <a href="https://assets.nercone.dev/images/other/color-palette/v2.png" class="text-decoration-none" download>png</a> / <a href="https://assets.nercone.dev/images/other/color-palette/v2.webp" class="text-decoration-none" download>webp</a></p>
 
 これはNerconeが制作したカラーパレットの紹介ページです。
 

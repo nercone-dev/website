@@ -1,0 +1,118 @@
+#snowflake {
+    view-transition-name: snowflake;
+
+    border: 1px solid var(--theme-color-border-header);
+
+    width: 320px;
+    max-width: calc(100vw - 32px);
+
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 1000;
+}
+#snowflake.is-hidden {
+    display: none;
+}
+
+#snowflake .snowflake-header {
+    font-size: smaller;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 6px;
+    padding: 6px;
+}
+
+#snowflake .snowflake-link {
+    cursor: pointer;
+}
+
+#snowflake .snowflake-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+#snowflake .snowflake-minimize,
+#snowflake .snowflake-close {
+    background: none;
+
+    border: none;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: var(--font-size);
+    height: var(--font-size);
+
+    padding: 0;
+    flex-shrink: 0;
+}
+#snowflake .snowflake-minimize, #snowflake .snowflake-minimize *,
+#snowflake .snowflake-close, #snowflake .snowflake-close * {
+    cursor: pointer;
+}
+#snowflake .snowflake-minimize svg,
+#snowflake .snowflake-close svg {
+    width: var(--font-size);
+    height: var(--font-size);
+}
+
+#snowflake .snowflake-minimize-vertical {
+    display: none;
+}
+#snowflake.is-minimized .minimize-vertical {
+    display: inline;
+}
+
+#snowflake iframe {
+    border: none;
+    display: block;
+    width: 320px;
+    height: 262px;
+    max-width: 100%;
+}
+#snowflake.is-minimized iframe {
+    height: 0;
+    min-height: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+@media (max-width: 512px) {
+    #snowflake {
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --color-scheme-background-snowflake: #f9f9fa;
+    }
+    #snowflake {
+        background: var(--color-scheme-background-snowflake);
+    }
+    #snowflake * {
+        color: #000000;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-scheme-background-snowflake: #38383d;
+    }
+    #snowflake {
+        background: var(--color-scheme-background-snowflake);
+    }
+    #snowflake * {
+        color: #ffffff;
+    }
+}

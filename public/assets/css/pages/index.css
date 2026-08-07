@@ -14,7 +14,7 @@ main {
     flex-direction: column;
 }
 
-#big-text {
+#title {
     font-size: 64pt;
     margin: 0;
 
@@ -23,11 +23,11 @@ main {
     justify-content: center;
 }
 
-#daily-quote {
+#description {
     font-size: 12pt;
 }
 
-#big-text, #daily-quote {
+#title, #description {
     padding-top: 0px;
     padding-bottom: 0px;
     margin-top: 0px;
@@ -37,7 +37,7 @@ main {
 }
 
 @media (max-width: 512px) {
-    #big-text {
+    #title {
         font-size: 48pt;
     }
 }

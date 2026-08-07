@@ -1,7 +1,8 @@
 import re
+import json
 from typing import Optional, Set, List
 
-from aki import Aki, Request, Response, Headers, PlainTextResponse, JSONResponse, FileResponse
+from aki import Aki, Request, Message
 
 from .logger import format_access
 from .routes import add_report_route
@@ -20,12 +21,12 @@ add_report_route(app, "/report", "DEFAULT")
 add_report_route(app, "/report/csp", "CSP")
 
 @app.route("/ping", methods=["GET"])
-async def ping(request: Request):
-    return PlainTextResponse("pong!")
+async def ping(request: Request) -> Message:
+    return Message.text("pong!", request.version)
 
 @app.route("/welcome", methods=["GET"])
-async def welcome(request: Request):
-    return PlainTextResponse(
+async def welcome(request: Request) -> Message:
+    return Message.text(
         f"""
 ■   ■ ■■■■■ ■■■■   ■■■■  ■■■  ■   ■ ■■■■■
 ■■  ■ ■     ■   ■ ■     ■   ■ ■■  ■ ■
@@ -37,36 +38,40 @@ async def welcome(request: Request):
 
 nercone.dev ({Repository.version})
 welcome to nercone.dev!
-        """.strip() + "\n"
+        """.strip() + "\n",
+        request.version
     )
 
 @app.route("/echo", methods=["GET"])
-async def echo(request: Request):
+async def echo(request: Request) -> Message:
     if request.scope["network"].trusted:
-        return JSONResponse(format_access(request))
+        return Message.json(json.dumps(format_access(request)), request.version)
     else:
         return await render_error_page(request=request, status_code=403, message="/echoエンドポイントはデバッグ用途のため、信頼された接続元からのみ使用できます。", joke_message="悪いなのび太、このエンドポイント開発者専用なんだ")
 
 @app.route("/status", methods=["GET"])
-async def status(request: Request):
-    return JSONResponse(
-        {
-            "status": "ok",
-            "version": Repository.version,
-            "counter": AccessCounter().get()
-        }
+async def status(request: Request) -> Message:
+    return Message.json(
+        json.dumps(
+            {
+                "status": "ok",
+                "version": Repository.version,
+                "counter": AccessCounter().get()
+            }
+        ),
+        request.version
     )
 
 @app.route("/assets/images/thumbnail/template/{template}", methods=["GET"])
-async def thumbnail(request: Request, template: str) -> Response:
-    query_params = {key: values[0] for key, values in request.url.params.items()}
+async def thumbnail(request: Request, template: str) -> Message:
+    query_params = {key: values[0] for key, values in request.scope["url"].params.items()}
     path = query_params.get("path", "/")
     title = query_params.get("title", "Untitled Page")
     description = query_params.get("description", "No description.")
 
     try:
         png = render_thumbnail_png(path, title, description, template=template, timings=request.scope["timings"])
-        return Response(body=png, headers=Headers([("Content-Type", ["image/png"])]))
+        return Message.content("image/png", png, request.version)
     except FileNotFoundError:
         return await render_error_page(request=request, status_code=404, message="サムネイルの生成に必要なテンプレートが見つかりません。", joke_message="はにゃ？")
     except PermissionError:
@@ -86,8 +91,8 @@ css_re_import     = re.compile(r'@import\b[^;]*;', re.DOTALL)
 css_re_whitespace = re.compile(r'\s+')
 
 @app.route("/assets/css/merge", methods=["GET"])
-async def merge_css(request: Request) -> Response:
-    path_param = request.url.params.get("path", [""])[0]
+async def merge_css(request: Request) -> Message:
+    path_param = request.scope["url"].params.get("path", [""])[0]
     if not path_param:
         return await render_error_page(request=request, status_code=400, message="pathパラメータが必要です。")
 
@@ -126,11 +131,11 @@ async def merge_css(request: Request) -> Response:
         parts.append('\n'.join(imports))
     parts.extend(bodies)
 
-    return PlainTextResponse('\n\n'.join(parts), content_type="text/css")
+    return Message.content("text/css", '\n\n'.join(parts), request.version)
 
 @app.route("/assets/js/merge", methods=["GET"])
-async def merge_js(request: Request) -> Response:
-    path_param = request.url.params.get("path", [""])[0]
+async def merge_js(request: Request) -> Message:
+    path_param = request.scope["url"].params.get("path", [""])[0]
     if not path_param:
         return await render_error_page(request=request, status_code=400, message="pathパラメータが必要です。")
 
@@ -144,20 +149,25 @@ async def merge_js(request: Request) -> Response:
         except PermissionError:
             return await render_error_page(request=request, status_code=403, message="ねえ、今JSファイル統合用のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？新しく追加されたエンドポイントに脆弱性あるか気になっただけ？そんなこと関係ないよね。攻撃しようとしたのは事実でしょ？？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
 
-    return PlainTextResponse(';\n'.join(c.strip() for c in contents if c.strip()), content_type="text/javascript")
+    return Message.content("text/javascript", ';\n'.join(c.strip() for c in contents if c.strip()), request.version)
 
 @app.route("/assets/images/counter.png", methods=["GET"])
-async def access_counter(request: Request) -> Response:
+async def access_counter(request: Request) -> Message:
     try:
         if file := resolve_file("/assets/images/counter.png", timings=request.scope["timings"]):
             AccessCounter().increase()
             request.scope["cc"].set("no-store")
-            return FileResponse(file)
-        else:
-            return PlainTextResponse("Not Found: counter.png", 404)
+            return Message.file(file, request.version)
+
+        response = Message.text("Not Found: counter.png", request.version)
+        response.status_code = 404
+        return response
+
     except PermissionError:
-        return PlainTextResponse("Permission Error: counter.png", 403)
+        response = Message.text("Permission Error: counter.png", request.version)
+        response.status_code = 403
+        return response
 
 @app.route("/{path:path}", methods=["GET", "POST", "HEAD"])
-async def default_route(request: Request, path: str) -> Response:
+async def default_route(request: Request, path: str) -> Message:
     return await default_response(path, request=request)

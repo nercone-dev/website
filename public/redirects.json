@@ -1,14 +1,15 @@
 {
   "email": {"type": "redirect", "content": "mailto:nercone@nercone.dev"},
 
-  "github": {"type": "redirect", "content": "https://github.com/nercone-dev/"},
-  "twitter": {"type": "redirect", "content": "https://twitter.com/nercone_z/"},
-  "youtube": {"type": "redirect", "content": "https://youtube.com/channel/UCBG9Y8fWvVyoIgDwdr_BUFw/"},
+  "github":    {"type": "redirect", "content": "https://github.com/nercone-dev/"},
+  "twitter":   {"type": "redirect", "content": "https://twitter.com/nercone_x/"},
+  "youtube":   {"type": "redirect", "content": "https://youtube.com/@nercone-ch/"},
   "nicovideo": {"type": "redirect", "content": "https://nicovideo.jp/user/132818887/"},
-  "qiita": {"type": "redirect", "content": "https://qiita.com/DiamondGotCat/"},
-  "zenn": {"type": "redirect", "content": "https://zenn.dev/techcat56/"},
-  "orcid": {"type": "redirect", "content": "https://orcid.org/0009-0001-3615-0962/"},
-  "justuuid": {"type": "redirect", "content": "https://justuuid.pages.dev/u/7b70a75e-d72f-4bba-8e55-1c3c9e032678/"},
+  "qiita":     {"type": "redirect", "content": "https://qiita.com/nercone/"},
+  "zenn":      {"type": "redirect", "content": "https://zenn.dev/nercone/"},
+  "orcid":     {"type": "redirect", "content": "https://orcid.org/0009-0001-3615-0962/"},
+  "justuuid":  {"type": "redirect", "content": "https://justuuid.pages.dev/u/7b70a75e-d72f-4bba-8e55-1c3c9e032678/"},
 
+  "favicon.ico":  {"type": "redirect", "content": "https://assets.nercone.dev/images/favicon.svg"},
   "security.txt": {"type": "redirect", "content": "https://nercone.dev/.well-known/security.txt"}
 }

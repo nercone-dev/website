@@ -1,153 +1,67 @@
 @font-face {
-    font-family: "Nercone Sans JP";
-    src: local("Nercone Sans JP"), url("https://assets.nercone.dev/fonts/NerconeSansJP-Regular.woff2") format("woff2");
-    font-weight: 400;
+    font-family: "Nercone Sans CJK";
+    src: local("Nercone Sans CJK"), url("https://assets.nercone.dev/fonts/NerconeSansCJK-Variable.woff2") format("woff2-variations");
     font-style: normal;
     font-display: swap;
 }
 @font-face {
-    font-family: "Nercone Sans JP";
-    src: local("Nercone Sans JP"), url("https://assets.nercone.dev/fonts/NerconeSansJP-Italic.woff2") format("woff2");
-    font-weight: 400;
+    font-family: "Nercone Sans CJK";
+    src: local("Nercone Sans CJK"), url("https://assets.nercone.dev/fonts/NerconeSansCJK-VariableItalic.woff2") format("woff2-variations");
     font-style: italic;
     font-display: swap;
 }
 @font-face {
-    font-family: "Nercone Sans JP";
-    src: local("Nercone Sans JP"), url("https://assets.nercone.dev/fonts/NerconeSansJP-Bold.woff2") format("woff2");
-    font-weight: 700;
+    font-family: "Nercone Serif CJK";
+    src: local("Nercone Serif CJK"), url("https://assets.nercone.dev/fonts/NerconeSerifCJK-Variable.woff2") format("woff2-variations");
     font-style: normal;
     font-display: swap;
 }
 @font-face {
-    font-family: "Nercone Sans JP";
-    src: local("Nercone Sans JP"), url("https://assets.nercone.dev/fonts/NerconeSansJP-BoldItalic.woff2") format("woff2");
-    font-weight: 700;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Nercone Sans SC";
-    src: local("Nercone Sans SC"), url("https://assets.nercone.dev/fonts/NerconeSansSC-Regular.woff2") format("woff2");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-@font-face {
-    font-family: "Nercone Sans SC";
-    src: local("Nercone Sans SC"), url("https://assets.nercone.dev/fonts/NerconeSansSC-Italic.woff2") format("woff2");
-    font-weight: 400;
+    font-family: "Nercone Serif CJK";
+    src: local("Nercone Serif CJK"), url("https://assets.nercone.dev/fonts/NerconeSerifCJK-VariableItalic.woff2") format("woff2-variations");
     font-style: italic;
     font-display: swap;
 }
 @font-face {
-    font-family: "Nercone Sans SC";
-    src: local("Nercone Sans SC"), url("https://assets.nercone.dev/fonts/NerconeSansSC-Bold.woff2") format("woff2");
-    font-weight: 700;
+    font-family: "Nercone Mono CJK";
+    src: local("Nercone Mono CJK"), url("https://assets.nercone.dev/fonts/NerconeMonoCJK-Variable.woff2") format("woff2-variations");
     font-style: normal;
     font-display: swap;
 }
 @font-face {
-    font-family: "Nercone Sans SC";
-    src: local("Nercone Sans SC"), url("https://assets.nercone.dev/fonts/NerconeSansSC-BoldItalic.woff2") format("woff2");
-    font-weight: 700;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Nercone Sans TC";
-    src: local("Nercone Sans TC"), url("https://assets.nercone.dev/fonts/NerconeSansTC-Regular.woff2") format("woff2");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-@font-face {
-    font-family: "Nercone Sans TC";
-    src: local("Nercone Sans TC"), url("https://assets.nercone.dev/fonts/NerconeSansTC-Italic.woff2") format("woff2");
-    font-weight: 400;
+    font-family: "Nercone Mono CJK";
+    src: local("Nercone Mono CJK"), url("https://assets.nercone.dev/fonts/NerconeMonoCJK-VariableItalic.woff2") format("woff2-variations");
     font-style: italic;
     font-display: swap;
 }
 @font-face {
-    font-family: "Nercone Sans TC";
-    src: local("Nercone Sans TC"), url("https://assets.nercone.dev/fonts/NerconeSansTC-Bold.woff2") format("woff2");
-    font-weight: 700;
+    font-family: "Nercone Mono CJK NF";
+    src: local("Nercone Mono CJK NF"), url("https://assets.nercone.dev/fonts/NerconeMonoCJKNF-Variable.woff2") format("woff2-variations");
     font-style: normal;
     font-display: swap;
 }
 @font-face {
-    font-family: "Nercone Sans TC";
-    src: local("Nercone Sans TC"), url("https://assets.nercone.dev/fonts/NerconeSansTC-BoldItalic.woff2") format("woff2");
-    font-weight: 700;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Nercone Sans KR";
-    src: local("Nercone Sans KR"), url("https://assets.nercone.dev/fonts/NerconeSansKR-Regular.woff2") format("woff2");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-@font-face {
-    font-family: "Nercone Sans KR";
-    src: local("Nercone Sans KR"), url("https://assets.nercone.dev/fonts/NerconeSansKR-Italic.woff2") format("woff2");
-    font-weight: 400;
-    font-style: italic;
-    font-display: swap;
-}
-@font-face {
-    font-family: "Nercone Sans KR";
-    src: local("Nercone Sans KR"), url("https://assets.nercone.dev/fonts/NerconeSansKR-Bold.woff2") format("woff2");
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
-@font-face {
-    font-family: "Nercone Sans KR";
-    src: local("Nercone Sans KR"), url("https://assets.nercone.dev/fonts/NerconeSansKR-BoldItalic.woff2") format("woff2");
-    font-weight: 700;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Nercone Mono JP";
-    src: local("Nercone Mono JP"), url("https://assets.nercone.dev/fonts/NerconeMonoJP-Regular.woff2") format("woff2");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-@font-face {
-    font-family: "Nercone Mono JP";
-    src: local("Nercone Mono JP"), url("https://assets.nercone.dev/fonts/NerconeMonoJP-Italic.woff2") format("woff2");
-    font-weight: 400;
-    font-style: italic;
-    font-display: swap;
-}
-@font-face {
-    font-family: "Nercone Mono JP";
-    src: local("Nercone Mono JP"), url("https://assets.nercone.dev/fonts/NerconeMonoJP-Bold.woff2") format("woff2");
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
-@font-face {
-    font-family: "Nercone Mono JP";
-    src: local("Nercone Mono JP"), url("https://assets.nercone.dev/fonts/NerconeMonoJP-BoldItalic.woff2") format("woff2");
-    font-weight: 700;
+    font-family: "Nercone Mono CJK NF";
+    src: local("Nercone Mono CJK NF"), url("https://assets.nercone.dev/fonts/NerconeMonoCJKNF-VariableItalic.woff2") format("woff2-variations");
     font-style: italic;
     font-display: swap;
 }
 
 :root {
-    --font-family-noto: "Noto Sans JP", "Noto Sans SC", "Noto Sans TC", "Noto Sans KR";
-    --font-family-sans: "Nercone Sans JP", "Inter", var(--font-family-noto), sans-serif;
-    --font-family-mono: "Nercone Mono JP", "Meslo", var(--font-family-noto), monospace;
-    --font-size: 12pt;
+    --font-family-sans: "Nercone Sans CJK", "Inter", "Noto Sans JP", "Noto Sans SC", "Noto Sans TC", "Noto Sans KR", sans-serif;
+    --font-family-serif: "Nercone Serif CJK", "Charter", "Noto Serif JP", "Noto Serif SC", "Noto Serif TC", "Noto Serif KR", serif;
+    --font-family-mono: "Nercone Mono CJK", "Meslo", "Noto Sans JP", "Noto Sans SC", "Noto Sans TC", "Noto Sans KR", monospace;
+
+    --font-weight-thin:       100;
+    --font-weight-extralight: 200;
+    --font-weight-light:      300;
+    --font-weight-regular:    400;
+    --font-weight-medium:     500;
+    --font-weight-semibold:   600;
+    --font-weight-bold:       700;
+    --font-weight-extrabold:  800;
+    --font-weight-black:      900;
+    --font-weight-extrablack: 1000;
 }
 
 a {
@@ -167,51 +81,45 @@ s {
     text-decoration: line-through;
 }
 
-.font-sans-jp {
-    font-family: "Nercone Sans JP";
+.font-family-sans {
+    font-family: var(--font-family-sans);
 }
-.font-sans-sc {
-    font-family: "Nercone Sans SC";
+.font-family-serif {
+    font-family: var(--font-family-serif);
 }
-.font-sans-tc {
-    font-family: "Nercone Sans TC";
-}
-.font-sans-kr {
-    font-family: "Nercone Sans KR";
-}
-.font-mono-jp {
-    font-family: "Nercone Mono JP";
+.font-family-mono {
+    font-family: var(--font-family-mono);
 }
 
-.font-thin {
-    font-weight: 100;
+.font-weight-thin {
+    font-weight: var(--font-weight-thin);
 }
-.font-extralight {
-    font-weight: 200;
+.font-weight-extralight {
+    font-weight: var(--font-weight-extralight);
 }
-.font-light {
-    font-weight: 300;
+.font-weight-light {
+    font-weight: var(--font-weight-light);
 }
-.font-regular {
-    font-weight: 400;
+.font-weight-regular {
+    font-weight: var(--font-weight-regular);
 }
-.font-medium {
-    font-weight: 500;
+.font-weight-medium {
+    font-weight: var(--font-weight-medium);
 }
-.font-semibold {
-    font-weight: 600;
+.font-weight-semibold {
+    font-weight: var(--font-weight-semibold);
 }
-.font-bold {
-    font-weight: 700;
+.font-weight-bold {
+    font-weight: var(--font-weight-bold);
 }
-.font-extrabold {
-    font-weight: 800;
+.font-weight-extrabold {
+    font-weight: var(--font-weight-extrabold);
 }
-.font-black {
-    font-weight: 900;
+.font-weight-black {
+    font-weight: var(--font-weight-black);
 }
-.font-extrablack {
-    font-weight: 1000;
+.font-weight-extrablack {
+    font-weight: var(--font-weight-extrablack);
 }
 
 .font-weight-100 {
@@ -344,49 +252,53 @@ s {
     font-variant-alternates: historical-forms;
 }
 
-.text-no-decoration {
-    text-decoration: none;
+.text-style-normal {
+    font-style: normal;
 }
-.text-italic {
+.text-style-italic {
     font-style: italic;
 }
-.text-underline {
+
+.text-decoration-none {
+    text-decoration: none;
+}
+.text-decoration-underline {
     text-decoration: underline;
 }
-.text-overline {
+.text-decoration-overline {
     text-decoration: overline;
 }
-.text-line-through {
+.text-decoration-line-through {
     text-decoration: line-through;
 }
 
-.font-xx-small {
+.font-size-xx-small {
     font-size: xx-small;
 }
-.font-x-small {
+.font-size-x-small {
     font-size: x-small;
 }
-.font-small {
+.font-size-small {
     font-size: small;
 }
-.font-medium {
+.font-size-medium {
     font-size: medium;
 }
-.font-large {
+.font-size-large {
     font-size: large;
 }
-.font-x-large {
+.font-size-x-large {
     font-size: x-large;
 }
-.font-xx-large {
+.font-size-xx-large {
     font-size: xx-large;
 }
-.font-xxx-large {
+.font-size-xxx-large {
     font-size: xxx-large;
 }
-.font-smaller {
+.font-size-smaller {
     font-size: smaller;
 }
-.font-larger {
+.font-size-larger {
     font-size: larger;
 }

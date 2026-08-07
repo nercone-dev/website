@@ -8,4 +8,4 @@ thumbnail_template: error
 
 {{ message }}
 
-<p class="text-alt font-small">{{ joke_message }}</p>
+<p class="text-color-alt font-size-small">{{ joke_message }}</p>

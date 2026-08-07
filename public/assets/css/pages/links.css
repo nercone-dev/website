@@ -1,8 +1,4 @@
-.name {
-    margin-top: 8px;
-    margin-bottom: 4px;
-}
-
-.description {
-    margin-top: 4px;
+.banner {
+    height: 50px;
+    width: auto;
 }

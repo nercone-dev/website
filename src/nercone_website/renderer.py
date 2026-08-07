@@ -1,4 +1,3 @@
-import os
 import io
 import re
 import yaml
@@ -8,6 +7,7 @@ import base64
 import random
 import hashlib
 import asyncio
+import contextvars
 import mistune
 import resvg_py
 from bs4 import BeautifulSoup
@@ -18,10 +18,9 @@ from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from markitdown import MarkItDown, StreamInfo
 
-from aki import Request, Response, Headers, HTMLResponse, MarkdownResponse, FileResponse, RedirectResponse
-from momiji.url import URL
+from aki import Request, Message, Method
 
-from .models import TimingManager
+from .models import URL, TimingManager
 from .resolver import resolve_file, resolve_page, resolve_redirects
 from .databases import AccessCounter
 from .constants import Directories, Files, Repository, Hostnames
@@ -53,6 +52,7 @@ integrity_client = httpx.AsyncClient(http2=True, timeout=10)
 integrity_cache: Dict[str, tuple[Optional[str], datetime]] = {}
 integrity_locks: Dict[str, asyncio.Lock] = {}
 integrity_max_age = timedelta(hours=1)
+integrity_internal = contextvars.ContextVar("integrity_internal", default=False)
 
 async def compute_integrity(url: str) -> Optional[str]:
     cached = integrity_cache.get(url)
@@ -70,20 +70,18 @@ async def compute_integrity(url: str) -> Optional[str]:
         if any(parsed.host == candidate or parsed.host.endswith("." + candidate) for candidate in Hostnames.public):
             from .app import app
 
-            headers = Headers({"Host": parsed.host if parsed.port is None else f"{parsed.host}:{parsed.port}"})
-            target = parsed.path + (f"?{parsed.query}" if parsed.query else "")
+            message = Message.request(Method.GET, parsed.path + (f"?{parsed.query}" if parsed.query else ""))
+            message.insert_header("host", parsed.host if parsed.port is None else f"{parsed.host}:{parsed.port}")
+            message.secure = True
 
-            request = Request(method="GET", target=target, client=("127.0.0.1", 0), scheme="https", secure=True, headers=headers)
+            token = integrity_internal.set(True)
+            try:
+                response = await app(message)
+                body = await response.body()
+            finally:
+                integrity_internal.reset(token)
 
-            response = await app.on_request(request)
-            response.minify()
-
-            body = response.body
-            if isinstance(body, (str, os.PathLike)):
-                with open(body, "rb") as f:
-                    body = f.read()
-
-            if response.status_code >= 400 or not isinstance(body, bytes):
+            if response.status_code >= 400:
                 value = None
             else:
                 digest = base64.b64encode(hashlib.sha384(body).digest()).decode()
@@ -99,6 +97,9 @@ async def compute_integrity(url: str) -> Optional[str]:
         return value
 
 async def add_integrity(html: str) -> str:
+    if integrity_internal.get():
+        return html
+
     soup = BeautifulSoup(html, "lxml")
     tags = [tag for tag in soup.find_all("script", src=True)] + [tag for tag in soup.find_all("link", rel="stylesheet", href=True)]
     if not tags:
@@ -138,7 +139,7 @@ def init_context(context: Dict[str, Any], request: Request):
     context["daily_quote"] = daily_quote
 
 def render_mode(request: Request) -> Literal["html", "markdown"]:
-    if any([request.url.path.endswith(".md"), "text/markdown" in request.headers.get("accept", "").lower(), request.headers.get("user-agent", "").lower().startswith("curl")]):
+    if any([request.scope["url"].path.endswith(".md"), "text/markdown" in (request.header("accept") or "").lower(), (request.header("user-agent") or "").lower().startswith("curl")]):
         return "markdown"
     else:
         return "html"
@@ -195,7 +196,8 @@ async def render_page(page: str, path: str, request: Request, render: bool = Tru
                     content = await add_integrity(content)
                     request.scope["timings"].stop("integrity")
 
-                    response = HTMLResponse(content, status_code=status_code)
+                    response = Message.html(content, request.version)
+                    response.status_code = status_code
 
                 elif mode == "markdown":
                     request.scope["timings"].start("convert", "HTML to Markdown")
@@ -204,7 +206,8 @@ async def render_page(page: str, path: str, request: Request, render: bool = Tru
                     content = markitdown.convert(io.BytesIO(main.encode("utf-8")), stream_info=StreamInfo(mimetype="text/html", charset="utf-8")).text_content
                     request.scope["timings"].stop("convert")
 
-                    response = MarkdownResponse(content, status_code=status_code)
+                    response = Message.markdown(content, request.version)
+                    response.status_code = status_code
 
             elif page.endswith(".md"):
                 if mode == "html":
@@ -220,22 +223,26 @@ async def render_page(page: str, path: str, request: Request, render: bool = Tru
                     content = await add_integrity(content)
                     request.scope["timings"].stop("integrity")
 
-                    response = HTMLResponse(content, status_code=status_code)
+                    response = Message.html(content, request.version)
+                    response.status_code = status_code
 
                 elif mode == "markdown":
-                    response = MarkdownResponse(content, status_code=status_code)
+                    response = Message.markdown(content, request.version)
+                    response.status_code = status_code
 
         else:
             if page.endswith(".html"):
-                response = HTMLResponse(source, status_code=status_code)
+                response = Message.html(source, request.version)
+                response.status_code = status_code
             elif page.endswith(".md"):
-                response = MarkdownResponse(source, status_code=status_code)
+                response = Message.markdown(source, request.version)
+                response.status_code = status_code
 
         if "compression" in front:
             if front["compression"].lower() == "true":
-                response.compression = True
+                request.scope["compression"] = True
             elif front["compression"].lower() == "false":
-                response.compression = False
+                request.scope["compression"] = False
 
         return response
 
@@ -245,13 +252,15 @@ async def default_response(path: str, request: Request, status_code: int = 200, 
 
     try:
         if url := resolve_redirects(path, timings=request.scope["timings"]):
-            response = RedirectResponse(url, status_code=status_code if 300 <= status_code < 400 else 307)
+            response = Message.redirect(url, request.version)
+            response.status_code = status_code if 300 <= status_code < 400 else 307
 
         elif page := resolve_page(path, mode, timings=request.scope["timings"]):
             response = await render_page(page, path=path, request=request, render=render, status_code=status_code, context=context, mode=mode)
 
         elif file := resolve_file(path, timings=request.scope["timings"]):
-            response = FileResponse(file, status_code=status_code)
+            response = Message.file(file, request.version)
+            response.status_code = status_code
 
         else:
             response = await render_error_page(request, 404, message="リクエストしたページは現在ご利用になれません。削除/移動されたか、URLが間違っている可能性があります。", joke_message="そんなページ知らないっ！")
@@ -260,7 +269,7 @@ async def default_response(path: str, request: Request, status_code: int = 200, 
         response = await render_error_page(request, 403, message="何をしてるんです？脆弱性報告のためならいいのですが、データ盗んで悪用するためなら今すぐにやめてくださいね？", joke_message="ディレクトリトラバーサルね、知ってる。公開してないところ覗きたいの？えっt")
 
     for key, value in headers.items():
-        response.headers[key.lower().strip()] = value
+        response.insert_header(key.lower().strip(), value)
 
     request.scope["options"].apply(response)
     return response
@@ -289,7 +298,7 @@ error_messages = {
     426: {"normal": "このリクエストを処理するにはプロトコルのアップグレードが必要です。", "joke": "それに答えるには、まずWebSocketに移動したい。"}
 }
 
-async def render_error_page(request: Request, status_code: int = 500, status_name: Optional[str] = None, message: Optional[str] = None, joke_message: Optional[str] = None) -> Response:
+async def render_error_page(request: Request, status_code: int = 500, status_name: Optional[str] = None, message: Optional[str] = None, joke_message: Optional[str] = None) -> Message:
     if 500 <= status_code < 600:
         request.scope["csp"].append("script-src", "'unsafe-inline'")
         request.scope["csp"].append("style-src", "fonts.googleapis.com", "'unsafe-inline'")

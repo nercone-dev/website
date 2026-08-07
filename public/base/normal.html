@@ -21,33 +21,32 @@
         <title>{% block title %}nercone's website{% endblock %}</title>
         <meta name="description" content="{% block description %}No description.{% endblock %}">
         <!-- for Crawlers -->
-        <link rel="canonical" href="https://nercone.dev{{ request.url.path }}">
+        <link rel="canonical" href="https://nercone.dev{{ url.path }}">
         <meta name="robots" content="index, follow">
         <meta name="googlebot" content="index, follow">
-        <meta name="author" content="Nercone a.k.a. DiamondGotCat">
+        <meta name="author" content="nercone">
         <meta name="theme-color" content="#1A1A1A">
         <!-- Thumbnail -->
-        {% set thumbnail_final_url %}{% block thumbnail_url %}https://assets.nercone.dev/images/thumbnail/template/{% block thumbnail_template %}normal{% endblock %}{% endblock %}?path={{ request.url.path.strip('/') or 'index' | urlencode }}&title={% block thumbnail_title %}{{ re_sub(self.title(), ' - Nercone.*$', '') | urlencode }}{% endblock %}&description={% block thumbnail_description %}{{ self.description() | urlencode }}{% endblock %}{% endset %}
+        {% set thumbnail_final_url %}{% block thumbnail_url %}https://assets.nercone.dev/images/thumbnail/template/{% block thumbnail_template %}normal{% endblock %}{% endblock %}?path={{ url.path.strip('/') or 'index' | urlencode }}&title={% block thumbnail_title %}{{ re_sub(self.title(), ' - Nercone.*$', '') | urlencode }}{% endblock %}&description={% block thumbnail_description %}{{ self.description() | urlencode }}{% endblock %}{% endset %}
         <meta property="og:site_name" content="nercone's website">
         <meta property="og:title" content="{{ self.title() }}">
         <meta property="og:description" content="{{ self.description() }}">
         <meta property="og:image" content="{{ thumbnail_final_url }}">
-        <meta property="og:url" content="https://nercone.dev{{ request.url.path }}">
+        <meta property="og:url" content="https://nercone.dev{{ url.path }}">
         <meta property="og:type" content="website">
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="{{ self.title() }}">
         <meta name="twitter:description" content="{{ self.description() }}">
         <meta name="twitter:image" content="{{ thumbnail_final_url }}">
-        <!-- PWA (Progressive Web App) -->
+        <!-- PWA -->
         <link rel="manifest" href="https://nercone.dev/site.webmanifest">
         <link rel="apple-touch-icon" href="https://assets.nercone.dev/images/favicon.png" sizes="384x384">
         <link rel="icon" type="image/png" href="https://assets.nercone.dev/images/favicon.png" sizes="384x384">
         <link rel="icon" type="image/svg+xml" href="https://assets.nercone.dev/images/favicon.svg" sizes="384x384">
-        <!-- Preconnect -->
-        <link rel="preconnect" href="https://embed-snowflake.torproject.org">
-        <!-- Stylesheets / Scripts -->
-        <script src="https://assets.nercone.dev/js/merge/?path=main,initializer,loading-overlay,view-transition" defer></script>
-        <link rel="stylesheet" href="https://assets.nercone.dev/css/merge/?path=main,colors,loading-overlay,view-transition,themes/{{ options.get('dev.nercone.options.appearance.theme') }}">
+        <!-- Imports -->
+        <script src="https://assets.nercone.dev/js/merge/?path=main,initializer,cursor,loading-overlay,view-transition,components/snowflake" defer></script>
+        <link rel="stylesheet" href="https://assets.nercone.dev/css/merge/?path=main,colors,fonts,components/snowflake,themes/{{ options.get('dev.nercone.options.appearance.theme') }}">
+        <noscript><link rel="stylesheet" href="https://assets.nercone.dev/css/noscript.css"></noscript>
         {% block extra_head %}{% endblock %}
     </head>
     <body>
@@ -63,17 +62,17 @@
 
         <img src="https://assets.nercone.dev/images/counter.png" width="0" height="0" class="hide">
 
-        <div id="snowflake-toast" class="snowflake-toast is-hidden cursor-system">
-            <div class="snowflake-toast-header">
-                <span><a href="/snowflake/" class="text-no-decoration snowflake-toast-link">Snowflake</a></span>
-                <div class="snowflake-toast-actions">
-                    <button type="button" class="snowflake-toast-minimize" aria-label="非表示" aria-pressed="false">
+        <div id="snowflake" class="is-hidden cursor-system">
+            <div class="snowflake-header">
+                <span><a href="/snowflake/" class="text-no-decoration snowflake-link">Snowflake</a></span>
+                <div class="snowflake-actions">
+                    <button type="button" class="snowflake-minimize" aria-label="非表示" aria-pressed="false">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="6" y1="12" x2="18" y2="12"/>
-                            <line class="snowflake-toast-minimize-vertical" x1="12" y1="6" x2="12" y2="18"/>
+                            <line class="snowflake-minimize-vertical" x1="12" y1="6" x2="12" y2="18"/>
                         </svg>
                     </button>
-                    <button type="button" class="snowflake-toast-close" aria-label="閉じる">
+                    <button type="button" class="snowflake-close" aria-label="閉じる">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="6" y1="6" x2="18" y2="18"/>
                             <line x1="18" y1="6" x2="6" y2="18"/>
@@ -85,29 +84,29 @@
         </div>
 
         {% block header_outer %}
-        <header class="flex">
-            <div class="flex-1 flex">
-                <a id="header-title" href="/" class="text-no-decoration" translate="no">nercone.dev</a>
+        <header>
+            {% block header %}
+            <div>
                 {% block header_start_before %}{% endblock %}
                 {% block header_start %}
-                <a href="/about/" class="text-no-decoration small:hide">about</a>
-                <a href="/links/" class="text-no-decoration small:hide">links</a>
-                <a href="/sitemap/" class="text-no-decoration small:hide">sitemap</a>
+                <a href="/" class="text-decoration-none" translate="no">nercone.dev</a>
+                <a href="/about/" class="text-decoration-none small:hide">about</a>
+                <a href="/links/" class="text-decoration-none small:hide">links</a>
                 {% endblock %}
                 {% block header_start_after %}{% endblock %}
             </div>
-            <div class="flex">
+            <div>
                 {% block header_end_before %}{% endblock %}
                 {% block header_end %}
-                <a href="/about/" class="text-no-decoration hide small:show">about</a>
-                <a href="/links/" class="text-no-decoration hide small:show">links</a>
-                <a href="/sitemap/" class="text-no-decoration hide small:show">sitemap</a>
+                <a href="/about/" class="text-decoration-none hide small:show">about</a>
+                <a href="/links/" class="text-decoration-none hide small:show">links</a>
 
-                <a href="/access-counter/" class="text-no-decoration font-variant-numeric-tabular small:hide" translate="no">{{ accesscounter.get() }}</a>
-                <a href="/about/server/" class="text-no-decoration small:hide" translate="no">{{ repository.version }}</a>
+                <p class="text-decoration-none small:hide" translate="no">{{ accesscounter.get() }}</p>
+                <p class="text-decoration-none small:hide" translate="no">{{ repository.version }}</p>
                 {% endblock %}
                 {% block header_end_after %}{% endblock %}
             </div>
+            {% endblock %}
         </header>
         {% endblock %}
 
@@ -116,9 +115,6 @@
         {% endblock %}
 
         {% block imports %}
-        <script src="https://assets.nercone.dev/js/merge/?path=cursor,class-prefix,components/dropdown,components/snowflake-toast" defer></script>
-        <link rel="stylesheet" href="https://assets.nercone.dev/css/merge/?path=fonts,cursor,layout,miscellaneous,components/button,components/dropdown,components/snowflake-toast">
-        <noscript><link rel="stylesheet" href="https://assets.nercone.dev/css/noscript.css"></noscript>
         {% endblock %}
         {% block extra_imports %}{% endblock %}
 

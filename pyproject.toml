@@ -7,7 +7,7 @@ name = "nercone-website"
 version = "1.0.0"
 requires-python = ">=3.12"
 dependencies = [
-    "nercone-aki",
+    "nercone-aki>=2,<3",
     "nercone-modern",
     "fourword",
 
@@ -20,6 +20,11 @@ dependencies = [
 
     "mistune",
     "markitdown",
+
+    "minify-html",
+    "rcssmin",
+    "rjsmin",
+    "scour",
 
     "pyyaml",
     "tzdata"
