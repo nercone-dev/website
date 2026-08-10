@@ -36,4 +36,5 @@ docker compose build \
 
 echo "> START"
 
+docker compose restart
 docker compose up -d
