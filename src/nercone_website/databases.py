@@ -2,7 +2,7 @@ import httpx
 import fcntl
 import traceback
 import mimetypes
-from modern import Logging
+from modern import Logger
 from datetime import datetime, timedelta
 
 from .constants import Files
@@ -23,8 +23,8 @@ class MimeTypes:
                 response.raise_for_status()
             Files.mime_types.write_text(response.text, encoding="utf-8")
         except Exception:
-            Logging("mimetypes", filepath=Files.Logs.main).log("Failed to fetch mime.types")
-            Logging("mimetypes", filepath=Files.Logs.error).log("Failed to fetch mime.types\n" + traceback.format_exc())
+            Logger("mimetypes", filepath=Files.Logs.main).log("Failed to fetch mime.types")
+            Logger("mimetypes", filepath=Files.Logs.error).log("Failed to fetch mime.types\n" + traceback.format_exc())
 
     @staticmethod
     def load():
