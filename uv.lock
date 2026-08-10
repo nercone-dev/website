@@ -926,13 +926,13 @@ wheels = [
 
 [[package]]
 name = "soyokaze"
-version = "0.6.0"
+version = "0.6.1"
 source = { registry = "https://pypi.org/simple" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/98/36/7898c349dcae905e5361af79cbf2cae0b8e514b4f77b67846402b48dd123/soyokaze-0.6.0-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:ed3c817d707aaae880f48013e3f55e9e6a636c551ccc33691956615df3c99260", size = 3201996, upload-time = "2026-08-10T02:02:07.429Z" },
-    { url = "https://files.pythonhosted.org/packages/ac/62/ab01342408081b93180a5407496452b9543d8b5168f9db1f29d362d2f3c2/soyokaze-0.6.0-py3-none-macosx_11_0_arm64.whl", hash = "sha256:fbb61911cfd4128574f9267ff9b7e075ed8db23969ac47d6d86959d3f36cd1a4", size = 3055579, upload-time = "2026-08-10T02:02:09.088Z" },
-    { url = "https://files.pythonhosted.org/packages/cd/6f/c59dbd4f1a54691027900d02653ca63efdd2a81618b99f9b8216f91abc86/soyokaze-0.6.0-py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:1cbe88aa4b2a883956e37fc359875992fca91d225e2a6ce6bc7773d822bb43ea", size = 3446411, upload-time = "2026-08-10T02:02:10.952Z" },
-    { url = "https://files.pythonhosted.org/packages/fa/c2/b2a53d53b8ab520273ac5b021d2c29e55c8e46615262574fd85980e9bf30/soyokaze-0.6.0-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:ebfcae49eade6ab177abebf43aade25c1801378ec6c0c0d5e6227f3c47d2977a", size = 3600351, upload-time = "2026-08-10T02:02:12.845Z" },
+    { url = "https://files.pythonhosted.org/packages/5a/6b/59c777ef55123b3e2ac522154ad2a253fdd776f01b12801b7100b717f6f7/soyokaze-0.6.1-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:03c4d07dd0e8e8198e7d0ea028d37751374c645893d4bd8c055e9f4635e7d030", size = 3202636, upload-time = "2026-08-10T05:22:47.344Z" },
+    { url = "https://files.pythonhosted.org/packages/6f/a3/d457e80407e4e5d3dd0b251b75426fb6fb147de791df6172e1c9ac0a56dd/soyokaze-0.6.1-py3-none-macosx_11_0_arm64.whl", hash = "sha256:ac906e83b69b77722f84417a3bb976d6d97728e2f717c57111426d032ac97d0d", size = 3056014, upload-time = "2026-08-10T05:22:49.376Z" },
+    { url = "https://files.pythonhosted.org/packages/9e/77/73586c0829bf8f704846e429962496bdcea49b2f32f0b55d357e79592d63/soyokaze-0.6.1-py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:607d91b01c06d50bed0599440d3eb76e0613a28b5e75bdab775c95221aae6046", size = 3447302, upload-time = "2026-08-10T05:22:51.311Z" },
+    { url = "https://files.pythonhosted.org/packages/82/8a/b92391cea36c7217aa57d8e84a5f39acf0d0bc62d06c92a8b9c7fcba6d5e/soyokaze-0.6.1-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:783f1907ded31d1c53c7109eb1578a79e3adc514bd8a8880f0fb7f9cddc5a13f", size = 3600722, upload-time = "2026-08-10T05:22:53.009Z" },
 ]
 
 [[package]]
