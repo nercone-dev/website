@@ -103,8 +103,8 @@
                 <a href="/links/" class="text-decoration-none hide small:show">links</a>
                 <a href="/sitemap/" class="text-decoration-none hide small:show">sitemap</a>
 
-                <p class="text-decoration-none small:hide" translate="no">{{ accesscounter.get() }}</p>
-                <p class="text-decoration-none small:hide" translate="no">{{ repository.version }}</p>
+                <a href="/access-counter/" class="text-decoration-none small:hide" translate="no">{{ accesscounter.get() }}</a>
+                <a href="/about/server/" class="text-decoration-none small:hide" translate="no">{{ repository.version }}</a>
                 {% endblock %}
                 {% block header_end_after %}{% endblock %}
             </div>
