@@ -15,7 +15,7 @@
     display: none;
 }
 
-#snowflake .snowflake-header {
+.snowflake-header {
     font-size: smaller;
 
     display: flex;
@@ -26,11 +26,11 @@
     padding: 6px;
 }
 
-#snowflake .snowflake-link {
+.snowflake-link {
     cursor: pointer;
 }
 
-#snowflake .snowflake-actions {
+.snowflake-actions {
     display: flex;
     align-items: center;
 
@@ -38,8 +38,8 @@
     flex-shrink: 0;
 }
 
-#snowflake .snowflake-minimize,
-#snowflake .snowflake-close {
+.snowflake-minimize,
+.snowflake-close {
     background: none;
 
     border: none;
@@ -54,17 +54,17 @@
     padding: 0;
     flex-shrink: 0;
 }
-#snowflake .snowflake-minimize, #snowflake .snowflake-minimize *,
-#snowflake .snowflake-close, #snowflake .snowflake-close * {
+.snowflake-minimize, .snowflake-minimize *,
+.snowflake-close, .snowflake-close * {
     cursor: pointer;
 }
-#snowflake .snowflake-minimize svg,
-#snowflake .snowflake-close svg {
+.snowflake-minimize svg,
+.snowflake-close svg {
     width: var(--font-size);
     height: var(--font-size);
 }
 
-#snowflake .snowflake-minimize-vertical {
+.snowflake-minimize-vertical {
     display: none;
 }
 #snowflake.is-minimized .minimize-vertical {
