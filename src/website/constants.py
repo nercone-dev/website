@@ -18,18 +18,18 @@ class Directories:
     base = Path.cwd()
 
     public = base.joinpath("public")
-    static    = public.joinpath("static")
+    static = public.joinpath("static")
     templates = public.joinpath("templates")
 
     assets = static.joinpath("assets")
 
     private = base.joinpath("private")
-    logs      = private.joinpath("logs")
+    logs = private.joinpath("logs")
     databases = private.joinpath("databases")
 
 class Files:
     mime_types = Directories.databases.joinpath("mime.types")
-    access_counter = Directories.databases.joinpath("access_counter.txt")
+    access_counter = Directories.static.joinpath("access_counter.txt")
 
     class Bundles:
         css_entry  = Directories.assets.joinpath("styles", "index.css")
