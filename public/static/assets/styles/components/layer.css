@@ -20,31 +20,31 @@ a:has(> .layer) {
 }
 
 .layer-note {
-    background-color: color-mix(in srgb, var(--color-note-bright) 5%, transparent);
+    background-color: color-mix(in srgb, var(--color-note-bright) 10%, transparent);
 }
 .layer-note > b:first-child {
     color: var(--color-note-bright);
 }
 .layer-tip {
-    background-color: color-mix(in srgb, var(--color-tip-bright) 5%, transparent);
+    background-color: color-mix(in srgb, var(--color-tip-bright) 10%, transparent);
 }
 .layer-tip > b:first-child {
     color: var(--color-tip-bright);
 }
 .layer-important {
-    background-color: color-mix(in srgb, var(--color-important-bright) 5%, transparent);
+    background-color: color-mix(in srgb, var(--color-important-bright) 10%, transparent);
 }
 .layer-important > b:first-child {
     color: var(--color-important-bright);
 }
 .layer-warning {
-    background-color: color-mix(in srgb, var(--color-warning-bright) 5%, transparent);
+    background-color: color-mix(in srgb, var(--color-warning-bright) 10%, transparent);
 }
 .layer-warning > b:first-child {
     color: var(--color-warning-bright);
 }
 .layer-caution {
-    background-color: color-mix(in srgb, var(--color-caution-bright) 5%, transparent);
+    background-color: color-mix(in srgb, var(--color-caution-bright) 10%, transparent);
 }
 .layer-caution > b:first-child {
     color: var(--color-caution-bright);
