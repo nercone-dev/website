@@ -1,0 +1,26 @@
+pre {
+    border: solid 1px var(--color-border);
+
+    font-family: var(--font-family-mono-nf);
+    font-weight: var(--font-weight-regular);
+    font-style: normal;
+    font-size: 0.85em;
+    font-optical-sizing: auto;
+
+    padding: 8px;
+
+    overflow-x: auto;
+    white-space: pre;
+}
+
+code {
+    font-family: var(--font-family-mono-nf);
+    font-weight: var(--font-weight-regular);
+    font-style: normal;
+    font-size: 1em;
+    font-optical-sizing: auto;
+
+    padding: 2px;
+
+    overflow-wrap: break-word;
+}

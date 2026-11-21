@@ -1,11 +1,3 @@
-# macOS
 .DS_Store
-
-# Python
-__pycache__
-
-# Database files
-databases/*
-
-# Log files
-logs/*
+__pycache__/
+/private/

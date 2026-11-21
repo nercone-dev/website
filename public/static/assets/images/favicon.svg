@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_レイヤー_1" data-name="レイヤー 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 384">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #39f;
+      }
+
+      .cls-2 {
+        fill: #1a1a1a;
+      }
+    </style>
+  </defs>
+  <rect class="cls-1" width="384" height="384"/>
+  <polyline class="cls-2" points="327 214.78 57 124.5 57 259.5 192 259.5 327 124.5 327 259.5 256.88 259.5"/>
+</svg>

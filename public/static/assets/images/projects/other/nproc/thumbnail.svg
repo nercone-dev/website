@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_レイヤー_1" data-name="レイヤー 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        font-family: NerconeSansCJKVariable-Bold, 'Nercone Sans CJK Variable';
+        font-variation-settings: 'opsz' 14, 'wght' 700;
+        font-weight: 700;
+      }
+
+      .cls-3 {
+        font-size: 12px;
+      }
+
+      .cls-3, .cls-2, .cls-4, .cls-5 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        font-size: 96px;
+      }
+
+      .cls-6 {
+        font-family: NerconeSansCJKVariable-SemiBold, 'Nercone Sans CJK Variable';
+        font-variation-settings: 'opsz' 14, 'wght' 600;
+        font-weight: 600;
+      }
+
+      .cls-4 {
+        font-family: NerconeSansCJK-Variable, 'Nercone Sans CJK Variable';
+        font-size: 30px;
+        font-variation-settings: 'opsz' 14, 'wght' 400;
+      }
+
+      .cls-7 {
+        fill: #39f;
+      }
+
+      .cls-5 {
+        font-family: NerconeMonoCJKNF-Variable, 'Nercone Mono CJK NF Variable';
+        font-size: 24px;
+        font-variation-settings: 'wght' 400;
+        opacity: .75;
+      }
+
+      .cls-8 {
+        fill: #1a1a1a;
+      }
+    </style>
+  </defs>
+  <rect class="cls-8" width="1280" height="640"/>
+  <g>
+    <rect class="cls-7" x="960" width="320" height="640"/>
+    <polyline class="cls-8" points="1210 335.19 1030 275 1030 365 1120 365 1210 275 1210 365 1163.25 365"/>
+  </g>
+  <text class="cls-2" transform="translate(123.98 329.97)"><tspan x="0" y="0">NPROC</tspan></text>
+  <text class="cls-4" transform="translate(127.81 382.64)"><tspan x="0" y="0">__DESCRIPTION__</tspan></text>
+  <text class="cls-5" transform="translate(128.3 506.88)"><tspan x="0" y="0">nercone-labs</tspan></text>
+  <g>
+    <g>
+      <rect class="cls-8" x="1027" y="227" width="186" height="186"/>
+      <path class="cls-8" d="M1210,230v180h-180v-180h180M1216,224h-192v192h192v-192h0Z"/>
+    </g>
+    <text class="cls-3" transform="translate(1072.79 383.83)"><tspan class="cls-1" x="0" y="0">NPROC</tspan><tspan class="cls-6" x="42.93" y="0" xml:space="preserve"> C1 Basic</tspan></text>
+    <polyline class="cls-7" points="1165 327.59 1075 297.5 1075 342.5 1120 342.5 1165 297.5 1165 342.5 1141.62 342.5"/>
+  </g>
+</svg>

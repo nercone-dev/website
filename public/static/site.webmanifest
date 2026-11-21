@@ -1,0 +1,30 @@
+{
+    "name": "nercone.dev",
+    "description": "作りたいものを作り、やりたくないことからは逃げる学生",
+    "start_url": "https://nercone.dev/",
+    "display": "standalone",
+    "theme_color": "#3399FF",
+    "background_color": "#000000",
+    "icons": [
+        {
+            "src": "https://assets.nercone.dev/images/favicon.svg",
+            "type": "image/svg+xml",
+            "sizes": "384x384"
+        },
+        {
+            "src": "https://assets.nercone.dev/images/favicon.jxl",
+            "type": "image/jxl",
+            "sizes": "384x384"
+        },
+        {
+            "src": "https://assets.nercone.dev/images/favicon.png",
+            "type": "image/png",
+            "sizes": "384x384"
+        },
+        {
+            "src": "https://assets.nercone.dev/images/favicon.webp",
+            "type": "image/webp",
+            "sizes": "384x384"
+        }
+    ]
+}

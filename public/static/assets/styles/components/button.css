@@ -1,0 +1,76 @@
+.button, :where(button:not(.sidebar-toggle, .toast-close, .swatch), input[type="button"], input[type="submit"], input[type="reset"]) {
+    color: var(--color-button-foreground);
+    background-color: var(--color-button-background);
+    border: solid 1px var(--color-button-border);
+    border-radius: 0;
+    outline: none;
+    appearance: none;
+
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+    text-decoration: none;
+    white-space: nowrap;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    box-sizing: border-box;
+    padding: var(--button-padding, 8px 16px);
+
+    cursor: pointer;
+    user-select: none;
+    -webkit-touch-callout: none;
+
+    transition:
+        color            0.15s ease,
+        background-color 0.15s ease,
+        border-color     0.15s ease,
+        transform        0.15s cubic-bezier(0.125,1,0.25,1);
+}
+
+.button:hover, :where(button:not(.sidebar-toggle, .toast-close, .swatch), input[type="button"], input[type="submit"], input[type="reset"]):hover {
+    background-color: color-mix(in srgb, var(--color-button-background), var(--color-foreground) 10%);
+}
+.button:active, :where(button:not(.sidebar-toggle, .toast-close, .swatch), input[type="button"], input[type="submit"], input[type="reset"]):active {
+    transform: scale(0.98);
+}
+.button:focus-visible, :where(button:not(.sidebar-toggle, .toast-close, .swatch), input[type="button"], input[type="submit"], input[type="reset"]):focus-visible {
+    outline: solid 1px var(--color-foreground-alt);
+    outline-offset: 2px;
+}
+
+.button:disabled, :where(button:not(.sidebar-toggle, .toast-close, .swatch), input[type="button"], input[type="submit"], input[type="reset"]):disabled, .button[aria-disabled="true"], :where(button:not(.sidebar-toggle, .toast-close, .swatch), input[type="button"], input[type="submit"], input[type="reset"])[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.button-primary {
+    --color-button-foreground: var(--color-button-primary-foreground);
+    --color-button-background: var(--color-button-primary-background);
+    --color-button-border:     var(--color-button-primary-border);
+}
+.button-information {
+    --color-button-foreground: var(--color-button-information-foreground);
+    --color-button-background: var(--color-button-information-background);
+    --color-button-border:     var(--color-button-information-border);
+}
+.button-success {
+    --color-button-foreground: var(--color-button-success-foreground);
+    --color-button-background: var(--color-button-success-background);
+    --color-button-border:     var(--color-button-success-border);
+}
+.button-warning {
+    --color-button-foreground: var(--color-button-warning-foreground);
+    --color-button-background: var(--color-button-warning-background);
+    --color-button-border:     var(--color-button-warning-border);
+}
+.button-error {
+    --color-button-foreground: var(--color-button-error-foreground);
+    --color-button-background: var(--color-button-error-background);
+    --color-button-border:     var(--color-button-error-border);
+}

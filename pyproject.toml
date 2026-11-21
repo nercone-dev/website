@@ -5,30 +5,39 @@ build-backend = "uv_build"
 [project]
 name = "nercone-website"
 version = "1.0.0"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<=3.14"
 dependencies = [
-    "nercone-aki>=2,<3",
-    "nercone-modern",
-    "fourword",
+    # Framework
+    "fastapi",
+    "uvicorn[standard]",
 
-    "httpx[http2]",
-
-    "beautifulsoup4",
-    "lxml",
-    "jinja2",
-    "resvg-py",
-
+    # Markdown
     "mistune",
     "markitdown",
+    "beautifulsoup4",
 
+    # Minification
     "minify-html",
     "rcssmin",
     "rjsmin",
     "scour",
 
+    # Compression
+    "zstandard",
+    "brotlicffi",
+
+    # Misc
+    "resvg-py",
+    "jinja2",
+    "tzdata",
+    "xxhash",
     "pyyaml",
-    "tzdata"
+    "httpx",
+    "fwid",
 ]
 
 [project.scripts]
-nercone-website = "nercone_website.__main__:main"
+nercone-website = "website.__main__:main"
+
+[tool.uv.build-backend]
+module-name = "website"

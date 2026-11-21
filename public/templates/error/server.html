@@ -1,0 +1,57 @@
+<!--
+    このページは、nercone.devのサーバーで何らかの問題が発生し、正常な応答ができない場合に表示されます。
+    すぐには修正されない場合があるため、コーヒーか何かを飲んで待つか、Nerconeを叩き起こして修正させる必要があります。
+    さて、このメッセージを見ているということは...おそらく技術者でしょう？良ければネッ友になりませんか？
+
+    P.S. 暇つぶしにソースコードでもいかがです？ https://github.com/nercone-infra/
+-->
+<!DOCTYPE html>
+<html lang="ja-JP">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>nercone.devはリクエストの処理に失敗しました</title>
+        <meta name="description" content="nercone.devのサーバーで何らかの問題が発生したため、リクエストへの正常な応答に失敗しました。">
+        <!-- for Crawlers -->
+        <link rel="canonical" href="https://nercone.dev/">
+        <meta name="robots" content="index, follow">
+        <meta name="googlebot" content="index, follow">
+        <meta name="author" content="nercone">
+        <meta name="theme-color" content="#3399FF">
+        <!-- PWA -->
+        <link rel="manifest" href="https://nercone.dev/site.webmanifest">
+        <link rel="apple-touch-icon" href="https://assets.nercone.dev/images/favicon.png" sizes="384x384">
+        <link rel="icon" type="image/png" href="https://assets.nercone.dev/images/favicon.png" sizes="384x384">
+        <link rel="icon" type="image/svg+xml" href="https://assets.nercone.dev/images/favicon.svg" sizes="384x384">
+        <!-- Scripts -->
+        <script src="https://assets.nercone.dev/script.js" defer></script>
+        <!-- Stylesheets -->
+        <link rel="stylesheet" href="https://assets.nercone.dev/style.css">
+        <noscript>
+            <link rel="stylesheet" href="https://assets.nercone.dev/styles/noscript.css">
+            <link rel="stylesheet" href="https://assets.nercone.dev/styles/themes/auto-stark.css">
+        </noscript>
+    </head>
+    <body>
+        <div id="cursor"></div>
+
+        <div id="loading-overlay">
+            <svg viewBox="96 256 832 512" xmlns="http://www.w3.org/2000/svg">
+                <polyline points="872 572.75 152 332 152 692 512 692 872 332 872 692 684.5 692" fill="currentColor"/>
+            </svg>
+        </div>
+
+        <header>
+            <div>
+                <a href="/" class="font-decoration-none" translate="no">nercone.dev</a>
+            </div>
+        </header>
+
+        <main>
+            <h1>nercone.devはリクエストの処理に失敗しました</h1>
+            <p>nercone.devのサーバーで何らかの問題が発生したため、リクエストへの正常な応答に失敗しました。</p>
+            <p>すぐには修正されない場合があるため、コーヒーか何かを飲んで待つか、Nerconeを叩き起こして修正させる必要があります。</p>
+            <p>修正まで気長にお待ちください。</p>
+        </main>
+    </body>
+</html>

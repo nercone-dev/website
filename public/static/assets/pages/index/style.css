@@ -1,0 +1,45 @@
+main {
+    flex: 1;
+    display: flex;
+}
+
+.outer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inner {
+    flex-direction: column;
+}
+
+#title {
+    color: var(--color-stark);
+    font-size: 64pt;
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#description {
+    font-size: 12pt;
+    text-decoration: none;
+}
+
+#title, #description {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+    text-box: trim-both cap alphabetic;
+}
+
+@media (max-width: 512px) {
+    #title {
+        font-size: 48pt;
+    }
+}
