@@ -1,0 +1,29 @@
+/* Initial values; progress.js keeps --progress-value in sync with aria-valuenow. */
+.demo-progress-30 {
+    --progress-value: 0.3;
+}
+.demo-progress-40 {
+    --progress-value: 0.4;
+}
+.demo-progress-60 {
+    --progress-value: 0.6;
+}
+.demo-progress-75 {
+    --progress-value: 0.75;
+}
+.demo-progress-success {
+    --color-progress: var(--color-success-bright);
+}
+.demo-progress-information {
+    --color-progress: var(--color-information-bright);
+}
+.demo-progress-warning {
+    --color-progress: var(--color-warning-bright);
+}
+.demo-progress-thick {
+    --progress-thickness: 8px;
+}
+.demo-progress-large {
+    --progress-size:      96px;
+    --progress-thickness: 2px;
+}

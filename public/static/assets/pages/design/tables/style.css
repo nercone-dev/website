@@ -1,0 +1,7 @@
+.demo-nowrap {
+    white-space: nowrap;
+}
+.demo-table-custom {
+    --table-padding: 4px 8px;
+    --color-table-header-background: var(--color-blue-opacity-20);
+}

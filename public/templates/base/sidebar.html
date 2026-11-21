@@ -1,0 +1,9 @@
+{% extends "/base/default.html" %}
+
+{% block main_before %}
+{% block sidebar_before %}{% endblock %}
+{% block sidebar_outer %}
+<nav id="sidebar" class="sidebar" popover aria-label="{% block sidebar_title %}Sidebar{% endblock %}">{% block sidebar %}{% endblock %}</nav>
+{% endblock %}
+{% block sidebar_after %}{% endblock %}
+{% endblock %}

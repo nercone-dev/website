@@ -1,0 +1,11 @@
+.demo-grid-3 {
+    --grid-columns: 3;
+    --grid-min-width: 0px;
+    --grid-gap: 4px;
+}
+.demo-height-48 {
+    height: 48px;
+}
+.demo-padding-16 {
+    padding: 16px;
+}

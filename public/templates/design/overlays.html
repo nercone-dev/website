@@ -1,0 +1,187 @@
+---
+title: Overlays - Nercone Design
+base: sidebar
+sidebar_title: Nercone Design
+sidebar: |
+  <a href="/design/index.html">Home</a>
+  <a href="/design/colors.html">Colors</a>
+  <a href="/design/typography.html">Typography</a>
+  <a href="/design/layout.html">Layout</a>
+  <a href="/design/tables.html">Tables</a>
+  <a href="/design/forms.html">Forms</a>
+  <a href="/design/progress.html">Progress</a>
+  <a href="/design/overlays.html" aria-current="page">Overlays</a>
+extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/design/style.css">
+               <link rel="stylesheet" href="https://assets.nercone.dev/pages/design/overlays/style.css">
+               <script src="https://assets.nercone.dev/pages/design/overlays/script.js" defer></script>
+---
+
+<div class="hero">
+    <h1>Overlays</h1>
+    <p>Popup and Toast. Both are drawn above the page.</p>
+</div>
+
+<h2>Popup</h2>
+<p>Applies to <code>&lt;dialog&gt;</code> without a class. A button with <code>commandfor="ID" command="show-modal"</code> opens the popup with that ID as a modal, and a button with <code>commandfor="ID" command="close"</code> closes it. <kbd>Esc</kbd> also closes it. These are HTML invoker commands, so they work without JavaScript; in browsers that do not support them, <code>popup.js</code> does the same.</p>
+<div class="flex demo-wrap">
+    <button type="button" commandfor="popup-basic" command="show-modal">Basic</button>
+    <button type="button" commandfor="popup-dismiss" command="show-modal">Close by clicking outside</button>
+    <button class="button-error" type="button" commandfor="popup-confirm" command="show-modal">Confirm</button>
+    <button type="button" commandfor="popup-form" command="show-modal">Form</button>
+    <button type="button" commandfor="popup-long" command="show-modal">Long content</button>
+</div>
+<p class="script-only">Result: <output id="popup-result">-</output></p>
+
+<dialog id="popup-basic" aria-labelledby="popup-basic-title">
+    <h2 id="popup-basic-title">Popup</h2>
+    <p>This is a basic popup.</p>
+    <div class="popup-actions">
+        <button class="button-primary" type="button" commandfor="popup-basic" command="close">Close</button>
+    </div>
+</dialog>
+
+<dialog id="popup-dismiss" closedby="any" aria-labelledby="popup-dismiss-title">
+    <h2 id="popup-dismiss-title">Close by clicking outside</h2>
+    <p>With <code>closedby="any"</code>, clicking outside the popup also closes it. In browsers that do not support the attribute, <code>popup.js</code> does the same. Keep a close button as well, because without JavaScript those browsers can close the popup only with <kbd>Esc</kbd>.</p>
+    <div class="popup-actions">
+        <button class="button-primary" type="button" commandfor="popup-dismiss" command="close">Close</button>
+    </div>
+</dialog>
+
+<dialog class="demo-popup-small" id="popup-confirm" aria-labelledby="popup-confirm-title">
+    <h2 id="popup-confirm-title">Delete this item?</h2>
+    <p>This cannot be undone.</p>
+    <div class="popup-actions">
+        <button type="button" commandfor="popup-confirm" command="close" value="cancel">Cancel</button>
+        <button class="button-error" type="button" commandfor="popup-confirm" command="close" value="delete">Delete</button>
+    </div>
+</dialog>
+
+<dialog id="popup-form" aria-labelledby="popup-form-title">
+    <h2 id="popup-form-title">Rename</h2>
+    <form method="dialog" class="flex demo-column">
+        <label for="popup-form-name">New name</label>
+        <input id="popup-form-name" name="name" type="text" autocomplete="off" required autofocus>
+        <div class="popup-actions">
+            <button type="button" commandfor="popup-form" command="close">Cancel</button>
+            <button class="button-primary" type="submit" value="save">Save</button>
+        </div>
+    </form>
+</dialog>
+
+<dialog id="popup-long" closedby="any" aria-labelledby="popup-long-title">
+    <h2 id="popup-long-title">Long content</h2>
+    <p>When the content does not fit on the screen, only the inside of the popup scrolls.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <div class="popup-actions">
+        <button class="button-primary" type="button" commandfor="popup-long" command="close">Close</button>
+    </div>
+</dialog>
+
+<pre><code>&lt;button type="button" commandfor="confirm" command="show-modal"&gt;Delete&lt;/button&gt;
+
+&lt;dialog id="confirm" closedby="any" aria-labelledby="confirm-title"&gt;
+    &lt;h2 id="confirm-title"&gt;Delete this item?&lt;/h2&gt;
+    &lt;div class="popup-actions"&gt;
+        &lt;button type="button" commandfor="confirm" command="close" value="cancel"&gt;Cancel&lt;/button&gt;
+        &lt;button class="button-error" type="button" commandfor="confirm" command="close" value="delete"&gt;Delete&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/dialog&gt;</code></pre>
+<p><code>popup-actions</code> lines up buttons at the end of the popup.</p>
+<p><code>popup.js</code> also supports <code>data-popup-open="ID"</code> on any element, and <code>data-popup-close</code> on an element inside a popup. They need JavaScript, so prefer <code>commandfor</code> and <code>command</code>.</p>
+
+<h3>Return value</h3>
+<p>The <code>value</code> of a <code>command="close"</code> button (or the value of <code>data-popup-close</code>) becomes the <code>returnValue</code> of the dialog, which can be read in the <code>close</code> event. <code>&lt;form method="dialog"&gt;</code> also works, and the <code>value</code> of the submit button becomes the return value.</p>
+<pre><code>document.getElementById('confirm').addEventListener('close', (event) =&gt; {
+    if (event.target.returnValue === 'delete') { … }
+});</code></pre>
+
+<h3>Script</h3>
+<p>Each method takes an ID or a <code>&lt;dialog&gt;</code> element, and returns the dialog, or <code>null</code> when nothing changed.</p>
+<pre><code>const popup = window.nercone.get('popup');
+popup.open('confirm');
+popup.close('confirm', 'cancel');
+popup.toggle(document.getElementById('confirm'));</code></pre>
+
+<h3>Customization</h3>
+<p>Change the width with <code>--popup-width</code> (default <code>480px</code>), the padding with <code>--popup-padding</code> (default <code>24px</code>), the backdrop blur with <code>--popup-backdrop-blur</code> (default <code>4px</code>), and the colors with <code>--color-popup-*</code>.</p>
+<div class="flex">
+    <button type="button" commandfor="popup-custom" command="show-modal">Customized popup</button>
+</div>
+<dialog class="demo-popup-custom" id="popup-custom" closedby="any" aria-labelledby="popup-custom-title">
+    <h2 id="popup-custom-title">Customized</h2>
+    <p><code>--popup-width: 640px; --popup-padding: 48px; --popup-backdrop-blur: 16px; --color-popup-border: var(--color-information-bright)</code></p>
+    <div class="popup-actions">
+        <button class="button-primary" type="button" commandfor="popup-custom" command="close">Close</button>
+    </div>
+</dialog>
+
+<h2>Toast</h2>
+<p>Shows a short notification at the edge of the screen, and closes it after a while. With <code>toast.js</code>, click an element with <code>data-toast="Message"</code>, or show one from a script. A toast does not close by itself while the pointer or focus is on it. Toasts stay above popups.</p>
+<p>Toasts need JavaScript, so do not use them for anything the page cannot work without. Buttons that only show toasts can have the <code>script-only</code> class, which hides them when JavaScript is disabled (see <a href="/design/layout.html#script-only">Layout</a>).</p>
+<noscript><p>JavaScript is required to show toasts, so the examples below are hidden.</p></noscript>
+
+<h3>Variants</h3>
+<p>Set <code>data-toast-variant</code> to <code>information</code>, <code>success</code>, <code>warning</code>, or <code>error</code>. <code>warning</code> and <code>error</code> get <code>role="alert"</code>, so assistive technology announces them right away.</p>
+<div class="flex script-only demo-wrap">
+    <button type="button" data-toast="Saved">Default</button>
+    <button class="button-information" type="button" data-toast="A new version is available" data-toast-variant="information">Information</button>
+    <button class="button-success" type="button" data-toast="Upload complete" data-toast-variant="success">Success</button>
+    <button class="button-warning" type="button" data-toast="Storage is almost full" data-toast-variant="warning">Warning</button>
+    <button class="button-error" type="button" data-toast="Connection failed" data-toast-variant="error">Error</button>
+</div>
+<pre><code>&lt;button type="button" data-toast="Saved" data-toast-variant="success"&gt;Save&lt;/button&gt;</code></pre>
+
+<h3>Script</h3>
+<div class="flex script-only demo-wrap">
+    <button type="button" id="toast-persistent">Does not close by itself</button>
+    <button type="button" id="toast-long">Long message</button>
+    <button type="button" id="toast-many">Show 7 (limit is 5)</button>
+    <button type="button" id="toast-undismissible">Without close button</button>
+    <button type="button" id="toast-paused">Pause for 3 seconds</button>
+    <button type="button" id="toast-over-popup">Over a popup</button>
+    <button type="button" id="toast-clear">Close all</button>
+</div>
+<dialog id="popup-toast" closedby="any" aria-labelledby="popup-toast-title">
+    <h2 id="popup-toast-title">Toast over a popup</h2>
+    <p>The toast container is kept in the top layer, so toasts are drawn above modal popups.</p>
+    <div class="popup-actions">
+        <button type="button" data-toast="Shown above the popup" data-toast-variant="information">Show toast</button>
+        <button class="button-primary" type="button" commandfor="popup-toast" command="close">Close</button>
+    </div>
+</dialog>
+<pre><code>const toast = window.nercone.get('toast');
+toast.show('Saved', { variant: 'success' });
+toast.show('Stays until closed', { duration: 0 });
+toast.show('No close button', { dismissible: false });
+
+const element = toast.show('Working');
+toast.pause(element);   // Stop the timer
+toast.resume(element);  // Continue from where it stopped
+toast.close(element);
+toast.clear();</code></pre>
+<p><code>show()</code> returns the toast element. The message can be a string or a <code>Node</code>.</p>
+
+<h3>Customization</h3>
+<p>Change the width with <code>--toast-width</code> (default <code>360px</code>), the distance from the edge of the screen with <code>--toast-offset</code> (default <code>24px</code>), the padding with <code>--toast-padding</code> (default <code>12px 16px</code>), and the colors with <code>--color-toast-*</code>. The container is created directly under <code>&lt;body&gt;</code>, so set them on <code>:root</code> or <code>body</code>.</p>
+<pre><code>:root {
+    --toast-width:  420px;
+    --toast-offset: 16px;
+}</code></pre>
+<p>To change the options, register a new instance under the same name. <code>position</code> is one of <code>top-start</code>, <code>top-center</code>, <code>top-end</code>, <code>bottom-start</code>, <code>bottom-center</code>, and <code>bottom-end</code> (default).</p>
+<pre><code>window.nercone.register('toast', new window.nercone.Toast({
+    position:   'top-center',
+    duration:   3000,
+    limit:      3,
+    label:      'Notifications',
+    closeLabel: 'Close'
+}));</code></pre>

@@ -9,7 +9,9 @@
             closeLabel:       'Close',
             triggerAttribute: 'data-toast',
             variantAttribute: 'data-toast-variant',
-            layer:            0
+            layer:            0,
+            // Kept by view-transition.js when it swaps the page, so toasts stay shown on the new page.
+            containerAttributes: { 'data-view-transition-keep': '' }
         };
         static VARIANTS = ['information', 'success', 'warning', 'error'];
         static URGENT_VARIANTS = ['warning', 'error'];
@@ -133,6 +135,7 @@
             container.className = `toast-container toast-container-${this.options.position}`;
             container.setAttribute('aria-label', this.options.label);
             container.setAttribute('aria-live', 'polite');
+            for (const [attribute, value] of Object.entries(this.options.containerAttributes)) container.setAttribute(attribute, value);
             document.body.append(container);
             // In the top layer, toasts stay visible above modal popups.
             window.nercone.topLayer.add(container, this.options.layer);

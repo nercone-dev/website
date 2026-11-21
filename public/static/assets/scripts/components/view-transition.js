@@ -1,9 +1,12 @@
 (() => {
     class PageTransition {
         static DEFAULTS = {
-            regions:       ['header', 'main'],
+            // Both pages must have these elements; otherwise the new page is loaded normally.
+            required:      ['header', 'main'],
             keepMeta:      ['charset', 'viewport', 'color-scheme', 'theme-color'],
-            // Stylesheets with this attribute stay when the page is swapped, even if the new page does not have them.
+            // Stylesheets and children of <body> with this attribute stay when the page is swapped, even if the new page does not have them.
+            // Children of <body> with this attribute are never taken from the new page: a feature may have removed its element on purpose
+            // (such as the loading overlay after it has played), and adding the new page's copy would show it again without its script.
             keepAttribute: 'data-view-transition-keep',
             headers:       { 'X-Requested-With': 'view-transition' }
         };
@@ -127,7 +130,7 @@
             if (!PageTransition.isHTML(response)) return null;
 
             const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
-            if (!this.options.regions.every(selector => doc.querySelector(selector) && document.querySelector(selector))) return null;
+            if (!this.options.required.every(selector => doc.querySelector(selector) && document.querySelector(selector))) return null;
 
             const pageURL = new URL(response.url || url);
             pageURL.hash = url.hash;
@@ -174,7 +177,7 @@
             this.url = new URL(location.href);
 
             this.syncHead(page);
-            this.swapRegions(page);
+            this.swapBody(page);
             this.addScripts(page);
             this.restoreScroll(this.url, scroll, 'auto');
 
@@ -236,17 +239,35 @@
             for (const style of PageTransition.activeElements(newHead, 'style')) head.append(style.cloneNode(true));
         }
 
-        swapRegions(page) {
-            for (const selector of this.options.regions) {
-                const current = document.querySelector(selector);
-                const next = page.doc.querySelector(selector);
+        swapBody(page) {
+            // Every child of <body> is replaced, so elements that only one of the pages has (such as the sidebar) are removed or added as well.
+            // Kept elements and assets stay; syncHead() and addScripts() handle the assets.
+            const keep = this.options.keepAttribute;
+            const assets = new Set([...PageTransition.stylesheetsOf(document), ...PageTransition.scriptsOf(document)]);
+            const nextAssets = new Set([...PageTransition.stylesheetsOf(page.doc), ...PageTransition.scriptsOf(page.doc)]);
 
-                for (const attribute of [...current.attributes]) current.removeAttribute(attribute.name);
-                PageTransition.copyAttributes(next, current);
+            const kept = new Map();
+            for (const element of [...document.body.children]) {
+                if (assets.has(element)) continue;
+                if (element.hasAttribute(keep)) {
+                    if (element.id) kept.set(element.id, element);
+                    continue;
+                }
+                element.remove();
+            }
 
-                // innerHTML re-parses with scripting enabled, so <noscript> contents stay inert.
-                current.innerHTML = next.innerHTML;
-                for (const script of current.querySelectorAll('script')) script.replaceWith(PageTransition.cloneScript(script));
+            // New elements are inserted after the last kept element before them, so the order of the new page is followed.
+            let anchor = null;
+            for (const next of page.doc.body.children) {
+                if (nextAssets.has(next)) continue;
+                if (next.hasAttribute(keep)) {
+                    anchor = (next.id && kept.get(next.id)) || anchor;
+                    continue;
+                }
+                const element = PageTransition.cloneElement(next);
+                if (anchor) anchor.after(element);
+                else document.body.prepend(element);
+                anchor = element;
             }
         }
 
@@ -318,6 +339,16 @@
             PageTransition.copyAttributes(script, clone);
             clone.textContent = script.textContent;
             return clone;
+        }
+
+        static cloneElement(source) {
+            if (source.localName === 'script') return PageTransition.cloneScript(source);
+            const element = document.createElementNS(source.namespaceURI, source.localName);
+            PageTransition.copyAttributes(source, element);
+            // innerHTML re-parses with scripting enabled, so <noscript> contents stay inert.
+            element.innerHTML = source.innerHTML;
+            for (const script of element.querySelectorAll('script')) script.replaceWith(PageTransition.cloneScript(script));
+            return element;
         }
 
         static copyAttributes(source, target, names = null) {

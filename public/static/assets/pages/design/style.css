@@ -1,0 +1,15 @@
+.demo-wrap {
+    flex-wrap: wrap;
+}
+.demo-center {
+    align-items: center;
+}
+.demo-column {
+    flex-direction: column;
+}
+.demo-grid-200 {
+    --grid-min-width: 200px;
+}
+.demo-grid-240 {
+    --grid-min-width: 240px;
+}
