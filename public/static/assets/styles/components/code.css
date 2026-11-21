@@ -4,7 +4,7 @@ pre {
     font-family: var(--font-family-mono-nf);
     font-weight: var(--font-weight-regular);
     font-style: normal;
-    font-size: 0.85em;
+    font-size: 1em;
     font-optical-sizing: auto;
 
     padding: 8px;
