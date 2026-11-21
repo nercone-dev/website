@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 set -e
 
+# Parse Arguments
+
+COMPOSE=(docker compose)
+
+for arg in "$@"; do
+    case "${arg}" in
+        --dev) COMPOSE+=(-f docker-compose.dev.yml) ;;
+        *) echo "Unknown argument: ${arg}" >&2; exit 2 ;;
+    esac
+done
+
 # Update Repository
 git pull
 
@@ -32,7 +43,7 @@ echo
 
 echo "> BUILD"
 
-docker compose build \
+"${COMPOSE[@]}" build \
     --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
     --build-arg PACKAGES_VERSION="${PACKAGES_VERSION}"
 
@@ -40,5 +51,5 @@ docker compose build \
 
 echo "> START"
 
-docker compose restart
-docker compose up -d
+"${COMPOSE[@]}" restart
+"${COMPOSE[@]}" up -d

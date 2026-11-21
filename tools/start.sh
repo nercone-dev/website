@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 set -e
 
+# Parse Arguments
+
+COMPOSE=(docker compose)
+
+for arg in "$@"; do
+    case "${arg}" in
+        --dev) COMPOSE+=(-f docker-compose.dev.yml) ;;
+        *) echo "Unknown argument: ${arg}" >&2; exit 2 ;;
+    esac
+done
+
 # Fetch Latest CPython 3.13.x Version
 
 PYTHON_VERSION=$(curl -fsSL "https://api.github.com/repos/python/cpython/tags?per_page=100" \
@@ -29,7 +40,7 @@ echo
 
 echo "> BUILD"
 
-docker compose build \
+"${COMPOSE[@]}" build \
     --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
     --build-arg PACKAGES_VERSION="${PACKAGES_VERSION}"
 
@@ -37,4 +48,4 @@ docker compose build \
 
 echo "> START"
 
-docker compose up -d
+"${COMPOSE[@]}" up -d
