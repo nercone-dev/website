@@ -1,3 +1,7 @@
+/* Styles of the Nercone Design pages. The CSP of this site forbids style attributes, so every demo value is a class here. */
+
+/* Layout of the demos */
+
 .demo-wrap {
     flex-wrap: wrap;
 }
@@ -7,9 +11,176 @@
 .demo-column {
     flex-direction: column;
 }
+.demo-nowrap {
+    white-space: nowrap;
+}
+/* Variable names in reference tables are kept on one line; the table scrolls instead. */
+.table-scroll code {
+    white-space: nowrap;
+}
+.demo-fit {
+    max-width: 100%;
+    height: auto;
+}
+.demo-height-48 {
+    height: 48px;
+}
+.demo-padding-16 {
+    padding: 16px;
+}
 .demo-grid-200 {
     --grid-min-width: 200px;
 }
 .demo-grid-240 {
     --grid-min-width: 240px;
+}
+.demo-grid-3 {
+    --grid-columns: 3;
+    --grid-min-width: 0px;
+    --grid-gap: 4px;
+}
+
+/* Pages */
+
+.page-list {
+    --grid-min-width: 240px;
+}
+.page-list > a > .layer {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* Swatch panels */
+
+.palette-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 16px;
+}
+.palette-header > span {
+    font-size: small;
+}
+.palette-group {
+    color: var(--color-foreground-alt);
+}
+.palette-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    /* The outline of a focused swatch is drawn outside it, so the scrolling area leaves room for it. */
+    padding: 3px;
+    margin: -3px;
+    overflow-x: auto;
+}
+.palette-row {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    align-items: center;
+    gap: 8px;
+    min-width: calc(80px + var(--palette-columns) * 32px);
+}
+.palette-row > span {
+    font-size: small;
+}
+.palette-row-41 {
+    --palette-columns: 41;
+}
+.palette-row-21 {
+    --palette-columns: 21;
+}
+.palette-grid-41, .palette-grid-21 {
+    --grid-min-width: 0px;
+    --grid-gap: 2px;
+}
+.palette-grid-41 {
+    --grid-columns: 41;
+}
+.palette-grid-21 {
+    --grid-columns: 21;
+}
+.swatch-grid {
+    --grid-min-width: 128px;
+    --grid-gap: 8px;
+}
+
+/* Customization demos */
+
+.demo-pink {
+    --color-button-primary-background: var(--color-pink-bright);
+    --color-button-primary-border:     var(--color-pink-bright);
+    --color-slider:                    var(--color-pink-bright);
+    --color-slider-thumb:              var(--color-pink-bright);
+}
+.demo-textfield-compact {
+    --textfield-padding: 4px 8px;
+}
+.demo-textfield-focus {
+    --color-textfield-focus: var(--color-success-bright);
+}
+.demo-button-compact {
+    --button-padding: 4px 8px;
+}
+.demo-dropdown-compact {
+    --dropdown-padding: 4px 8px;
+}
+.demo-slider-large {
+    --color-slider:       var(--color-success-bright);
+    --color-slider-thumb: var(--color-success-bright);
+    --slider-thickness:   8px;
+    --slider-thumb-size:  24px;
+}
+.demo-slider-thin {
+    --slider-thickness:  2px;
+    --slider-thumb-size: 12px;
+}
+.demo-table-custom {
+    --table-padding: 4px 8px;
+    --color-table-header-background: var(--color-blue-opacity-20);
+}
+.demo-details-compact {
+    --details-padding:         8px;
+    --details-summary-padding: 6px 8px;
+}
+.demo-popup-small {
+    --popup-width: 360px;
+}
+.demo-popup-custom {
+    --popup-width:         640px;
+    --popup-padding:       48px;
+    --popup-backdrop-blur: 16px;
+    --color-popup-border:  var(--color-information-bright);
+}
+
+/* Progress demos. progress.js keeps --progress-value in sync with aria-valuenow; these are the values before it runs. */
+
+.demo-progress-30 {
+    --progress-value: 0.3;
+}
+.demo-progress-40 {
+    --progress-value: 0.4;
+}
+.demo-progress-60 {
+    --progress-value: 0.6;
+}
+.demo-progress-75 {
+    --progress-value: 0.75;
+}
+.demo-progress-success {
+    --color-progress: var(--color-success-bright);
+}
+.demo-progress-information {
+    --color-progress: var(--color-information-bright);
+}
+.demo-progress-warning {
+    --color-progress: var(--color-warning-bright);
+}
+.demo-progress-thick {
+    --progress-thickness: 8px;
+}
+.demo-progress-large {
+    --progress-size:      96px;
+    --progress-thickness: 2px;
 }

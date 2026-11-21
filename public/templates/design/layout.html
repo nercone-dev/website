@@ -1,122 +1,139 @@
 ---
 title: Layout - Nercone Design
-base: sidebar
-sidebar_title: Nercone Design
-sidebar: |
-  <a href="/design/index.html">Home</a>
-  <a href="/design/colors.html">Colors</a>
-  <a href="/design/typography.html">Typography</a>
-  <a href="/design/layout.html" aria-current="page">Layout</a>
-  <a href="/design/tables.html">Tables</a>
-  <a href="/design/forms.html">Forms</a>
-  <a href="/design/progress.html">Progress</a>
-  <a href="/design/overlays.html">Overlays</a>
-extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/design/style.css">
-               <link rel="stylesheet" href="https://assets.nercone.dev/pages/design/layout/style.css">
+description: Page structure, sidebar, hero, block, layer, details, grid, and the layout utility classes of Nercone Design.
+base: design
 ---
 
 <div class="hero">
     <h1>Layout</h1>
-    <p>Hero, Block, Layer, Grid, and layout utility classes.</p>
+    <p>The structure of a page, the areas that group content, and the classes that place them.</p>
 </div>
 
+<h2>Page structure</h2>
+<p><code>&lt;body&gt;</code> is a column that fills the height of the window. <code>&lt;header&gt;</code> is fixed to the top over a blurred background; its first <code>&lt;div&gt;</code> takes the remaining width, so the second one is at the end. <code>&lt;main&gt;</code> stacks its children with a gap of <code>16px</code>, and leaves room at the top for the header.</p>
+<pre><code>&lt;body&gt;
+    &lt;header&gt;
+        &lt;div&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/div&gt;
+        &lt;div&gt;&lt;a href="/about/"&gt;About&lt;/a&gt;&lt;/div&gt;
+    &lt;/header&gt;
+    &lt;main&gt;…&lt;/main&gt;
+&lt;/body&gt;</code></pre>
+
+<h2>Sidebar</h2>
+<p>A <code>&lt;nav class="sidebar"&gt;</code> before <code>&lt;main&gt;</code> is fixed to the start of the page, and <code>&lt;main&gt;</code> makes room for it. Up to 768px wide, it is hidden and opens as a popover over the page from a <code>sidebar-toggle</code> button, which is shown only there. The popover is native HTML, so it opens without JavaScript. This site uses it on these pages.</p>
+<pre><code>&lt;header&gt;
+    &lt;div&gt;
+        &lt;button class="sidebar-toggle" type="button" popovertarget="sidebar" aria-label="Open the menu"&gt;
+            &lt;svg viewBox="0 0 24 24" aria-hidden="true"&gt;&lt;path d="M3 6h18M3 12h18M3 18h18" fill="none" stroke="currentColor" stroke-width="2"/&gt;&lt;/svg&gt;
+        &lt;/button&gt;
+        …
+    &lt;/div&gt;
+&lt;/header&gt;
+&lt;nav id="sidebar" class="sidebar" popover aria-label="Documents"&gt;
+    &lt;span class="sidebar-heading"&gt;Guides&lt;/span&gt;
+    &lt;a href="/guides/start.html"&gt;Getting started&lt;/a&gt;
+    &lt;details&gt;
+        &lt;summary&gt;Reference&lt;/summary&gt;
+        &lt;a href="/reference/api.html"&gt;API&lt;/a&gt;
+        &lt;a href="/reference/cli.html"&gt;CLI&lt;/a&gt;
+    &lt;/details&gt;
+    &lt;hr&gt;
+    &lt;a href="/about/"&gt;About&lt;/a&gt;
+&lt;/nav&gt;
+&lt;main&gt;…&lt;/main&gt;</code></pre>
+<ul>
+    <li><code>sidebar-heading</code> labels a group of links. <code>&lt;hr&gt;</code> separates groups.</li>
+    <li><code>&lt;details&gt;</code> makes a folder. Its links hang from a guide line.</li>
+    <li>The link to the current page is highlighted by <code>aria-current="page"</code>. <code>sidebar.js</code> sets it on the link whose path and query match the page, and opens the folders around it.</li>
+    <li><code>sidebar.js</code> also closes the popover when a link in it is clicked, and when the window becomes wider than 768px.</li>
+</ul>
+<p>Change the width with <code>--sidebar-width</code> (default <code>240px</code>), the padding on its sides with <code>--sidebar-padding</code> (default <code>12px</code>), and the colors with <code>--color-sidebar-*</code>. Set <code>--sidebar-width</code> where both the sidebar and <code>&lt;main&gt;</code> can see it, such as <code>:root</code>.</p>
+
 <h2>Hero</h2>
-<p>A large title area. As the first child of <code>&lt;main&gt;</code>, it extends over the padding of <code>&lt;main&gt;</code> and fills its width, which excludes the sidebar. Outside <code>&lt;main&gt;</code>, it fills the width of the viewport. The top of this page is a Hero.</p>
-<p>Set a background image with <code>--hero-image</code>. A relative URL in a custom property may not resolve against the page, so use a path that starts with <code>/</code> or a full URL.</p>
-<pre><code>&lt;div class="hero" style="--hero-image: url('/images/header/wide.webp')"&gt;
+<p>A large title area at the top of a page. As the first child of <code>&lt;main&gt;</code>, it covers the padding of <code>&lt;main&gt;</code> and fills its width, beside the sidebar. Elsewhere it fills the width of the window. Its background is the page background tinted with 10% of <code>stark</code>. The top of this page is a hero.</p>
+<p>Set a background image with <code>--hero-image</code>. A relative URL in a custom property may not be resolved against the page, so use a path from <code>/</code> or a full URL.</p>
+<pre><code>.hero-about { --hero-image: url("/images/header/wide.webp"); }
+
+&lt;div class="hero hero-about"&gt;
     &lt;h1&gt;Title&lt;/h1&gt;
     &lt;p&gt;Subtitle&lt;/p&gt;
 &lt;/div&gt;</code></pre>
 
 <h2>Block</h2>
-<p>An area with a border. Children are stacked vertically with a gap of <code>16px</code>. When the first child is <code>&lt;b&gt;</code>, it is colored as the title of the variant.</p>
-<div class="block">
-    <p>A Block without a variant.</p>
-</div>
-<div class="block block-note">
-    <b>Note</b>
-    <p>Useful information that users should know.</p>
-</div>
-<div class="block block-tip">
-    <b>Tip</b>
-    <p>Helpful advice for doing things better.</p>
-</div>
-<div class="block block-important">
-    <b>Important</b>
-    <p>Key information users need to achieve their goal.</p>
-</div>
-<div class="block block-warning">
-    <b>Warning</b>
-    <p>Information that needs attention to avoid problems.</p>
-</div>
-<div class="block block-caution">
-    <b>Caution</b>
-    <p>Information about risks or negative outcomes of an action.</p>
+<p>An area with a border. Children are stacked with a gap of <code>16px</code>. With a variant, the border has the color of the alert, and a <code>&lt;b&gt;</code> as the first child is its title.</p>
+<div class="grid demo-grid-200">
+    <div class="block"><p>block</p></div>
+    {%- for name in ["note", "tip", "important", "warning", "caution"] %}
+    <div class="block block-{{ name }}"><b>{{ name | capitalize }}</b><p>block-{{ name }}</p></div>
+    {%- endfor %}
 </div>
 <pre><code>&lt;div class="block block-note"&gt;
     &lt;b&gt;Note&lt;/b&gt;
     &lt;p&gt;Text&lt;/p&gt;
 &lt;/div&gt;</code></pre>
+<p>On Markdown pages of this site, the alerts of GitHub Markdown become blocks.</p>
+<pre><code>&gt; [!WARNING]
+&gt; Text</code></pre>
 
 <h2>Layer</h2>
-<p>An area with a background color. The variants are the same as Block.</p>
-<div class="layer">
-    <p>A Layer without a variant.</p>
+<p>An area with a translucent background. The variants are the same as Block, with a background tinted by the color of the alert.</p>
+<div class="grid demo-grid-200">
+    <div class="layer"><p>layer</p></div>
+    {%- for name in ["note", "tip", "important", "warning", "caution"] %}
+    <div class="layer layer-{{ name }}"><b>{{ name | capitalize }}</b><p>layer-{{ name }}</p></div>
+    {%- endfor %}
 </div>
-<div class="layer layer-note">
-    <b>Note</b>
-    <p>Useful information that users should know.</p>
-</div>
-<div class="layer layer-tip">
-    <b>Tip</b>
-    <p>Helpful advice for doing things better.</p>
-</div>
-<div class="layer layer-important">
-    <b>Important</b>
-    <p>Key information users need to achieve their goal.</p>
-</div>
-<div class="layer layer-warning">
-    <b>Warning</b>
-    <p>Information that needs attention to avoid problems.</p>
-</div>
-<div class="layer layer-caution">
-    <b>Caution</b>
-    <p>Information about risks or negative outcomes of an action.</p>
-</div>
-<pre><code>&lt;div class="layer layer-tip"&gt;
-    &lt;b&gt;Tip&lt;/b&gt;
-    &lt;p&gt;Text&lt;/p&gt;
-&lt;/div&gt;</code></pre>
-<p>A link that wraps a Block or Layer has no underline, so the whole area can be a link.</p>
+<p>A link that contains a block or layer as its child has no underline, so the whole area can be a link.</p>
 <a href="/design/index.html">
     <div class="layer">
         <b>Home</b>
-        <p>A Layer inside a link.</p>
+        <p>A layer inside a link.</p>
     </div>
 </a>
+<pre><code>&lt;a href="/design/"&gt;
+    &lt;div class="layer"&gt;…&lt;/div&gt;
+&lt;/a&gt;</code></pre>
+
+<h2>Details</h2>
+<p><code>&lt;details&gt;</code> needs no class. The summary is a bar with a triangle that points up while it is open.</p>
+<details>
+    <summary>Closed</summary>
+    <p>Content.</p>
+</details>
+<details open>
+    <summary>Open</summary>
+    <p>The space around the content is <code>--details-padding</code> (default <code>16px</code>), and the padding of the summary is <code>--details-summary-padding</code> (default <code>12px 16px</code>). The colors are <code>--color-details-*</code>.</p>
+</details>
+<details class="demo-details-compact" open>
+    <summary>Compact</summary>
+    <p><code>--details-padding: 8px; --details-summary-padding: 6px 8px</code></p>
+</details>
+<pre><code>&lt;details&gt;
+    &lt;summary&gt;Title&lt;/summary&gt;
+    &lt;p&gt;Text&lt;/p&gt;
+&lt;/details&gt;</code></pre>
 
 <h2>Grid</h2>
 <p><code>grid</code> places children in as many equal columns as fit. Each column is at least <code>--grid-min-width</code> (default <code>160px</code>) wide, and the gap is <code>--grid-gap</code> (default <code>16px</code>). Set <code>--grid-columns</code> to fix the number of columns.</p>
 <div class="grid">
-    <div class="layer">1</div>
-    <div class="layer">2</div>
-    <div class="layer">3</div>
-    <div class="layer">4</div>
-    <div class="layer">5</div>
-    <div class="layer">6</div>
+    {%- for index in range(1, 7) %}
+    <div class="layer">{{ index }}</div>
+    {%- endfor %}
 </div>
 <div class="grid demo-grid-3">
     <div class="layer">--grid-columns: 3</div>
     <div class="layer">--grid-gap: 4px</div>
-    <div class="layer">3</div>
+    <div class="layer">--grid-min-width: 0px</div>
 </div>
-<pre><code>&lt;div class="grid" style="--grid-min-width: 240px"&gt;
+<pre><code>.cards { --grid-min-width: 240px; }
+
+&lt;div class="grid cards"&gt;
     &lt;div class="layer"&gt;…&lt;/div&gt;
     &lt;div class="layer"&gt;…&lt;/div&gt;
 &lt;/div&gt;</code></pre>
 
 <h2>Flex</h2>
-<p><code>flex</code> lays children out in a row with a gap of <code>16px</code>. <code>flex:1</code> to <code>flex:10</code> set the ratio of each child.</p>
+<p><code>flex</code> lays children out in a row with a gap of <code>16px</code>. <code>flex:1</code> to <code>flex:10</code> set how much of the free space each child takes.</p>
 <div class="flex">
     <div class="layer flex:1">flex:1</div>
     <div class="layer flex:2">flex:2</div>
@@ -128,72 +145,60 @@ extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/des
 &lt;/div&gt;</code></pre>
 
 <h2>Responsive</h2>
-<p>Classes in <code>responsive-design.css</code> show or hide elements depending on the viewport width. <code>hide</code> and <code>show</code> always apply. <code>small:</code> applies up to 768px, <code>medium:</code> from 769px to 1080px, and <code>large:</code> from 1081px. Resize the window to see them change.</p>
-<div class="layer hide small:show"><p>Small (up to 768px): <code>hide small:show</code></p></div>
-<div class="layer hide medium:show"><p>Medium (769px to 1080px): <code>hide medium:show</code></p></div>
-<div class="layer hide large:show"><p>Large (from 1081px): <code>hide large:show</code></p></div>
-<div class="layer small:hide"><p>Hidden up to 768px: <code>small:hide</code></p></div>
+<p><code>hide</code> and <code>show</code> always apply. With a prefix, they apply only at some widths: <code>small:</code> up to 768px, <code>medium:</code> from 769px to 1080px, and <code>large:</code> from 1081px. Resize the window to see them change.</p>
+<div class="layer hide small:show"><p>Small: <code>hide small:show</code></p></div>
+<div class="layer hide medium:show"><p>Medium: <code>hide medium:show</code></p></div>
+<div class="layer hide large:show"><p>Large: <code>hide large:show</code></p></div>
 <pre><code>&lt;nav class="small:hide"&gt;…&lt;/nav&gt;
 &lt;button class="hide small:show"&gt;…&lt;/button&gt;</code></pre>
 <div class="block block-warning">
     <b>Warning</b>
-    <p>The <code>show</code> classes set <code>display: block</code>. For elements that need another <code>display</code> value, such as <code>flex</code> or <code>grid</code>, do not use <code>hide</code>; combine the <code>*:hide</code> classes instead.</p>
+    <p>The <code>show</code> classes set <code>display: block</code>. For an element that needs another <code>display</code>, such as <code>flex</code> or <code>grid</code>, combine the <code>*:hide</code> classes instead of <code>hide</code> and <code>*:show</code>.</p>
 </div>
 
 <h2>Spacing</h2>
-<p><code>no-padding</code> and <code>no-margin</code> remove the padding or margin on all sides. Add <code>-top</code>, <code>-bottom</code>, <code>-left</code>, or <code>-right</code> to remove it on one side only.</p>
+<p><code>no-padding</code> and <code>no-margin</code> remove the padding or margin. Add <code>-top</code>, <code>-bottom</code>, <code>-left</code>, or <code>-right</code> to remove it on one side only.</p>
 <div class="flex demo-wrap">
-    <div class="layer flex:1"><p>Normal Layer</p></div>
+    <div class="layer flex:1"><p>layer</p></div>
     <div class="layer no-padding flex:1"><p>no-padding</p></div>
     <div class="layer no-padding-left flex:1"><p>no-padding-left</p></div>
 </div>
-<div class="flex demo-wrap">
-    <div class="border flex:1">
-        <ul>
-            <li>Normal list</li>
-            <li>Indented on the left</li>
-        </ul>
-    </div>
-    <div class="border flex:1">
-        <ul class="no-padding-left">
-            <li>no-padding-left</li>
-            <li>Not indented</li>
-        </ul>
-    </div>
-</div>
-<pre><code>&lt;div class="layer no-padding"&gt;…&lt;/div&gt;
-&lt;ul class="no-padding-left"&gt;…&lt;/ul&gt;</code></pre>
+<pre><code>&lt;ul class="no-padding-left"&gt;…&lt;/ul&gt;</code></pre>
 
-<h2>Border</h2>
-<div class="border demo-padding-16">
-    <p>An element with the <code>border</code> class.</p>
+<h2>Other utilities</h2>
+<div class="table-scroll">
+    <table>
+        <thead>
+            <tr><th>Class</th><th>Effect</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>border</code></td><td>A 1px border in <code>--color-border</code></td></tr>
+            <tr><td><code>overflow-show</code>, <code>overflow-hide</code>, <code>overflow-scroll</code></td><td>Content that does not fit is drawn outside, clipped, or scrolled</td></tr>
+            <tr><td><code>unselectable</code></td><td>Text cannot be selected</td></tr>
+            <tr><td><code>selectable</code></td><td>Text can be selected again inside an unselectable element</td></tr>
+            <tr><td><code>script-only</code></td><td>Hidden when JavaScript is disabled (with <code>noscript.css</code>)</td></tr>
+        </tbody>
+    </table>
 </div>
-
-<h2>Overflow</h2>
-<p><code>overflow-show</code>, <code>overflow-hide</code>, and <code>overflow-scroll</code> change how content that does not fit is handled.</p>
 <div class="grid demo-grid-200">
-    <div class="block overflow-show demo-height-48"><p>overflow-show: content that does not fit is still drawn outside the box.</p></div>
-    <div class="block overflow-hide demo-height-48"><p>overflow-hide: content that does not fit is clipped. Content that does not fit is clipped.</p></div>
-    <div class="block overflow-scroll demo-height-48"><p>overflow-scroll: content that does not fit can be scrolled. Content that does not fit can be scrolled.</p></div>
+    <div class="block overflow-show demo-height-48"><p>overflow-show: content that does not fit is drawn outside the box.</p></div>
+    <div class="block overflow-hide demo-height-48"><p>overflow-hide: content that does not fit is clipped, so this line is cut.</p></div>
+    <div class="block overflow-scroll demo-height-48"><p>overflow-scroll: content that does not fit can be scrolled inside the box.</p></div>
 </div>
-
-<h2>Selection</h2>
-<p><code>unselectable</code> prevents text from being selected. <code>selectable</code> makes text selectable again inside an unselectable element.</p>
 <div class="layer unselectable">
     <p>This text cannot be selected (<code>unselectable</code>).</p>
     <p class="selectable">This text can be selected (<code>selectable</code>).</p>
 </div>
 
-<h2 id="script-only">Without JavaScript</h2>
-<p>Pages should work without JavaScript. Load <code>noscript.css</code> inside <code>&lt;noscript&gt;</code>, so it applies only when JavaScript is disabled: it hides the loading overlay, draws sliders without the fill that <code>slider.js</code> keeps up to date, and hides elements with the <code>script-only</code> class. Give that class to controls that do nothing without JavaScript, such as buttons that only show toasts, and explain what is missing in a <code>&lt;noscript&gt;</code> element if it matters.</p>
-<pre><code>&lt;noscript&gt;&lt;link rel="stylesheet" href="styles/noscript.css"&gt;&lt;/noscript&gt;
-
-&lt;button class="script-only" type="button" data-toast="Saved"&gt;Show toast&lt;/button&gt;</code></pre>
-<p>If the scripts are enabled but fail to load, the loading overlay fades out by itself after <code>--loading-overlay-timeout</code> (default <code>10s</code>), so it does not keep covering the page.</p>
-
-<h2>Priority of utility classes</h2>
-<p>Classes that change a single property (the classes on this page, <code>fg-color-*</code>, <code>font-weight-*</code>, and so on) are declared with <code>!important</code>. They take precedence over component styles and <code>style</code> attributes, regardless of load order or specificity.</p>
+<h2 id="utility-priority">Priority of utility classes</h2>
+<p>Utility classes, which each change one property (the classes on this page, <code>fg-color-*</code>, <code>font-weight-*</code>, and so on), are declared with <code>!important</code>. They win over component styles and <code>style</code> attributes, whatever the order or specificity.</p>
 <div class="flex demo-wrap">
     <button class="font-weight-light" type="button">button font-weight-light</button>
-    <div class="block bd-color-pink-normal bg-color-pink-opacity-10 no-padding"><p>block bd-color-pink-normal bg-color-pink-opacity-10 no-padding</p></div>
+    <div class="block bd-color-pink-normal bg-color-pink-opacity-10 no-padding"><p>block no-padding</p></div>
 </div>
+
+<h2 id="without-javascript">Without JavaScript</h2>
+<p>Pages must work without JavaScript. Load <code>noscript.css</code> inside <code>&lt;noscript&gt;</code>, so that it applies only then. It hides the loading overlay, draws sliders without the fill that <code>slider.js</code> keeps up to date, and hides elements with <code>script-only</code>. Give that class to controls that do nothing without JavaScript, such as buttons that only show toasts.</p>
+<pre><code>&lt;noscript&gt;&lt;link rel="stylesheet" href="https://assets.nercone.dev/styles/noscript.css"&gt;&lt;/noscript&gt;
+&lt;button class="script-only" type="button" data-toast="Saved"&gt;Show toast&lt;/button&gt;</code></pre>
+<p>When JavaScript is enabled but the scripts fail to load, the loading overlay fades out by itself after <code>--loading-overlay-timeout</code> (default <code>10s</code>), so it does not keep covering the page.</p>

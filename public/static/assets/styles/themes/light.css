@@ -5,8 +5,8 @@
 
     --color-foreground:     var(--color-black-opacity-75);
     --color-foreground-alt: var(--color-black-opacity-100);
-    --color-background:     var(--color-grey-95);
-    --color-background-alt: var(--color-grey-90);
+    --color-background:     var(--color-grey-190);
+    --color-background-alt: var(--color-grey-180);
 
     --color-layer:     var(--color-black-opacity-5);
     --color-layer-alt: var(--color-black-opacity-10);
@@ -156,6 +156,6 @@
     --color-swatch-foreground:    var(--color-foreground);
     --color-swatch-border:        var(--color-border);
     --color-swatch-focus:         var(--color-foreground-alt);
-    --color-swatch-checker-light: var(--color-grey-20);
-    --color-swatch-checker-dark:  var(--color-grey-10);
+    --color-swatch-checker-light: var(--color-grey-40);
+    --color-swatch-checker-dark:  var(--color-grey-20);
 }

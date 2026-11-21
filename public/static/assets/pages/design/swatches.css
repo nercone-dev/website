@@ -1,65 +1,65 @@
-.palette-header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px 16px;
-}
-.palette-header > span {
-    font-size: small;
-}
-.palette-rows {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-
-    padding: 3px;
-    margin: -3px;
-    overflow-x: auto;
-}
-.palette-row {
-    display: grid;
-    grid-template-columns: 72px 1fr;
-    align-items: center;
-    gap: 8px;
-    min-width: calc(80px + var(--palette-columns) * 32px);
-}
-.palette-row > span {
-    font-size: small;
-}
-.palette-group {
-    color: var(--color-foreground-alt);
-}
-
-.palette-row-41 {
-    --palette-columns: 41;
-}
-.palette-row-21 {
-    --palette-columns: 21;
-}
-.palette-grid-41 {
-    --grid-columns: 41;
-    --grid-min-width: 0px;
-    --grid-gap: 2px;
-}
-.palette-grid-21 {
-    --grid-columns: 21;
-    --grid-min-width: 0px;
-    --grid-gap: 2px;
-}
-.swatch-grid {
-    --grid-min-width: 128px;
-    --grid-gap: 8px;
-}
-
-.demo-pink {
-    --color-button-primary-background: var(--color-pink-bright);
-    --color-button-primary-border:     var(--color-pink-bright);
-    --color-slider:                    var(--color-pink-bright);
-    --color-slider-thumb:              var(--color-pink-bright);
-}
-
-/* Each swatch shows the color named by its data-swatch attribute. */
+/* Each swatch shows the color named by its data-swatch attribute. Generated from color.css and themes/dark.css. */
+.swatch[data-swatch="--color-black"] { --swatch-color: var(--color-black); }
+.swatch[data-swatch="--color-white"] { --swatch-color: var(--color-white); }
+.swatch[data-swatch="--color-grey"] { --swatch-color: var(--color-grey); }
+.swatch[data-swatch="--color-red"] { --swatch-color: var(--color-red); }
+.swatch[data-swatch="--color-orange"] { --swatch-color: var(--color-orange); }
+.swatch[data-swatch="--color-yellow"] { --swatch-color: var(--color-yellow); }
+.swatch[data-swatch="--color-green"] { --swatch-color: var(--color-green); }
+.swatch[data-swatch="--color-cyan"] { --swatch-color: var(--color-cyan); }
+.swatch[data-swatch="--color-sky"] { --swatch-color: var(--color-sky); }
+.swatch[data-swatch="--color-blue"] { --swatch-color: var(--color-blue); }
+.swatch[data-swatch="--color-purple"] { --swatch-color: var(--color-purple); }
+.swatch[data-swatch="--color-pink"] { --swatch-color: var(--color-pink); }
+.swatch[data-swatch="--color-jis-white"] { --swatch-color: var(--color-jis-white); }
+.swatch[data-swatch="--color-jis-black"] { --swatch-color: var(--color-jis-black); }
+.swatch[data-swatch="--color-jis-red"] { --swatch-color: var(--color-jis-red); }
+.swatch[data-swatch="--color-jis-red-yellow"] { --swatch-color: var(--color-jis-red-yellow); }
+.swatch[data-swatch="--color-jis-yellow"] { --swatch-color: var(--color-jis-yellow); }
+.swatch[data-swatch="--color-jis-green"] { --swatch-color: var(--color-jis-green); }
+.swatch[data-swatch="--color-jis-blue"] { --swatch-color: var(--color-jis-blue); }
+.swatch[data-swatch="--color-jis-red-purple"] { --swatch-color: var(--color-jis-red-purple); }
+.swatch[data-swatch="--color-stark-0"] { --swatch-color: var(--color-stark-0); }
+.swatch[data-swatch="--color-stark-5"] { --swatch-color: var(--color-stark-5); }
+.swatch[data-swatch="--color-stark-10"] { --swatch-color: var(--color-stark-10); }
+.swatch[data-swatch="--color-stark-15"] { --swatch-color: var(--color-stark-15); }
+.swatch[data-swatch="--color-stark-20"] { --swatch-color: var(--color-stark-20); }
+.swatch[data-swatch="--color-stark-25"] { --swatch-color: var(--color-stark-25); }
+.swatch[data-swatch="--color-stark-30"] { --swatch-color: var(--color-stark-30); }
+.swatch[data-swatch="--color-stark-35"] { --swatch-color: var(--color-stark-35); }
+.swatch[data-swatch="--color-stark-40"] { --swatch-color: var(--color-stark-40); }
+.swatch[data-swatch="--color-stark-45"] { --swatch-color: var(--color-stark-45); }
+.swatch[data-swatch="--color-stark-50"] { --swatch-color: var(--color-stark-50); }
+.swatch[data-swatch="--color-stark-55"] { --swatch-color: var(--color-stark-55); }
+.swatch[data-swatch="--color-stark-60"] { --swatch-color: var(--color-stark-60); }
+.swatch[data-swatch="--color-stark-65"] { --swatch-color: var(--color-stark-65); }
+.swatch[data-swatch="--color-stark-70"] { --swatch-color: var(--color-stark-70); }
+.swatch[data-swatch="--color-stark-75"] { --swatch-color: var(--color-stark-75); }
+.swatch[data-swatch="--color-stark-80"] { --swatch-color: var(--color-stark-80); }
+.swatch[data-swatch="--color-stark-85"] { --swatch-color: var(--color-stark-85); }
+.swatch[data-swatch="--color-stark-90"] { --swatch-color: var(--color-stark-90); }
+.swatch[data-swatch="--color-stark-95"] { --swatch-color: var(--color-stark-95); }
+.swatch[data-swatch="--color-stark-100"] { --swatch-color: var(--color-stark-100); }
+.swatch[data-swatch="--color-stark-105"] { --swatch-color: var(--color-stark-105); }
+.swatch[data-swatch="--color-stark-110"] { --swatch-color: var(--color-stark-110); }
+.swatch[data-swatch="--color-stark-115"] { --swatch-color: var(--color-stark-115); }
+.swatch[data-swatch="--color-stark-120"] { --swatch-color: var(--color-stark-120); }
+.swatch[data-swatch="--color-stark-125"] { --swatch-color: var(--color-stark-125); }
+.swatch[data-swatch="--color-stark-130"] { --swatch-color: var(--color-stark-130); }
+.swatch[data-swatch="--color-stark-135"] { --swatch-color: var(--color-stark-135); }
+.swatch[data-swatch="--color-stark-140"] { --swatch-color: var(--color-stark-140); }
+.swatch[data-swatch="--color-stark-145"] { --swatch-color: var(--color-stark-145); }
+.swatch[data-swatch="--color-stark-150"] { --swatch-color: var(--color-stark-150); }
+.swatch[data-swatch="--color-stark-155"] { --swatch-color: var(--color-stark-155); }
+.swatch[data-swatch="--color-stark-160"] { --swatch-color: var(--color-stark-160); }
+.swatch[data-swatch="--color-stark-165"] { --swatch-color: var(--color-stark-165); }
+.swatch[data-swatch="--color-stark-170"] { --swatch-color: var(--color-stark-170); }
+.swatch[data-swatch="--color-stark-175"] { --swatch-color: var(--color-stark-175); }
+.swatch[data-swatch="--color-stark-180"] { --swatch-color: var(--color-stark-180); }
+.swatch[data-swatch="--color-stark-185"] { --swatch-color: var(--color-stark-185); }
+.swatch[data-swatch="--color-stark-190"] { --swatch-color: var(--color-stark-190); }
+.swatch[data-swatch="--color-stark-195"] { --swatch-color: var(--color-stark-195); }
+.swatch[data-swatch="--color-stark-200"] { --swatch-color: var(--color-stark-200); }
 .swatch[data-swatch="--color-grey-0"] { --swatch-color: var(--color-grey-0); }
 .swatch[data-swatch="--color-grey-5"] { --swatch-color: var(--color-grey-5); }
 .swatch[data-swatch="--color-grey-10"] { --swatch-color: var(--color-grey-10); }
@@ -470,45 +470,57 @@
 .swatch[data-swatch="--color-pink-190"] { --swatch-color: var(--color-pink-190); }
 .swatch[data-swatch="--color-pink-195"] { --swatch-color: var(--color-pink-195); }
 .swatch[data-swatch="--color-pink-200"] { --swatch-color: var(--color-pink-200); }
-.swatch[data-swatch="--color-black"] { --swatch-color: var(--color-black); }
-.swatch[data-swatch="--color-white"] { --swatch-color: var(--color-white); }
-.swatch[data-swatch="--color-grey"] { --swatch-color: var(--color-grey); }
-.swatch[data-swatch="--color-red"] { --swatch-color: var(--color-red); }
+.swatch[data-swatch="--color-grey-dark"] { --swatch-color: var(--color-grey-dark); }
+.swatch[data-swatch="--color-grey-normal"] { --swatch-color: var(--color-grey-normal); }
+.swatch[data-swatch="--color-grey-bright"] { --swatch-color: var(--color-grey-bright); }
 .swatch[data-swatch="--color-red-dark"] { --swatch-color: var(--color-red-dark); }
 .swatch[data-swatch="--color-red-normal"] { --swatch-color: var(--color-red-normal); }
 .swatch[data-swatch="--color-red-bright"] { --swatch-color: var(--color-red-bright); }
-.swatch[data-swatch="--color-orange"] { --swatch-color: var(--color-orange); }
 .swatch[data-swatch="--color-orange-dark"] { --swatch-color: var(--color-orange-dark); }
 .swatch[data-swatch="--color-orange-normal"] { --swatch-color: var(--color-orange-normal); }
 .swatch[data-swatch="--color-orange-bright"] { --swatch-color: var(--color-orange-bright); }
-.swatch[data-swatch="--color-yellow"] { --swatch-color: var(--color-yellow); }
 .swatch[data-swatch="--color-yellow-dark"] { --swatch-color: var(--color-yellow-dark); }
 .swatch[data-swatch="--color-yellow-normal"] { --swatch-color: var(--color-yellow-normal); }
 .swatch[data-swatch="--color-yellow-bright"] { --swatch-color: var(--color-yellow-bright); }
-.swatch[data-swatch="--color-green"] { --swatch-color: var(--color-green); }
 .swatch[data-swatch="--color-green-dark"] { --swatch-color: var(--color-green-dark); }
 .swatch[data-swatch="--color-green-normal"] { --swatch-color: var(--color-green-normal); }
 .swatch[data-swatch="--color-green-bright"] { --swatch-color: var(--color-green-bright); }
-.swatch[data-swatch="--color-cyan"] { --swatch-color: var(--color-cyan); }
 .swatch[data-swatch="--color-cyan-dark"] { --swatch-color: var(--color-cyan-dark); }
 .swatch[data-swatch="--color-cyan-normal"] { --swatch-color: var(--color-cyan-normal); }
 .swatch[data-swatch="--color-cyan-bright"] { --swatch-color: var(--color-cyan-bright); }
-.swatch[data-swatch="--color-sky"] { --swatch-color: var(--color-sky); }
 .swatch[data-swatch="--color-sky-dark"] { --swatch-color: var(--color-sky-dark); }
 .swatch[data-swatch="--color-sky-normal"] { --swatch-color: var(--color-sky-normal); }
 .swatch[data-swatch="--color-sky-bright"] { --swatch-color: var(--color-sky-bright); }
-.swatch[data-swatch="--color-blue"] { --swatch-color: var(--color-blue); }
 .swatch[data-swatch="--color-blue-dark"] { --swatch-color: var(--color-blue-dark); }
 .swatch[data-swatch="--color-blue-normal"] { --swatch-color: var(--color-blue-normal); }
 .swatch[data-swatch="--color-blue-bright"] { --swatch-color: var(--color-blue-bright); }
-.swatch[data-swatch="--color-purple"] { --swatch-color: var(--color-purple); }
 .swatch[data-swatch="--color-purple-dark"] { --swatch-color: var(--color-purple-dark); }
 .swatch[data-swatch="--color-purple-normal"] { --swatch-color: var(--color-purple-normal); }
 .swatch[data-swatch="--color-purple-bright"] { --swatch-color: var(--color-purple-bright); }
-.swatch[data-swatch="--color-pink"] { --swatch-color: var(--color-pink); }
 .swatch[data-swatch="--color-pink-dark"] { --swatch-color: var(--color-pink-dark); }
 .swatch[data-swatch="--color-pink-normal"] { --swatch-color: var(--color-pink-normal); }
 .swatch[data-swatch="--color-pink-bright"] { --swatch-color: var(--color-pink-bright); }
+.swatch[data-swatch="--color-stark-opacity-0"] { --swatch-color: var(--color-stark-opacity-0); }
+.swatch[data-swatch="--color-stark-opacity-5"] { --swatch-color: var(--color-stark-opacity-5); }
+.swatch[data-swatch="--color-stark-opacity-10"] { --swatch-color: var(--color-stark-opacity-10); }
+.swatch[data-swatch="--color-stark-opacity-15"] { --swatch-color: var(--color-stark-opacity-15); }
+.swatch[data-swatch="--color-stark-opacity-20"] { --swatch-color: var(--color-stark-opacity-20); }
+.swatch[data-swatch="--color-stark-opacity-25"] { --swatch-color: var(--color-stark-opacity-25); }
+.swatch[data-swatch="--color-stark-opacity-30"] { --swatch-color: var(--color-stark-opacity-30); }
+.swatch[data-swatch="--color-stark-opacity-35"] { --swatch-color: var(--color-stark-opacity-35); }
+.swatch[data-swatch="--color-stark-opacity-40"] { --swatch-color: var(--color-stark-opacity-40); }
+.swatch[data-swatch="--color-stark-opacity-45"] { --swatch-color: var(--color-stark-opacity-45); }
+.swatch[data-swatch="--color-stark-opacity-50"] { --swatch-color: var(--color-stark-opacity-50); }
+.swatch[data-swatch="--color-stark-opacity-55"] { --swatch-color: var(--color-stark-opacity-55); }
+.swatch[data-swatch="--color-stark-opacity-60"] { --swatch-color: var(--color-stark-opacity-60); }
+.swatch[data-swatch="--color-stark-opacity-65"] { --swatch-color: var(--color-stark-opacity-65); }
+.swatch[data-swatch="--color-stark-opacity-70"] { --swatch-color: var(--color-stark-opacity-70); }
+.swatch[data-swatch="--color-stark-opacity-75"] { --swatch-color: var(--color-stark-opacity-75); }
+.swatch[data-swatch="--color-stark-opacity-80"] { --swatch-color: var(--color-stark-opacity-80); }
+.swatch[data-swatch="--color-stark-opacity-85"] { --swatch-color: var(--color-stark-opacity-85); }
+.swatch[data-swatch="--color-stark-opacity-90"] { --swatch-color: var(--color-stark-opacity-90); }
+.swatch[data-swatch="--color-stark-opacity-95"] { --swatch-color: var(--color-stark-opacity-95); }
+.swatch[data-swatch="--color-stark-opacity-100"] { --swatch-color: var(--color-stark-opacity-100); }
 .swatch[data-swatch="--color-black-opacity-0"] { --swatch-color: var(--color-black-opacity-0); }
 .swatch[data-swatch="--color-black-opacity-5"] { --swatch-color: var(--color-black-opacity-5); }
 .swatch[data-swatch="--color-black-opacity-10"] { --swatch-color: var(--color-black-opacity-10); }
@@ -551,6 +563,27 @@
 .swatch[data-swatch="--color-white-opacity-90"] { --swatch-color: var(--color-white-opacity-90); }
 .swatch[data-swatch="--color-white-opacity-95"] { --swatch-color: var(--color-white-opacity-95); }
 .swatch[data-swatch="--color-white-opacity-100"] { --swatch-color: var(--color-white-opacity-100); }
+.swatch[data-swatch="--color-grey-opacity-0"] { --swatch-color: var(--color-grey-opacity-0); }
+.swatch[data-swatch="--color-grey-opacity-5"] { --swatch-color: var(--color-grey-opacity-5); }
+.swatch[data-swatch="--color-grey-opacity-10"] { --swatch-color: var(--color-grey-opacity-10); }
+.swatch[data-swatch="--color-grey-opacity-15"] { --swatch-color: var(--color-grey-opacity-15); }
+.swatch[data-swatch="--color-grey-opacity-20"] { --swatch-color: var(--color-grey-opacity-20); }
+.swatch[data-swatch="--color-grey-opacity-25"] { --swatch-color: var(--color-grey-opacity-25); }
+.swatch[data-swatch="--color-grey-opacity-30"] { --swatch-color: var(--color-grey-opacity-30); }
+.swatch[data-swatch="--color-grey-opacity-35"] { --swatch-color: var(--color-grey-opacity-35); }
+.swatch[data-swatch="--color-grey-opacity-40"] { --swatch-color: var(--color-grey-opacity-40); }
+.swatch[data-swatch="--color-grey-opacity-45"] { --swatch-color: var(--color-grey-opacity-45); }
+.swatch[data-swatch="--color-grey-opacity-50"] { --swatch-color: var(--color-grey-opacity-50); }
+.swatch[data-swatch="--color-grey-opacity-55"] { --swatch-color: var(--color-grey-opacity-55); }
+.swatch[data-swatch="--color-grey-opacity-60"] { --swatch-color: var(--color-grey-opacity-60); }
+.swatch[data-swatch="--color-grey-opacity-65"] { --swatch-color: var(--color-grey-opacity-65); }
+.swatch[data-swatch="--color-grey-opacity-70"] { --swatch-color: var(--color-grey-opacity-70); }
+.swatch[data-swatch="--color-grey-opacity-75"] { --swatch-color: var(--color-grey-opacity-75); }
+.swatch[data-swatch="--color-grey-opacity-80"] { --swatch-color: var(--color-grey-opacity-80); }
+.swatch[data-swatch="--color-grey-opacity-85"] { --swatch-color: var(--color-grey-opacity-85); }
+.swatch[data-swatch="--color-grey-opacity-90"] { --swatch-color: var(--color-grey-opacity-90); }
+.swatch[data-swatch="--color-grey-opacity-95"] { --swatch-color: var(--color-grey-opacity-95); }
+.swatch[data-swatch="--color-grey-opacity-100"] { --swatch-color: var(--color-grey-opacity-100); }
 .swatch[data-swatch="--color-red-opacity-0"] { --swatch-color: var(--color-red-opacity-0); }
 .swatch[data-swatch="--color-red-opacity-5"] { --swatch-color: var(--color-red-opacity-5); }
 .swatch[data-swatch="--color-red-opacity-10"] { --swatch-color: var(--color-red-opacity-10); }
@@ -740,14 +773,7 @@
 .swatch[data-swatch="--color-pink-opacity-90"] { --swatch-color: var(--color-pink-opacity-90); }
 .swatch[data-swatch="--color-pink-opacity-95"] { --swatch-color: var(--color-pink-opacity-95); }
 .swatch[data-swatch="--color-pink-opacity-100"] { --swatch-color: var(--color-pink-opacity-100); }
-.swatch[data-swatch="--color-jis-white"] { --swatch-color: var(--color-jis-white); }
-.swatch[data-swatch="--color-jis-black"] { --swatch-color: var(--color-jis-black); }
-.swatch[data-swatch="--color-jis-red"] { --swatch-color: var(--color-jis-red); }
-.swatch[data-swatch="--color-jis-red-yellow"] { --swatch-color: var(--color-jis-red-yellow); }
-.swatch[data-swatch="--color-jis-yellow"] { --swatch-color: var(--color-jis-yellow); }
-.swatch[data-swatch="--color-jis-green"] { --swatch-color: var(--color-jis-green); }
-.swatch[data-swatch="--color-jis-blue"] { --swatch-color: var(--color-jis-blue); }
-.swatch[data-swatch="--color-jis-red-purple"] { --swatch-color: var(--color-jis-red-purple); }
+.swatch[data-swatch="--color-stark"] { --swatch-color: var(--color-stark); }
 .swatch[data-swatch="--color-foreground"] { --swatch-color: var(--color-foreground); }
 .swatch[data-swatch="--color-foreground-alt"] { --swatch-color: var(--color-foreground-alt); }
 .swatch[data-swatch="--color-background"] { --swatch-color: var(--color-background); }
@@ -808,6 +834,9 @@
 .swatch[data-swatch="--color-dropdown-background"] { --swatch-color: var(--color-dropdown-background); }
 .swatch[data-swatch="--color-dropdown-border"] { --swatch-color: var(--color-dropdown-border); }
 .swatch[data-swatch="--color-dropdown-focus"] { --swatch-color: var(--color-dropdown-focus); }
+.swatch[data-swatch="--color-dropdown-hover"] { --swatch-color: var(--color-dropdown-hover); }
+.swatch[data-swatch="--color-dropdown-active-foreground"] { --swatch-color: var(--color-dropdown-active-foreground); }
+.swatch[data-swatch="--color-dropdown-active-background"] { --swatch-color: var(--color-dropdown-active-background); }
 .swatch[data-swatch="--color-progress"] { --swatch-color: var(--color-progress); }
 .swatch[data-swatch="--color-progress-track"] { --swatch-color: var(--color-progress-track); }
 .swatch[data-swatch="--color-slider"] { --swatch-color: var(--color-slider); }

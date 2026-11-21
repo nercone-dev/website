@@ -1,19 +1,9 @@
 ---
 title: Tables - Nercone Design
-base: sidebar
-sidebar_title: Nercone Design
-sidebar: |
-  <a href="/design/index.html">Home</a>
-  <a href="/design/colors.html">Colors</a>
-  <a href="/design/typography.html">Typography</a>
-  <a href="/design/layout.html">Layout</a>
-  <a href="/design/tables.html" aria-current="page">Tables</a>
-  <a href="/design/forms.html">Forms</a>
-  <a href="/design/progress.html">Progress</a>
-  <a href="/design/overlays.html">Overlays</a>
-extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/design/style.css">
-               <link rel="stylesheet" href="https://assets.nercone.dev/pages/design/tables/style.css">
+description: Tables, their variants, numeric cells, and horizontal scrolling in Nercone Design.
+base: design
 ---
+{%- set hues = [("red", 0), ("orange", 25), ("yellow", 50), ("green", 155), ("cyan", 190), ("sky", 210), ("blue", 230), ("purple", 270), ("pink", 320)] -%}
 
 <div class="hero">
     <h1>Tables</h1>
@@ -21,87 +11,38 @@ extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/des
 </div>
 
 <h2>Basic</h2>
-<p>Applies to <code>&lt;table&gt;</code> without a class. Other elements can get the same look with the <code>table</code> class. Header cells in <code>&lt;thead&gt;</code> have a background.</p>
+<p>Applies to <code>&lt;table&gt;</code>. Add the <code>table</code> class to other elements. Header cells in <code>&lt;thead&gt;</code> have a background; <code>&lt;th&gt;</code> elsewhere is semibold without one. <code>&lt;caption&gt;</code> is placed below the table.</p>
 <table>
+    <caption>Components and their files</caption>
     <thead>
-        <tr>
-            <th>Component</th>
-            <th>Stylesheet</th>
-            <th>Script</th>
-        </tr>
+        <tr><th>Component</th><th>Stylesheet</th><th>Script</th></tr>
     </thead>
     <tbody>
-        <tr><td>Button</td><td><code>button.css</code></td><td>None</td></tr>
-        <tr><td>Slider</td><td><code>slider.css</code></td><td><code>slider.js</code></td></tr>
-        <tr><td>Table</td><td><code>table.css</code></td><td>None</td></tr>
-        <tr><td>Popup</td><td><code>popup.css</code></td><td><code>popup.js</code></td></tr>
-        <tr><td>Toast</td><td><code>toast.css</code></td><td><code>toast.js</code></td></tr>
+        <tr><th>Button</th><td><code>button.css</code></td><td>None</td></tr>
+        <tr><th>Slider</th><td><code>slider.css</code></td><td><code>slider.js</code></td></tr>
+        <tr><th>Popup</th><td><code>popup.css</code></td><td><code>popup.js</code></td></tr>
     </tbody>
 </table>
-<pre><code>&lt;table&gt;
-    &lt;thead&gt;
-        &lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Value&lt;/th&gt;&lt;/tr&gt;
-    &lt;/thead&gt;
-    &lt;tbody&gt;
-        &lt;tr&gt;&lt;td&gt;One&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;/tr&gt;
-    &lt;/tbody&gt;
-&lt;/table&gt;</code></pre>
 
 <h2>Variants</h2>
-<p>Variants can be combined.</p>
-<table class="table-bordered">
-    <thead>
-        <tr><th>Class</th><th>Effect</th></tr>
-    </thead>
-    <tbody>
-        <tr><td><code>table-striped</code></td><td>Adds a background to even rows in <code>&lt;tbody&gt;</code>.</td></tr>
-        <tr><td><code>table-hover</code></td><td>Adds a background to the row under the pointer.</td></tr>
-        <tr><td><code>table-bordered</code></td><td>Adds borders to every cell.</td></tr>
-    </tbody>
-</table>
-
-<h3>Striped and hover</h3>
+<p><code>table-bordered</code> draws a border around every cell. <code>table-striped</code> gives every second row a background, and <code>table-hover</code> highlights the row under the pointer. They can be combined.</p>
 <div class="table-scroll">
-    <table class="table-striped table-hover">
+    <table class="table-bordered table-striped table-hover">
         <thead>
-            <tr>
-                <th>Hue</th>
-                <th class="table-numeric">Angle</th>
-                <th class="table-numeric">Whiteness</th>
-                <th class="table-numeric">Blackness</th>
-            </tr>
+            <tr><th>Hue</th><th class="table-numeric">Angle</th><th class="table-numeric">Whiteness</th><th class="table-numeric">Blackness</th></tr>
         </thead>
         <tbody>
-            <tr><td class="fg-color-red-bright">red</td><td class="table-numeric">0</td><td class="table-numeric">30%</td><td class="table-numeric">0%</td></tr>
-            <tr><td class="fg-color-orange-bright">orange</td><td class="table-numeric">30</td><td class="table-numeric">0%</td><td class="table-numeric">0%</td></tr>
-            <tr><td class="fg-color-yellow-bright">yellow</td><td class="table-numeric">50</td><td class="table-numeric">0%</td><td class="table-numeric">0%</td></tr>
-            <tr><td class="fg-color-green-bright">green</td><td class="table-numeric">130</td><td class="table-numeric">0%</td><td class="table-numeric">0%</td></tr>
-            <tr><td class="fg-color-cyan-bright">cyan</td><td class="table-numeric">200</td><td class="table-numeric">20%</td><td class="table-numeric">0%</td></tr>
-            <tr><td class="fg-color-sky-bright">sky</td><td class="table-numeric">220</td><td class="table-numeric">30%</td><td class="table-numeric">0%</td></tr>
-            <tr><td class="fg-color-blue-bright">blue</td><td class="table-numeric">230</td><td class="table-numeric">30%</td><td class="table-numeric">0%</td></tr>
-            <tr><td class="fg-color-purple-bright">purple</td><td class="table-numeric">260</td><td class="table-numeric">20%</td><td class="table-numeric">0%</td></tr>
-            <tr><td class="fg-color-pink-bright">pink</td><td class="table-numeric">330</td><td class="table-numeric">30%</td><td class="table-numeric">0%</td></tr>
+            {%- for hue, angle in hues %}
+            <tr><td class="fg-color-{{ hue }}-bright">{{ hue }}</td><td class="table-numeric">{{ angle }}</td><td class="table-numeric">20%</td><td class="table-numeric">0%</td></tr>
+            {%- endfor %}
         </tbody>
     </table>
 </div>
 <pre><code>&lt;table class="table-striped table-hover"&gt;…&lt;/table&gt;</code></pre>
 
-<h3>Bordered with a caption</h3>
-<table class="table-bordered">
-    <caption>A caption is shown below the table.</caption>
-    <thead>
-        <tr><th>Prefix</th><th>Viewport width</th></tr>
-    </thead>
-    <tbody>
-        <tr><td><code>small:</code></td><td>Up to 768px</td></tr>
-        <tr><td><code>medium:</code></td><td>769px to 1080px</td></tr>
-        <tr><td><code>large:</code></td><td>From 1081px</td></tr>
-    </tbody>
-</table>
-
 <h2>Numeric cells</h2>
 <p>Cells with <code>table-numeric</code> are aligned to the end and use tabular figures, so digits line up.</p>
-<table>
+<table class="table-bordered">
     <thead>
         <tr><th>Item</th><th>Normal</th><th class="table-numeric">table-numeric</th></tr>
     </thead>
@@ -112,29 +53,17 @@ extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/des
     </tbody>
 </table>
 
-<h2>Row headers</h2>
-<p><code>&lt;th&gt;</code> outside <code>&lt;thead&gt;</code> is bold, without a background.</p>
-<table class="table-bordered">
-    <tbody>
-        <tr><th scope="row">Name</th><td>Nercone Design</td></tr>
-        <tr><th scope="row">License</th><td>Code under the MIT License, other assets under CC BY 4.0</td></tr>
-    </tbody>
-</table>
-
 <h2>Horizontal scrolling</h2>
-<p>Wrap a wide table in <code>table-scroll</code> to scroll the table instead of the page. The table fills at least the width of the container.</p>
+<p>Wrap a wide table in <code>table-scroll</code> to scroll the table instead of the page. The table is at least as wide as the container.</p>
 <div class="table-scroll">
     <table class="table-striped demo-nowrap">
         <thead>
-            <tr>
-                <th class="table-numeric">Step</th>
-                <th>red</th><th>orange</th><th>yellow</th><th>green</th><th>cyan</th><th>sky</th><th>blue</th><th>purple</th><th>pink</th>
-            </tr>
+            <tr><th>Name</th>{% for hue, angle in hues %}<th>{{ hue }}</th>{% endfor %}</tr>
         </thead>
         <tbody>
-            <tr><td class="table-numeric">45</td><td><code>--color-red-dark</code></td><td><code>--color-orange-dark</code></td><td><code>--color-yellow-dark</code></td><td><code>--color-green-dark</code></td><td><code>--color-cyan-dark</code></td><td><code>--color-sky-dark</code></td><td><code>--color-blue-dark</code></td><td><code>--color-purple-dark</code></td><td><code>--color-pink-dark</code></td></tr>
-            <tr><td class="table-numeric">75</td><td><code>--color-red-normal</code></td><td><code>--color-orange-normal</code></td><td><code>--color-yellow-normal</code></td><td><code>--color-green-normal</code></td><td><code>--color-cyan-normal</code></td><td><code>--color-sky-normal</code></td><td><code>--color-blue-normal</code></td><td><code>--color-purple-normal</code></td><td><code>--color-pink-normal</code></td></tr>
-            <tr><td class="table-numeric">100</td><td><code>--color-red-bright</code></td><td><code>--color-orange-bright</code></td><td><code>--color-yellow-bright</code></td><td><code>--color-green-bright</code></td><td><code>--color-cyan-bright</code></td><td><code>--color-sky-bright</code></td><td><code>--color-blue-bright</code></td><td><code>--color-purple-bright</code></td><td><code>--color-pink-bright</code></td></tr>
+            {%- for name in ["dark", "normal", "bright"] %}
+            <tr><th>{{ name }}</th>{% for hue, angle in hues %}<td><code>--color-{{ hue }}-{{ name }}</code></td>{% endfor %}</tr>
+            {%- endfor %}
         </tbody>
     </table>
 </div>
@@ -143,7 +72,7 @@ extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/des
 &lt;/div&gt;</code></pre>
 
 <h2>Customization</h2>
-<p>Change the cell padding with <code>--table-padding</code> (default <code>8px 12px</code>), and the colors with <code>--color-table-*</code>.</p>
+<p>Change the cell padding with <code>--table-padding</code> (default <code>8px 12px</code>) and the colors with <code>--color-table-*</code>.</p>
 <table class="table-striped demo-table-custom">
     <thead>
         <tr><th>Compact</th><th class="table-numeric">Value</th></tr>
@@ -154,4 +83,7 @@ extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/des
         <tr><td>Hundred</td><td class="table-numeric">100</td></tr>
     </tbody>
 </table>
-<pre><code>&lt;table style="--table-padding: 4px 8px; --color-table-header-background: var(--color-blue-opacity-20)"&gt;…&lt;/table&gt;</code></pre>
+<pre><code>.compact {
+    --table-padding: 4px 8px;
+    --color-table-header-background: var(--color-blue-opacity-20);
+}</code></pre>

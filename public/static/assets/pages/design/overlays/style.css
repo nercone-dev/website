@@ -1,9 +1,0 @@
-.demo-popup-small {
-    --popup-width: 360px;
-}
-.demo-popup-custom {
-    --popup-width:          640px;
-    --popup-padding:        48px;
-    --popup-backdrop-blur:  16px;
-    --color-popup-border:   var(--color-information-bright);
-}

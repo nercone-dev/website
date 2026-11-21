@@ -1,0 +1,166 @@
+---
+title: Themes - Nercone Design
+description: The themes of Nercone Design, and how to load and change them with theme.js.
+base: design
+extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/design/swatches.css">
+---
+
+<div class="hero">
+    <h1>Themes</h1>
+    <p>A theme sets the colors by purpose, such as the text, background, and status colors, and the colors of every component.</p>
+</div>
+
+<h2>Choosing a theme</h2>
+<p>Load one stylesheet from <code>styles/themes/</code> after <code>style.css</code>. This site loads <code>auto-stark</code>.</p>
+<pre><code>&lt;link rel="stylesheet" href="https://assets.nercone.dev/style.css"&gt;
+&lt;link rel="stylesheet" href="https://assets.nercone.dev/styles/themes/auto-stark.css"&gt;</code></pre>
+<p class="script-only">Choose a theme to see it on this site. The choice is saved in this browser and applies to every page.</p>
+<noscript><p>JavaScript is required to change the theme on this site, so the theme selector is hidden.</p></noscript>
+<div class="segmented-control script-only" role="radiogroup" aria-label="Theme">
+    <label><input type="radio" name="theme" data-theme-trigger="auto"><span>Auto</span></label>
+    <label><input type="radio" name="theme" data-theme-trigger="auto-stark"><span>Auto Stark</span></label>
+    <label><input type="radio" name="theme" data-theme-trigger="auto-ud"><span>Auto UD</span></label>
+    <label><input type="radio" name="theme" data-theme-trigger="auto-stark-ud"><span>Auto Stark UD</span></label>
+    <label><input type="radio" name="theme" data-theme-trigger="dark"><span>Dark</span></label>
+    <label><input type="radio" name="theme" data-theme-trigger="light"><span>Light</span></label>
+    <label><input type="radio" name="theme" data-theme-trigger="black"><span>Black</span></label>
+    <label><input type="radio" name="theme" data-theme-trigger="white"><span>White</span></label>
+    <label><input type="radio" name="theme" data-theme-trigger="dark-ud"><span>Dark UD</span></label>
+    <label><input type="radio" name="theme" data-theme-trigger="light-ud"><span>Light UD</span></label>
+    <label><input type="radio" name="theme" data-theme-trigger="black-ud"><span>Black UD</span></label>
+    <label><input type="radio" name="theme" data-theme-trigger="white-ud"><span>White UD</span></label>
+</div>
+
+<h2>Themes</h2>
+<p>There are four base themes. <code>dark</code> and <code>black</code> differ only in the background, and so do <code>light</code> and <code>white</code>.</p>
+<div class="table-scroll">
+    <table class="demo-nowrap">
+        <thead>
+            <tr><th>Theme</th><th><code>color-scheme</code></th><th><code>--color-stark</code></th><th><code>--color-background</code></th><th><code>--color-background-alt</code></th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>dark</code></td><td><code>dark</code></td><td><code>white</code></td><td><code>grey-10</code></td><td><code>grey-20</code></td></tr>
+            <tr><td><code>black</code></td><td><code>dark</code></td><td><code>white</code></td><td><code>grey-0</code></td><td><code>grey-10</code></td></tr>
+            <tr><td><code>light</code></td><td><code>light</code></td><td><code>black</code></td><td><code>grey-190</code></td><td><code>grey-180</code></td></tr>
+            <tr><td><code>white</code></td><td><code>light</code></td><td><code>black</code></td><td><code>grey-200</code></td><td><code>grey-190</code></td></tr>
+        </tbody>
+    </table>
+</div>
+<p>The text, layers, and borders are translucent <code>stark</code>: <code>--color-foreground</code> is <code>{white|black}-opacity-75</code>, <code>--color-foreground-alt</code> is <code>-opacity-100</code>, <code>--color-layer</code> and <code>--color-layer-alt</code> are <code>-opacity-5</code> and <code>-opacity-10</code>, and <code>--color-border</code> and <code>--color-border-alt</code> are <code>-opacity-10</code> and <code>-opacity-15</code>.</p>
+
+<h3>UD variants</h3>
+<p><code>dark-ud</code>, <code>light-ud</code>, <code>black-ud</code>, and <code>white-ud</code> are the same as the base themes, except that the status and alert colors are <a href="/design/colors.html">JIS safety colors</a>. Their colors are chosen to be told apart by people with color vision deficiencies, and keep the same color in every theme.</p>
+<div class="table-scroll">
+    <table class="demo-nowrap">
+        <thead>
+            <tr><th>Colors</th><th>Base themes</th><th>UD themes</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>information</code>, <code>note</code></td><td><code>sky</code></td><td><code>jis-blue</code></td></tr>
+            <tr><td><code>success</code></td><td><code>green</code></td><td><code>jis-green</code></td></tr>
+            <tr><td><code>tip</code></td><td><code>green</code></td><td><code>jis-blue</code></td></tr>
+            <tr><td><code>warning</code></td><td><code>orange</code></td><td><code>jis-red-yellow</code></td></tr>
+            <tr><td><code>error</code>, <code>caution</code></td><td><code>red</code></td><td><code>jis-red</code></td></tr>
+            <tr><td><code>important</code></td><td><code>purple</code></td><td><code>jis-red</code></td></tr>
+        </tbody>
+    </table>
+</div>
+<p>In the UD themes, <code>-dark</code>, <code>-normal</code>, and <code>-bright</code> of each status are the same color.</p>
+
+<h3>Automatic themes</h3>
+<p>These follow the color scheme of the system with <code>prefers-color-scheme</code>.</p>
+<div class="table-scroll">
+    <table class="demo-nowrap">
+        <thead>
+            <tr><th>Theme</th><th>Light</th><th>Dark</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>auto</code></td><td><code>light</code></td><td><code>dark</code></td></tr>
+            <tr><td><code>auto-stark</code></td><td><code>white</code></td><td><code>black</code></td></tr>
+            <tr><td><code>auto-ud</code></td><td><code>light-ud</code></td><td><code>dark-ud</code></td></tr>
+            <tr><td><code>auto-stark-ud</code></td><td><code>white-ud</code></td><td><code>black-ud</code></td></tr>
+        </tbody>
+    </table>
+</div>
+<p>In the files, the automatic themes import the two themes with a media query. The server joins the imports, so each is one stylesheet.</p>
+<pre><code>@import url("./light.css") (prefers-color-scheme: light);
+@import url("./dark.css") (prefers-color-scheme: dark);</code></pre>
+
+<h2>Current colors</h2>
+<p>The colors by purpose of the current theme.<span class="script-only"> Click a swatch to copy it.</span></p>
+<div class="layer" data-swatch-format="variable">
+    <div class="palette-header script-only">
+        <span>Click a swatch to copy it as</span>
+        <div class="segmented-control" role="radiogroup" aria-label="Copy format">
+            <label><input type="radio" name="current-format" value="variable" checked><span>Variable</span></label>
+            <label><input type="radio" name="current-format" value="rgb"><span>RGB</span></label>
+            <label><input type="radio" name="current-format" value="hex"><span>Hex</span></label>
+        </div>
+    </div>
+    <div class="grid swatch-grid">
+        {%- for name in ["stark", "foreground", "foreground-alt", "background", "background-alt", "layer", "layer-alt", "border", "border-alt", "information-bright", "success-bright", "warning-bright", "error-bright", "note-bright", "tip-bright", "important-bright", "caution-bright"] %}
+        <button class="swatch" type="button" title="--color-{{ name }}" data-swatch="--color-{{ name }}"><span>{{ name }}</span></button>
+        {%- endfor %}
+    </div>
+</div>
+<div class="flex demo-wrap">
+    <button class="button-primary" type="button">Primary</button>
+    <button class="button-information" type="button">Information</button>
+    <button class="button-success" type="button">Success</button>
+    <button class="button-warning" type="button">Warning</button>
+    <button class="button-error" type="button">Error</button>
+</div>
+<div class="grid demo-grid-200">
+    <div class="block block-note"><b>Note</b><p>block-note</p></div>
+    <div class="block block-tip"><b>Tip</b><p>block-tip</p></div>
+    <div class="block block-important"><b>Important</b><p>block-important</p></div>
+    <div class="block block-warning"><b>Warning</b><p>block-warning</p></div>
+    <div class="block block-caution"><b>Caution</b><p>block-caution</p></div>
+</div>
+
+<h2>Changing the theme with a script</h2>
+<p><code>theme.js</code> changes the theme while the page is open. It adds <code>{baseURL}{theme}.css</code> after the other stylesheets, removes the stylesheet it added before once the new one has loaded, and sets <code>data-theme</code> on <code>&lt;html&gt;</code>. Stylesheets in the HTML stay, so keep loading a theme there as well: it is used until the script runs, and when JavaScript is disabled.</p>
+<p>Clicking an element with <code>data-theme-trigger="light"</code> applies that theme, and <code>data-theme-trigger=""</code> removes the theme added by the script. Radio buttons and checkboxes with <code>data-theme-trigger</code> are checked while their theme is applied.</p>
+<pre><code>&lt;button type="button" data-theme-trigger="light"&gt;Light&lt;/button&gt;
+&lt;label&gt;&lt;input type="radio" name="theme" data-theme-trigger="dark"&gt;Dark&lt;/label&gt;</code></pre>
+<pre><code>const theme = window.nercone.get('theme');
+await theme.set('light'); // true when applied, false when the name is unknown or the stylesheet failed to load
+theme.get();              // 'light'
+await theme.set(null);    // removes the stylesheet added by theme.js</code></pre>
+<p>On load, <code>theme.js</code> applies the first theme it finds in this order: the one saved in <code>localStorage</code>, the one in <code>&lt;html data-theme="…"&gt;</code>, and the <code>theme</code> option. Names that are not in the <code>themes</code> option are skipped. <code>set()</code> saves the theme unless it is called with <code>{ save: false }</code>.</p>
+<div class="table-scroll">
+    <table class="demo-nowrap">
+        <thead>
+            <tr><th>Option</th><th>Default</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>baseURL</code></td><td><code>'https://assets.nercone.dev/styles/themes/'</code></td><td>Where the theme stylesheets are. A relative URL is resolved against the page when the instance is created</td></tr>
+            <tr><td><code>themes</code></td><td>The 12 themes above</td><td>Names that can be applied</td></tr>
+            <tr><td><code>theme</code></td><td><code>'auto-stark'</code></td><td>The theme applied when none is saved or set on <code>&lt;html&gt;</code></td></tr>
+            <tr><td><code>storageKey</code></td><td><code>'nercone-theme'</code></td><td>The <code>localStorage</code> key. An empty value disables saving</td></tr>
+            <tr><td><code>rootAttribute</code></td><td><code>'data-theme'</code></td><td>The attribute set on <code>&lt;html&gt;</code></td></tr>
+            <tr><td><code>triggerAttribute</code></td><td><code>'data-theme-trigger'</code></td><td>The attribute of the elements that change the theme</td></tr>
+            <tr><td><code>linkAttributes</code></td><td><code>{ 'data-view-transition-keep': '' }</code></td><td>Attributes of the added <code>&lt;link&gt;</code>. The default keeps it when <code>view-transition.js</code> moves to another page</td></tr>
+        </tbody>
+    </table>
+</div>
+<p>To change the options, register a new instance under the same name. See <a href="/design/scripts.html">Scripts</a>.</p>
+<pre><code>window.nercone.register('theme', new window.nercone.Theme({
+    baseURL:    '/styles/themes/',
+    theme:      'auto',
+    storageKey: ''
+}));</code></pre>
+
+<h2>Making a theme</h2>
+<p>A theme is a <code>:root</code> rule that sets <code>color-scheme</code>, <code>--color-stark</code>, and every color by purpose and component color. Start from a copy of the theme closest to the one you want, and change the colors by purpose first: the component colors refer to them, so most of them follow without changes. Every theme must define the same variables, because a missing one leaves the components that use it without a color.</p>
+<pre><code>:root {
+    color-scheme: dark;
+
+    --color-stark: var(--color-white);
+
+    --color-foreground:     var(--color-white-opacity-75);
+    --color-foreground-alt: var(--color-white-opacity-100);
+    --color-background:     var(--color-blue-5);
+    --color-background-alt: var(--color-blue-10);
+    /* … */
+}</code></pre>

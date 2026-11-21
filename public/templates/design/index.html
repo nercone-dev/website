@@ -1,62 +1,123 @@
 ---
 title: Nercone Design
-base: sidebar
-sidebar_title: Nercone Design
-sidebar: |
-  <a href="/design/index.html" aria-current="page">Home</a>
-  <a href="/design/colors.html">Colors</a>
-  <a href="/design/typography.html">Typography</a>
-  <a href="/design/layout.html">Layout</a>
-  <a href="/design/tables.html">Tables</a>
-  <a href="/design/forms.html">Forms</a>
-  <a href="/design/progress.html">Progress</a>
-  <a href="/design/overlays.html">Overlays</a>
+description: The design system of nercone.dev — colors, themes, typography, layout, components, and scripts.
+base: design
 ---
 
 <div class="hero">
     <h1>Nercone Design</h1>
-    <p>Examples and Documentation of Images, Fonts, and Design System</p>
+    <p>The design system of nercone.dev: one stylesheet, one script, and a theme. Write plain HTML, and add classes only where needed.</p>
 </div>
 
-<a href="/design/colors.html">
-    <div class="layer">
-        <b>Colors</b>
-        <p>Color Palette, and List of Brightness, Opacity, and Usage-specific colors, and Utility Classes.</p>
-    </div>
-</a>
-<a href="/design/typography.html">
-    <div class="layer">
-        <b>Typography</b>
-        <p>Headings, Paragraphs, Lists, Tables, Quotes, Codes, and normal HTML Elements, Font Utility Classes.</p>
-    </div>
-</a>
-<a href="/design/layout.html">
-    <div class="layer">
-        <b>Layout</b>
-        <p>Hero, Block, Layer, and Layouting Utility Classes.</p>
-    </div>
-</a>
-<a href="/design/tables.html">
-    <div class="layer">
-        <b>Tables</b>
-        <p>Table and variants.</p>
-    </div>
-</a>
-<a href="/design/forms.html">
-    <div class="layer">
-        <b>Forms</b>
-        <p>Text field, Button, Dropdown, Slider, etc.</p>
-    </div>
-</a>
-<a href="/design/progress.html">
-    <div class="layer">
-        <b>Progress</b>
-        <p>Linear, Circular, and Logo progress indicators.</p>
-    </div>
-</a>
-<a href="/design/overlays.html">
-    <div class="layer">
-        <b>Overlays</b>
-        <p>Popup and Toast.</p>
-    </div>
-</a>
+<h2>Getting started</h2>
+<p>Load <code>style.css</code>, a theme, and <code>script.js</code>. <code>noscript.css</code> is loaded only when JavaScript is disabled.</p>
+<pre><code>&lt;link rel="stylesheet" href="https://assets.nercone.dev/style.css"&gt;
+&lt;link rel="stylesheet" href="https://assets.nercone.dev/styles/themes/auto-stark.css"&gt;
+&lt;noscript&gt;
+    &lt;link rel="stylesheet" href="https://assets.nercone.dev/styles/noscript.css"&gt;
+&lt;/noscript&gt;
+&lt;script src="https://assets.nercone.dev/script.js" defer&gt;&lt;/script&gt;</code></pre>
+<div class="block block-important">
+    <b>Important</b>
+    <p><code>style.css</code> defines the palette, but not the colors by purpose such as <code>--color-foreground</code> and <code>--color-background</code>. They come from the theme, so always load one. See <a href="/design/themes.html">Themes</a>.</p>
+</div>
+<p>Most elements need no class. <code>&lt;button&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>, <code>&lt;textarea&gt;</code>, <code>&lt;table&gt;</code>, <code>&lt;details&gt;</code>, and <code>&lt;dialog&gt;</code> are styled as they are. Classes such as <code>button</code> and <code>table</code> give the same look to other elements.</p>
+<pre><code>&lt;main&gt;
+    &lt;div class="hero"&gt;
+        &lt;h1&gt;Title&lt;/h1&gt;
+        &lt;p&gt;Subtitle&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;p&gt;Text&lt;/p&gt;
+    &lt;button class="button-primary" type="button"&gt;Save&lt;/button&gt;
+&lt;/main&gt;</code></pre>
+
+<h2>Files</h2>
+<p><code>style.css</code> and <code>script.js</code> are bundles. The server joins the files below in the order of their entry files, <code>styles/index.css</code> and <code>scripts/index.js</code>. Each theme in <code>styles/themes/</code> is a separate stylesheet.</p>
+<div class="table-scroll">
+    <table>
+        <thead>
+            <tr><th>Path</th><th>Contents</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>styles/color.css</code></td><td>Palette, brightness, opacity, JIS safety colors, and color utility classes</td></tr>
+            <tr><td><code>styles/font.css</code></td><td>Fonts, inline elements, and font utility classes</td></tr>
+            <tr><td><code>styles/layout.css</code></td><td>Spacing and flex utility classes</td></tr>
+            <tr><td><code>styles/main.css</code></td><td><code>&lt;html&gt;</code>, <code>&lt;body&gt;</code>, <code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, headings, and lists</td></tr>
+            <tr><td><code>styles/misc.css</code></td><td>Border, selection, and overflow utility classes</td></tr>
+            <tr><td><code>styles/responsive-design.css</code></td><td><code>hide</code>, <code>show</code>, and the <code>small:</code>, <code>medium:</code>, and <code>large:</code> variants</td></tr>
+            <tr><td><code>styles/components/*.css</code></td><td>One file for each component</td></tr>
+            <tr><td><code>styles/themes/*.css</code></td><td>Colors by purpose. Not part of <code>style.css</code></td></tr>
+            <tr><td><code>styles/noscript.css</code></td><td>Rules for pages without JavaScript. Not part of <code>style.css</code></td></tr>
+            <tr><td><code>scripts/initializer.js</code></td><td><code>window.nercone</code>, which the other scripts use</td></tr>
+            <tr><td><code>scripts/theme.js</code></td><td>Changes the theme while the page is open</td></tr>
+            <tr><td><code>scripts/components/*.js</code></td><td>One file for each component that needs a script</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h2>Principles</h2>
+<ul>
+    <li>Plain HTML first. Native elements and attributes, such as <code>&lt;dialog&gt;</code>, <code>popover</code>, <code>commandfor</code>, and <code>closedby</code>, do the work wherever browsers support them. Scripts only fill the gaps.</li>
+    <li>Pages work without JavaScript. Controls that cannot work without it get the <code>script-only</code> class, which <code>noscript.css</code> hides.</li>
+    <li>Square corners and 1px borders. Areas are told apart by a border (<code>block</code>) or a translucent background (<code>layer</code>), not by shadows.</li>
+    <li>Every size and color is a custom property, so it can be changed for one element and its descendants without new classes.</li>
+    <li>Animations are short. Popups, toasts, details, the sidebar, page transitions, and the loading overlay drop their animations when the system prefers reduced motion.</li>
+</ul>
+
+<h2>Pages</h2>
+<div class="grid page-list">
+    <a href="/design/colors.html">
+        <div class="layer">
+            <b>Colors</b>
+            <p>Palette, brightness, opacity, JIS safety colors, colors by purpose, utility classes, and swatches.</p>
+        </div>
+    </a>
+    <a href="/design/themes.html">
+        <div class="layer">
+            <b>Themes</b>
+            <p>Dark, light, black, white, their UD variants, the automatic themes, and <code>theme.js</code>.</p>
+        </div>
+    </a>
+    <a href="/design/typography.html">
+        <div class="layer">
+            <b>Typography</b>
+            <p>Font families, text elements, code, and font utility classes.</p>
+        </div>
+    </a>
+    <a href="/design/layout.html">
+        <div class="layer">
+            <b>Layout</b>
+            <p>Page structure, sidebar, hero, block, layer, details, grid, and layout utility classes.</p>
+        </div>
+    </a>
+    <a href="/design/forms.html">
+        <div class="layer">
+            <b>Forms</b>
+            <p>Button, text field, dropdown, slider, and segmented control.</p>
+        </div>
+    </a>
+    <a href="/design/tables.html">
+        <div class="layer">
+            <b>Tables</b>
+            <p>Tables, variants, numeric cells, and horizontal scrolling.</p>
+        </div>
+    </a>
+    <a href="/design/progress.html">
+        <div class="layer">
+            <b>Progress</b>
+            <p>Linear, circular, and logo progress indicators.</p>
+        </div>
+    </a>
+    <a href="/design/overlays.html">
+        <div class="layer">
+            <b>Overlays</b>
+            <p>Popup and toast.</p>
+        </div>
+    </a>
+    <a href="/design/scripts.html">
+        <div class="layer">
+            <b>Scripts</b>
+            <p><code>window.nercone</code>, features and their options, cursor, loading overlay, and page transitions.</p>
+        </div>
+    </a>
+</div>

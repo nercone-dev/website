@@ -1,29 +1,51 @@
 ---
 title: Forms - Nercone Design
-base: sidebar
-sidebar_title: Nercone Design
-sidebar: |
-  <a href="/design/index.html">Home</a>
-  <a href="/design/colors.html">Colors</a>
-  <a href="/design/typography.html">Typography</a>
-  <a href="/design/layout.html">Layout</a>
-  <a href="/design/tables.html">Tables</a>
-  <a href="/design/forms.html" aria-current="page">Forms</a>
-  <a href="/design/progress.html">Progress</a>
-  <a href="/design/overlays.html">Overlays</a>
-extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/design/style.css">
-               <link rel="stylesheet" href="https://assets.nercone.dev/pages/design/forms/style.css">
-               <script src="https://assets.nercone.dev/pages/design/forms/script.js" defer></script>
+description: Button, text field, dropdown, slider, and segmented control of Nercone Design.
+base: design
 ---
 
 <div class="hero">
     <h1>Forms</h1>
-    <p>Text field, Button, Dropdown, Slider, and Segmented control.</p>
+    <p>Button, text field, dropdown, slider, and segmented control. Native form elements are styled without classes.</p>
 </div>
 
+<h2>Button</h2>
+<p>Applies to <code>&lt;button&gt;</code>, <code>&lt;input type="button"&gt;</code>, <code>&lt;input type="submit"&gt;</code>, and <code>&lt;input type="reset"&gt;</code>. Add the <code>button</code> class to other elements, such as <code>&lt;a&gt;</code>.</p>
+<h3>Variants</h3>
+<div class="flex demo-wrap">
+    <button type="button">Default</button>
+    <button class="button-primary" type="button">Primary</button>
+    <button class="button-information" type="button">Information</button>
+    <button class="button-success" type="button">Success</button>
+    <button class="button-warning" type="button">Warning</button>
+    <button class="button-error" type="button">Error</button>
+</div>
+<p><code>button-primary</code> is for the main action of a form or popup. The status variants use the status colors of the <a href="/design/themes.html">theme</a>.</p>
+<h3>Links and inputs</h3>
+<div class="flex demo-wrap">
+    <a class="button" href="/design/index.html">Back to Home</a>
+    <a class="button button-primary" href="/design/tables.html">Next: Tables</a>
+    <input type="button" value="input type=button">
+</div>
+<h3>Disabled</h3>
+<p>Use the <code>disabled</code> attribute, or <code>aria-disabled="true"</code> on elements that do not have it.</p>
+<div class="flex demo-wrap">
+    <button type="button" disabled>Default</button>
+    <button class="button-primary" type="button" disabled>Primary</button>
+    <a class="button button-error" aria-disabled="true">Error (a)</a>
+</div>
+<h3>Customization</h3>
+<p>Change the padding with <code>--button-padding</code> (default <code>8px 16px</code>) and the colors with <code>--color-button-*</code>. Each variant sets <code>--color-button-foreground</code>, <code>-background</code>, and <code>-border</code> from its own colors, such as <code>--color-button-error-*</code>.</p>
+<div class="flex demo-wrap demo-center demo-button-compact">
+    <button type="button">Compact</button>
+    <button class="button-primary" type="button">Compact</button>
+</div>
+<pre><code>&lt;button type="button"&gt;Cancel&lt;/button&gt;
+&lt;button class="button-primary" type="submit"&gt;Save&lt;/button&gt;
+&lt;a class="button button-error" href="/delete"&gt;Delete&lt;/a&gt;</code></pre>
+
 <h2>Text field</h2>
-<p>Applies without a class to <code>&lt;textarea&gt;</code> and to <code>&lt;input&gt;</code> whose <code>type</code> is <code>text</code>, <code>search</code>, <code>email</code>, <code>url</code>, <code>tel</code>, <code>password</code>, <code>number</code>, a date or time type, or not set. Other elements can get the same look with the <code>textfield</code> class.</p>
-<h3>Types</h3>
+<p>Applies to <code>&lt;textarea&gt;</code> and to <code>&lt;input&gt;</code> whose <code>type</code> is not set or is <code>text</code>, <code>search</code>, <code>email</code>, <code>url</code>, <code>tel</code>, <code>password</code>, <code>number</code>, <code>date</code>, <code>time</code>, <code>datetime-local</code>, <code>month</code>, or <code>week</code>. Add the <code>textfield</code> class to other elements.</p>
 <div class="grid demo-grid-240">
     <input type="text" placeholder="text" aria-label="text">
     <input type="password" placeholder="password" aria-label="password">
@@ -46,52 +68,18 @@ extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/des
     <input type="text" value="Read-only (readonly)" readonly aria-label="Read-only">
     <input type="text" value="Disabled (disabled)" disabled aria-label="Disabled">
 </div>
-<p><small>The second field fails validation and shows the error state after you edit it (<code>:user-invalid</code>).</small></p>
+<p>The border turns to <code>--color-error-normal</code> with <code>aria-invalid="true"</code>, or when the value fails validation after the user has changed it (<code>:user-invalid</code>), as the second field does after you edit it. A read-only field has no background.</p>
 <h3>Customization</h3>
 <p>Change the padding with <code>--textfield-padding</code> (default <code>8px 12px</code>) and the colors with <code>--color-textfield-*</code>.</p>
 <div class="grid demo-grid-240">
     <input class="demo-textfield-compact" type="text" placeholder="--textfield-padding: 4px 8px" aria-label="Compact">
     <input class="demo-textfield-focus" type="text" placeholder="--color-textfield-focus: var(--color-success-bright)" aria-label="Custom focus color">
 </div>
-<pre><code>&lt;input type="email" placeholder="you@example.com"&gt;
-&lt;textarea rows="4"&gt;&lt;/textarea&gt;</code></pre>
-
-<h2>Button</h2>
-<p>Applies without a class to <code>&lt;button&gt;</code>, <code>&lt;input type="button"&gt;</code>, <code>&lt;input type="submit"&gt;</code>, and <code>&lt;input type="reset"&gt;</code>. Add the <code>button</code> class to other elements, such as <code>&lt;a&gt;</code>. Add one variant class if needed.</p>
-<h3>Variants</h3>
-<div class="flex demo-wrap">
-    <button type="button">Default</button>
-    <button class="button-primary" type="button">Primary</button>
-    <button class="button-information" type="button">Information</button>
-    <button class="button-success" type="button">Success</button>
-    <button class="button-warning" type="button">Warning</button>
-    <button class="button-error" type="button">Error</button>
-</div>
-<h3>Links and inputs</h3>
-<div class="flex demo-wrap">
-    <a class="button" href="/design/index.html">Back to Home</a>
-    <a class="button button-primary" href="/design/overlays.html">Next: Overlays</a>
-    <input type="button" value="input type=button">
-</div>
-<h3>Disabled</h3>
-<p>Use the <code>disabled</code> attribute, or <code>aria-disabled="true"</code> on elements without it.</p>
-<div class="flex demo-wrap">
-    <button type="button" disabled>Default</button>
-    <button class="button-primary" type="button" disabled>Primary</button>
-    <a class="button button-error" aria-disabled="true">Error (a)</a>
-</div>
-<h3>Customization</h3>
-<p>Change the padding with <code>--button-padding</code> (default <code>8px 16px</code>) and the colors with <code>--color-button-*</code>.</p>
-<div class="flex demo-wrap demo-center demo-button-compact">
-    <button type="button">Small</button>
-    <button class="button-primary" type="button">Small</button>
-</div>
-<pre><code>&lt;button type="button"&gt;Cancel&lt;/button&gt;
-&lt;button class="button-primary" type="submit"&gt;Save&lt;/button&gt;
-&lt;a class="button button-error" href="/delete"&gt;Delete&lt;/a&gt;</code></pre>
+<pre><code>&lt;label for="email"&gt;Email&lt;/label&gt;
+&lt;input id="email" type="email" placeholder="you@example.com"&gt;</code></pre>
 
 <h2>Dropdown</h2>
-<p>Applies to <code>&lt;select&gt;</code> without a class. Other elements can get the same look with the <code>dropdown</code> class.</p>
+<p>Applies to <code>&lt;select&gt;</code>. Add the <code>dropdown</code> class to other elements. Invalid and disabled states are the same as the text field.</p>
 <div class="grid demo-grid-200">
     <select aria-label="Basic">
         <option>One</option>
@@ -118,13 +106,14 @@ extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/des
         <option>--dropdown-padding: 4px 8px</option>
     </select>
 </div>
-<p>With <code>multiple</code> or a <code>size</code> greater than 1, the options are drawn as a list instead of an arrow. The list uses <code>appearance: base-select</code>; browsers that do not support it for lists show the native list. The visible rows follow <code>size</code> (default 4). Change the padding of the list with <code>--dropdown-list-padding</code> (one length, default <code>4px</code>) and the padding of each row with <code>--dropdown-option-padding-block</code> (default <code>4px</code>) and <code>--dropdown-option-padding-inline</code> (default <code>8px</code>).</p>
+<h3>List</h3>
+<p>With <code>multiple</code>, or a <code>size</code> greater than 1, the options are drawn as a list. The list uses <code>appearance: base-select</code>, and shows as many rows as <code>size</code> (default 4); browsers that do not support it for lists show their native list.</p>
 <div class="grid demo-grid-200">
     <select multiple aria-label="Multiple">
-        <option selected>Multiple One</option>
-        <option>Multiple Two</option>
-        <option selected>Multiple Three</option>
-        <option disabled>Multiple Four (disabled)</option>
+        <option selected>One</option>
+        <option>Two</option>
+        <option selected>Three</option>
+        <option disabled>Four (disabled)</option>
     </select>
     <select multiple aria-label="Multiple with groups">
         <optgroup label="Fruits">
@@ -136,24 +125,25 @@ extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/des
         </optgroup>
     </select>
     <select size="4" aria-label="Size">
-        <option>Size One</option>
-        <option selected>Size Two</option>
-        <option>Size Three</option>
-        <option>Size Four</option>
+        <option>One</option>
+        <option selected>Two</option>
+        <option>Three</option>
+        <option>Four</option>
     </select>
 </div>
+<p>Change the padding with <code>--dropdown-padding</code> (default <code>8px 12px</code>), the padding of a list with <code>--dropdown-list-padding</code> (one length, default <code>4px</code>), the padding of its rows with <code>--dropdown-option-padding-block</code> (default <code>4px</code>) and <code>--dropdown-option-padding-inline</code> (default <code>8px</code>), and the colors with <code>--color-dropdown-*</code>.</p>
 <pre><code>&lt;select&gt;
     &lt;option&gt;One&lt;/option&gt;
     &lt;option&gt;Two&lt;/option&gt;
 &lt;/select&gt;</code></pre>
 
 <h2>Slider</h2>
-<p>Applies to <code>&lt;input type="range"&gt;</code> without a class. Other elements can get the same look with the <code>slider</code> class. <code>slider.js</code> fills the track up to the current value. Without JavaScript, <code>noscript.css</code> draws the track without the fill (Firefox still draws it), because the fill could not follow the value.</p>
+<p>Applies to <code>&lt;input type="range"&gt;</code>. Add the <code>slider</code> class to other elements. <code>slider.js</code> fills the track up to the value by setting <code>--slider-value</code> (from <code>0</code> to <code>1</code>). Without JavaScript, the track is drawn without the fill, except in Firefox, which draws it by itself.</p>
 <div class="layer">
     <label for="slider-volume">Volume<span class="script-only">: <output id="slider-volume-output" for="slider-volume">30</output></span></label>
-    <input id="slider-volume" type="range" min="0" max="100" value="30">
+    <input id="slider-volume" type="range" min="0" max="100" value="30" data-demo-output="slider-volume-output">
     <label for="slider-step">Steps (<code>min="1" max="5" step="1"</code>)<span class="script-only">: <output id="slider-step-output" for="slider-step">3</output></span></label>
-    <input id="slider-step" type="range" min="1" max="5" step="1" value="3">
+    <input id="slider-step" type="range" min="1" max="5" step="1" value="3" data-demo-output="slider-step-output">
 </div>
 <h3>States</h3>
 <input type="range" value="70" aria-label="Invalid (aria-invalid)" aria-invalid="true">
@@ -165,25 +155,25 @@ extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/des
 <pre><code>&lt;input type="range" min="0" max="100" value="30"&gt;</code></pre>
 <div class="block block-note">
     <b>Note</b>
-    <p>Setting the <code>value</code> property from a script fires no <code>input</code> event, so call <code>window.nercone.get('slider').update(element)</code> afterwards.</p>
+    <p><code>slider.js</code> follows user input, form resets, and changes of the <code>value</code>, <code>min</code>, and <code>max</code> attributes. Setting the <code>value</code> property from a script changes none of them, so call <code>window.nercone.get('slider').update(element)</code> afterwards.</p>
 </div>
 
 <h2>Segmented control</h2>
-<p>A set of mutually exclusive options. Put a radio button and a <code>&lt;span&gt;</code> in each <code>&lt;label&gt;</code>. The radio button stays focusable and readable by assistive technology, while the <code>&lt;span&gt;</code> is drawn.</p>
+<p>A set of options where one is chosen. Put a radio button and a <code>&lt;span&gt;</code> in each <code>&lt;label&gt;</code>. The radio button stays focusable and readable by assistive technology, and the <code>&lt;span&gt;</code> is drawn. It needs no script.</p>
 <div class="segmented-control" role="radiogroup" aria-label="View">
     <label><input type="radio" name="segmented-view" value="list" checked><span>List</span></label>
     <label><input type="radio" name="segmented-view" value="grid"><span>Grid</span></label>
     <label><input type="radio" name="segmented-view" value="table"><span>Table</span></label>
     <label><input type="radio" name="segmented-view" value="map" disabled><span>Map</span></label>
 </div>
-<p>Change the padding of each option with <code>--segmented-control-padding</code> (default <code>4px 12px</code>).</p>
+<p>Change the padding of each option with <code>--segmented-control-padding</code> (default <code>4px 12px</code>) and the colors with <code>--color-segmented-control-*</code>. The options wrap onto more lines when they do not fit.</p>
 <pre><code>&lt;div class="segmented-control" role="radiogroup" aria-label="View"&gt;
     &lt;label&gt;&lt;input type="radio" name="view" value="list" checked&gt;&lt;span&gt;List&lt;/span&gt;&lt;/label&gt;
     &lt;label&gt;&lt;input type="radio" name="view" value="grid"&gt;&lt;span&gt;Grid&lt;/span&gt;&lt;/label&gt;
 &lt;/div&gt;</code></pre>
 
-<h2>Example form</h2>
-<form class="layer" id="form-example">
+<h2>Example</h2>
+<form class="layer" data-demo="form">
     <b>Contact</b>
     <label for="form-name">Name</label>
     <input id="form-name" type="text" autocomplete="off" required>

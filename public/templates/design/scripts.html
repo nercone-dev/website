@@ -1,0 +1,155 @@
+---
+title: Scripts - Nercone Design
+description: window.nercone, the features of script.js and their options, the cursor, the loading overlay, and page transitions in Nercone Design.
+base: design
+---
+
+<div class="hero">
+    <h1>Scripts</h1>
+    <p><code>script.js</code> adds behavior that HTML and CSS cannot provide. Every page must still work without it.</p>
+</div>
+
+<h2>window.nercone</h2>
+<p><code>initializer.js</code> defines <code>window.nercone</code>. Each script registers a feature under a name, and the feature is started when the document is ready.</p>
+<pre><code>const toast = window.nercone.get('toast'); // the registered feature, or null
+toast.show('Hello');</code></pre>
+<div class="table-scroll">
+    <table>
+        <thead>
+            <tr><th>Method</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>register(name, feature)</code></td><td>Stops the feature registered under <code>name</code>, if any, registers <code>feature</code>, and calls its <code>init()</code> when the document is ready. Returns <code>feature</code></td></tr>
+            <tr><td><code>unregister(name)</code></td><td>Stops the feature and removes it</td></tr>
+            <tr><td><code>get(name)</code></td><td>Returns the feature, or <code>null</code></td></tr>
+            <tr><td><code>cleanup()</code></td><td>Calls <code>cleanup()</code> of every feature. Called before a page transition swaps the page</td></tr>
+            <tr><td><code>reinit(doc)</code></td><td>Calls <code>reinit(doc)</code> of every feature. Called after a page transition, with the new document</td></tr>
+            <tr><td><code>navigate(href)</code></td><td>Moves to <code>href</code> with a page transition when one is available, or loads it normally</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h3>Writing a feature</h3>
+<p>A feature is any object. It may have these methods, and those it lacks are skipped. Errors thrown by them are logged, so one feature cannot stop the others.</p>
+<ul>
+    <li><code>init()</code>: starts the feature. Add listeners to <code>document</code> rather than to elements, because a page transition replaces the elements.</li>
+    <li><code>cleanup()</code>: called before the page is swapped. Close what belongs to the old page.</li>
+    <li><code>reinit(doc)</code>: called after the page is swapped. Update for the new page.</li>
+    <li><code>destroy()</code>: stops the feature. Called by <code>register()</code> and <code>unregister()</code>; without it, <code>cleanup()</code> is called instead.</li>
+</ul>
+<p>A page transition runs a script only once, even when the page that loaded it is opened again, so page scripts should be features as well.</p>
+<pre><code>class Clock {
+    init() {
+        this.timer ??= setInterval(() =&gt; this.render(), 1000);
+        this.render();
+    }
+    reinit() {
+        this.render();
+    }
+    destroy() {
+        clearInterval(this.timer);
+        this.timer = null;
+    }
+    render() {
+        for (const element of document.querySelectorAll('[data-clock]')) element.textContent = new Date().toLocaleTimeString();
+    }
+}
+window.nercone.register('clock', new Clock());</code></pre>
+
+<h3>Changing options</h3>
+<p>Each feature has a class on <code>window.nercone</code> whose constructor takes options. To change them, register a new instance under the same name. The old one is stopped first.</p>
+<pre><code>window.nercone.register('toast', new window.nercone.Toast({ position: 'top-center' }));</code></pre>
+
+<h3>Helpers</h3>
+<div class="table-scroll">
+    <table>
+        <thead>
+            <tr><th>Helper</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>Nercone.whenReady(callback)</code></td><td>Calls <code>callback</code> when the document has been parsed, or at once if it already has</td></tr>
+            <tr><td><code>Nercone.whenLoaded(element)</code></td><td>Resolves to <code>true</code> when the element, such as a <code>&lt;link&gt;</code>, fires <code>load</code>, and to <code>false</code> when it fires <code>error</code></td></tr>
+            <tr><td><code>Numbers.clamp(value, min, max)</code></td><td>Limits <code>value</code> to the range</td></tr>
+            <tr><td><code>Numbers.parse(value, fallback)</code></td><td>Parses a string, such as an attribute value, as a finite number, or returns <code>fallback</code></td></tr>
+            <tr><td><code>Numbers.ratio(value, min, max)</code></td><td>Where <code>value</code> is between <code>min</code> and <code>max</code>, from <code>0</code> to <code>1</code>, or <code>null</code></td></tr>
+            <tr><td><code>topLayer.add(element, order)</code></td><td>Keeps the element in the top layer, above modal popups, as a manual popover. Elements with a larger <code>order</code> are drawn above</td></tr>
+            <tr><td><code>topLayer.remove(element)</code></td><td>Stops keeping the element in the top layer</td></tr>
+        </tbody>
+    </table>
+</div>
+<p>The classes are <code>window.nercone.Nercone</code>, <code>window.nercone.Numbers</code>, and <code>window.nercone.TopLayer</code>; <code>window.nercone.topLayer</code> is the shared instance. The toast container (order <code>0</code>), the cursor (<code>1</code>), and the loading overlay (<code>2</code>) are kept in it.</p>
+
+<h2 id="features">Features</h2>
+<p>The features registered by <code>script.js</code>, with their classes and options.</p>
+<div class="table-scroll">
+    <table>
+        <thead>
+            <tr><th>Name</th><th>Class</th><th>Does</th><th>Options (default)</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>theme</code></td><td><code>Theme</code></td><td>Changes the theme. See <a href="/design/themes.html">Themes</a></td>
+                <td><code>baseURL</code>, <code>themes</code>, <code>theme</code> (<code>'auto-stark'</code>), <code>storageKey</code> (<code>'nercone-theme'</code>), <code>rootAttribute</code> (<code>'data-theme'</code>), <code>triggerAttribute</code> (<code>'data-theme-trigger'</code>), <code>linkAttributes</code></td>
+            </tr>
+            <tr>
+                <td><code>cursor</code></td><td><code>Cursor</code></td><td>Draws the <a href="#cursor-feature">cursor</a></td>
+                <td><code>selector</code> (<code>'#cursor'</code>), <code>linkSelector</code>, <code>systemSelector</code> (<code>'.cursor-system'</code>), <code>activeClass</code> (<code>'cursor-active'</code>), <code>padding</code> (<code>6</code>), <code>linkGap</code> (<code>4</code>), <code>textGap</code> (<code>4</code>), <code>layer</code> (<code>1</code>)</td>
+            </tr>
+            <tr>
+                <td><code>loading-overlay</code></td><td><code>LoadingOverlay</code></td><td>Plays and removes the <a href="#loading-overlay-feature">loading overlay</a></td>
+                <td><code>selector</code> (<code>'#loading-overlay'</code>), <code>easing</code>, <code>layer</code> (<code>2</code>), <code>duration</code> (<code>{ in: 3000, wait: 1000, out: 1000 }</code>, in milliseconds)</td>
+            </tr>
+            <tr>
+                <td><code>popup</code></td><td><code>Popup</code></td><td>Fills in for invoker commands and <code>closedby</code>. See <a href="/design/overlays.html">Overlays</a></td>
+                <td><code>selector</code> (<code>'.popup, dialog'</code>), <code>openAttribute</code> (<code>'data-popup-open'</code>), <code>closeAttribute</code> (<code>'data-popup-close'</code>)</td>
+            </tr>
+            <tr>
+                <td><code>progress</code></td><td><code>Progress</code></td><td>Sets <code>--progress-value</code>. See <a href="/design/progress.html">Progress</a></td>
+                <td><code>selector</code>, <code>property</code> (<code>'--progress-value'</code>), <code>min</code> (<code>0</code>), <code>max</code> (<code>100</code>)</td>
+            </tr>
+            <tr>
+                <td><code>sidebar</code></td><td><code>Sidebar</code></td><td>Marks the current page and closes the popover. See <a href="/design/layout.html">Layout</a></td>
+                <td><code>selector</code> (<code>'.sidebar'</code>), <code>media</code> (<code>'(max-width: 768px)'</code>)</td>
+            </tr>
+            <tr>
+                <td><code>slider</code></td><td><code>Slider</code></td><td>Sets <code>--slider-value</code>. See <a href="/design/forms.html">Forms</a></td>
+                <td><code>selector</code> (<code>'.slider, input[type="range"]'</code>), <code>property</code> (<code>'--slider-value'</code>)</td>
+            </tr>
+            <tr>
+                <td><code>swatch</code></td><td><code>Swatch</code></td><td>Copies colors. See <a href="/design/colors.html">Colors</a></td>
+                <td><code>attribute</code> (<code>'data-swatch'</code>), <code>formatAttribute</code> (<code>'data-swatch-format'</code>), <code>format</code> (<code>'variable'</code>), <code>toast</code> (<code>true</code>), <code>copiedMessage</code>, <code>failedMessage</code></td>
+            </tr>
+            <tr>
+                <td><code>toast</code></td><td><code>Toast</code></td><td>Shows toasts. See <a href="/design/overlays.html">Overlays</a></td>
+                <td><code>position</code> (<code>'bottom-end'</code>; also <code>top-start</code>, <code>top-center</code>, <code>top-end</code>, <code>bottom-start</code>, <code>bottom-center</code>), <code>duration</code> (<code>5000</code>; <code>0</code> never closes), <code>limit</code> (<code>5</code>), <code>dismissible</code> (<code>true</code>), <code>label</code> (<code>'Notifications'</code>), <code>closeLabel</code> (<code>'Close'</code>), <code>triggerAttribute</code> (<code>'data-toast'</code>), <code>variantAttribute</code> (<code>'data-toast-variant'</code>), <code>layer</code> (<code>0</code>), <code>containerAttributes</code></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Page transitions are not a feature but the navigator of <code>window.nercone</code>; see <a href="#page-transitions">below</a>.</p>
+
+<h2 id="cursor-feature">Cursor</h2>
+<p>A round cursor that follows the mouse. Over a link or button it becomes a box around it, and over text it becomes a thin bar. It is shown only for a mouse; touch and pen input hide it and leave the system cursor. Add the element to <code>&lt;body&gt;</code>:</p>
+<pre><code>&lt;div id="cursor" data-view-transition-keep&gt;&lt;/div&gt;</code></pre>
+<p>Elements with <code>cursor-system</code> show the system cursor instead, for places where the exact position matters, such as a canvas. The elements treated as links are set by the <code>linkSelector</code> option. The colors are <code>--color-cursor</code> and <code>--color-cursor-on-link</code>.</p>
+
+<h2 id="loading-overlay-feature">Loading overlay</h2>
+<p>Covers the page while it loads, and draws the logo before fading out. When the system prefers reduced motion, it only fades out. Add it as the first child of <code>&lt;body&gt;</code>:</p>
+<pre><code>&lt;div id="loading-overlay" data-view-transition-keep&gt;
+    &lt;svg viewBox="96 256 832 512" xmlns="http://www.w3.org/2000/svg"&gt;
+        &lt;polyline points="872 572.75 152 332 152 692 512 692 872 332 872 692 684.5 692" fill="currentColor"/&gt;
+    &lt;/svg&gt;
+&lt;/div&gt;</code></pre>
+<p>It is shown only on the first page; page transitions do not show it again. <code>noscript.css</code> hides it when JavaScript is disabled, and it fades out by itself after <code>--loading-overlay-timeout</code> (default <code>10s</code>) when the scripts fail to load.</p>
+
+<h2 id="page-transitions">Page transitions</h2>
+<p>In browsers with the View Transition API, <code>view-transition.js</code> moves between pages of the same origin without reloading. It fetches the next page, then swaps the head and the children of <code>&lt;body&gt;</code> while the header and main content cross-fade. When the page cannot be swapped, it is loaded normally.</p>
+<ul>
+    <li>Both pages must have <code>&lt;header&gt;</code> and <code>&lt;main&gt;</code>.</li>
+    <li>Links with <code>target</code> (other than <code>_self</code>) or <code>download</code>, links to other origins, and clicks with a modifier key are left to the browser.</li>
+    <li>Requests have the header <code>X-Requested-With: view-transition</code>.</li>
+    <li>Elements and stylesheets with <code>data-view-transition-keep</code> stay as they are, even when the next page does not have them. The cursor, the loading overlay, the toast container, and the stylesheet added by <code>theme.js</code> have it.</li>
+    <li>Stylesheets of the next page are loaded before the swap, and stylesheets the next page does not have are removed. Scripts are added but never removed, and a script that has run once does not run again.</li>
+    <li>The scroll position is restored when going back and forward.</li>
+</ul>
+<p>Before the swap, <code>window.nercone.cleanup()</code> is called; after it, <code>window.nercone.reinit(doc)</code>. To move from a script, call <code>window.nercone.navigate(href)</code>.</p>

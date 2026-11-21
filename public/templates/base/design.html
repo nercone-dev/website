@@ -1,0 +1,24 @@
+{% extends "/base/sidebar.html" %}
+
+{% block sidebar_title %}Nercone Design{% endblock %}
+{% block sidebar %}
+<span class="sidebar-heading">Overview</span>
+<a href="/design/index.html">Home</a>
+<span class="sidebar-heading">Foundations</span>
+<a href="/design/colors.html">Colors</a>
+<a href="/design/themes.html">Themes</a>
+<a href="/design/typography.html">Typography</a>
+<a href="/design/layout.html">Layout</a>
+<span class="sidebar-heading">Components</span>
+<a href="/design/forms.html">Forms</a>
+<a href="/design/tables.html">Tables</a>
+<a href="/design/progress.html">Progress</a>
+<a href="/design/overlays.html">Overlays</a>
+<span class="sidebar-heading">Scripts</span>
+<a href="/design/scripts.html">Scripts</a>
+{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://assets.nercone.dev/pages/design/style.css">
+<script src="https://assets.nercone.dev/pages/design/script.js" defer></script>
+{% endblock %}
