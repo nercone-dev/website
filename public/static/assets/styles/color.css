@@ -26,6 +26,48 @@
 
     /* Brightness */
 
+    --color-stark-0:   color-mix(in srgb, var(--color-stark), var(--color-black) 100%);
+    --color-stark-5:   color-mix(in srgb, var(--color-stark), var(--color-black) 95%);
+    --color-stark-10:  color-mix(in srgb, var(--color-stark), var(--color-black) 90%);
+    --color-stark-15:  color-mix(in srgb, var(--color-stark), var(--color-black) 85%);
+    --color-stark-20:  color-mix(in srgb, var(--color-stark), var(--color-black) 80%);
+    --color-stark-25:  color-mix(in srgb, var(--color-stark), var(--color-black) 75%);
+    --color-stark-30:  color-mix(in srgb, var(--color-stark), var(--color-black) 70%);
+    --color-stark-35:  color-mix(in srgb, var(--color-stark), var(--color-black) 65%);
+    --color-stark-40:  color-mix(in srgb, var(--color-stark), var(--color-black) 60%);
+    --color-stark-45:  color-mix(in srgb, var(--color-stark), var(--color-black) 55%);
+    --color-stark-50:  color-mix(in srgb, var(--color-stark), var(--color-black) 50%);
+    --color-stark-55:  color-mix(in srgb, var(--color-stark), var(--color-black) 45%);
+    --color-stark-60:  color-mix(in srgb, var(--color-stark), var(--color-black) 40%);
+    --color-stark-65:  color-mix(in srgb, var(--color-stark), var(--color-black) 35%);
+    --color-stark-70:  color-mix(in srgb, var(--color-stark), var(--color-black) 30%);
+    --color-stark-75:  color-mix(in srgb, var(--color-stark), var(--color-black) 25%);
+    --color-stark-80:  color-mix(in srgb, var(--color-stark), var(--color-black) 20%);
+    --color-stark-85:  color-mix(in srgb, var(--color-stark), var(--color-black) 15%);
+    --color-stark-90:  color-mix(in srgb, var(--color-stark), var(--color-black) 10%);
+    --color-stark-95:  color-mix(in srgb, var(--color-stark), var(--color-black) 5%);
+    --color-stark-100: color-mix(in srgb, var(--color-stark), var(--color-black) 0%);
+    --color-stark-105: color-mix(in srgb, var(--color-stark), var(--color-white) 5%);
+    --color-stark-110: color-mix(in srgb, var(--color-stark), var(--color-white) 10%);
+    --color-stark-115: color-mix(in srgb, var(--color-stark), var(--color-white) 15%);
+    --color-stark-120: color-mix(in srgb, var(--color-stark), var(--color-white) 20%);
+    --color-stark-125: color-mix(in srgb, var(--color-stark), var(--color-white) 25%);
+    --color-stark-130: color-mix(in srgb, var(--color-stark), var(--color-white) 30%);
+    --color-stark-135: color-mix(in srgb, var(--color-stark), var(--color-white) 35%);
+    --color-stark-140: color-mix(in srgb, var(--color-stark), var(--color-white) 40%);
+    --color-stark-145: color-mix(in srgb, var(--color-stark), var(--color-white) 45%);
+    --color-stark-150: color-mix(in srgb, var(--color-stark), var(--color-white) 50%);
+    --color-stark-155: color-mix(in srgb, var(--color-stark), var(--color-white) 55%);
+    --color-stark-160: color-mix(in srgb, var(--color-stark), var(--color-white) 60%);
+    --color-stark-165: color-mix(in srgb, var(--color-stark), var(--color-white) 65%);
+    --color-stark-170: color-mix(in srgb, var(--color-stark), var(--color-white) 70%);
+    --color-stark-175: color-mix(in srgb, var(--color-stark), var(--color-white) 75%);
+    --color-stark-180: color-mix(in srgb, var(--color-stark), var(--color-white) 80%);
+    --color-stark-185: color-mix(in srgb, var(--color-stark), var(--color-white) 85%);
+    --color-stark-190: color-mix(in srgb, var(--color-stark), var(--color-white) 90%);
+    --color-stark-195: color-mix(in srgb, var(--color-stark), var(--color-white) 95%);
+    --color-stark-200: color-mix(in srgb, var(--color-stark), var(--color-white) 100%);
+
     --color-grey-0:   color-mix(in srgb, var(--color-grey), var(--color-black) 100%);
     --color-grey-5:   color-mix(in srgb, var(--color-grey), var(--color-black) 95%);
     --color-grey-10:  color-mix(in srgb, var(--color-grey), var(--color-black) 90%);
@@ -483,6 +525,28 @@
     --color-pink-bright: var(--color-pink-100);
 
     /* Opacity */
+
+    --color-stark-opacity-0: color-mix(in srgb, transparent, var(--color-stark) 0%);
+    --color-stark-opacity-5: color-mix(in srgb, transparent, var(--color-stark) 5%);
+    --color-stark-opacity-10: color-mix(in srgb, transparent, var(--color-stark) 10%);
+    --color-stark-opacity-15: color-mix(in srgb, transparent, var(--color-stark) 15%);
+    --color-stark-opacity-20: color-mix(in srgb, transparent, var(--color-stark) 20%);
+    --color-stark-opacity-25: color-mix(in srgb, transparent, var(--color-stark) 25%);
+    --color-stark-opacity-30: color-mix(in srgb, transparent, var(--color-stark) 30%);
+    --color-stark-opacity-35: color-mix(in srgb, transparent, var(--color-stark) 35%);
+    --color-stark-opacity-40: color-mix(in srgb, transparent, var(--color-stark) 40%);
+    --color-stark-opacity-45: color-mix(in srgb, transparent, var(--color-stark) 45%);
+    --color-stark-opacity-50: color-mix(in srgb, transparent, var(--color-stark) 50%);
+    --color-stark-opacity-55: color-mix(in srgb, transparent, var(--color-stark) 55%);
+    --color-stark-opacity-60: color-mix(in srgb, transparent, var(--color-stark) 60%);
+    --color-stark-opacity-65: color-mix(in srgb, transparent, var(--color-stark) 65%);
+    --color-stark-opacity-70: color-mix(in srgb, transparent, var(--color-stark) 70%);
+    --color-stark-opacity-75: color-mix(in srgb, transparent, var(--color-stark) 75%);
+    --color-stark-opacity-80: color-mix(in srgb, transparent, var(--color-stark) 80%);
+    --color-stark-opacity-85: color-mix(in srgb, transparent, var(--color-stark) 85%);
+    --color-stark-opacity-90: color-mix(in srgb, transparent, var(--color-stark) 90%);
+    --color-stark-opacity-95: color-mix(in srgb, transparent, var(--color-stark) 95%);
+    --color-stark-opacity-100: color-mix(in srgb, transparent, var(--color-stark) 100%);
 
     --color-black-opacity-0: color-mix(in srgb, transparent, var(--color-black) 0%);
     --color-black-opacity-5: color-mix(in srgb, transparent, var(--color-black) 5%);
