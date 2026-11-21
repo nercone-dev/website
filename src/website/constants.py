@@ -60,5 +60,5 @@ class Hostnames:
 
 class Ports:
     tcp_host: str = os.environ.get("WEBSITE_TCP_HOST", "0.0.0.0")
-    tcp_port: int = int(os.environ.get("WEBSITE_TCP_PORT", "80"))
+    tcp_port: int = int(os.environ.get("WEBSITE_TCP_PORT", "8080"))
     uds: Optional[str] = os.environ.get("WEBSITE_UDS")
