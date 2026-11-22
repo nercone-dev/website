@@ -3,25 +3,25 @@
   <defs>
     <style>
       .cls-1 {
-        fill: #272727;
-      }
-
-      .cls-2 {
         opacity: .75;
       }
 
-      .cls-2, .cls-3 {
+      .cls-1, .cls-2 {
         fill: none;
         stroke: #fff;
         stroke-linecap: square;
         stroke-miterlimit: 10;
         stroke-width: 64px;
       }
+
+      .cls-3 {
+        fill: #26bf80;
+      }
     </style>
   </defs>
-  <rect class="cls-1" x="0" width="1024" height="1024"/>
+  <rect class="cls-3" x="0" width="1024" height="1024"/>
   <g>
-    <path class="cls-3" d="M208,208v456c0,83.95,68.05,152,152,152h456"/>
-    <path class="cls-2" d="M392,208h272c83.95,0,152,68.05,152,152v456h-424v-152c0-83.95,68.05-152,152-152h272"/>
+    <path class="cls-2" d="M208,208v456c0,83.95,68.05,152,152,152h456"/>
+    <path class="cls-1" d="M392,208h272c83.95,0,152,68.05,152,152v456h-424v-152c0-83.95,68.05-152,152-152h272"/>
   </g>
 </svg>
