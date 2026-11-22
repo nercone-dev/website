@@ -37,7 +37,7 @@ extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/des
 
 <div class="hero">
     <h1>Colors</h1>
-    <p>Every color is a custom property. The palette is in <code>color.css</code>; the colors by purpose come from the <a href="/design/themes.html">theme</a>.</p>
+    <p>Every color is a custom property. The palette is in <code>color.css</code>; the colors by purpose come from the <a href="/design/themes">theme</a>.</p>
 </div>
 
 <p>Hover a swatch to see its variable name.<span class="script-only"> Click it to copy the color; the control above each panel chooses the format.</span> The swatches show the colors of the current theme.</p>
@@ -118,7 +118,7 @@ extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/des
 </div>
 
 <h2>Colors by purpose</h2>
-<p>Pages and components use these instead of the palette. They are defined by the theme, so a page follows the theme without changes. See <a href="/design/themes.html">Themes</a> for how each theme sets them.</p>
+<p>Pages and components use these instead of the palette. They are defined by the theme, so a page follows the theme without changes. See <a href="/design/themes">Themes</a> for how each theme sets them.</p>
 <div class="layer" data-swatch-format="variable">
     {{ format_control("semantic") }}
     <b class="palette-group">Base</b>
@@ -225,4 +225,4 @@ extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/des
 <pre><code>const swatch = window.nercone.get('swatch');
 await swatch.copy(element);        // true when copied
 await swatch.copy(element, 'rgb'); // in another format</code></pre>
-<p>Change the height of the color with <code>--swatch-height</code> (default <code>48px</code>), the padding of the content with <code>--swatch-padding</code> (default <code>4px 8px</code>), the size of the checkerboard with <code>--swatch-checker-size</code> (default <code>12px</code>), and the colors with <code>--color-swatch-*</code>. The options of <code>swatch.js</code> are on <a href="/design/scripts.html#features">Scripts</a>.</p>
+<p>Change the height of the color with <code>--swatch-height</code> (default <code>48px</code>), the padding of the content with <code>--swatch-padding</code> (default <code>4px 8px</code>), the size of the checkerboard with <code>--swatch-checker-size</code> (default <code>12px</code>), and the colors with <code>--color-swatch-*</code>. The options of <code>swatch.js</code> are on <a href="/design/scripts#features">Scripts</a>.</p>

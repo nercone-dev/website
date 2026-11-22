@@ -1,0 +1,41 @@
+---
+title: サイトマップ - Nercone
+description: nercone.devのサイトマップ
+---
+
+<div class="hero">
+    <h1>サイトマップ</h1>
+    <p>nercone.devのサイトマップ</p>
+</div>
+
+{%- set sections = [
+    (None, [
+        ("Nerconeについて", "/about/"),
+        ("サーバーについて", "/about/server/"),
+        ("相互リンク", "/links/"),
+        ("公開鍵", "/public-keys/"),
+        ("デザインシステム", "/design/"),
+        ("アクセスカウンタ", "/access-counter/"),
+        ("日替わり迷言集", "/daily-quote/"),
+        ("QRコード", "/qr-code/"),
+    ]),
+    ("プロジェクト・配布物", [
+        ("バナー画像", "/banner/"),
+    ]),
+] %}
+
+{%- for heading, pages in sections %}
+{%- if heading %}
+<h2>{{ heading }}</h2>
+{%- endif %}
+<div class="grid">
+    {%- for name, path in pages %}
+    <a href="{{ path }}">
+        <div class="layer">
+            <b>{{ name }}</b>
+            <p class="text-color-alt font-size-small" translate="no"><code>{{ path }}</code></p>
+        </div>
+    </a>
+    {%- endfor %}
+</div>
+{%- endfor %}

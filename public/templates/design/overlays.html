@@ -112,7 +112,7 @@ popup.toggle(document.getElementById('confirm'));</code></pre>
 
 <h2>Toast</h2>
 <p>A short notification at the edge of the screen that closes after a while. With <code>toast.js</code>, clicking an element with <code>data-toast="Message"</code> shows one; scripts can show them as well. A toast does not close while the pointer or focus is on it, and toasts stay above popups.</p>
-<p>Toasts need JavaScript, so do not use them for anything the page needs. Give buttons that only show toasts the <code>script-only</code> class, which hides them without JavaScript (see <a href="/design/layout.html#without-javascript">Layout</a>).</p>
+<p>Toasts need JavaScript, so do not use them for anything the page needs. Give buttons that only show toasts the <code>script-only</code> class, which hides them without JavaScript (see <a href="/design/layout#without-javascript">Layout</a>).</p>
 <noscript><p>JavaScript is required to show toasts, so the examples below are hidden.</p></noscript>
 
 <h3>Variants</h3>
@@ -159,7 +159,7 @@ toast.clear();          // Closes every toast</code></pre>
 <h3>Customization</h3>
 <p>The close button (×) is drawn in the color of the toast text at full opacity, so it has the same contrast as the message. On hover it gets a 1px line inside instead of a fill, so that the color of the toast behind it, a JIS safety color in the UD themes, does not change.</p>
 <p>Change the width of the container with <code>--toast-width</code> (default <code>360px</code>, including <code>--toast-offset</code> on both sides, so toasts are 312px wide), the distance from the edge of the screen with <code>--toast-offset</code> (default <code>24px</code>), the padding with <code>--toast-padding</code> (default <code>12px 16px</code>), and the colors with <code>--color-toast-*</code>. The container is created directly under <code>&lt;body&gt;</code>, so set them on <code>:root</code> or <code>body</code>.</p>
-<p>The options of <code>toast.js</code>, such as the position and the duration, are on <a href="/design/scripts.html#features">Scripts</a>.</p>
+<p>The options of <code>toast.js</code>, such as the position and the duration, are on <a href="/design/scripts#features">Scripts</a>.</p>
 <pre><code>window.nercone.register('toast', new window.nercone.Toast({
     position: 'top-center',
     duration: 3000,

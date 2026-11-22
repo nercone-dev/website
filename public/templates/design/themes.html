@@ -49,7 +49,7 @@ extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/des
 <p>The text, layers, and borders are translucent <code>stark</code>: <code>--color-foreground</code> is <code>{white|black}-opacity-75</code>, <code>--color-foreground-alt</code> is <code>-opacity-100</code>, <code>--color-layer</code> and <code>--color-layer-alt</code> are <code>-opacity-5</code> and <code>-opacity-10</code>, and <code>--color-border</code> and <code>--color-border-alt</code> are <code>-opacity-10</code> and <code>-opacity-15</code>.</p>
 
 <h3>UD variants</h3>
-<p><code>dark-ud</code>, <code>light-ud</code>, <code>black-ud</code>, and <code>white-ud</code> are the same as the base themes, except that the status and alert colors are <a href="/design/colors.html">JIS safety colors</a>. Their colors are chosen to be told apart by people with color vision deficiencies, and keep the same color in every theme.</p>
+<p><code>dark-ud</code>, <code>light-ud</code>, <code>black-ud</code>, and <code>white-ud</code> are the same as the base themes, except that the status and alert colors are <a href="/design/colors">JIS safety colors</a>. Their colors are chosen to be told apart by people with color vision deficiencies, and keep the same color in every theme.</p>
 <div class="table-scroll">
     <table class="demo-nowrap">
         <thead>
@@ -164,7 +164,7 @@ await theme.set(null);    // removes the stylesheet added by theme.js</code></pr
         </tbody>
     </table>
 </div>
-<p>To change the options, register a new instance under the same name. See <a href="/design/scripts.html">Scripts</a>.</p>
+<p>To change the options, register a new instance under the same name. See <a href="/design/scripts">Scripts</a>.</p>
 <pre><code>window.nercone.register('theme', new window.nercone.Theme({
     baseURL:    '/styles/themes/',
     theme:      'auto',

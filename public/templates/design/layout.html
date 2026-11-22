@@ -31,11 +31,11 @@ base: design
 &lt;/header&gt;
 &lt;nav id="sidebar" class="sidebar" popover aria-label="Documents"&gt;
     &lt;span class="sidebar-heading"&gt;Guides&lt;/span&gt;
-    &lt;a href="/guides/start.html"&gt;Getting started&lt;/a&gt;
+    &lt;a href="/guides/start"&gt;Getting started&lt;/a&gt;
     &lt;details&gt;
         &lt;summary&gt;Reference&lt;/summary&gt;
-        &lt;a href="/reference/api.html"&gt;API&lt;/a&gt;
-        &lt;a href="/reference/cli.html"&gt;CLI&lt;/a&gt;
+        &lt;a href="/reference/api"&gt;API&lt;/a&gt;
+        &lt;a href="/reference/cli"&gt;CLI&lt;/a&gt;
     &lt;/details&gt;
     &lt;hr&gt;
     &lt;a href="/about/"&gt;About&lt;/a&gt;
@@ -60,7 +60,7 @@ base: design
 &lt;/div&gt;</code></pre>
 
 <h2>Block</h2>
-<p>An area with a border. Children are stacked with a gap of <code>16px</code>. With a variant, the border has the color of the alert, and a <code>&lt;b&gt;</code> as the first child is its title. The title is <code>--color-alert-{name}-title-foreground</code> on <code>--color-alert-{name}-title-background</code>, with <code>--alert-title-padding-inline</code> on its sides. The base themes color only the text of the title; the UD themes fill it with the JIS safety color and write it in black (see <a href="/design/themes.html">Themes</a>).</p>
+<p>An area with a border. Children are stacked with a gap of <code>16px</code>. With a variant, the border has the color of the alert, and a <code>&lt;b&gt;</code> as the first child is its title. The title is <code>--color-alert-{name}-title-foreground</code> on <code>--color-alert-{name}-title-background</code>, with <code>--alert-title-padding-inline</code> on its sides. The base themes color only the text of the title; the UD themes fill it with the JIS safety color and write it in black (see <a href="/design/themes">Themes</a>).</p>
 <div class="grid demo-grid-200">
     <div class="block"><p>block</p></div>
     {%- for name in ["note", "tip", "important", "warning", "caution"] %}
@@ -84,7 +84,7 @@ base: design
     {%- endfor %}
 </div>
 <p>A link that contains a block or layer as its child has no underline, so the whole area can be a link.</p>
-<a href="/design/index.html">
+<a href="/design">
     <div class="layer">
         <b>Home</b>
         <p>A layer inside a link.</p>

@@ -88,7 +88,7 @@ window.nercone.register('clock', new Clock());</code></pre>
         </thead>
         <tbody>
             <tr>
-                <td><code>theme</code></td><td><code>Theme</code></td><td>Changes the theme. See <a href="/design/themes.html">Themes</a></td>
+                <td><code>theme</code></td><td><code>Theme</code></td><td>Changes the theme. See <a href="/design/themes">Themes</a></td>
                 <td><code>baseURL</code>, <code>themes</code>, <code>theme</code> (<code>'auto-stark'</code>), <code>storageKey</code> (<code>'nercone-theme'</code>), <code>rootAttribute</code> (<code>'data-theme'</code>), <code>triggerAttribute</code> (<code>'data-theme-trigger'</code>), <code>linkAttributes</code></td>
             </tr>
             <tr>
@@ -100,27 +100,27 @@ window.nercone.register('clock', new Clock());</code></pre>
                 <td><code>selector</code> (<code>'#loading-overlay'</code>), <code>easing</code>, <code>layer</code> (<code>2</code>), <code>duration</code> (<code>{ in: 3000, wait: 1000, out: 1000 }</code>, in milliseconds)</td>
             </tr>
             <tr>
-                <td><code>popup</code></td><td><code>Popup</code></td><td>Fills in for invoker commands and <code>closedby</code>. See <a href="/design/overlays.html">Overlays</a></td>
+                <td><code>popup</code></td><td><code>Popup</code></td><td>Fills in for invoker commands and <code>closedby</code>. See <a href="/design/overlays">Overlays</a></td>
                 <td><code>selector</code> (<code>'.popup, dialog'</code>), <code>openAttribute</code> (<code>'data-popup-open'</code>), <code>closeAttribute</code> (<code>'data-popup-close'</code>)</td>
             </tr>
             <tr>
-                <td><code>progress</code></td><td><code>Progress</code></td><td>Sets <code>--progress-value</code>. See <a href="/design/progress.html">Progress</a></td>
+                <td><code>progress</code></td><td><code>Progress</code></td><td>Sets <code>--progress-value</code>. See <a href="/design/progress">Progress</a></td>
                 <td><code>selector</code>, <code>property</code> (<code>'--progress-value'</code>), <code>min</code> (<code>0</code>), <code>max</code> (<code>100</code>)</td>
             </tr>
             <tr>
-                <td><code>sidebar</code></td><td><code>Sidebar</code></td><td>Marks the current page and closes the popover. See <a href="/design/layout.html">Layout</a></td>
+                <td><code>sidebar</code></td><td><code>Sidebar</code></td><td>Marks the current page and closes the popover. See <a href="/design/layout">Layout</a></td>
                 <td><code>selector</code> (<code>'.sidebar'</code>), <code>media</code> (<code>'(max-width: 768px)'</code>)</td>
             </tr>
             <tr>
-                <td><code>slider</code></td><td><code>Slider</code></td><td>Sets <code>--slider-value</code>. See <a href="/design/forms.html">Forms</a></td>
+                <td><code>slider</code></td><td><code>Slider</code></td><td>Sets <code>--slider-value</code>. See <a href="/design/forms">Forms</a></td>
                 <td><code>selector</code> (<code>'.slider, input[type="range"]'</code>), <code>property</code> (<code>'--slider-value'</code>)</td>
             </tr>
             <tr>
-                <td><code>swatch</code></td><td><code>Swatch</code></td><td>Copies colors. See <a href="/design/colors.html">Colors</a></td>
+                <td><code>swatch</code></td><td><code>Swatch</code></td><td>Copies colors. See <a href="/design/colors">Colors</a></td>
                 <td><code>attribute</code> (<code>'data-swatch'</code>), <code>formatAttribute</code> (<code>'data-swatch-format'</code>), <code>format</code> (<code>'variable'</code>), <code>toast</code> (<code>true</code>), <code>copiedMessage</code>, <code>failedMessage</code></td>
             </tr>
             <tr>
-                <td><code>toast</code></td><td><code>Toast</code></td><td>Shows toasts. See <a href="/design/overlays.html">Overlays</a></td>
+                <td><code>toast</code></td><td><code>Toast</code></td><td>Shows toasts. See <a href="/design/overlays">Overlays</a></td>
                 <td><code>position</code> (<code>'bottom-end'</code>; also <code>top-start</code>, <code>top-center</code>, <code>top-end</code>, <code>bottom-start</code>, <code>bottom-center</code>), <code>duration</code> (<code>5000</code>; <code>0</code> never closes), <code>limit</code> (<code>5</code>), <code>dismissible</code> (<code>true</code>), <code>label</code> (<code>'Notifications'</code>), <code>closeLabel</code> (<code>'Close'</code>), <code>triggerAttribute</code> (<code>'data-toast'</code>), <code>variantAttribute</code> (<code>'data-toast-variant'</code>), <code>layer</code> (<code>0</code>), <code>containerAttributes</code></td>
             </tr>
         </tbody>
