@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "website-dev",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "nercone-website"],
+      "env": { "WEBSITE_DEV": "1", "WEBSITE_TCP_PORT": "8080" },
+      "port": 8080
+    }
+  ]
+}
