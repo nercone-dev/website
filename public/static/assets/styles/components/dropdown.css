@@ -101,7 +101,7 @@
 }
 
 .dropdown:hover, :where(select):hover {
-    border-color: color-mix(in srgb, var(--color-foreground) 40%, transparent);
+    border-color: var(--color-dropdown-hover-border);
 }
 .dropdown:focus-visible, :where(select):focus-visible {
     border-color: var(--color-dropdown-focus);

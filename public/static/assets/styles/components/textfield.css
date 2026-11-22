@@ -24,12 +24,12 @@ textarea.textfield, :where(textarea) {
 }
 
 .textfield::placeholder, :where(input:not([type]), input[type="text"], input[type="search"], input[type="email"], input[type="url"], input[type="tel"], input[type="password"], input[type="number"], input[type="date"], input[type="time"], input[type="datetime-local"], input[type="month"], input[type="week"], textarea)::placeholder {
-    color: color-mix(in srgb, var(--color-foreground) 50%, transparent);
+    color: color-mix(in srgb, var(--color-foreground) 80%, transparent);
     opacity: 1;
 }
 
 .textfield:hover, :where(input:not([type]), input[type="text"], input[type="search"], input[type="email"], input[type="url"], input[type="tel"], input[type="password"], input[type="number"], input[type="date"], input[type="time"], input[type="datetime-local"], input[type="month"], input[type="week"], textarea):hover {
-    border-color: color-mix(in srgb, var(--color-foreground) 40%, transparent);
+    border-color: var(--color-textfield-hover-border);
 }
 .textfield:focus-visible, :where(input:not([type]), input[type="text"], input[type="search"], input[type="email"], input[type="url"], input[type="tel"], input[type="password"], input[type="number"], input[type="date"], input[type="time"], input[type="datetime-local"], input[type="month"], input[type="week"], textarea):focus-visible {
     border-color: var(--color-textfield-focus);

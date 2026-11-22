@@ -35,7 +35,7 @@ base: design
     <a class="button button-error" aria-disabled="true">Error (a)</a>
 </div>
 <h3>Customization</h3>
-<p>Change the padding with <code>--button-padding</code> (default <code>8px 16px</code>) and the colors with <code>--color-button-*</code>. Each variant sets <code>--color-button-foreground</code>, <code>-background</code>, and <code>-border</code> from its own colors, such as <code>--color-button-error-*</code>.</p>
+<p>Change the padding with <code>--button-padding</code> (default <code>8px 16px</code>) and the colors with <code>--color-button-*</code>. Each variant sets <code>--color-button-foreground</code>, <code>-background</code>, and <code>-border</code> from its own colors, such as <code>--color-button-error-*</code>. On hover, the background is mixed with <code>--button-hover-background-mix</code> of <code>--color-foreground</code> (default <code>10%</code>), and the border with <code>--button-hover-border-mix</code> of <code>--color-foreground-alt</code> (default <code>0%</code>). The status variants take both from the theme (<code>--button-status-hover-background-mix</code> and <code>--button-status-hover-border-mix</code>): the UD themes set them to <code>0%</code> and <code>100%</code>, so that the JIS safety color stays as it is and the border shows the hover. The mix is done on the button, so it follows colors overridden on an ancestor.</p>
 <div class="flex demo-wrap demo-center demo-button-compact">
     <button type="button">Compact</button>
     <button class="button-primary" type="button">Compact</button>
@@ -70,7 +70,7 @@ base: design
 </div>
 <p>The border turns to <code>--color-error-normal</code> with <code>aria-invalid="true"</code>, or when the value fails validation after the user has changed it (<code>:user-invalid</code>), as the second field does after you edit it. A read-only field has no background.</p>
 <h3>Customization</h3>
-<p>Change the padding with <code>--textfield-padding</code> (default <code>8px 12px</code>) and the colors with <code>--color-textfield-*</code>.</p>
+<p>Change the padding with <code>--textfield-padding</code> (default <code>8px 12px</code>) and the colors with <code>--color-textfield-*</code>. The border on hover is <code>--color-textfield-hover-border</code>; text fields, dropdowns, and swatches have this variable.</p>
 <div class="grid demo-grid-240">
     <input class="demo-textfield-compact" type="text" placeholder="--textfield-padding: 4px 8px" aria-label="Compact">
     <input class="demo-textfield-focus" type="text" placeholder="--color-textfield-focus: var(--color-success-bright)" aria-label="Custom focus color">

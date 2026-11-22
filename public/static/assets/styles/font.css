@@ -120,8 +120,8 @@ strong {
 }
 
 mark {
-    background-color: var(--color-yellow-opacity-10);
-    color: var(--color-yellow-bright);
+    background-color: var(--color-mark-background);
+    color: var(--color-mark-foreground);
 }
 
 .font-family-sans {

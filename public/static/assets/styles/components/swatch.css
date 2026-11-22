@@ -47,7 +47,7 @@
     -webkit-touch-callout: none;
 }
 :is(button, a[href]).swatch:hover {
-    border-color: color-mix(in srgb, var(--color-foreground) 40%, transparent);
+    border-color: var(--color-swatch-hover-border);
 }
 :is(button, a[href]).swatch:active {
     transform: scale(0.96);

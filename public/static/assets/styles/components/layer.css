@@ -15,6 +15,11 @@
     margin-bottom: 0;
 }
 
+:is(.layer-note, .layer-tip, .layer-important, .layer-warning, .layer-caution) > b:first-child {
+    align-self: flex-start;
+    padding-inline: var(--alert-title-padding-inline);
+}
+
 a:has(> .layer) {
     text-decoration: none;
 }
@@ -23,29 +28,34 @@ a:has(> .layer) {
     background-color: color-mix(in srgb, var(--color-note-bright) 10%, transparent);
 }
 .layer-note > b:first-child {
-    color: var(--color-note-bright);
+    color: var(--color-alert-note-title-foreground);
+    background-color: var(--color-alert-note-title-background);
 }
 .layer-tip {
     background-color: color-mix(in srgb, var(--color-tip-bright) 10%, transparent);
 }
 .layer-tip > b:first-child {
-    color: var(--color-tip-bright);
+    color: var(--color-alert-tip-title-foreground);
+    background-color: var(--color-alert-tip-title-background);
 }
 .layer-important {
     background-color: color-mix(in srgb, var(--color-important-bright) 10%, transparent);
 }
 .layer-important > b:first-child {
-    color: var(--color-important-bright);
+    color: var(--color-alert-important-title-foreground);
+    background-color: var(--color-alert-important-title-background);
 }
 .layer-warning {
     background-color: color-mix(in srgb, var(--color-warning-bright) 10%, transparent);
 }
 .layer-warning > b:first-child {
-    color: var(--color-warning-bright);
+    color: var(--color-alert-warning-title-foreground);
+    background-color: var(--color-alert-warning-title-background);
 }
 .layer-caution {
     background-color: color-mix(in srgb, var(--color-caution-bright) 10%, transparent);
 }
 .layer-caution > b:first-child {
-    color: var(--color-caution-bright);
+    color: var(--color-alert-caution-title-foreground);
+    background-color: var(--color-alert-caution-title-background);
 }

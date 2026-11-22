@@ -52,7 +52,7 @@ font-family: var(--font-family-mono-nf);</code></pre>
 <h2>Text</h2>
 <p>This is a paragraph. {{ sample }} <span lang="ja">{{ sample_ja }}</span></p>
 <p><b>Bold (b)</b>, <strong>strong</strong>, <i>italic (i)</i>, <em>emphasis (em)</em>, <u>underline (u)</u>, <s>strikethrough (s)</s>, <a href="/design/index.html">link (a)</a>, <code>code</code>, <kbd>Ctrl</kbd> + <kbd>C</kbd> (kbd), <mark>highlight (mark)</mark>, <small>small</small>, H<sub>2</sub>O (sub), x<sup>2</sup> (sup), <abbr title="HyperText Markup Language">HTML</abbr> (abbr).</p>
-<p>Links keep the color of the text around them and are underlined. <code>&lt;strong&gt;</code> is bold in <code>--color-foreground-alt</code>, so it stands out more than <code>&lt;b&gt;</code>. <code>&lt;mark&gt;</code> is <code>yellow-bright</code> on <code>yellow-opacity-10</code>.</p>
+<p>Links keep the color of the text around them and are underlined. <code>&lt;strong&gt;</code> is bold in <code>--color-foreground-alt</code>, so it stands out more than <code>&lt;b&gt;</code>. <code>&lt;mark&gt;</code> is <code>--color-mark-foreground</code> on <code>--color-mark-background</code>: <code>yellow-bright</code> (<code>yellow-40</code> in the light themes) on <code>yellow-opacity-10</code>, or black on <code>jis-yellow</code> in the UD themes.</p>
 
 <h2>Lists</h2>
 <div class="grid demo-grid-200">

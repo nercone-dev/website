@@ -60,7 +60,7 @@ base: design
 &lt;/div&gt;</code></pre>
 
 <h2>Block</h2>
-<p>An area with a border. Children are stacked with a gap of <code>16px</code>. With a variant, the border has the color of the alert, and a <code>&lt;b&gt;</code> as the first child is its title.</p>
+<p>An area with a border. Children are stacked with a gap of <code>16px</code>. With a variant, the border has the color of the alert, and a <code>&lt;b&gt;</code> as the first child is its title. The title is <code>--color-alert-{name}-title-foreground</code> on <code>--color-alert-{name}-title-background</code>, with <code>--alert-title-padding-inline</code> on its sides. The base themes color only the text of the title; the UD themes fill it with the JIS safety color and write it in black (see <a href="/design/themes.html">Themes</a>).</p>
 <div class="grid demo-grid-200">
     <div class="block"><p>block</p></div>
     {%- for name in ["note", "tip", "important", "warning", "caution"] %}

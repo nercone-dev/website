@@ -66,6 +66,26 @@ extra_imports: <link rel="stylesheet" href="https://assets.nercone.dev/pages/des
     </table>
 </div>
 <p>In the UD themes, <code>-dark</code>, <code>-normal</code>, and <code>-bright</code> of each status are the same color.</p>
+<p>The JIS safety colors are never made lighter or darker, not even on hover: some people, such as those with achromatopsia, tell them apart only by their lightness, so a changed lightness can be read as another color. On the light backgrounds, most of them do not reach the contrast of WCAG 2.2 AA (4.5:1) as text, so the UD themes do not use them as text. Status buttons, toasts, alert titles, and <code>&lt;mark&gt;</code> are filled with the safety color and written in <code>jis-black</code>, which has at least 4.8:1 on every safety color the UD themes use. White text was not chosen because it reaches 4.5:1 on none of them (<code>jis-blue</code> comes closest with 4.3:1), and darkening the colors was not chosen because it changes their lightness. A status button shows hover with <code>--color-foreground-alt</code> on its border instead of a darker fill. The borders of text fields, dropdowns, and swatches are 60% of <code>--color-foreground</code>, so that they reach 3:1 against the page (WCAG 2.2, 1.4.11); the base themes keep the thinner border.</p>
+<p>Known exceptions: a disabled control is drawn at 50% opacity, which also changes the lightness of a JIS safety color, and the tint of <code>layer-*</code> is 10% of it. WCAG does not require contrast for disabled controls.</p>
+
+<h3>Contrast</h3>
+<p>All themes aim for 4.5:1 for text, as WCAG 2.2 AA requires. The UD themes also give the borders of text fields, dropdowns, and swatches 3:1 (1.4.11); the base themes keep a thinner, more modern border, which stays below it. In the base themes, <code>-bright</code> of each status is the color for text, so the light themes use a darker step of the hue than the dark themes.</p>
+<div class="table-scroll">
+    <table class="demo-nowrap">
+        <thead>
+            <tr><th>Hue</th><th><code>-bright</code> in <code>light</code>, <code>white</code></th><th><code>-bright</code> in <code>dark</code>, <code>black</code></th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>sky</code></td><td><code>sky-55</code></td><td><code>sky-bright</code></td></tr>
+            <tr><td><code>green</code></td><td><code>green-40</code></td><td><code>green-bright</code></td></tr>
+            <tr><td><code>orange</code></td><td><code>orange-50</code></td><td><code>orange-bright</code></td></tr>
+            <tr><td><code>red</code></td><td><code>red-65</code></td><td><code>red-120</code></td></tr>
+            <tr><td><code>purple</code></td><td><code>purple-75</code></td><td><code>purple-130</code></td></tr>
+        </tbody>
+    </table>
+</div>
+<p>Each step is the lightest (in the light themes) or darkest (in the dark themes) of the steps of 5 that keeps 4.5:1 with some room, measured against the page, against <code>--color-background-alt</code> under the 10% tint of a toast, against the 10% tint of a button or layer, and against a button on hover. The placeholder of a text field is 80% of <code>--color-foreground</code> for the same reason.</p>
 
 <h3>Automatic themes</h3>
 <p>These follow the color scheme of the system with <code>prefers-color-scheme</code>.</p>
@@ -152,7 +172,7 @@ await theme.set(null);    // removes the stylesheet added by theme.js</code></pr
 }));</code></pre>
 
 <h2>Making a theme</h2>
-<p>A theme is a <code>:root</code> rule that sets <code>color-scheme</code>, <code>--color-stark</code>, and every color by purpose and component color. Start from a copy of the theme closest to the one you want, and change the colors by purpose first: the component colors refer to them, so most of them follow without changes. Every theme must define the same variables, because a missing one leaves the components that use it without a color.</p>
+<p>A theme is a <code>:root</code> rule that sets <code>color-scheme</code>, <code>--color-stark</code>, every color by purpose and component color, and three other variables: <code>--alert-title-padding-inline</code>, the padding that goes with the fill of an alert title, and <code>--button-status-hover-background-mix</code> and <code>--button-status-hover-border-mix</code>, how much the hover of a status button changes its background and border. Start from a copy of the theme closest to the one you want, and change the colors by purpose first: the component colors refer to them, so most of them follow without changes. Every theme must define the same variables, because a missing one leaves the components that use it without a color.</p>
 <pre><code>:root {
     color-scheme: dark;
 

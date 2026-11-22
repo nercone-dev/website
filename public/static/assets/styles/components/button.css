@@ -21,6 +21,10 @@
     box-sizing: border-box;
     padding: var(--button-padding, 8px 16px);
 
+    /* Set on each button, so that a variant on an ancestor does not change the hover of this one. */
+    --button-hover-background-mix: 10%;
+    --button-hover-border-mix:     0%;
+
     cursor: pointer;
     user-select: none;
     -webkit-touch-callout: none;
@@ -33,7 +37,8 @@
 }
 
 .button:hover, :where(button:not(.sidebar-toggle, .toast-close, .swatch), input[type="button"], input[type="submit"], input[type="reset"]):hover {
-    background-color: color-mix(in srgb, var(--color-button-background), var(--color-foreground) 10%);
+    background-color: color-mix(in srgb, var(--color-button-background), var(--color-foreground) var(--button-hover-background-mix));
+    border-color:     color-mix(in srgb, var(--color-button-border), var(--color-foreground-alt) var(--button-hover-border-mix));
 }
 .button:active, :where(button:not(.sidebar-toggle, .toast-close, .swatch), input[type="button"], input[type="submit"], input[type="reset"]):active {
     transform: scale(0.98);
@@ -58,19 +63,27 @@
     --color-button-foreground: var(--color-button-information-foreground);
     --color-button-background: var(--color-button-information-background);
     --color-button-border:     var(--color-button-information-border);
+    --button-hover-background-mix: var(--button-status-hover-background-mix);
+    --button-hover-border-mix:     var(--button-status-hover-border-mix);
 }
 .button-success {
     --color-button-foreground: var(--color-button-success-foreground);
     --color-button-background: var(--color-button-success-background);
     --color-button-border:     var(--color-button-success-border);
+    --button-hover-background-mix: var(--button-status-hover-background-mix);
+    --button-hover-border-mix:     var(--button-status-hover-border-mix);
 }
 .button-warning {
     --color-button-foreground: var(--color-button-warning-foreground);
     --color-button-background: var(--color-button-warning-background);
     --color-button-border:     var(--color-button-warning-border);
+    --button-hover-background-mix: var(--button-status-hover-background-mix);
+    --button-hover-border-mix:     var(--button-status-hover-border-mix);
 }
 .button-error {
     --color-button-foreground: var(--color-button-error-foreground);
     --color-button-background: var(--color-button-error-background);
     --color-button-border:     var(--color-button-error-border);
+    --button-hover-background-mix: var(--button-status-hover-background-mix);
+    --button-hover-border-mix:     var(--button-status-hover-border-mix);
 }

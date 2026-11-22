@@ -16,42 +16,60 @@
 
     --color-information-dark:   var(--color-sky-dark);
     --color-information-normal: var(--color-sky-normal);
-    --color-information-bright: var(--color-sky-bright);
+    --color-information-bright: var(--color-sky-55);
 
     --color-success-dark:   var(--color-green-dark);
     --color-success-normal: var(--color-green-normal);
-    --color-success-bright: var(--color-green-bright);
+    --color-success-bright: var(--color-green-40);
 
     --color-warning-dark:   var(--color-orange-dark);
     --color-warning-normal: var(--color-orange-normal);
-    --color-warning-bright: var(--color-orange-bright);
+    --color-warning-bright: var(--color-orange-50);
 
     --color-error-dark:   var(--color-red-dark);
     --color-error-normal: var(--color-red-normal);
-    --color-error-bright: var(--color-red-bright);
+    --color-error-bright: var(--color-red-65);
 
     /* GitHub Markdown */
 
     --color-note-dark:   var(--color-sky-dark);
     --color-note-normal: var(--color-sky-normal);
-    --color-note-bright: var(--color-sky-bright);
+    --color-note-bright: var(--color-sky-55);
 
     --color-tip-dark:   var(--color-green-dark);
     --color-tip-normal: var(--color-green-normal);
-    --color-tip-bright: var(--color-green-bright);
+    --color-tip-bright: var(--color-green-40);
 
     --color-important-dark:   var(--color-purple-dark);
     --color-important-normal: var(--color-purple-normal);
-    --color-important-bright: var(--color-purple-bright);
+    --color-important-bright: var(--color-purple-75);
 
     --color-caution-dark:   var(--color-red-dark);
     --color-caution-normal: var(--color-red-normal);
-    --color-caution-bright: var(--color-red-bright);
+    --color-caution-bright: var(--color-red-65);
+
+    /* Alerts */
+
+    --color-alert-note-title-foreground:      var(--color-note-bright);
+    --color-alert-note-title-background:      transparent;
+    --color-alert-tip-title-foreground:       var(--color-tip-bright);
+    --color-alert-tip-title-background:       transparent;
+    --color-alert-important-title-foreground: var(--color-important-bright);
+    --color-alert-important-title-background: transparent;
+    --color-alert-warning-title-foreground:   var(--color-warning-bright);
+    --color-alert-warning-title-background:   transparent;
+    --color-alert-caution-title-foreground:   var(--color-caution-bright);
+    --color-alert-caution-title-background:   transparent;
+
+    --alert-title-padding-inline: 0;
 
     /* Components */
 
     --color-cursor:         var(--color-black-opacity-75);
     --color-cursor-on-link: var(--color-black-opacity-20);
+
+    --color-mark-foreground: var(--color-yellow-40);
+    --color-mark-background: var(--color-yellow-opacity-10);
 
     --color-button-foreground: var(--color-foreground-alt);
     --color-button-background: var(--color-layer-alt);
@@ -77,14 +95,19 @@
     --color-button-error-background: color-mix(in srgb, transparent, var(--color-error-bright) 10%);
     --color-button-error-border:     var(--color-error-normal);
 
-    --color-textfield-foreground: var(--color-foreground-alt);
-    --color-textfield-background: var(--color-layer-alt);
-    --color-textfield-border:     var(--color-border);
-    --color-textfield-focus:      var(--color-foreground-alt);
+    --button-status-hover-background-mix: 10%;
+    --button-status-hover-border-mix:     0%;
+
+    --color-textfield-foreground:   var(--color-foreground-alt);
+    --color-textfield-background:   var(--color-layer-alt);
+    --color-textfield-border:       var(--color-border);
+    --color-textfield-hover-border: color-mix(in srgb, var(--color-foreground) 40%, transparent);
+    --color-textfield-focus:        var(--color-foreground-alt);
 
     --color-dropdown-foreground:        var(--color-foreground-alt);
     --color-dropdown-background:        var(--color-layer-alt);
     --color-dropdown-border:            var(--color-border);
+    --color-dropdown-hover-border:      color-mix(in srgb, var(--color-foreground) 40%, transparent);
     --color-dropdown-focus:             var(--color-foreground-alt);
     --color-dropdown-hover:             color-mix(in srgb, transparent, var(--color-foreground) 15%);
     --color-dropdown-active-foreground: var(--color-button-primary-foreground);
@@ -155,6 +178,7 @@
 
     --color-swatch-foreground:    var(--color-foreground);
     --color-swatch-border:        var(--color-border);
+    --color-swatch-hover-border:  color-mix(in srgb, var(--color-foreground) 40%, transparent);
     --color-swatch-focus:         var(--color-foreground-alt);
     --color-swatch-checker-light: var(--color-grey-40);
     --color-swatch-checker-dark:  var(--color-grey-20);
