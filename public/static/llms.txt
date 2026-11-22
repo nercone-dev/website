@@ -1,0 +1,40 @@
+# nercone.dev
+
+This website is a personal website run as a hobby by an individual (student) named Nercone. It features a self-introduction, a collection of links, various tools, and design experiment pages.
+
+The primary language is Japanese.
+
+## Pages
+
+- [/](https://nercone.dev/) The top page displaying a daily changing message
+- [/status](https://nercone.dev/status) Server uptime status (JSON)
+- [/about](https://nercone.dev/about/) Self-introduction of the site administrator
+- [/about/server](https://nercone.dev/about/server/) Details of this site's server configuration (HTTP/3, TLS, post-quantum cryptography support, etc.)
+- [/links](https://nercone.dev/links/) Mutual link collection
+- [/public-keys](https://nercone.dev/public-keys/) PGP public key for contact
+- [/design](https://nercone.dev/design/) The design system for this site
+- [/robots.txt](https://nercone.dev/robots.txt)
+- [/sitemap.xml](https://nercone.dev/sitemap.xml)
+
+## Source Code
+
+The source code is publicly available at https://github.com/nercone-dev/website/. Most parts can be viewed here, except for sections that are difficult to make public due to third-party software, confidential information, or similar reasons.
+
+No CMS such as WordPress or site builders are used. A custom web server built by combining FastAPI, Jinja2, and other tools operates as the backend.
+
+## License
+
+Unless otherwise noted, the information and assets on this website are freely available for use under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), and the code is available under the MIT License.
+
+## Contact
+
+Please get in touch via [email](mailto:nercone@nercone.dev).
+OpenPGP is available for email communication. The public key can be obtained from [this page](https://nercone.dev/public-keys/).
+
+When reporting vulnerabilities, please read [security.txt](https://nercone.dev/.well-known/security.txt).
+
+## Regarding Use by AI
+
+According to the `Content-Signal` in [robots.txt](https://nercone.dev/robots.txt), search and use as AI input (ai-input) are permitted, but use for AI training (ai-train) is not permitted. Please follow this policy. Some crawlers are individually blocked in robots.txt.
+
+You can retrieve pages in Markdown format by appending `.md` to the HTML page URL or by sending a request with the `Accept: text/markdown` header.
