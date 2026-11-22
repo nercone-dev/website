@@ -14,7 +14,7 @@ def ensure_public_path(path: Union[str, Path]) -> Optional[Path]:
 
 def resolve_file(path: str, *, timings: Optional[ServerTiming] = None) -> Optional[Path]:
     if timings:
-        timings.start("resolve", "Resolve File")
+        timings.start("resolve-file", f"File {path or '/'}")
 
     try:
         if full_path := ensure_public_path(Directories.public.joinpath(path.lstrip("/"))):
@@ -23,7 +23,7 @@ def resolve_file(path: str, *, timings: Optional[ServerTiming] = None) -> Option
         return None
     finally:
         if timings:
-            timings.stop("resolve")
+            timings.stop("resolve-file")
 
 def resolve_static(path: str, *, timings: Optional[ServerTiming] = None) -> Optional[Path]:
     return resolve_file("static/" + path.lstrip("/"), timings=timings)
@@ -45,7 +45,7 @@ def page_candidates(path: str, mode: Literal["html", "markdown"] = "html") -> Li
 
 def resolve_page(path: str, *, mode: Literal["html", "markdown"] = "html", timings: Optional[ServerTiming] = None) -> Optional[str]:
     if timings:
-        timings.start("resolve", "Resolve Page")
+        timings.start("resolve-page", f"Page {path or '/'}")
 
     try:
         for candidate in page_candidates(path, mode):
@@ -54,11 +54,11 @@ def resolve_page(path: str, *, mode: Literal["html", "markdown"] = "html", timin
         return None
     finally:
         if timings:
-            timings.stop("resolve")
+            timings.stop("resolve-page")
 
 def resolve_redirects(path: str, *, max_retry: int = 10, timings: Optional[ServerTiming] = None) -> Optional[str]:
     if timings:
-        timings.start("resolve", "Resolve Redirects")
+        timings.start("resolve-redirect", f"Redirect {path or '/'}")
 
     try:
         file = resolve_static("redirects.json", timings=timings)
@@ -83,4 +83,4 @@ def resolve_redirects(path: str, *, max_retry: int = 10, timings: Optional[Serve
         return None
     finally:
         if timings:
-            timings.stop("resolve")
+            timings.stop("resolve-redirect")
