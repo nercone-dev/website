@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_レイヤー_1" data-name="レイヤー 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <defs>
+    <style>
+      .cls-1 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-1, .cls-2 {
+        font-family: NerconeSansCJKNFVariable-Bold, 'Nercone Sans CJK NF Variable';
+        font-variation-settings: 'opsz' 14, 'wght' 700;
+        font-weight: 700;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5 {
+        font-size: 12px;
+      }
+
+      .cls-6, .cls-7 {
+        fill: #939393;
+      }
+
+      .cls-8 {
+        font-size: 14px;
+      }
+
+      .cls-8, .cls-9, .cls-10, .cls-7, .cls-3, .cls-11, .cls-12, .cls-4, .cls-13, .cls-5 {
+        font-family: NerconeSansCJKNF-Variable, 'Nercone Sans CJK NF Variable';
+        font-variation-settings: 'opsz' 14, 'wght' 400;
+      }
+
+      .cls-8, .cls-14, .cls-4 {
+        fill: #fff;
+      }
+
+      .cls-15, .cls-16 {
+        letter-spacing: .25em;
+      }
+
+      .cls-15, .cls-12, .cls-17, .cls-18 {
+        opacity: .5;
+      }
+
+      .cls-9, .cls-10, .cls-12 {
+        font-size: 16px;
+      }
+
+      .cls-9, .cls-19, .cls-12, .cls-13 {
+        fill: #c3c3c3;
+      }
+
+      .cls-20 {
+        fill: #3f3f3f;
+      }
+
+      .cls-20, .cls-14 {
+        opacity: .75;
+      }
+
+      .cls-10, .cls-3, .cls-21 {
+        fill: #a8a8a8;
+      }
+
+      .cls-22 {
+        fill: #272727;
+      }
+
+      .cls-7, .cls-13 {
+        font-size: 24px;
+      }
+
+      .cls-3 {
+        text-decoration: underline;
+      }
+
+      .cls-23 {
+        fill: #0080c0;
+      }
+
+      .cls-11 {
+        font-size: 10px;
+      }
+
+      .cls-4 {
+        opacity: .9;
+      }
+
+      .cls-17 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-24 {
+        opacity: .25;
+      }
+
+      .cls-25 {
+        fill: #00c0ff;
+      }
+
+      .cls-26 {
+        fill: red;
+      }
+
+      .cls-27 {
+        letter-spacing: -.17em;
+      }
+
+      .cls-28 {
+        letter-spacing: -.14em;
+      }
+
+      .cls-29 {
+        letter-spacing: -.03em;
+      }
+
+      .cls-30 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-31 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-32 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-33 {
+        fill: #2d2d2d;
+      }
+
+      .cls-34 {
+        letter-spacing: 0em;
+      }
+
+      .cls-35 {
+        fill: #333;
+      }
+
+      .cls-36 {
+        fill: #4b4b4b;
+      }
+    </style>
+  </defs>
+  <rect class="cls-21" width="1920" height="1080"/>
+  <rect class="cls-22" x="64" y="64" width="1792" height="952"/>
+  <rect class="cls-35" x="64" y="64" width="1792" height="32"/>
+  <rect class="cls-26" x="1808" y="64" width="48" height="32"/>
+  <text class="cls-19" transform="translate(76.1 84.25)"><tspan class="cls-2" x="0" y="0">Ne</tspan><tspan class="cls-1" x="16.29" y="0">r</tspan><tspan class="cls-2" x="20.89" y="0">cone UgokiEdit </tspan><tspan class="cls-5" x="112.08" y="0" xml:space="preserve">    </tspan><tspan class="cls-11" x="125.58" y="-.76" xml:space="preserve">ファイル    プロジェクト    シーン    アイテム    エフェクト    トランジション    シーケンス　スクリプト    表示    拡張機能</tspan></text>
+  <rect class="cls-33" x="1248" y="96" width="608" height="920"/>
+  <g>
+    <path class="cls-25" d="M352,128v192H96v-192H352ZM354,126H94v196h260V126H354Z"/>
+    <rect class="cls-20" x="96" y="284" width="256" height="36"/>
+    <rect class="cls-24" x="96" y="128" width="256" height="156"/>
+    <text class="cls-4" transform="translate(108.87 306.25)"><tspan x="0" y="0">1920x1080 (1080p, UHD)</tspan></text>
+    <rect class="cls-14" x="138.67" y="158" width="170.67" height="96"/>
+  </g>
+  <g>
+    <rect class="cls-20" x="384" y="284" width="256" height="36"/>
+    <rect class="cls-24" x="384" y="128" width="256" height="156"/>
+    <text class="cls-4" transform="translate(396.87 306.25)"><tspan x="0" y="0">2560x1440 (1440p, UHD)</tspan></text>
+    <rect class="cls-14" x="426.67" y="158" width="170.67" height="96"/>
+  </g>
+  <g>
+    <rect class="cls-20" x="672" y="284" width="256" height="36"/>
+    <rect class="cls-24" x="672" y="128" width="256" height="156"/>
+    <text class="cls-4" transform="translate(684.87 306.25)"><tspan x="0" y="0">3840x2160 (4K, UHD)</tspan></text>
+    <rect class="cls-14" x="714.67" y="158" width="170.67" height="96"/>
+  </g>
+  <g>
+    <rect class="cls-20" x="960" y="284" width="256" height="36"/>
+    <rect class="cls-24" x="960" y="128" width="256" height="156"/>
+    <text class="cls-4" transform="translate(972.87 306.25)"><tspan class="cls-32" x="0" y="0">7</tspan><tspan x="6.6" y="0">680x4320 (8K, UHD)</tspan></text>
+    <rect class="cls-14" x="1002.67" y="158" width="170.67" height="96"/>
+  </g>
+  <g>
+    <rect class="cls-20" x="96" y="508" width="256" height="36"/>
+    <rect class="cls-24" x="96" y="352" width="256" height="156"/>
+    <text class="cls-4" transform="translate(108.87 530.25)"><tspan x="0" y="0">2048x1080 (1080p, DCI)</tspan></text>
+    <rect class="cls-14" x="133.33" y="382" width="181.33" height="96"/>
+  </g>
+  <g>
+    <rect class="cls-20" x="384" y="508" width="256" height="36"/>
+    <rect class="cls-24" x="384" y="352" width="256" height="156"/>
+    <text class="cls-4" transform="translate(396.87 530.25)"><tspan x="0" y="0">3840x2160 (4K, DCI)</tspan></text>
+    <rect class="cls-14" x="421.33" y="382" width="181.33" height="96"/>
+  </g>
+  <g>
+    <rect class="cls-20" x="672" y="508" width="256" height="36"/>
+    <rect class="cls-24" x="672" y="352" width="256" height="156"/>
+    <text class="cls-4" transform="translate(684.87 530.25)"><tspan class="cls-32" x="0" y="0">7</tspan><tspan x="6.6" y="0">680x4320 (8K, DCI)</tspan></text>
+    <rect class="cls-14" x="709.33" y="382" width="181.33" height="96"/>
+  </g>
+  <g>
+    <rect class="cls-20" x="960" y="508" width="256" height="36"/>
+    <rect class="cls-24" x="960" y="352" width="256" height="156"/>
+    <text class="cls-4" transform="translate(972.87 530.25)"><tspan x="0" y="0">1620x1080 (3:2)</tspan></text>
+    <rect class="cls-14" x="1016" y="382" width="144" height="96"/>
+  </g>
+  <g>
+    <rect class="cls-20" x="96" y="732" width="256" height="36"/>
+    <rect class="cls-24" x="96" y="576" width="256" height="156"/>
+    <text class="cls-4" transform="translate(108.87 754.25)"><tspan x="0" y="0">1440x1080 (4:3)</tspan></text>
+    <rect class="cls-14" x="160" y="606" width="128" height="96"/>
+  </g>
+  <g>
+    <rect class="cls-20" x="384" y="732" width="256" height="36"/>
+    <rect class="cls-24" x="384" y="576" width="256" height="156"/>
+    <text class="cls-4" transform="translate(396.87 754.25)"><tspan x="0" y="0">1080x1920 (1080p, UHD)</tspan></text>
+    <rect class="cls-14" x="485" y="606" width="54" height="96"/>
+  </g>
+  <g>
+    <rect class="cls-20" x="672" y="732" width="256" height="36"/>
+    <rect class="cls-24" x="672" y="576" width="256" height="156"/>
+    <text class="cls-4" transform="translate(684.87 754.25)"><tspan x="0" y="0">1440x2560 (1440p, UHD)</tspan></text>
+    <rect class="cls-14" x="773" y="606" width="54" height="96"/>
+  </g>
+  <g>
+    <rect class="cls-20" x="960" y="732" width="256" height="36"/>
+    <rect class="cls-24" x="960" y="576" width="256" height="156"/>
+    <text class="cls-4" transform="translate(972.87 754.25)"><tspan x="0" y="0">2160x3840 (4K, UHD)</tspan></text>
+    <rect class="cls-14" x="1061" y="606" width="54" height="96"/>
+  </g>
+  <g>
+    <rect class="cls-20" x="96" y="956" width="256" height="36"/>
+    <rect class="cls-24" x="96" y="800" width="256" height="156"/>
+    <text class="cls-4" transform="translate(108.87 978.25)"><tspan x="0" y="0">4320x</tspan><tspan class="cls-32" x="36.6" y="0">7</tspan><tspan x="43.21" y="0">680 (4K, UHD)</tspan></text>
+    <rect class="cls-14" x="197" y="830" width="54" height="96"/>
+  </g>
+  <g>
+    <rect class="cls-20" x="384" y="956" width="256" height="36"/>
+    <rect class="cls-24" x="384" y="800" width="256" height="156"/>
+    <text class="cls-4" transform="translate(396.87 978.25)"><tspan x="0" y="0">1080x1620 (2:3)</tspan></text>
+    <rect class="cls-14" x="480" y="830" width="64" height="96"/>
+  </g>
+  <g>
+    <rect class="cls-20" x="672" y="956" width="256" height="36"/>
+    <rect class="cls-24" x="672" y="800" width="256" height="156"/>
+    <text class="cls-4" transform="translate(684.87 978.25)"><tspan x="0" y="0">1080x1440 (3:4)</tspan></text>
+    <rect class="cls-14" x="764" y="830" width="72" height="96"/>
+  </g>
+  <g>
+    <rect class="cls-20" x="960" y="956" width="256" height="36"/>
+    <rect class="cls-24" x="960" y="800" width="256" height="156"/>
+    <text class="cls-4" transform="translate(972.87 978.25)"><tspan x="0" y="0">10</tspan><tspan class="cls-32" x="12.45" y="0">2</tspan><tspan x="19.58" y="0">4x10</tspan><tspan class="cls-32" x="46.34" y="0">2</tspan><tspan x="53.47" y="0">4 (1:1)</tspan></text>
+    <rect class="cls-14" x="1040" y="830" width="96" height="96"/>
+  </g>
+  <text class="cls-13" transform="translate(1284.3045 148.7305)"><tspan x="0" y="0">Ne</tspan><tspan class="cls-30" x="32.07" y="0">r</tspan><tspan x="40.71" y="0">cone UgokiEdit v1</tspan><tspan class="cls-29" x="242.47" y="0">.0.</tspan><tspan x="269.61" y="0">0</tspan></text>
+  <rect class="cls-36" x="1284.5" y="224" width="535" height="48"/>
+  <text class="cls-10" transform="translate(1284.5 210.9937)"><tspan x="0" y="0">プロジェクト名</tspan></text>
+  <rect class="cls-36" x="1284.5" y="333.01" width="535" height="48"/>
+  <text class="cls-10" transform="translate(1284.5 320)"><tspan x="0" y="0">プロジェクトファイルの保存先</tspan></text>
+  <text class="cls-9" transform="translate(1301.1402 253)"><tspan x="0" y="0">Example</tspan></text>
+  <text class="cls-9" transform="translate(1302.5469 362.2393)"><tspan x="0" y="0">/Users/ne</tspan><tspan class="cls-30" x="74.46" y="0">r</tspan><tspan x="80.22" y="0">cone/M</tspan><tspan class="cls-31" x="137.95" y="0">o</tspan><tspan x="147.23" y="0">vies/UgokiEdit P</tspan><tspan class="cls-30" x="270.85" y="0">r</tspan><tspan x="276.61" y="0">ojec</tspan><tspan class="cls-34" x="308.55" y="0">t</tspan><tspan x="313.62" y="0">s/</tspan><tspan class="cls-18" x="327.84" y="0">Example.ugk</tspan></text>
+  <rect class="cls-36" x="1284.5" y="443.01" width="251.5" height="48"/>
+  <text class="cls-10" transform="translate(1284.5 430)"><tspan x="0" y="0">映像設定</tspan></text>
+  <text class="cls-9" transform="translate(1300.5465 472.5519)"><tspan class="cls-18" x="0" y="0" xml:space="preserve">幅  </tspan><tspan x="25" y="0">1920</tspan><tspan class="cls-17" x="61.28" y="0">p</tspan><tspan class="cls-18" x="70.72" y="0">x</tspan></text>
+  <rect class="cls-36" x="1568" y="443.01" width="251.5" height="48"/>
+  <text class="cls-7" transform="translate(1544.4491 473.3955)"><tspan x="0" y="0">×</tspan></text>
+  <text class="cls-9" transform="translate(1584.4658 472.3956)"><tspan class="cls-18" x="0" y="0" xml:space="preserve">高さ  </tspan><tspan x="41" y="0">1080</tspan><tspan class="cls-17" x="77.59" y="0">p</tspan><tspan class="cls-18" x="87.03" y="0">x</tspan></text>
+  <rect class="cls-36" x="1284.5" y="508" width="251.5" height="48"/>
+  <text class="cls-9" transform="translate(1301.5465 537.5456)"><tspan x="0" y="0">60</tspan></text>
+  <rect class="cls-36" x="1568" y="508" width="251.5" height="48"/>
+  <text class="cls-9" transform="translate(1584.4658 537.3893)"><tspan class="cls-18" x="0" y="0">3</tspan><tspan class="cls-15" x="9.88" y="0">D</tspan><tspan class="cls-18" x="25.43" y="0">編集</tspan><tspan x="57.43" y="0" xml:space="preserve">  有効</tspan></text>
+  <text class="cls-12" transform="translate(1424.3452 537.7018)"><tspan x="0" y="0">フレーム毎秒</tspan></text>
+  <rect class="cls-36" x="1284.5" y="606" width="251.5" height="48"/>
+  <text class="cls-10" transform="translate(1284.5001 592.9937)"><tspan x="0" y="0">音響設定</tspan></text>
+  <rect class="cls-36" x="1568" y="606" width="251.5" height="48"/>
+  <text class="cls-9" transform="translate(1584.4659 635.3893)"><tspan class="cls-18" x="0" y="0">3</tspan><tspan class="cls-15" x="9.88" y="0">D</tspan><tspan class="cls-18" x="25.43" y="0" xml:space="preserve">音響再現  </tspan><tspan x="98.43" y="0">無効</tspan></text>
+  <text class="cls-9" transform="translate(1302.9062 635.3112)"><tspan x="0" y="0">2 </tspan><tspan class="cls-16" x="14.26" y="0">(</tspan><tspan x="24.09" y="0">ステレ</tspan><tspan class="cls-16" x="72.09" y="0">オ</tspan><tspan x="92.09" y="0">)</tspan></text>
+  <text class="cls-12" transform="translate(1441.7049 635.4674)"><tspan x="0" y="0">チャンネル</tspan></text>
+  <text class="cls-3" transform="translate(1284.5 688.9937)"><tspan x="0" y="0">その他のオプションを表示</tspan></text>
+  <text class="cls-3" transform="translate(1723.5002 319.0237)"><tspan x="0" y="0">ダイアログで選択</tspan></text>
+  <rect class="cls-23" x="1720" y="944" width="96" height="32"/>
+  <text class="cls-8" transform="translate(1754 964.7554)"><tspan x="0" y="0">作成</tspan></text>
+  <rect class="cls-6" x="1592" y="944" width="96" height="32"/>
+  <text class="cls-8" transform="translate(1628.1914 964.7549)"><tspan class="cls-28" x="0" y="0">開</tspan><tspan class="cls-27" x="12.07" y="0">く</tspan></text>
+</svg>
