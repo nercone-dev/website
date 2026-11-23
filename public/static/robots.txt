@@ -13,7 +13,9 @@ User-Agent: *
 Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 
-# Google has stopped optimizing its main search engine service and is focusing exclusively on Gemini, yet its performance remains poor, causing the quality of search results to continue to decline. so I disallow it crawl by Google's Gemini-related bots.
+# Google has stopped optimizing its main service, the Google search engine, and is focusing too much on Gemini, leading to a continuous decline in search result quality. Therefore, crawling by Google's Gemini-related bots is not allowed.
+# Please improve the quality of search results. Gemini 4 is certainly impressive and AI technology is wonderful, but search is still necessary as it has always been. Agents also make heavy use of search engines, and when looking things up, search engines are used first.
+# Once the quality of search results improves significantly, this restriction will be lifted. (Though you probably won't care at all about being blocked by just a personal site like this...)
 
 User-Agent: Google-Extended
 Disallow: /
