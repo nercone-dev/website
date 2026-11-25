@@ -1,0 +1,244 @@
+/* Styles of the server status pages. The charts, gauges, stats, badges, heatmaps and stack bars are components of style.css; this file only lays them out. */
+
+/* Toolbar */
+
+.status-toolbar {
+    background-color: color-mix(in srgb, var(--color-background) 85%, transparent);
+    border-bottom: solid 1px var(--color-border);
+    backdrop-filter: blur(8px);
+
+    font-size: small;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+
+    position: sticky;
+    z-index: 2;
+    top: 68px;
+
+    margin: -24px -24px 0;
+    padding: 8px 24px;
+}
+.status-toolbar-spacer {
+    flex: 1;
+}
+.status-toolbar .segmented-control {
+    --segmented-control-padding: 2px 10px;
+}
+.status-toolbar button {
+    padding-block: 2px;
+}
+.status-updated {
+    color: var(--color-foreground-alt);
+    font-variant-numeric: tabular-nums;
+}
+
+.status-connection {
+    font-weight: var(--font-weight-semibold);
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.status-dot {
+    --status-dot-color: var(--color-grey-normal);
+
+    background-color: var(--status-dot-color);
+    border-radius: 50%;
+
+    width: 8px;
+    height: 8px;
+}
+[data-status-connection="live"] .status-dot {
+    --status-dot-color: var(--color-success-bright);
+    animation: status-pulse 2s ease-out infinite;
+}
+[data-status-connection="error"] .status-dot {
+    --status-dot-color: var(--color-error-bright);
+}
+[data-status-connection="paused"] .status-dot, [data-status-connection="hidden"] .status-dot {
+    --status-dot-color: var(--color-warning-bright);
+}
+[data-status-connection="error"] {
+    color: var(--color-error-normal);
+}
+
+@keyframes status-pulse {
+    from { box-shadow: 0 0 0 0 color-mix(in srgb, var(--status-dot-color) 60%, transparent); }
+    to   { box-shadow: 0 0 0 8px transparent; }
+}
+
+/* Page header */
+
+.status-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    margin-top: 16px;
+}
+.status-header > * {
+    margin: 0;
+}
+.status-header > h1 {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+.status-header > p {
+    color: var(--color-foreground-alt);
+}
+
+.status-section-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 16px;
+}
+.status-section-title > small {
+    color: var(--color-foreground-alt);
+    font-size: small;
+    font-weight: var(--font-weight-regular);
+}
+
+.status-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.status-section > h3 {
+    margin: 8px 0 0;
+}
+
+/* Grids */
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(var(--status-grid-min, 220px), 100%), 1fr));
+    gap: 16px;
+}
+.status-grid > * {
+    min-width: 0;
+}
+.status-grid-wide {
+    --status-grid-min: 360px;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--status-grid-min), 100%), 1fr));
+}
+.status-grid-2 {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: 16px;
+}
+@media (max-width: 1024px) {
+    .status-grid-2 {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Stats */
+
+.status-grid > a > .stat {
+    height: 100%;
+}
+.stat > .gauge {
+    margin-inline: auto;
+}
+.stat-value-small {
+    --stat-value-size: 1.125rem;
+}
+.stat .description-list {
+    font-size: small;
+}
+
+/* Charts */
+
+.status-chart-small {
+    --chart-height: 48px;
+}
+.status-chart-large {
+    --chart-height: 200px;
+}
+
+/* The free part of a stack bar is its track. */
+.status-legend-track {
+    --chart-series-color: var(--color-progress-track);
+}
+
+.status-swap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* An unknown value (binding.js removes aria-valuenow and sets data-bind-missing) draws only the track,
+   instead of the animation of an indeterminate indicator. */
+.progress-linear[data-bind-missing]::before, .progress-circular[data-bind-missing] .progress-indicator {
+    visibility: hidden;
+    animation: none;
+}
+.progress-circular[data-bind-missing] {
+    animation: none;
+}
+
+/* Badges of states */
+
+.badge[data-state="true"], .badge[data-state="ok"] {
+    --badge-color: var(--color-success-normal);
+}
+
+/* Tables */
+
+.status-table {
+    width: 100%;
+    font-variant-numeric: tabular-nums;
+}
+.status-table td, .status-table th {
+    white-space: nowrap;
+}
+.status-table .progress-linear {
+    min-width: 120px;
+}
+.status-table .status-table-wrap {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+/* Network: inactive interfaces are hidden until the checkbox is checked */
+
+.status-page:has(#status-show-inactive:not(:checked)) [data-bind-item][data-state="false"] {
+    display: none;
+}
+
+.status-filter {
+    font-size: small;
+    font-weight: var(--font-weight-regular);
+
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Empty states */
+
+.status-empty {
+    color: var(--color-foreground-alt);
+    text-align: center;
+    justify-content: center;
+
+    min-height: 160px;
+}
+
+/* Raw JSON */
+
+.status-json {
+    max-height: 70vh;
+    overflow: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [data-status-connection="live"] .status-dot {
+        animation: none;
+    }
+}

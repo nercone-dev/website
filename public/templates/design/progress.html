@@ -51,6 +51,29 @@ base: design
 <p><code>aria-valuemin="0" aria-valuemax="5" aria-valuenow="3"</code> is 60%.</p>
 <div class="progress-linear demo-progress-60" role="progressbar" aria-label="Steps" aria-valuemin="0" aria-valuemax="5" aria-valuenow="3"></div>
 
+<h2>Label</h2>
+<p><code>progress-label</code> is a line above a linear indicator, with a name at the start and the value at the end.</p>
+<div>
+    <span class="progress-label"><span>Storage</span><span>412 GiB / 1 TiB</span></span>
+    <div class="progress-linear" role="progressbar" aria-label="Storage" aria-valuenow="40"></div>
+</div>
+<pre><code>&lt;div&gt;
+    &lt;span class="progress-label"&gt;&lt;span&gt;Storage&lt;/span&gt;&lt;span&gt;412 GiB / 1 TiB&lt;/span&gt;&lt;/span&gt;
+    &lt;div class="progress-linear" role="progressbar" aria-label="Storage" aria-valuenow="40"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+<h2 id="levels">Levels</h2>
+<p>For a value that should stay low, such as the usage of a disk, write the ratios (from <code>0</code> to <code>1</code>) at which it becomes a warning and a caution in <code>data-progress-thresholds</code>, on the indicator or any ancestor. <code>progress.js</code> then sets <code>data-progress-level</code> to <code>normal</code>, <code>warning</code>, or <code>caution</code>, and the indicator is drawn in <code>--color-progress-warning</code> or <code>--color-progress-caution</code>. <a href="/design/data">Gauges and heatmap cells</a> follow the levels as well.</p>
+<div class="flex demo-column" data-progress-thresholds="0.75 0.9">
+    <div class="progress-linear" role="progressbar" aria-label="50%" aria-valuenow="50"></div>
+    <div class="progress-linear" role="progressbar" aria-label="80%" aria-valuenow="80"></div>
+    <div class="progress-linear" role="progressbar" aria-label="95%" aria-valuenow="95"></div>
+</div>
+<pre><code>&lt;div data-progress-thresholds="0.75 0.9"&gt;
+    &lt;div class="progress-linear" role="progressbar" aria-label="Disk" aria-valuenow="80"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<p>The color is not the only sign of the level: write the value in text as well.</p>
+
 <h2>Customization</h2>
 <p>Change the size with <code>--progress-size</code> (circular and logo, default <code>48px</code>) and <code>--progress-thickness</code> (default <code>4px</code>), the length of one cycle of the indeterminate animation with <code>--progress-duration</code> (default <code>1.5s</code>, and <code>3s</code> for the logo), and the colors with <code>--color-progress</code> and <code>--color-progress-track</code>.</p>
 <div class="flex demo-wrap demo-center demo-progress-large">

@@ -1,5 +1,7 @@
+import os
 import re
 import json
+import plistlib
 import time
 import shutil
 import socket
@@ -7,11 +9,12 @@ import platform
 import threading
 import subprocess
 from pathlib import Path
-from typing import Optional, Any, List, Dict, Tuple
+from typing import Optional, Any, List, Dict, Tuple, Set, Iterable
 
 import psutil
 
 from .smbios import SMBIOS, SMBIOSMemoryDevice
+from .volume import VolumeCapacity
 
 class SystemInfo:
     """
@@ -55,6 +58,8 @@ class SystemInfo:
         self.cpu_name: Optional[str] = self.read_cpu_name()
         self.cpu_base_frequency: Optional[float] = self.read_cpu_base_frequency()
         self.ram_slots: Optional[List[Dict[str, Any]]] = self.read_ram_slots()
+        # Physical disk of each macOS device, found with diskutil once. Devices mounted later are looked up when they appear.
+        self.darwin_io_devices: Dict[str, Optional[str]] = {}
 
     def snapshot(self) -> Dict[str, Any]:
         with self.lock:
@@ -447,30 +452,154 @@ class SystemInfo:
             counters = {}
 
         storages: Dict[str, Dict[str, Any]] = {}
+        # Space available for important usage, by APFS container. Some volumes (such as VM and Preboot) do not report it,
+        # but it belongs to the container, so the value one volume reports applies to every volume of its container.
+        container_available: Dict[str, int] = {}
         for partition in psutil.disk_partitions(all=False):
             if partition.device in storages:
                 storages[partition.device]["mountpoints"].append(partition.mountpoint)
                 continue
 
-            try:
-                usage = psutil.disk_usage(partition.mountpoint)
-                usage_info: Optional[Dict[str, int]] = {"total": usage.total * bits, "used": usage.used * bits, "free": usage.free * bits}
-            except OSError:
-                usage_info = None
+            usage_info = self.read_storage_usage(partition.device, partition.mountpoint, container_available)
 
-            io = counters.get(Path(partition.device).name)
+            io_device = self.read_io_device(partition.device, partition.mountpoint, counters.keys())
+            io = counters.get(io_device) if io_device is not None else None
             storages[partition.device] = {
                 "device": partition.device,
                 "filesystem": partition.fstype or None,
                 "mountpoints": [partition.mountpoint],
                 "usage": usage_info,
                 "io": {
+                    # The disk whose counters these are. Several storages can share one (such as APFS volumes on one SSD).
+                    "device": io_device,
                     "read": io.read_bytes * bits if io else None,
                     "written": io.write_bytes * bits if io else None,
                 },
             }
 
         return list(storages.values())
+
+    def read_storage_usage(self, device: str, mountpoint: str, container_available: Dict[str, int]) -> Optional[Dict[str, int]]:
+        """
+        Usage of the space a filesystem takes from, in bits:
+          total      the size of that space. For an APFS volume, the size of its container, which its volumes share.
+          available  what a program can still write. On macOS, this includes purgeable space (caches, local snapshots),
+                     which macOS frees when the space is needed, as Finder counts it.
+          used       what is in use: total - available on macOS (as Finder shows it), and the allocated blocks elsewhere.
+          free       what is not allocated at all.
+          consumed   what this filesystem itself holds. For an APFS volume, only its own part of the container.
+
+        `container_available` keeps the available space of each container (macOS) between the calls of one snapshot.
+        """
+        bits = SystemInfo.BITS_PER_BYTE
+        try:
+            usage = psutil.disk_usage(mountpoint)
+        except OSError:
+            return None
+
+        available = usage.free
+        used = usage.used
+        if self.kernel_type == "darwin":
+            # statvfs() reports the container (total, free) but the blocks of the volume alone as used.
+            container = SystemInfo.darwin_whole_disk(Path(device).name)
+            important = container_available.get(container) if container is not None else None
+            if important is None:
+                important = VolumeCapacity.available_for_important_usage(mountpoint)
+                if important is not None and usage.free <= important <= usage.total:
+                    if container is not None:
+                        container_available[container] = important
+                else:
+                    important = None
+            if important is not None:
+                available = important
+            used = usage.total - available
+
+        return {
+            "total": usage.total * bits,
+            "used": used * bits,
+            "available": available * bits,
+            "free": usage.free * bits,
+            "consumed": usage.used * bits,
+        }
+
+    def read_io_device(self, device: str, mountpoint: str, names: Iterable[str]) -> Optional[str]:
+        """
+        Returns the name of the I/O counter (a key of psutil.disk_io_counters(perdisk=True)) that measures `device`,
+        or None when there is none.
+
+        Linux counts every block device, partitions included, so the device itself has a counter.
+        macOS counts only physical disks, so an APFS volume is followed to the disk of its container.
+        """
+        known = set(names)
+        if self.kernel_type == "linux":
+            return SystemInfo.read_io_device_linux(device, mountpoint, known)
+        if self.kernel_type == "darwin":
+            return self.read_io_device_darwin(device, known)
+        name = Path(device).name
+        return name if name in known else None
+
+    @staticmethod
+    def read_io_device_linux(device: str, mountpoint: str, names: Set[str]) -> Optional[str]:
+        # /dev/mapper/root and /dev/disk/by-uuid/... are links to the real node, such as /dev/dm-0.
+        name = Path(os.path.realpath(device)).name
+        if name in names:
+            return name
+
+        # /dev/root and other names without a node: the block device behind the mount, by its device number.
+        try:
+            number = os.stat(mountpoint).st_dev
+        except OSError:
+            return None
+        link = Path(f"/sys/dev/block/{os.major(number)}:{os.minor(number)}")
+        try:
+            name = Path(os.path.realpath(link)).name if link.exists() else None
+        except OSError:
+            return None
+        return name if name in names else None
+
+    def read_io_device_darwin(self, device: str, names: Set[str]) -> Optional[str]:
+        identifier = Path(device).name
+        if identifier in names:
+            return identifier
+
+        # Every volume of a container is on the same disk, so the container (the whole disk of the volume) is looked up once.
+        whole = SystemInfo.darwin_whole_disk(identifier)
+        if whole is None:
+            return None
+        if whole in names:
+            return whole
+        if whole not in self.darwin_io_devices:
+            self.darwin_io_devices[whole] = SystemInfo.read_darwin_physical_disk(whole)
+        disk = self.darwin_io_devices[whole]
+        return disk if disk in names else None
+
+    @staticmethod
+    def darwin_whole_disk(identifier: str) -> Optional[str]:
+        # BSD names of slices are the name of their whole disk followed by "s" and a number (disk3s3s1 -> disk3).
+        match = re.match(r"disk\d+", identifier)
+        return match.group(0) if match else None
+
+    @staticmethod
+    def read_darwin_physical_disk(identifier: str) -> Optional[str]:
+        # A container (disk3) is synthesized on a physical store (disk0s2), a slice of a physical disk (disk0).
+        try:
+            result = subprocess.run(["/usr/sbin/diskutil", "info", "-plist", identifier], capture_output=True, timeout=5)
+            info = plistlib.loads(result.stdout)
+        except (OSError, subprocess.SubprocessError, plistlib.InvalidFileException, ValueError):
+            return None
+        if not isinstance(info, dict):
+            return None
+
+        stores = info.get("APFSPhysicalStores")
+        if stores:
+            # A container on several stores (a Fusion Drive) has no single disk to measure it.
+            if len(stores) != 1 or not isinstance(stores[0], dict):
+                return None
+            source = stores[0].get("APFSPhysicalStore")
+        else:
+            source = info.get("ParentWholeDisk")
+
+        return SystemInfo.darwin_whole_disk(str(source or ""))
 
     # Files
 

@@ -1,0 +1,27 @@
+/* Badge: a short label, such as a state */
+
+.badge {
+    color: var(--badge-color, var(--color-foreground-alt));
+    border: solid 1px currentColor;
+
+    font-size: x-small;
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.6;
+    white-space: nowrap;
+
+    display: inline-block;
+    padding-inline: 6px;
+}
+
+.badge-information {
+    --badge-color: var(--color-information-normal);
+}
+.badge-success {
+    --badge-color: var(--color-success-normal);
+}
+.badge-warning {
+    --badge-color: var(--color-warning-normal);
+}
+.badge-error {
+    --badge-color: var(--color-error-normal);
+}

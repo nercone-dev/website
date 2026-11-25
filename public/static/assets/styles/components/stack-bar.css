@@ -1,0 +1,23 @@
+/* Stack bar: parts of one whole side by side. stack-bar.js sets --stack-bar-value (from 0 to 1) of each segment from data-value. */
+
+.stack-bar {
+    background-color: var(--color-progress-track);
+
+    display: flex;
+    overflow: hidden;
+
+    height: var(--stack-bar-thickness, 16px);
+}
+.stack-bar-segment {
+    background-color: var(--chart-series-color, var(--color-progress));
+
+    flex: 0 0 calc(var(--stack-bar-value, 0) * 100%);
+
+    transition: flex-basis 0.3s cubic-bezier(0.125,1,0.25,1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stack-bar-segment {
+        transition: none;
+    }
+}

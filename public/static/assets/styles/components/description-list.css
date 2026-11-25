@@ -1,0 +1,30 @@
+/* Description list: terms and their values in two columns */
+
+.description-list {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: var(--description-list-gap, 6px 24px);
+
+    margin: 0;
+}
+.description-list > dt {
+    color: var(--color-foreground-alt);
+}
+.description-list > dd {
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+
+    margin: 0;
+}
+
+/* Small screens: each value goes under its term */
+
+@media (max-width: 768px) {
+    .description-list {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+    }
+    .description-list > dd {
+        margin-bottom: 8px;
+    }
+}

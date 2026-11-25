@@ -1,0 +1,84 @@
+---
+title: メモリ - サーバーの状態 - Nercone
+description: nercone.devのサーバーのメモリとスワップの使用状況、メモリスロットの構成
+base: status
+---
+
+<div class="status-header">
+    <h1>メモリ</h1>
+    <p>メモリとスワップの使用状況と、メモリスロットの構成です。</p>
+</div>
+
+<div class="status-grid">
+    <div class="layer stat">
+        <span class="stat-label">使用中</span>
+        <span class="stat-value" data-bind="system.hardwares.ram.usage.used" data-format="bytes">—</span>
+        <span class="stat-description"><span data-bind="summary.ram" data-format="percent">—</span> / 合計 <span data-bind="system.hardwares.ram.usage.total" data-format="bytes">—</span></span>
+    </div>
+    <div class="layer stat">
+        <span class="stat-label">利用可能</span>
+        <span class="stat-value" data-bind="system.hardwares.ram.usage.available" data-format="bytes">—</span>
+        <span class="stat-description">キャッシュなど、解放できる領域を含みます</span>
+    </div>
+    <div class="layer stat">
+        <span class="stat-label">キャッシュ</span>
+        <span class="stat-value" data-bind="system.hardwares.ram.usage.cache" data-format="bytes">—</span>
+        <span class="stat-description">ファイルのキャッシュ</span>
+    </div>
+    <div class="layer stat">
+        <span class="stat-label">未使用</span>
+        <span class="stat-value" data-bind="system.hardwares.ram.usage.free" data-format="bytes">—</span>
+        <span class="stat-description">何にも使われていない領域</span>
+    </div>
+</div>
+
+<div class="layer">
+    <span class="stat-label">内訳 <span><span data-bind="system.hardwares.ram.usage.total" data-format="bytes">—</span></span></span>
+    <div class="stack-bar" role="img" aria-label="メモリの内訳">
+        <span class="stack-bar-segment chart-series-1" data-bind-attr="data-value: system.hardwares.ram.usage.ratio"></span>
+        <span class="stack-bar-segment chart-series-3" data-bind-attr="data-value: system.hardwares.ram.usage.cache_ratio"></span>
+    </div>
+    <ul class="chart-legend">
+        <li class="chart-series-1">使用中 <b data-bind="system.hardwares.ram.usage.ratio" data-format="percent">—</b></li>
+        <li class="chart-series-3">キャッシュ <b data-bind="system.hardwares.ram.usage.cache_ratio" data-format="percent">—</b></li>
+        <li class="status-legend-track">利用可能 <b data-bind="system.hardwares.ram.usage.available_ratio" data-format="percent">—</b></li>
+    </ul>
+</div>
+
+<div class="status-grid-2">
+    <div class="layer">
+        <span class="stat-label">使用率の推移</span>
+        <div class="chart status-chart-large" data-status-chart="ram" data-chart-max="1" data-format="percent"></div>
+    </div>
+    <div class="layer">
+        <span class="stat-label">スワップ</span>
+        <div data-bind-show="system.hardwares.ram.swap" class="status-swap">
+            <span class="progress-label"><span><span data-bind="system.hardwares.ram.swap.used" data-format="bytes">—</span> / <span data-bind="system.hardwares.ram.swap.total" data-format="bytes">—</span></span><span data-bind="system.hardwares.ram.swap.ratio" data-format="percent">—</span></span>
+            <div class="progress-linear" role="progressbar" aria-label="スワップ使用率" aria-valuenow="0" aria-valuemax="1" data-bind-attr="aria-valuenow: system.hardwares.ram.swap.ratio"></div>
+            <div class="chart" data-status-chart="swap" data-chart-max="1"></div>
+        </div>
+        <p class="stat-description" data-bind-hide="system.hardwares.ram.swap">スワップは設定されていません。</p>
+    </div>
+</div>
+
+<h2 class="status-section-title">メモリスロット <small><span data-bind="system.hardwares.ram.slots_installed" data-format="number">—</span> / <span data-bind="system.hardwares.ram.slots_total" data-format="number">—</span> 使用中</small></h2>
+<div class="table-scroll" data-bind-show="system.hardwares.ram.slots">
+    <table class="status-table table-hover">
+        <thead>
+            <tr><th>スロット</th><th>状態</th><th>規格</th><th>メーカー</th><th class="table-numeric">速度</th><th class="table-numeric">容量</th></tr>
+        </thead>
+        <tbody data-bind-list="system.hardwares.ram.slots">
+            <template>
+                <tr>
+                    <td data-bind="locator" translate="no">—</td>
+                    <td><span class="badge" data-bind-attr="data-state: installed"><span data-bind="installed" data-format="installed">—</span></span></td>
+                    <td data-bind="type" translate="no">—</td>
+                    <td data-bind="manufacturer" translate="no">—</td>
+                    <td class="table-numeric" data-bind="speed" data-format="mts">—</td>
+                    <td class="table-numeric" data-bind="capacity" data-format="bytes">—</td>
+                </tr>
+            </template>
+        </tbody>
+    </table>
+</div>
+<p class="stat-description" data-bind-hide="system.hardwares.ram.slots">このサーバーではメモリスロットの情報を取得できません。</p>

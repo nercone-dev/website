@@ -115,6 +115,14 @@
 
     --color-progress:       var(--color-foreground-alt);
     --color-progress-track: var(--color-layer);
+    --color-progress-warning: var(--color-warning-normal);
+    --color-progress-caution: var(--color-caution-normal);
+
+    --color-chart-1:    var(--color-information-normal);
+    --color-chart-2:    var(--color-success-normal);
+    --color-chart-3:    var(--color-important-normal);
+    --color-chart-4:    var(--color-warning-normal);
+    --color-chart-grid: var(--color-border);
 
     --color-slider:       var(--color-foreground-alt);
     --color-slider-track: var(--color-layer);

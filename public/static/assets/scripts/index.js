@@ -2,12 +2,16 @@
 // initializer.js defines window.nercone, which the other scripts use, so it comes first.
 import "./initializer.js";
 import "./theme.js";
+import "./components/binding.js";
+import "./components/chart.js";
 import "./components/cursor.js";
 import "./components/loading-overlay.js";
 import "./components/popup.js";
 import "./components/progress.js";
+import "./components/heatmap.js";
 import "./components/sidebar.js";
 import "./components/slider.js";
+import "./components/stack-bar.js";
 import "./components/swatch.js";
 import "./components/toast.js";
 import "./components/view-transition.js";

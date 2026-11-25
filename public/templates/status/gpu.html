@@ -1,0 +1,48 @@
+---
+title: GPU - サーバーの状態 - Nercone
+description: nercone.devのサーバーのGPUの使用率・温度・VRAM
+base: status
+---
+
+<div class="status-header">
+    <h1>GPU</h1>
+    <p>GPUの使用率・温度・VRAMです。ドライバーによっては、一部の値を取得できません。</p>
+</div>
+
+<div class="layer status-empty" data-bind-hide="system.hardwares.gpu">
+    <b>GPUが見つかりません</b>
+    <p>このサーバーにはGPUが無いか、GPUの情報を取得できません。</p>
+</div>
+
+<div class="status-grid status-grid-wide" data-bind-list="system.hardwares.gpu">
+    <template>
+        <div class="layer stat">
+            <span class="stat-label"><span>GPU <span data-bind="index">—</span></span> <span data-bind="name">—</span></span>
+            <div class="status-grid">
+                <div class="gauge">
+                    <svg class="progress-circular" viewBox="0 0 48 48" role="progressbar" aria-label="GPU使用率" aria-valuenow="0" aria-valuemax="1" data-bind-attr="aria-valuenow: usage">
+                        <circle class="progress-track"     cx="24" cy="24" r="20" pathLength="1"/>
+                        <circle class="progress-indicator" cx="24" cy="24" r="20" pathLength="1"/>
+                    </svg>
+                    <span class="gauge-value"><span data-bind="usage" data-format="percent">—</span><small>使用率</small></span>
+                </div>
+                <div class="gauge">
+                    <svg class="progress-circular" viewBox="0 0 48 48" role="progressbar" aria-label="GPU温度" aria-valuemax="100" aria-valuenow="0" data-bind-attr="aria-valuenow: temperature">
+                        <circle class="progress-track"     cx="24" cy="24" r="20" pathLength="1"/>
+                        <circle class="progress-indicator" cx="24" cy="24" r="20" pathLength="1"/>
+                    </svg>
+                    <span class="gauge-value"><span data-bind="temperature" data-format="celsius">—</span><small>温度</small></span>
+                </div>
+            </div>
+            <div class="chart" data-bind-attr="data-status-chart: chart" data-chart-max="1"></div>
+            <div>
+                <span class="progress-label"><span>専用VRAM</span><span><span data-bind="vram.usage.dedicated.used" data-format="bytes">—</span> / <span data-bind="vram.usage.dedicated.total" data-format="bytes">—</span></span></span>
+                <div class="progress-linear" role="progressbar" aria-label="専用VRAM使用率" aria-valuenow="0" aria-valuemax="1" data-bind-attr="aria-valuenow: vram.usage.dedicated.ratio"></div>
+            </div>
+            <div>
+                <span class="progress-label"><span>共有メモリ</span><span><span data-bind="vram.usage.shared.used" data-format="bytes">—</span> / <span data-bind="vram.usage.shared.total" data-format="bytes">—</span></span></span>
+                <div class="progress-linear" role="progressbar" aria-label="共有メモリ使用率" aria-valuenow="0" aria-valuemax="1" data-bind-attr="aria-valuenow: vram.usage.shared.ratio"></div>
+            </div>
+        </div>
+    </template>
+</div>

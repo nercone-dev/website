@@ -1,0 +1,42 @@
+/* Heatmap: cells filled by their value. heatmap.js sets --heatmap-value (from 0 to 1) from data-value. */
+
+.heatmap {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--heatmap-cell-min-width, 72px), 1fr));
+    gap: var(--heatmap-gap, 4px);
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.heatmap-cell {
+    /* Even an empty cell is a little tinted, so that it is told apart from the page. */
+    background-color: color-mix(in srgb, var(--color-progress) calc(var(--heatmap-value, 0) * 85% + 8%), var(--color-layer));
+
+    font-size: small;
+    font-variant-numeric: tabular-nums;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    padding: 8px;
+
+    transition: background-color 0.3s ease;
+}
+.heatmap-cell:not([data-value]) {
+    background-color: var(--color-layer);
+}
+.heatmap-cell > :first-child:not(:last-child) {
+    color: var(--color-foreground-alt);
+    font-size: x-small;
+}
+.heatmap-cell > :last-child {
+    font-weight: var(--font-weight-semibold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .heatmap-cell {
+        transition: none;
+    }
+}

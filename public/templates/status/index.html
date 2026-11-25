@@ -1,0 +1,126 @@
+---
+title: サーバーの状態 - Nercone
+description: nercone.devのサーバーの状態をリアルタイムで表示するダッシュボード
+base: status
+---
+
+<div class="status-header">
+    <h1>サーバーの状態</h1>
+    <p>nercone.devを動かしているサーバーの状態を、<a href="/status/api"><code>/api/v1/status</code></a>からリアルタイムで表示します。</p>
+</div>
+
+<div class="status-grid">
+    <div class="layer stat">
+        <span class="stat-label">状態 <span class="badge" data-bind="status" data-bind-attr="data-state: status">—</span></span>
+        <span class="stat-value stat-value-small" data-bind="system.name" translate="no">—</span>
+        <span class="stat-description"><span data-bind="system.distribution.name">—</span> <span data-bind="system.distribution.version"></span> · <span data-bind="system.kernel.type" translate="no">—</span> <span data-bind="system.kernel.version" translate="no"></span></span>
+    </div>
+    <div class="layer stat">
+        <span class="stat-label">バージョン <span class="badge" data-bind="startup.mode">—</span></span>
+        <span class="stat-value stat-value-small" data-bind="startup.version" translate="no">—</span>
+        <span class="stat-description">起動ID <code data-bind="startup.id" translate="no">—</code></span>
+    </div>
+    <div class="layer stat">
+        <span class="stat-label">アクセスカウンタ</span>
+        <span class="stat-value" data-bind="counter" data-format="number">—</span>
+        <span class="stat-description"><a href="/access-counter/">アクセスカウンタについて</a></span>
+    </div>
+    <div class="layer stat">
+        <span class="stat-label">応答時間</span>
+        <span class="stat-value" data-bind="client.latency" data-format="ms">—</span>
+        <span class="stat-description">CPU使用率の計測時間を含みます</span>
+    </div>
+</div>
+
+<h2 class="status-section-title">リソース <small>グラフはこのページを開いてからの推移です</small></h2>
+<div class="status-grid">
+    <a href="/status/cpu">
+        <div class="layer stat">
+            <span class="stat-label">CPU <span data-bind="system.hardwares.cpu.0.name">—</span></span>
+            <div class="gauge">
+                <svg class="progress-circular" viewBox="0 0 48 48" role="progressbar" aria-label="CPU使用率" aria-valuenow="0" aria-valuemax="1" data-bind-attr="aria-valuenow: summary.cpu">
+                    <circle class="progress-track"     cx="24" cy="24" r="20" pathLength="1"/>
+                    <circle class="progress-indicator" cx="24" cy="24" r="20" pathLength="1"/>
+                </svg>
+                <span class="gauge-value"><span data-bind="summary.cpu" data-format="percent">—</span><small>使用率</small></span>
+            </div>
+            <div class="chart status-chart-small" data-status-chart="cpu" data-chart-max="1"></div>
+        </div>
+    </a>
+    <a href="/status/memory">
+        <div class="layer stat">
+            <span class="stat-label">メモリ <span><span data-bind="system.hardwares.ram.usage.used" data-format="bytes">—</span> / <span data-bind="system.hardwares.ram.usage.total" data-format="bytes">—</span></span></span>
+            <div class="gauge">
+                <svg class="progress-circular" viewBox="0 0 48 48" role="progressbar" aria-label="メモリ使用率" aria-valuenow="0" aria-valuemax="1" data-bind-attr="aria-valuenow: summary.ram">
+                    <circle class="progress-track"     cx="24" cy="24" r="20" pathLength="1"/>
+                    <circle class="progress-indicator" cx="24" cy="24" r="20" pathLength="1"/>
+                </svg>
+                <span class="gauge-value"><span data-bind="summary.ram" data-format="percent">—</span><small>使用中</small></span>
+            </div>
+            <div class="chart status-chart-small" data-status-chart="ram" data-chart-max="1"></div>
+        </div>
+    </a>
+    <a href="/status/storage">
+        <div class="layer stat">
+            <span class="stat-label">ストレージ <code data-bind="summary.storage.mountpoints.0" translate="no">—</code></span>
+            <div class="gauge">
+                <svg class="progress-circular" viewBox="0 0 48 48" role="progressbar" aria-label="ストレージ使用率" aria-valuenow="0" aria-valuemax="1" data-bind-attr="aria-valuenow: summary.storage.usage.ratio">
+                    <circle class="progress-track"     cx="24" cy="24" r="20" pathLength="1"/>
+                    <circle class="progress-indicator" cx="24" cy="24" r="20" pathLength="1"/>
+                </svg>
+                <span class="gauge-value"><span data-bind="summary.storage.usage.ratio" data-format="percent">—</span><small>使用中</small></span>
+            </div>
+            <span class="stat-description">利用可能 <span data-bind="summary.storage.usage.available" data-format="bytes">—</span> / <span data-bind="summary.storage.usage.total" data-format="bytes">—</span></span>
+        </div>
+    </a>
+    <a href="/status/gpu">
+        <div class="layer stat">
+            <span class="stat-label">GPU <span><span data-bind="summary.gpus" data-format="number">—</span> 基</span></span>
+            <div class="gauge">
+                <svg class="progress-circular" viewBox="0 0 48 48" role="progressbar" aria-label="GPU使用率" aria-valuenow="0" aria-valuemax="1" data-bind-attr="aria-valuenow: summary.gpu">
+                    <circle class="progress-track"     cx="24" cy="24" r="20" pathLength="1"/>
+                    <circle class="progress-indicator" cx="24" cy="24" r="20" pathLength="1"/>
+                </svg>
+                <span class="gauge-value"><span data-bind="summary.gpu" data-format="percent">—</span><small>平均使用率</small></span>
+            </div>
+            <div class="chart status-chart-small" data-status-chart="gpu" data-chart-max="1"></div>
+        </div>
+    </a>
+</div>
+
+<div class="status-grid status-grid-wide">
+    <a href="/status/network">
+        <div class="layer stat">
+            <span class="stat-label">ネットワーク <span><span data-bind="summary.network.up" data-format="number">—</span> / <span data-bind="summary.network.total" data-format="number">—</span> インターフェースが有効</span></span>
+            <div class="chart" data-status-chart="network.received network.sent" data-format="bitrate"><span class="chart-scale"></span></div>
+            <ul class="chart-legend">
+                <li class="chart-series-1">受信 <b data-bind="summary.network.received" data-format="bitrate">—</b></li>
+                <li class="chart-series-2">送信 <b data-bind="summary.network.sent" data-format="bitrate">—</b></li>
+            </ul>
+        </div>
+    </a>
+    <a href="/status/storage">
+        <div class="layer stat">
+            <span class="stat-label">ディスクI/O <span>すべてのディスクの合計</span></span>
+            <div class="chart" data-status-chart="disk.read disk.written" data-format="byterate"><span class="chart-scale"></span></div>
+            <ul class="chart-legend">
+                <li class="chart-series-1">読み込み <b data-bind="summary.disk.read" data-format="byterate">—</b></li>
+                <li class="chart-series-2">書き込み <b data-bind="summary.disk.written" data-format="byterate">—</b></li>
+            </ul>
+        </div>
+    </a>
+</div>
+
+<h2>システム</h2>
+<div class="layer">
+    <dl class="description-list">
+        <dt>ホスト名</dt><dd data-bind="system.name" translate="no">—</dd>
+        <dt>種類</dt><dd data-bind="system.type">—</dd>
+        <dt>OS</dt><dd><span data-bind="system.distribution.name">—</span> <span data-bind="system.distribution.version"></span></dd>
+        <dt>カーネル</dt><dd translate="no"><span data-bind="system.kernel.type">—</span> <span data-bind="system.kernel.version"></span></dd>
+        <dt>CPU</dt><dd data-bind="system.hardwares.cpu.0.name">—</dd>
+        <dt>プロセス数</dt><dd data-bind="system.hardwares.cpu.0.usage.process" data-format="number">—</dd>
+        <dt>スレッド数</dt><dd data-bind="system.hardwares.cpu.0.usage.threads" data-format="number">—</dd>
+        <dt>起動モード</dt><dd data-bind="startup.mode">—</dd>
+    </dl>
+</div>

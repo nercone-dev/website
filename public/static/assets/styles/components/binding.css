@@ -1,0 +1,5 @@
+/* Binding: binding.js hides elements with the hidden attribute, which loses to any display set by a class (such as layer). */
+
+:is([data-bind-show], [data-bind-hide])[hidden] {
+    display: none !important;
+}

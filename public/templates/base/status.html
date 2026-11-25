@@ -1,0 +1,47 @@
+{% extends "/base/sidebar.html" %}
+
+{% block sidebar_title %}Server Status{% endblock %}
+{% block sidebar %}
+<span class="sidebar-heading">概要</span>
+<a href="/status">ダッシュボード</a>
+<span class="sidebar-heading">ハードウェア</span>
+<a href="/status/cpu">CPU</a>
+<a href="/status/memory">メモリ</a>
+<a href="/status/gpu">GPU</a>
+<a href="/status/network">ネットワーク</a>
+<a href="/status/storage">ストレージ</a>
+<span class="sidebar-heading">開発者向け</span>
+<a href="/status/api">API</a>
+{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://assets.nercone.dev/pages/status/style.css">
+<script src="https://assets.nercone.dev/pages/status/script.js" defer></script>
+{% endblock %}
+
+{% block main_outer %}
+<main class="status-page" data-status-page data-progress-thresholds="0.75 0.9">
+    <div class="status-toolbar">
+        <span class="status-connection" data-status-connection="loading" role="status" aria-live="polite">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span data-status-connection-text>接続中…</span>
+        </span>
+        <span class="status-updated">最終更新 <time data-status-updated>—</time></span>
+        <span class="status-toolbar-spacer"></span>
+        <div class="segmented-control" role="radiogroup" aria-label="更新間隔">
+            <label><input type="radio" name="status-interval" value="1000"><span>1秒</span></label>
+            <label><input type="radio" name="status-interval" value="2000" checked><span>2秒</span></label>
+            <label><input type="radio" name="status-interval" value="5000"><span>5秒</span></label>
+            <label><input type="radio" name="status-interval" value="10000"><span>10秒</span></label>
+        </div>
+        <button type="button" data-status-pause aria-pressed="false">一時停止</button>
+    </div>
+    <noscript>
+        <div class="block block-warning">
+            <b>Warning</b>
+            <p>このページはJavaScriptで<a href="/api/v1/status"><code>/api/v1/status</code></a>を取得して表示します。JavaScriptが無効な場合は、APIのJSONを直接参照してください。</p>
+        </div>
+    </noscript>
+    {% block main %}{% endblock %}
+</main>
+{% endblock %}

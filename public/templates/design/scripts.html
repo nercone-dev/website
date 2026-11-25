@@ -92,8 +92,16 @@ window.nercone.register('clock', new Clock());</code></pre>
                 <td><code>baseURL</code>, <code>themes</code>, <code>theme</code> (<code>'auto-stark'</code>), <code>storageKey</code> (<code>'nercone-theme'</code>), <code>rootAttribute</code> (<code>'data-theme'</code>), <code>triggerAttribute</code> (<code>'data-theme-trigger'</code>), <code>linkAttributes</code></td>
             </tr>
             <tr>
+                <td><code>chart</code></td><td><code>Chart</code></td><td>Draws the charts with <code>data-chart-values</code>. <code>Chart.draw()</code> draws any other. See <a href="/design/data">Data Display</a></td>
+                <td><code>selector</code> (<code>'.chart'</code>), <code>valuesAttribute</code> (<code>'data-chart-values'</code>), <code>maxAttribute</code> (<code>'data-chart-max'</code>), <code>lengthAttribute</code> (<code>'data-chart-length'</code>)</td>
+            </tr>
+            <tr>
                 <td><code>cursor</code></td><td><code>Cursor</code></td><td>Draws the <a href="#cursor-feature">cursor</a></td>
                 <td><code>selector</code> (<code>'#cursor'</code>), <code>linkSelector</code>, <code>systemSelector</code> (<code>'.cursor-system'</code>), <code>activeClass</code> (<code>'cursor-active'</code>), <code>padding</code> (<code>6</code>), <code>linkGap</code> (<code>4</code>), <code>textGap</code> (<code>4</code>), <code>layer</code> (<code>1</code>)</td>
+            </tr>
+            <tr>
+                <td><code>heatmap</code></td><td><code>Progress</code></td><td>Sets <code>--heatmap-value</code>. See <a href="/design/data">Data Display</a></td>
+                <td>Those of <code>progress</code>, with <code>selector</code> (<code>'.heatmap-cell'</code>), <code>property</code> (<code>'--heatmap-value'</code>), <code>max</code> (<code>1</code>), and <code>data-value</code>, <code>data-min</code>, and <code>data-max</code> as the attributes</td>
             </tr>
             <tr>
                 <td><code>loading-overlay</code></td><td><code>LoadingOverlay</code></td><td>Plays and removes the <a href="#loading-overlay-feature">loading overlay</a></td>
@@ -104,8 +112,8 @@ window.nercone.register('clock', new Clock());</code></pre>
                 <td><code>selector</code> (<code>'.popup, dialog'</code>), <code>openAttribute</code> (<code>'data-popup-open'</code>), <code>closeAttribute</code> (<code>'data-popup-close'</code>)</td>
             </tr>
             <tr>
-                <td><code>progress</code></td><td><code>Progress</code></td><td>Sets <code>--progress-value</code>. See <a href="/design/progress">Progress</a></td>
-                <td><code>selector</code>, <code>property</code> (<code>'--progress-value'</code>), <code>min</code> (<code>0</code>), <code>max</code> (<code>100</code>)</td>
+                <td><code>progress</code></td><td><code>Progress</code></td><td>Sets <code>--progress-value</code> and the <a href="/design/progress#levels">level</a>. See <a href="/design/progress">Progress</a></td>
+                <td><code>selector</code>, <code>property</code> (<code>'--progress-value'</code>), <code>min</code> (<code>0</code>), <code>max</code> (<code>100</code>), <code>valueAttribute</code> (<code>'aria-valuenow'</code>), <code>minAttribute</code> (<code>'aria-valuemin'</code>), <code>maxAttribute</code> (<code>'aria-valuemax'</code>), <code>thresholdsAttribute</code> (<code>'data-progress-thresholds'</code>), <code>levelAttribute</code> (<code>'data-progress-level'</code>)</td>
             </tr>
             <tr>
                 <td><code>sidebar</code></td><td><code>Sidebar</code></td><td>Marks the current page and closes the popover. See <a href="/design/layout">Layout</a></td>
@@ -114,6 +122,10 @@ window.nercone.register('clock', new Clock());</code></pre>
             <tr>
                 <td><code>slider</code></td><td><code>Slider</code></td><td>Sets <code>--slider-value</code>. See <a href="/design/forms">Forms</a></td>
                 <td><code>selector</code> (<code>'.slider, input[type="range"]'</code>), <code>property</code> (<code>'--slider-value'</code>)</td>
+            </tr>
+            <tr>
+                <td><code>stack-bar</code></td><td><code>Progress</code></td><td>Sets <code>--stack-bar-value</code>. See <a href="/design/data">Data Display</a></td>
+                <td>Those of <code>progress</code>, with <code>selector</code> (<code>'.stack-bar-segment'</code>), <code>property</code> (<code>'--stack-bar-value'</code>), <code>max</code> (<code>1</code>), and <code>data-value</code>, <code>data-min</code>, and <code>data-max</code> as the attributes</td>
             </tr>
             <tr>
                 <td><code>swatch</code></td><td><code>Swatch</code></td><td>Copies colors. See <a href="/design/colors">Colors</a></td>
@@ -126,7 +138,7 @@ window.nercone.register('clock', new Clock());</code></pre>
         </tbody>
     </table>
 </div>
-<p>Page transitions are not a feature but the navigator of <code>window.nercone</code>; see <a href="#page-transitions">below</a>.</p>
+<p>Page transitions are not a feature but the navigator of <code>window.nercone</code>; see <a href="#page-transitions">below</a>. <code>window.nercone.Binding</code> (<code>binding.js</code>) is a class without a feature: it fills elements with data when a script calls it. See <a href="/design/data#binding">Data Display</a>.</p>
 
 <h2 id="cursor-feature">Cursor</h2>
 <p>A round cursor that follows the mouse. Over a link or button it becomes a box around it, and over text it becomes a thin bar. It is shown only for a mouse; touch and pen input hide it and leave the system cursor. Add the element to <code>&lt;body&gt;</code>:</p>

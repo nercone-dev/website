@@ -1,0 +1,59 @@
+---
+title: ネットワーク - サーバーの状態 - Nercone
+description: nercone.devのサーバーのネットワークインターフェースごとの通信量
+base: status
+---
+
+<div class="status-header">
+    <h1>ネットワーク</h1>
+    <p>ネットワークインターフェースごとの通信速度と通信量です。ループバックは含みません。</p>
+</div>
+
+<div class="status-grid">
+    <div class="layer stat">
+        <span class="stat-label">受信</span>
+        <span class="stat-value" data-bind="summary.network.received" data-format="bitrate">—</span>
+        <span class="stat-description">有効なインターフェースの合計</span>
+    </div>
+    <div class="layer stat">
+        <span class="stat-label">送信</span>
+        <span class="stat-value" data-bind="summary.network.sent" data-format="bitrate">—</span>
+        <span class="stat-description">有効なインターフェースの合計</span>
+    </div>
+    <div class="layer stat">
+        <span class="stat-label">インターフェース</span>
+        <span class="stat-value"><span data-bind="summary.network.up" data-format="number">—</span> / <span data-bind="summary.network.total" data-format="number">—</span></span>
+        <span class="stat-description">有効 / すべて</span>
+    </div>
+</div>
+
+<div class="layer">
+    <span class="stat-label">通信速度の推移 <span>合計</span></span>
+    <div class="chart status-chart-large" data-status-chart="network.received network.sent" data-format="bitrate"><span class="chart-scale"></span></div>
+    <ul class="chart-legend">
+        <li class="chart-series-1">受信 <b data-bind="summary.network.received" data-format="bitrate">—</b></li>
+        <li class="chart-series-2">送信 <b data-bind="summary.network.sent" data-format="bitrate">—</b></li>
+    </ul>
+</div>
+
+<h2 class="status-section-title">インターフェース <label class="status-filter"><input id="status-show-inactive" type="checkbox"> ダウンしているインターフェースも表示</label></h2>
+<div class="status-grid status-grid-wide" data-bind-list="system.hardwares.network">
+    <template>
+        <div class="layer stat" data-bind-attr="data-state: up">
+            <span class="stat-label"><code data-bind="name" translate="no">—</code> <span class="badge" data-bind-attr="data-state: up"><span data-bind="up" data-format="up">—</span></span></span>
+            <div class="chart status-chart-small" data-bind-attr="data-status-chart: chart" data-format="bitrate"><span class="chart-scale"></span></div>
+            <ul class="chart-legend">
+                <li class="chart-series-1">受信 <b data-bind="rate.received" data-format="bitrate">—</b></li>
+                <li class="chart-series-2">送信 <b data-bind="rate.sent" data-format="bitrate">—</b></li>
+            </ul>
+            <dl class="description-list">
+                <dt>リンク速度</dt><dd data-bind="speed" data-format="bitrate">—</dd>
+                <dt>MTU</dt><dd data-bind="mtu" data-format="number">—</dd>
+                <dt>通信量</dt><dd>受信 <span data-bind="traffic.received" data-format="bytes">—</span> · 送信 <span data-bind="traffic.sent" data-format="bytes">—</span></dd>
+                <dt>パケット</dt><dd>受信 <span data-bind="packets.received" data-format="number">—</span> · 送信 <span data-bind="packets.sent" data-format="number">—</span></dd>
+                <dt>エラー</dt><dd>受信 <span data-bind="errors.received" data-format="number">—</span> · 送信 <span data-bind="errors.sent" data-format="number">—</span></dd>
+                <dt>ドロップ</dt><dd>受信 <span data-bind="drops.received" data-format="number">—</span> · 送信 <span data-bind="drops.sent" data-format="number">—</span></dd>
+            </dl>
+        </div>
+    </template>
+</div>

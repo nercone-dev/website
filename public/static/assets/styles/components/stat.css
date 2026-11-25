@@ -1,0 +1,46 @@
+/* Stat: one value with a label above and a description below. Combine it with layer or block. */
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stat-gap, 8px);
+}
+.stat-label {
+    color: var(--color-foreground-alt);
+    font-size: small;
+    font-weight: var(--font-weight-semibold);
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px 8px;
+}
+.stat-label > :not(:first-child) {
+    font-weight: var(--font-weight-regular);
+}
+.stat-value {
+    font-size: var(--stat-value-size, 1.75rem);
+    font-weight: var(--font-weight-semibold);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+
+    overflow-wrap: anywhere;
+}
+.stat-description {
+    color: var(--color-foreground-alt);
+    font-size: small;
+    font-variant-numeric: tabular-nums;
+
+    margin: 0;
+}
+
+/* a:has(> .layer) already drops the underline; this shows that the stat is a link. */
+a > .stat {
+    height: 100%;
+    box-sizing: border-box;
+    transition: background-color 0.15s ease;
+}
+a:hover > .layer.stat {
+    background-color: var(--color-layer-alt);
+}

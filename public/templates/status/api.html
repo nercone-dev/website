@@ -1,0 +1,49 @@
+---
+title: API - サーバーの状態 - Nercone
+description: サーバー状態API /api/v1/status の仕様とレスポンス
+base: status
+---
+
+<div class="status-header">
+    <h1>API</h1>
+    <p>このダッシュボードは<code>/api/v1/status</code>のJSONだけを使っています。同じ値を自由に取得できます。</p>
+</div>
+
+<pre><code>$ curl https://nercone.dev/api/v1/status</code></pre>
+
+<h2>単位</h2>
+<div class="table-scroll">
+    <table>
+        <thead>
+            <tr><th>値</th><th>単位</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>容量・通信量・I/O量</td><td>ビット (バイトの8倍)</td></tr>
+            <tr><td>リンク速度</td><td>ビット毎秒</td></tr>
+            <tr><td>使用率</td><td>0.0 〜 1.0</td></tr>
+            <tr><td>周波数</td><td>GHz</td></tr>
+            <tr><td>温度</td><td>°C</td></tr>
+            <tr><td>メモリの速度</td><td>MT/s</td></tr>
+        </tbody>
+    </table>
+</div>
+<p>このサーバーで取得できない値は<code>null</code>になります。CPU使用率の計測のため、応答には約0.25秒かかり、結果は1秒間キャッシュされます。通信速度や読み書きの速度はAPIに含まれず、このダッシュボードが前回の値との差から計算しています。ストレージの<code>io.device</code>は、読み書きの量を計測したディスクの名前です。同じディスク上の複数のストレージが、同じ値を共有することがあります。</p>
+
+<h2>ストレージの使用量</h2>
+<div class="table-scroll">
+    <table>
+        <thead>
+            <tr><th>キー</th><th>意味</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>usage.total</code></td><td>ファイルシステムが使える領域の大きさ。APFSでは、ボリュームが共有するコンテナの大きさ</td></tr>
+            <tr><td><code>usage.available</code></td><td>プログラムがまだ書き込める量。macOSでは、容量が必要になるとOSが削除する解放可能な領域(キャッシュやローカルスナップショットなど)を含み、Finderの「利用可能」と同じ値</td></tr>
+            <tr><td><code>usage.used</code></td><td>使用中の量。macOSでは<code>total - available</code>(Finderの「使用済み」と同じ)、それ以外では割り当て済みのブロック</td></tr>
+            <tr><td><code>usage.free</code></td><td>まったく割り当てられていない量</td></tr>
+            <tr><td><code>usage.consumed</code></td><td>このファイルシステム自体が使っている量。APFSでは、コンテナのうちこのボリュームの分だけ</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h2 class="status-section-title">最新のレスポンス <small>取得 <span data-bind="client.samples" data-format="number">—</span> 回 · 応答時間 <span data-bind="client.latency" data-format="ms">—</span></small></h2>
+<pre class="status-json"><code data-bind="response" data-format="json" translate="no">読み込み中…</code></pre>

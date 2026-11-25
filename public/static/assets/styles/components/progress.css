@@ -97,3 +97,30 @@
 .progress-logo:not([aria-valuenow]) .progress-indicator {
     animation: progress-logo var(--progress-duration, 3s) cubic-bezier(0.65,0,0.35,1) infinite;
 }
+
+/* Levels: progress.js sets data-progress-level from the thresholds in data-progress-thresholds. */
+
+[data-progress-level="warning"] {
+    --color-progress: var(--color-progress-warning);
+}
+[data-progress-level="caution"] {
+    --color-progress: var(--color-progress-caution);
+}
+
+/* Label: a name and a value above a linear indicator */
+
+.progress-label {
+    font-size: small;
+    line-height: 1.5;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 16px;
+
+    margin-bottom: 4px;
+}
+.progress-label > :last-child:not(:first-child) {
+    color: var(--color-foreground-alt);
+    font-variant-numeric: tabular-nums;
+}

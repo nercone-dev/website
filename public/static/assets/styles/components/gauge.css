@@ -1,0 +1,28 @@
+/* Gauge: a circular progress indicator with its value inside */
+
+.gauge {
+    --progress-size:      var(--gauge-size, 144px);
+    --progress-thickness: var(--gauge-thickness, 3px);
+
+    display: grid;
+    place-items: center;
+
+    width: fit-content;
+}
+.gauge > * {
+    grid-area: 1 / 1;
+}
+.gauge-value {
+    font-size: var(--gauge-font-size, 1.5rem);
+    font-weight: var(--font-weight-semibold);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.3;
+    text-align: center;
+}
+.gauge-value > small {
+    color: var(--color-foreground-alt);
+    font-size: small;
+    font-weight: var(--font-weight-regular);
+
+    display: block;
+}

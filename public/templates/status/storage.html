@@ -1,0 +1,85 @@
+---
+title: ストレージ - サーバーの状態 - Nercone
+description: nercone.devのサーバーのストレージの使用状況と読み書きの速度
+base: status
+---
+
+<div class="status-header">
+    <h1>ストレージ</h1>
+    <p>マウントされているデバイスごとの使用状況と、読み書きの速度です。</p>
+</div>
+
+<div class="status-grid">
+    <div class="layer stat">
+        <span class="stat-label">ルート <code data-bind="summary.storage.device" translate="no">—</code></span>
+        <span class="stat-value" data-bind="summary.storage.usage.ratio" data-format="percent">—</span>
+        <div class="progress-linear" role="progressbar" aria-label="ルートの使用率" aria-valuenow="0" aria-valuemax="1" data-bind-attr="aria-valuenow: summary.storage.usage.ratio"></div>
+        <span class="stat-description">使用中 <span data-bind="summary.storage.usage.used" data-format="bytes">—</span> / 合計 <span data-bind="summary.storage.usage.total" data-format="bytes">—</span></span>
+    </div>
+    <div class="layer stat">
+        <span class="stat-label">読み込み</span>
+        <span class="stat-value" data-bind="summary.disk.read" data-format="byterate">—</span>
+        <span class="stat-description">すべてのディスクの合計</span>
+    </div>
+    <div class="layer stat">
+        <span class="stat-label">書き込み</span>
+        <span class="stat-value" data-bind="summary.disk.written" data-format="byterate">—</span>
+        <span class="stat-description">すべてのディスクの合計</span>
+    </div>
+</div>
+
+<div class="layer">
+    <span class="stat-label">ルートの内訳 <span><span data-bind="summary.storage.usage.total" data-format="bytes">—</span></span></span>
+    <div class="stack-bar" role="img" aria-label="ルートの内訳">
+        <span class="stack-bar-segment chart-series-1" data-bind-attr="data-value: summary.storage.usage.ratio"></span>
+        <span class="stack-bar-segment chart-series-3" data-bind-attr="data-value: summary.storage.usage.purgeable_ratio"></span>
+    </div>
+    <ul class="chart-legend">
+        <li class="chart-series-1">使用中 <b data-bind="summary.storage.usage.used" data-format="bytes">—</b></li>
+        <li class="chart-series-3">解放可能 <b data-bind="summary.storage.usage.purgeable" data-format="bytes">—</b></li>
+        <li class="status-legend-track">空き <b data-bind="summary.storage.usage.free" data-format="bytes">—</b></li>
+    </ul>
+    <p class="stat-description">利用可能な容量(<span data-bind="summary.storage.usage.available" data-format="bytes">—</span>)は、空きと解放可能の合計です。解放可能は、キャッシュやローカルスナップショットなど、容量が必要になるとOSが削除する領域です(macOSのみ)。</p>
+</div>
+
+<div class="layer">
+    <span class="stat-label">読み書きの推移 <span>合計</span></span>
+    <div class="chart status-chart-large" data-status-chart="disk.read disk.written" data-format="byterate"><span class="chart-scale"></span></div>
+    <ul class="chart-legend">
+        <li class="chart-series-1">読み込み <b data-bind="summary.disk.read" data-format="byterate">—</b></li>
+        <li class="chart-series-2">書き込み <b data-bind="summary.disk.written" data-format="byterate">—</b></li>
+    </ul>
+</div>
+
+<h2>デバイス</h2>
+<div class="table-scroll">
+    <table class="status-table table-hover">
+        <thead>
+            <tr><th>デバイス</th><th>ファイルシステム</th><th>マウントポイント</th><th>使用率</th><th class="table-numeric">使用中</th><th class="table-numeric">利用可能</th><th class="table-numeric">合計</th><th class="table-numeric">このボリューム</th><th>I/Oの計測元</th><th class="table-numeric">読み込み</th><th class="table-numeric">書き込み</th></tr>
+        </thead>
+        <tbody data-bind-list="system.hardwares.storage">
+            <template>
+                <tr>
+                    <td><code data-bind="device" translate="no">—</code></td>
+                    <td data-bind="filesystem" translate="no">—</td>
+                    <td class="status-table-wrap" data-bind="mountpoints" translate="no">—</td>
+                    <td>
+                        <div>
+                            <span class="progress-label"><span></span><span data-bind="usage.ratio" data-format="percent">—</span></span>
+                            <div class="progress-linear" role="progressbar" aria-label="使用率" aria-valuenow="0" aria-valuemax="1" data-bind-attr="aria-valuenow: usage.ratio"></div>
+                        </div>
+                    </td>
+                    <td class="table-numeric" data-bind="usage.used" data-format="bytes">—</td>
+                    <td class="table-numeric" data-bind="usage.available" data-format="bytes">—</td>
+                    <td class="table-numeric" data-bind="usage.total" data-format="bytes">—</td>
+                    <td class="table-numeric" data-bind="usage.consumed" data-format="bytes">—</td>
+                    <td><code data-bind="io.device" translate="no">—</code></td>
+                    <td class="table-numeric" data-bind="rate.read" data-format="byterate">—</td>
+                    <td class="table-numeric" data-bind="rate.written" data-format="byterate">—</td>
+                </tr>
+            </template>
+        </tbody>
+    </table>
+</div>
+<p class="stat-description">APFSでは、同じコンテナのボリュームが容量を共有するため、使用率・使用中・利用可能・合計はコンテナ全体の値です。「このボリューム」は、そのボリューム自体が使っている量です。</p>
+<p class="stat-description">読み書きの速度は「I/Oの計測元」のディスクの値です。macOSはI/Oを物理ディスクごとにしか数えないため、同じディスク上のボリューム(APFSなど)は同じ値になります。合計では、ディスクごとに1回だけ数えています。</p>

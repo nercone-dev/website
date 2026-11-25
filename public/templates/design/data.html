@@ -1,0 +1,230 @@
+---
+title: Data Display - Nercone Design
+description: Stat, gauge, chart, heatmap, stack bar, badge, description list, and binding of Nercone Design.
+base: design
+---
+{%- set chart_cpu = "12 18 15 22 30 26 41 38 35 52 48 44 60 57 49 45 40 46 51 43" -%}
+{%- set chart_received = "3 4 3 6 9 7 12 10 8 14 11 9 15 13 10 12 9 11 13 10" -%}
+{%- set chart_sent = "1 2 1 2 3 2 4 3 3 5 4 3 5 4 3 4 3 4 5 3" -%}
+
+<div class="hero">
+    <h1>Data Display</h1>
+    <p>Components that show values and their changes, such as on a dashboard.</p>
+</div>
+
+<p>The CSP of this site forbids <code>style</code> attributes, so every value is written in an attribute, and a script turns it into a custom property: <code>aria-valuenow</code> for progress indicators and gauges, <code>data-value</code> for heatmap cells and stack bar segments, and <code>data-chart-values</code> for charts. Change the attribute, and the component follows.</p>
+
+<h2>Stat</h2>
+<p><code>stat</code> shows one value with a label above (<code>stat-label</code>) and a description below (<code>stat-description</code>). Combine it with <code>layer</code> or <code>block</code>. A second child of the label is placed at its end, in regular weight. Inside a link, the stat is highlighted under the pointer.</p>
+<div class="grid">
+    <div class="layer stat">
+        <span class="stat-label">Requests <span class="badge badge-success">OK</span></span>
+        <span class="stat-value">12,480</span>
+        <p class="stat-description">In the last hour</p>
+    </div>
+    <div class="layer stat">
+        <span class="stat-label">Memory <span>32.0 GiB</span></span>
+        <span class="stat-value">14.2 GiB</span>
+        <div class="progress-linear" role="progressbar" aria-label="Memory" aria-valuenow="44"></div>
+        <p class="stat-description">44% in use</p>
+    </div>
+    <a href="/design/data">
+        <div class="layer stat">
+            <span class="stat-label">Link</span>
+            <span class="stat-value">→</span>
+            <p class="stat-description">The whole stat is a link</p>
+        </div>
+    </a>
+</div>
+<pre><code>&lt;div class="layer stat"&gt;
+    &lt;span class="stat-label"&gt;Requests &lt;span class="badge badge-success"&gt;OK&lt;/span&gt;&lt;/span&gt;
+    &lt;span class="stat-value"&gt;12,480&lt;/span&gt;
+    &lt;p class="stat-description"&gt;In the last hour&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+<p>Change the size of the value with <code>--stat-value-size</code> (default <code>1.75rem</code>) and the space between the parts with <code>--stat-gap</code> (default <code>8px</code>).</p>
+
+<h2>Gauge</h2>
+<p><code>gauge</code> places a value inside a <a href="/design/progress">circular progress indicator</a>. A <code>&lt;small&gt;</code> in <code>gauge-value</code> is a caption under the value.</p>
+<div class="flex demo-wrap demo-center">
+    <div class="gauge">
+        <svg class="progress-circular" viewBox="0 0 48 48" role="progressbar" aria-label="CPU" aria-valuenow="38">
+            <circle class="progress-track"     cx="24" cy="24" r="20" pathLength="1"/>
+            <circle class="progress-indicator" cx="24" cy="24" r="20" pathLength="1"/>
+        </svg>
+        <span class="gauge-value">38%<small>CPU</small></span>
+    </div>
+    <div class="gauge" data-progress-thresholds="0.75 0.9">
+        <svg class="progress-circular" viewBox="0 0 48 48" role="progressbar" aria-label="Disk" aria-valuenow="93">
+            <circle class="progress-track"     cx="24" cy="24" r="20" pathLength="1"/>
+            <circle class="progress-indicator" cx="24" cy="24" r="20" pathLength="1"/>
+        </svg>
+        <span class="gauge-value">93%<small>Disk</small></span>
+    </div>
+</div>
+<pre><code>&lt;div class="gauge"&gt;
+    &lt;svg class="progress-circular" viewBox="0 0 48 48" role="progressbar" aria-label="CPU" aria-valuenow="38"&gt;
+        &lt;circle class="progress-track"     cx="24" cy="24" r="20" pathLength="1"/&gt;
+        &lt;circle class="progress-indicator" cx="24" cy="24" r="20" pathLength="1"/&gt;
+    &lt;/svg&gt;
+    &lt;span class="gauge-value"&gt;38%&lt;small&gt;CPU&lt;/small&gt;&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+<p>Change the size with <code>--gauge-size</code> (default <code>144px</code>), the line with <code>--gauge-thickness</code> (default <code>3px</code>), and the value with <code>--gauge-font-size</code> (default <code>1.5rem</code>). The second gauge is colored by its <a href="/design/progress#levels">level</a>.</p>
+
+<h2>Chart</h2>
+<p><code>chart</code> draws lines with the area below them. Write the values in <code>data-chart-values</code>: numbers separated by spaces, series separated by <code>;</code>, and <code>-</code> for a missing value, which leaves a gap. The last values are at the right edge.</p>
+<div class="layer">
+    <div class="chart" role="img" aria-label="CPU usage, from 12% to 43%" data-chart-values="{{ chart_cpu }}" data-chart-max="100"></div>
+</div>
+<pre><code>&lt;div class="chart" role="img" aria-label="CPU usage, from 12% to 43%"
+     data-chart-values="12 18 15 22 30 26 41 …" data-chart-max="100"&gt;&lt;/div&gt;</code></pre>
+<div class="table-scroll">
+    <table>
+        <thead>
+            <tr><th>Attribute</th><th>Value</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>data-chart-values</code></td><td>The values. Without it, <code>chart.js</code> leaves the chart to <code>Chart.draw()</code></td></tr>
+            <tr><td><code>data-chart-max</code></td><td>The top of the scale. By default, it follows the highest value, with 15% room above it</td></tr>
+            <tr><td><code>data-chart-length</code></td><td>The number of values across the chart. By default, the length of the longest series. Set it to keep the scale of time while the values are still few</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h3>Series, legend, and scale</h3>
+<p>The nth series is drawn in <code>--color-chart-n</code> (up to 4). <code>chart-legend</code> is a list of the series; give each item the class <code>chart-series-n</code>. A <code>chart-scale</code> inside the chart is a label at its top, such as the maximum; it is hidden while empty.</p>
+<div class="layer">
+    <div class="chart" role="img" aria-label="Traffic" data-chart-values="{{ chart_received }}; {{ chart_sent }}"><span class="chart-scale">Max 15 Mbps</span></div>
+    <ul class="chart-legend">
+        <li class="chart-series-1">Received <b>10 Mbps</b></li>
+        <li class="chart-series-2">Sent <b>3 Mbps</b></li>
+    </ul>
+</div>
+<pre><code>&lt;div class="chart" data-chart-values="3 4 3 6 …; 1 2 1 2 …"&gt;&lt;span class="chart-scale"&gt;Max 15 Mbps&lt;/span&gt;&lt;/div&gt;
+&lt;ul class="chart-legend"&gt;
+    &lt;li class="chart-series-1"&gt;Received &lt;b&gt;10 Mbps&lt;/b&gt;&lt;/li&gt;
+    &lt;li class="chart-series-2"&gt;Sent &lt;b&gt;3 Mbps&lt;/b&gt;&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+
+<h3>Drawing from a script</h3>
+<p>For values that change often, such as a history of measurements, call <code>window.nercone.Chart.draw(element, series, options)</code> instead of writing the attribute: it does not turn the numbers into text and back. <code>series</code> is an array of arrays of numbers, where <code>null</code> leaves a gap, and <code>options</code> takes <code>max</code> and <code>length</code>, like the attributes. It returns the top of the scale, or <code>0</code> when the scale follows the values and none is above <code>0</code>, so that a <code>chart-scale</code> can show it.</p>
+<pre><code>const top = window.nercone.Chart.draw(element, [received, sent], { length: 150 });
+scale.textContent = top &gt; 0 ? `Max ${format(top)}` : '';</code></pre>
+<p>Change the height with <code>--chart-height</code> (default <code>120px</code>), the line with <code>--chart-line-width</code> (default <code>1.5px</code>), the area with <code>--chart-area-opacity</code> (default <code>15%</code>), and the colors with <code>--color-chart-1</code> to <code>--color-chart-4</code> and <code>--color-chart-grid</code>. A chart is a picture: give it <code>role="img"</code> and a label, or show the values in text next to it.</p>
+
+<h2>Heatmap</h2>
+<p><code>heatmap</code> is a grid of cells (<code>heatmap-cell</code>) filled by their value in <code>data-value</code>, from <code>data-min</code> (default <code>0</code>) to <code>data-max</code> (default <code>1</code>). A cell without a value is not filled. The first of two children is a small label. Cells are colored by their <a href="/design/progress#levels">level</a> too.</p>
+<ul class="heatmap" data-progress-thresholds="0.75 0.9">
+    <li class="heatmap-cell" data-value="0.12"><span>#0</span><span>12%</span></li>
+    <li class="heatmap-cell" data-value="0.35"><span>#1</span><span>35%</span></li>
+    <li class="heatmap-cell" data-value="0.58"><span>#2</span><span>58%</span></li>
+    <li class="heatmap-cell" data-value="0.8"><span>#3</span><span>80%</span></li>
+    <li class="heatmap-cell" data-value="0.97"><span>#4</span><span>97%</span></li>
+    <li class="heatmap-cell"><span>#5</span><span>—</span></li>
+</ul>
+<pre><code>&lt;ul class="heatmap"&gt;
+    &lt;li class="heatmap-cell" data-value="0.12"&gt;&lt;span&gt;#0&lt;/span&gt;&lt;span&gt;12%&lt;/span&gt;&lt;/li&gt;
+    &lt;li class="heatmap-cell" data-value="0.35"&gt;&lt;span&gt;#1&lt;/span&gt;&lt;span&gt;35%&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+<p>Change the width of the cells with <code>--heatmap-cell-min-width</code> (default <code>72px</code>) and the space between them with <code>--heatmap-gap</code> (default <code>4px</code>). The color is <code>--color-progress</code>. Write the value in the cell as text as well; the color alone does not tell it.</p>
+
+<h2>Stack bar</h2>
+<p><code>stack-bar</code> shows parts of one whole side by side. Each <code>stack-bar-segment</code> is as wide as its value in <code>data-value</code>, from <code>data-min</code> (default <code>0</code>) to <code>data-max</code> (default <code>1</code>), and the rest is the track. Color the segments with <code>chart-series-n</code>, and use the same classes in a <code>chart-legend</code>.</p>
+<div class="stack-bar" role="img" aria-label="Memory: 45% used, 20% cache">
+    <span class="stack-bar-segment chart-series-1" data-value="0.45"></span>
+    <span class="stack-bar-segment chart-series-3" data-value="0.2"></span>
+</div>
+<ul class="chart-legend">
+    <li class="chart-series-1">Used <b>45%</b></li>
+    <li class="chart-series-3">Cache <b>20%</b></li>
+</ul>
+<pre><code>&lt;div class="stack-bar" role="img" aria-label="Memory: 45% used, 20% cache"&gt;
+    &lt;span class="stack-bar-segment chart-series-1" data-value="0.45"&gt;&lt;/span&gt;
+    &lt;span class="stack-bar-segment chart-series-3" data-value="0.2"&gt;&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+<p>Change the height with <code>--stack-bar-thickness</code> (default <code>16px</code>). The values should add up to at most the maximum; the bar does not grow past it.</p>
+
+<h2>Badge</h2>
+<p><code>badge</code> is a short label, such as a state. <code>badge-information</code>, <code>badge-success</code>, <code>badge-warning</code>, and <code>badge-error</code> color it; any other color can be set with <code>--badge-color</code>.</p>
+<div class="flex demo-wrap demo-center">
+    <span class="badge">Default</span>
+    <span class="badge badge-information">Information</span>
+    <span class="badge badge-success">Success</span>
+    <span class="badge badge-warning">Warning</span>
+    <span class="badge badge-error">Error</span>
+</div>
+<pre><code>&lt;span class="badge badge-success"&gt;Success&lt;/span&gt;</code></pre>
+
+<h2>Description list</h2>
+<p><code>description-list</code> places the terms (<code>&lt;dt&gt;</code>) and their values (<code>&lt;dd&gt;</code>) of a <code>&lt;dl&gt;</code> in two columns. On small screens, each value goes under its term.</p>
+<div class="layer">
+    <dl class="description-list">
+        <dt>Host name</dt><dd>example</dd>
+        <dt>Kernel</dt><dd>linux 6.8.0</dd>
+        <dt>Processes</dt><dd>312</dd>
+    </dl>
+</div>
+<pre><code>&lt;dl class="description-list"&gt;
+    &lt;dt&gt;Host name&lt;/dt&gt;&lt;dd&gt;example&lt;/dd&gt;
+    &lt;dt&gt;Kernel&lt;/dt&gt;&lt;dd&gt;linux 6.8.0&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+<p>Change the space with <code>--description-list-gap</code> (default <code>6px 24px</code>).</p>
+
+<h2 id="binding">Binding</h2>
+<p><code>binding.js</code> fills elements with values from data, such as a response of an API, by their attributes. Each path is a dot-separated path into the data, such as <code>system.cpu.0.name</code>; an empty path is the data itself. Inside a list item, paths are relative to the item.</p>
+<div class="table-scroll">
+    <table>
+        <thead>
+            <tr><th>Attribute</th><th>Does</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>data-bind="path"</code></td><td>Sets the text to the value, formatted by the formatter in <code>data-format</code> (default <code>text</code>). A missing value is written as <code>—</code></td></tr>
+            <tr><td><code>data-bind-attr="name: path; …"</code></td><td>Sets each attribute to the value as text, and removes it while the value is missing. While any of them is missing, the element has <code>data-bind-missing</code></td></tr>
+            <tr><td><code>data-bind-show="path"</code></td><td>Shows the element only while the value is present</td></tr>
+            <tr><td><code>data-bind-hide="path"</code></td><td>Hides the element while the value is present</td></tr>
+            <tr><td><code>data-bind-list="path"</code></td><td>Repeats the first element of its <code>&lt;template&gt;</code> for each item of an array. The copies get <code>data-bind-item</code>, and are kept and filled again on the next render</td></tr>
+        </tbody>
+    </table>
+</div>
+<p>A value is missing when it is <code>null</code>, <code>undefined</code>, or a number that is not finite. It is present when it is not missing, not <code>false</code>, and not an empty array.</p>
+<pre><code>&lt;div class="layer stat"&gt;
+    &lt;span class="stat-label"&gt;CPU &lt;span data-bind="cpu.name"&gt;&lt;/span&gt;&lt;/span&gt;
+    &lt;span class="stat-value" data-bind="cpu.usage" data-format="percent"&gt;—&lt;/span&gt;
+    &lt;div class="progress-linear" role="progressbar" aria-label="CPU" aria-valuemax="1"
+         data-bind-attr="aria-valuenow: cpu.usage"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;ul class="heatmap" data-bind-list="cpu.cores"&gt;
+    &lt;template&gt;
+        &lt;li class="heatmap-cell" data-bind-attr="data-value: usage"&gt;
+            &lt;span data-bind="name"&gt;&lt;/span&gt;&lt;span data-bind="usage" data-format="percent"&gt;&lt;/span&gt;
+        &lt;/li&gt;
+    &lt;/template&gt;
+&lt;/ul&gt;
+&lt;p data-bind-hide="cpu.cores"&gt;No cores.&lt;/p&gt;</code></pre>
+<pre><code>const binding = new window.nercone.Binding();
+binding.render(document.querySelector('main'), await response.json());</code></pre>
+<p><code>render(root, data)</code> fills <code>root</code> and its descendants, and changes an element only where its value changed, so it can be called again with each new response. Binding is a class, not a feature: it does nothing until a script calls it.</p>
+
+<h3>Formatters</h3>
+<div class="table-scroll">
+    <table>
+        <thead>
+            <tr><th>Name</th><th>Value</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>text</code></td><td>Anything. Arrays are joined with <code>, </code></td><td><code>a, b</code></td></tr>
+            <tr><td><code>number</code></td><td>A number, rounded and grouped by the locale</td><td><code>12,480</code></td></tr>
+            <tr><td><code>percent</code></td><td>A ratio, from <code>0</code> to <code>1</code></td><td><code>38.5%</code></td></tr>
+            <tr><td><code>bytes</code></td><td>A number of bytes, in binary units</td><td><code>1.5 GiB</code></td></tr>
+            <tr><td><code>json</code></td><td>Anything, as indented JSON</td><td><code>{ … }</code></td></tr>
+            <tr><td><code>time</code>, <code>date</code></td><td>Milliseconds since the epoch, or a date string</td><td><code>12:34:56</code></td></tr>
+        </tbody>
+    </table>
+</div>
+<p>Options: <code>missing</code> (<code>'—'</code>) is the text of a missing value, <code>locale</code> (that of the browser) is for numbers and dates, and <code>formatters</code> adds formatters or replaces the ones above. <code>Binding.scaled(value, base, units, digits)</code> helps to write one with units.</p>
+<pre><code>const binding = new window.nercone.Binding({
+    locale: 'ja-JP',
+    formatters: {
+        bitrate: (bits) =&gt; window.nercone.Binding.scaled(bits, 1000, ['bps', 'kbps', 'Mbps', 'Gbps'])
+    }
+});</code></pre>
+<p>A progress indicator without <code>aria-valuenow</code> is indeterminate and animates. When a value can be missing, style <code>[data-bind-missing]</code>, for example to draw only the track. Elements hidden by <code>data-bind-show</code> and <code>data-bind-hide</code> stay hidden, even when a class such as <code>layer</code> sets their <code>display</code>.</p>

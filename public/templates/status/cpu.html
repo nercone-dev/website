@@ -1,0 +1,69 @@
+---
+title: CPU - サーバーの状態 - Nercone
+description: nercone.devのサーバーのCPUの使用率・周波数・温度
+base: status
+---
+
+<div class="status-header">
+    <h1>CPU</h1>
+    <p>CPUの使用率・周波数・温度と、コアごとの負荷です。</p>
+</div>
+
+<div data-bind-list="system.hardwares.cpu">
+    <template>
+        <section class="status-section">
+            <h2 class="status-section-title"><span data-bind="name">CPU</span> <small><span data-bind="cores" data-format="number">—</span> コア / <span data-bind="threads" data-format="number">—</span> スレッド</small></h2>
+
+            <div class="status-grid">
+                <div class="layer stat">
+                    <span class="stat-label">平均使用率</span>
+                    <span class="stat-value" data-bind="usage.average" data-format="percent">—</span>
+                    <div class="progress-linear" role="progressbar" aria-label="平均使用率" aria-valuenow="0" aria-valuemax="1" data-bind-attr="aria-valuenow: usage.average"></div>
+                    <span class="stat-description">最小 <span data-bind="usage.minimum" data-format="percent">—</span> · 最大 <span data-bind="usage.maximum" data-format="percent">—</span></span>
+                </div>
+                <div class="layer stat">
+                    <span class="stat-label">周波数</span>
+                    <span class="stat-value" data-bind="frequency.current" data-format="ghz">—</span>
+                    <span class="stat-description">ベース <span data-bind="frequency.base" data-format="ghz">—</span></span>
+                </div>
+                <div class="layer stat">
+                    <span class="stat-label">温度</span>
+                    <span class="stat-value" data-bind="temperature.average" data-format="celsius">—</span>
+                    <span class="stat-description">最小 <span data-bind="temperature.minimum" data-format="celsius">—</span> · 最大 <span data-bind="temperature.maximum" data-format="celsius">—</span></span>
+                </div>
+                <div class="layer stat">
+                    <span class="stat-label">プロセス / スレッド</span>
+                    <span class="stat-value" data-bind="usage.process" data-format="number">—</span>
+                    <span class="stat-description"><span data-bind="usage.threads" data-format="number">—</span> スレッド</span>
+                </div>
+            </div>
+
+            <div class="layer">
+                <span class="stat-label">使用率の推移 <span>平均</span></span>
+                <div class="chart status-chart-large" data-bind-attr="data-status-chart: chart" data-chart-max="1" data-format="percent"></div>
+            </div>
+
+            <h3 class="status-section-title">スレッドごとの使用率 <small>論理プロセッサごと</small></h3>
+            <ul class="heatmap" data-bind-list="usage.core_list">
+                <template>
+                    <li class="heatmap-cell" data-bind-attr="data-value: usage">
+                        <span>#<span data-bind="index">—</span></span>
+                        <span data-bind="usage" data-format="percent">—</span>
+                    </li>
+                </template>
+            </ul>
+            <p class="stat-description" data-bind-hide="usage.core_list">スレッドごとの使用率を取得できません。</p>
+
+            <h3 class="status-section-title">コアごとの温度 <small>センサーが報告するコアごと</small></h3>
+            <div class="status-grid" data-bind-show="temperature.core_list" data-bind-list="temperature.core_list">
+                <template>
+                    <div>
+                        <span class="progress-label"><span>コア <span data-bind="index">—</span></span><span data-bind="temperature" data-format="celsius">—</span></span>
+                        <div class="progress-linear" role="progressbar" aria-label="温度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-bind-attr="aria-valuenow: temperature"></div>
+                    </div>
+                </template>
+            </div>
+            <p class="stat-description" data-bind-hide="temperature.core_list">このサーバーではコアごとの温度を取得できません。</p>
+        </section>
+    </template>
+</div>
