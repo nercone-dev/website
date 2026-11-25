@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_レイヤー_1" data-name="レイヤー 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <defs>
+    <style>
+      .cls-1 {
+        opacity: .12;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        opacity: .25;
+      }
+
+      .cls-3 {
+        opacity: .5;
+      }
+
+      .cls-4 {
+        opacity: .38;
+      }
+
+      .cls-5 {
+        opacity: .62;
+      }
+
+      .cls-6 {
+        opacity: .88;
+      }
+
+      .cls-7 {
+        opacity: .75;
+      }
+    </style>
+  </defs>
+  <rect width="16" height="16"/>
+  <rect class="cls-1" width="4" height="4"/>
+  <rect class="cls-2" x="8" y="0" width="4" height="4"/>
+  <rect class="cls-4" x="4" y="4" width="4" height="4"/>
+  <rect class="cls-3" x="12" y="4" width="4" height="4"/>
+  <rect class="cls-5" y="8" width="4" height="4"/>
+  <rect class="cls-7" x="8" y="8" width="4" height="4"/>
+  <rect class="cls-6" x="4" y="12" width="4" height="4"/>
+  <rect class="cls-8" x="12" y="12" width="4" height="4"/>
+</svg>

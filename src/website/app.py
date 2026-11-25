@@ -1,9 +1,10 @@
 import asyncio
 
 from fastapi import FastAPI, Request, Response
-from fastapi.responses import PlainTextResponse, JSONResponse
+from fastapi.responses import PlainTextResponse, FileResponse, JSONResponse
 
 from .helpers import add_report_route, Counter, MimeTypes, CSSBundler, JSBundler, SystemInfo
+from .resolver import resolve_static
 from .renderer import render_thumbnail_png, render_error_page, default_response
 from .constants import Startup, Directories, Files
 from .middleware import Middleware
@@ -41,9 +42,25 @@ async def status() -> Response:
         }
     )
 
+# Access Counter Trigger
+@app.api_route("/assets/images/counter.png", methods=["GET"])
+async def access_counter_trigger(request: Request) -> Response:
+    try:
+        if file := resolve_static("/assets/images/checker.png", timings=request.scope["nercone"]["response"]["headers"]["server-timing"]):
+            Counter(Files.access_counter).increase()
+            request.scope["nercone"]["response"]["headers"]["cache-control"].set("no-store")
+            return FileResponse(file)
+
+        response = PlainTextResponse("Not Found: checker.png", status_code=404)
+        return response
+
+    except PermissionError:
+        response = PlainTextResponse("Permission Error: checker.png", status_code=403)
+        return response
+
 # Auto-generated Thumbnail
 @app.api_route("/assets/images/templates/thumbnail/generate/{template}", methods=["GET"])
-async def thumbnail(request: Request, template: str) -> Response:
+async def generate_thumbnail(request: Request, template: str) -> Response:
     query_params = {key: values[0] for key, values in request.scope["nercone"]["request"]["url"].params.items()}
     path = query_params.get("path", "/")
     title = query_params.get("title", "Untitled Page")

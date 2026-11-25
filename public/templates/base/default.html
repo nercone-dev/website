@@ -35,7 +35,7 @@
         <meta name="twitter:title" content="{{ self.title() }}">
         <meta name="twitter:description" content="{{ self.description() }}">
         <meta name="twitter:image" content="{{ thumbnail_final_url }}">
-        <!-- PWA -->
+        <!-- PWA / Icons -->
         <link rel="manifest" href="https://nercone.dev/site.webmanifest">
         <link rel="apple-touch-icon" href="https://assets.nercone.dev/images/favicon.png" sizes="384x384">
         <link rel="icon" type="image/jxl" href="https://assets.nercone.dev/images/favicon.jxl" sizes="384x384">
@@ -60,6 +60,8 @@
                 <polyline points="872 572.75 152 332 152 692 512 692 872 332 872 692 684.5 692" fill="currentColor"/>
             </svg>
         </div>
+
+        <img src="https://assets.nercone.dev/images/counter.png" width="0" height="0" class="hide">
 
         {% block header_before %}{% endblock %}
         {% block header_outer %}
