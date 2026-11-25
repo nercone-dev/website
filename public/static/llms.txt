@@ -7,7 +7,6 @@ The primary language is Japanese.
 ## Pages
 
 - [/](https://nercone.dev/) The top page displaying a daily changing message
-- [/status](https://nercone.dev/status) Server uptime status (JSON)
 - [/about](https://nercone.dev/about/) Self-introduction of the site administrator
 - [/about/server](https://nercone.dev/about/server/) Details of this site's server configuration (HTTP/3, TLS, post-quantum cryptography support, etc.)
 - [/links](https://nercone.dev/links/) Mutual link collection
@@ -15,6 +14,7 @@ The primary language is Japanese.
 - [/design](https://nercone.dev/design/) The design system for this site
 - [/robots.txt](https://nercone.dev/robots.txt)
 - [/sitemap.xml](https://nercone.dev/sitemap.xml)
+- [/api/v1/status](https://nercone.dev/api/v1/status) Server uptime status (JSON)
 
 ## Source Code
 

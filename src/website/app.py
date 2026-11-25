@@ -1,7 +1,9 @@
+import asyncio
+
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import PlainTextResponse, JSONResponse
 
-from .helpers import add_report_route, Counter, MimeTypes, CSSBundler, JSBundler
+from .helpers import add_report_route, Counter, MimeTypes, CSSBundler, JSBundler, SystemInfo
 from .renderer import render_thumbnail_png, render_error_page, default_response
 from .constants import Startup, Directories, Files
 from .middleware import Middleware
@@ -14,6 +16,7 @@ app.add_middleware(Middleware)
 css_bundler = CSSBundler(Files.Bundles.css_entry, Files.Bundles.css_output, Directories.assets)
 js_bundler  = JSBundler(Files.Bundles.js_entry, Files.Bundles.js_output, Directories.assets)
 theme_bundlers = {path.stem: CSSBundler(path, path, Directories.assets) for path in Files.Bundles.themes}
+system_info = SystemInfo()
 
 add_report_route(app, "/report", "DEFAULT")
 add_report_route(app, "/report/csp", "CSP")
@@ -22,7 +25,8 @@ add_report_route(app, "/report/csp", "CSP")
 async def ping() -> Response:
     return PlainTextResponse("pong!")
 
-@app.api_route("/status", methods=["GET"])
+# API v1
+@app.api_route("/api/v1/status", methods=["GET"])
 async def status() -> Response:
     return JSONResponse(
         {
@@ -32,10 +36,12 @@ async def status() -> Response:
                 "id": Startup.id.text(),
                 "version": Startup.version,
                 "mode": Startup.mode.value,
-            }
+            },
+            "system": await asyncio.to_thread(system_info.snapshot),
         }
     )
 
+# Auto-generated Thumbnail
 @app.api_route("/assets/images/templates/thumbnail/generate/{template}", methods=["GET"])
 async def thumbnail(request: Request, template: str) -> Response:
     query_params = {key: values[0] for key, values in request.scope["nercone"]["request"]["url"].params.items()}
@@ -51,6 +57,7 @@ async def thumbnail(request: Request, template: str) -> Response:
     except PermissionError:
         return await render_error_page(request=request, status_code=403, message="ねえ、今サムネイル生成のエンドポイント悪用して攻撃しようとした？したよね？？ディレクトリトラバーサルでしょ？知ってるよ？怒ってないから正直に言って？ね？ね？？", joke_message="嘘つきには針千本プレゼント！このメッセージを読んだ後、100年以内限定！飲用補助サービスが無料でついてきます！今すぐ正直に言え！！")
 
+# Fake Error Page
 @app.api_route("/error/{status_code}", methods=["GET"])
 async def fake_error_page(request: Request, status_code: str) -> Response:
     if status_code.isdecimal():
@@ -60,6 +67,7 @@ async def fake_error_page(request: Request, status_code: str) -> Response:
     else:
         return await render_error_page(request=request, status_code=400, message="errorエンドポイントのパスには「server」またはHTTPレスポンスステータスコードのみが使用可能です。", joke_message="HTTP/1.1 600 Not Normal")
 
+# Bundle Styles
 @app.api_route("/assets/style.css", methods=["GET"])
 async def bundle_styles(request: Request) -> Response:
     timings = request.scope["nercone"]["response"]["headers"]["server-timing"]
@@ -68,6 +76,7 @@ async def bundle_styles(request: Request) -> Response:
     timings.stop("bundle")
     return Response(content, media_type="text/css; charset=utf-8")
 
+# Bundle Theme Style
 @app.api_route("/assets/styles/themes/{name}.css", methods=["GET"])
 async def bundle_theme(request: Request, name: str) -> Response:
     bundler = theme_bundlers.get(name)
@@ -79,6 +88,7 @@ async def bundle_theme(request: Request, name: str) -> Response:
     timings.stop("bundle")
     return Response(content, media_type="text/css; charset=utf-8")
 
+# Bundle Scripts
 @app.api_route("/assets/script.js", methods=["GET"])
 async def bundle_scripts(request: Request) -> Response:
     timings = request.scope["nercone"]["response"]["headers"]["server-timing"]
@@ -87,6 +97,7 @@ async def bundle_scripts(request: Request) -> Response:
     timings.stop("bundle")
     return Response(content, media_type="text/javascript; charset=utf-8")
 
+# Default
 @app.api_route("/{path:path}", methods=["GET", "POST", "HEAD"])
 async def default_route(request: Request, path: str) -> Response:
     return await default_response(path, request=request)

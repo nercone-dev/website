@@ -8,6 +8,7 @@ from .hash import compute_xxhash3
 from .minify import minify_html, minify_css, minify_js, minify_svg, Minifier
 from .compress import compress_gzip, compress_deflate, compress_zstd, compress_brotli, Compressor
 from .bundle import Bundler, CSSBundler, JSBundler
+from .system import SystemInfo
 
 __all__ = [
     "URL",
@@ -19,4 +20,5 @@ __all__ = [
     "minify_html", "minify_css", "minify_js", "minify_svg", "Minifier",
     "compress_gzip", "compress_deflate", "compress_zstd", "compress_brotli", "Compressor",
     "Bundler", "CSSBundler", "JSBundler",
+    "SystemInfo",
 ]

@@ -10,22 +10,18 @@ dependencies = [
     # Framework
     "fastapi",
     "uvicorn[standard]",
-
     # Markdown
     "mistune",
     "markitdown",
     "beautifulsoup4",
-
     # Minification
     "minify-html",
     "rcssmin",
     "rjsmin",
     "scour",
-
     # Compression
     "zstandard",
     "brotlicffi",
-
     # Misc
     "resvg-py",
     "jinja2",
@@ -34,6 +30,7 @@ dependencies = [
     "pyyaml",
     "httpx",
     "fwid",
+    "psutil>=7.2.2",
 ]
 
 [project.scripts]

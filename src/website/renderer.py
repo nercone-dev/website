@@ -233,10 +233,25 @@ error_messages = {
 
 async def render_error_page(request: Request, status_code: int = 500, status_name: Optional[str] = None, message: Optional[str] = None, joke_message: Optional[str] = None) -> Response:
     if 500 <= status_code < 600:
-        request.scope["nercone"]["response"]["headers"]["content-security-policy"].append("script-src", "'unsafe-inline'")
         request.scope["nercone"]["response"]["headers"]["content-security-policy"].append("style-src", "fonts.googleapis.com", "'unsafe-inline'")
         request.scope["nercone"]["response"]["headers"]["content-security-policy"].append("font-src", "fonts.gstatic.com")
-        return await render_page("error/server.html", request=request, status_code=status_code, render=False)
+
+        if status_name is None:
+            try:
+                status_name = HTTPStatus(status_code).name
+            except ValueError:
+                status_name = "UNKNOWN"
+
+        filepath = resolve_template("error/server.html", timings=request.scope["nercone"]["response"]["headers"]["server-timing"])
+        if filepath is None:
+            raise FileNotFoundError("Page not found: error/server.html")
+
+        content = templates.from_string(filepath.read_text(encoding="utf-8")).render(
+            status_code=status_code,
+            status_name=status_name,
+            access_id=request.scope["nercone"]["request"]["id"],
+        )
+        return HTMLResponse(content, status_code=status_code)
     else:
         if status_name is None:
             try:

@@ -183,6 +183,7 @@ class Middleware:
 
         # Development
         if content_type.startswith(("text/html", "text/css", "text/javascript", "application/javascript", "image/svg+xml")) and Startup.mode == StartupMode.DEVELOPMENT:
+            response.body = bytes(response.body).replace(b"https://api.nercone.dev/",    f"http://localhost:{Ports.tcp_port}/api/".encode())
             response.body = bytes(response.body).replace(b"https://assets.nercone.dev/", f"http://localhost:{Ports.tcp_port}/assets/".encode())
 
         # Compression

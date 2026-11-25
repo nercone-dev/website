@@ -10,49 +10,111 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>nercone.devはリクエストの処理に失敗しました</title>
-        <meta name="description" content="nercone.devのサーバーで何らかの問題が発生したため、リクエストへの正常な応答に失敗しました。">
+        <title>nercone.dev はリクエストの処理に失敗しました</title>
+        <meta name="description" content="リクエストの処理中に重大なエラーが発生したため、正常な応答ができませんでした。">
         <!-- for Crawlers -->
-        <link rel="canonical" href="https://nercone.dev/">
-        <meta name="robots" content="index, follow">
-        <meta name="googlebot" content="index, follow">
+        <meta name="robots" content="noindex, nofollow">
+        <meta name="googlebot" content="noindex, nofollow">
         <meta name="author" content="nercone">
-        <meta name="theme-color" content="#3399FF">
-        <!-- PWA -->
-        <link rel="manifest" href="https://nercone.dev/site.webmanifest">
+        <meta name="theme-color" content="#000000">
+        <!-- Icons -->
         <link rel="apple-touch-icon" href="https://assets.nercone.dev/images/favicon.png" sizes="384x384">
-        <link rel="icon" type="image/jxl" href="https://assets.nercone.dev/images/favicon.jxl" sizes="384x384">
         <link rel="icon" type="image/png" href="https://assets.nercone.dev/images/favicon.png" sizes="384x384">
         <link rel="icon" type="image/svg+xml" href="https://assets.nercone.dev/images/favicon.svg" sizes="384x384">
-        <!-- Scripts -->
-        <script src="https://assets.nercone.dev/script.js" defer></script>
-        <!-- Stylesheets -->
-        <link rel="stylesheet" href="https://assets.nercone.dev/style.css">
-        <link rel="stylesheet" href="https://assets.nercone.dev/styles/themes/auto-stark.css">
-        <noscript>
-            <link rel="stylesheet" href="https://assets.nercone.dev/styles/noscript.css">
-        </noscript>
+        <!-- Stylesheets (self-contained: this page must render even when the assets are broken) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap">
+        <style>
+            *, *::before, *::after {
+                box-sizing: border-box;
+            }
+
+            html {
+                color-scheme: dark;
+            }
+
+            body {
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+                min-height: 100dvh;
+                margin: 0;
+                padding: 0 16px;
+                background: #000000;
+                color: #FFFFFF;
+                font-family: "Inter", "Noto Sans JP", system-ui, -apple-system, sans-serif;
+                text-align: center;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            main {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 48px 0;
+            }
+
+            h1 {
+                margin: 0 0 16px;
+                font-size: 2rem;
+                font-weight: 700;
+                line-height: 1.4;
+            }
+
+            main p {
+                margin: 0;
+                color: #CCCCCC;
+                font-size: 1.2rem;
+                line-height: 1.8;
+            }
+
+            footer {
+                padding: 0 0 104px;
+                color: #8C8C8C;
+                font-size: 1.2rem;
+                line-height: 1.6;
+                overflow-wrap: anywhere;
+            }
+
+            footer b {
+                color: #A6A6A6;
+            }
+
+            footer .part {
+                display: inline-block;
+            }
+
+            footer .separator {
+                color: #595959;
+                white-space: pre;
+            }
+
+            @media (max-width: 640px) {
+                h1 {
+                    font-size: 1.5rem;
+                }
+
+                main p, footer {
+                    font-size: 1rem;
+                }
+
+                footer {
+                    padding-bottom: 48px;
+                }
+            }
+        </style>
     </head>
     <body>
-        <div id="cursor" data-view-transition-keep></div>
-
-        <div id="loading-overlay" data-view-transition-keep>
-            <svg viewBox="96 256 832 512" xmlns="http://www.w3.org/2000/svg">
-                <polyline points="872 572.75 152 332 152 692 512 692 872 332 872 692 684.5 692" fill="currentColor"/>
-            </svg>
-        </div>
-
-        <header>
-            <div>
-                <a href="/" class="font-decoration-none" translate="no">nercone.dev</a>
-            </div>
-        </header>
-
         <main>
-            <h1>nercone.devはリクエストの処理に失敗しました</h1>
-            <p>nercone.devのサーバーで何らかの問題が発生したため、リクエストへの正常な応答に失敗しました。</p>
-            <p>すぐには修正されない場合があるため、コーヒーか何かを飲んで待つか、Nerconeを叩き起こして修正させる必要があります。</p>
-            <p>修正まで気長にお待ちください。</p>
+            <h1>nercone.dev はリクエストの処理に失敗しました</h1>
+            <p>リクエストの処理中に重大なエラーが発生したため、正常な応答ができませんでした。<br>少し待ってからリクエストを再試行してください。HTTP ステータスコードは {{ status_code }} です。</p>
         </main>
+
+        <footer>
+            <span class="part"><b translate="no">Nercone Infrastructure</b> <span translate="no">{{ status_name }}</span><span class="separator"> / </span></span><span class="part">Connection Tracking FWID <span translate="no">conn_{{ access_id.readable_text }}</span></span>
+        </footer>
     </body>
 </html>
