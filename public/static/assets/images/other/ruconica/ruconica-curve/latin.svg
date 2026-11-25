@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_レイヤー_1" data-name="レイヤー 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 64px;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        font-family: NerconeSansCJKNF-Variable, 'Nercone Sans CJK NF Variable';
+        font-variation-settings: 'opsz' 14, 'wght' 400;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        font-size: 24px;
+        opacity: .75;
+      }
+
+      .cls-5, .cls-4 {
+        stroke-linecap: square;
+      }
+
+      .cls-5, .cls-4, .cls-6, .cls-7 {
+        stroke: #fff;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-5, .cls-4, .cls-7 {
+        stroke-width: 2px;
+      }
+
+      .cls-5, .cls-6, .cls-7 {
+        fill: none;
+      }
+
+      .cls-3 {
+        font-size: 16px;
+        opacity: .5;
+      }
+
+      .cls-8 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-6 {
+        opacity: .2;
+      }
+
+      .cls-9 {
+        letter-spacing: .02em;
+      }
+
+      .cls-10 {
+        letter-spacing: 0em;
+      }
+    </style>
+  </defs>
+  <rect width="1280" height="640"/>
+  <text class="cls-1" transform="translate(48 101.65)"><tspan x="0" y="0">Ruconi</tspan><tspan class="cls-10" x="207.28" y="0">c</tspan><tspan x="244.47" y="0">a Cu</tspan><tspan class="cls-9" x="383" y="0">r</tspan><tspan class="cls-8" x="408.09" y="0">v</tspan><tspan x="442.81" y="0">e</tspan></text>
+  <text class="cls-2" transform="translate(52.09 149.9)"><tspan x="0" y="0">特徴的な等幅フォント</tspan></text>
+  <g>
+    <rect class="cls-6" x="48" y="208" width="64" height="64"/>
+    <text class="cls-3" transform="translate(52.15 224.11)"><tspan x="0" y="0">0</tspan></text>
+    <g>
+      <rect class="cls-5" x="68" y="224" width="24" height="32" rx="8" ry="8"/>
+      <line class="cls-7" x1="68" y1="236" x2="92" y2="244"/>
+    </g>
+  </g>
+  <g>
+    <rect class="cls-6" x="128" y="208" width="64" height="64"/>
+    <text class="cls-3" transform="translate(133.95 224.11)"><tspan x="0" y="0">1</tspan></text>
+    <line class="cls-5" x1="160" y1="224" x2="160" y2="256"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="208" y="208" width="64" height="64"/>
+    <text class="cls-3" transform="translate(212.32 224.11)"><tspan x="0" y="0">2</tspan></text>
+    <path class="cls-5" d="M228,224h0c6.63,0,12,5.37,12,12v8c0,6.63,5.37,12,12,12h0"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="288" y="208" width="64" height="64"/>
+    <text class="cls-3" transform="translate(292.26 224.11)"><tspan x="0" y="0">3</tspan></text>
+    <path class="cls-5" d="M308,224h16.71c6,0,9.42,6.84,5.82,11.64h0c-1.94,2.58-1.94,6.14,0,8.72h0c3.6,4.8.18,11.64-5.82,11.64h-16.71"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="368" y="208" width="64" height="64"/>
+    <text class="cls-3" transform="translate(372.03 224.11)"><tspan x="0" y="0">4</tspan></text>
+    <g>
+      <path class="cls-5" d="M388,224v8c0,4.42,3.58,8,8,8h16"/>
+      <line class="cls-5" x1="412" y1="256" x2="412" y2="224"/>
+    </g>
+  </g>
+  <g>
+    <rect class="cls-6" x="448" y="208" width="64" height="64"/>
+    <text class="cls-3" transform="translate(452.45 224.11)"><tspan x="0" y="0">5</tspan></text>
+    <path class="cls-5" d="M468,256h16c4.42,0,8-3.58,8-8h0c0-4.42-3.58-8-8-8h-16v-16h24"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="528" y="208" width="64" height="64"/>
+    <text class="cls-3" transform="translate(532.24 224.11)"><tspan x="0" y="0">6</tspan></text>
+    <path class="cls-5" d="M548,256h16c4.42,0,8-3.58,8-8h0c0-4.42-3.58-8-8-8h-10.5s-5.5,0-5.5,0v-8c0-4.42,3.58-8,8-8h8c4.42,0,8,3.58,8,8h0"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="608" y="208" width="64" height="64"/>
+    <text class="cls-3" transform="translate(612.67 224.11)"><tspan x="0" y="0">7</tspan></text>
+    <polyline class="cls-5" points="628 224 652 224 628 256"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="688" y="208" width="64" height="64"/>
+    <text class="cls-3" transform="translate(692.25 224.11)"><tspan x="0" y="0">8</tspan></text>
+    <path class="cls-5" d="M716,224h8c4.42,0,8,3.58,8,8h0c0,4.42-3.58,8-8,8h-8c-4.42,0-8,3.58-8,8h0c0,4.42,3.58,8,8,8h8c4.42,0,8-3.58,8-8h0c0-4.42-3.58-8-8-8h-8c-4.42,0-8-3.58-8-8h0C708,227.58,711.58,224,716,224Z"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="768" y="208" width="64" height="64"/>
+    <text class="cls-3" transform="translate(772.24 224.11)"><tspan x="0" y="0">9</tspan></text>
+    <path class="cls-5" d="M812,240h-16c-4.42,0-8-3.58-8-8h0c0-4.42,3.58-8,8-8h8c4.42,0,8,3.58,8,8v16c0,4.42-3.58,8-8,8h-8c-4.42,0-8-3.58-8-8h0"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="48" y="288" width="64" height="64"/>
+    <text class="cls-3" transform="translate(51.68 304.11)"><tspan x="0" y="0">A</tspan></text>
+    <polyline class="cls-7" points="68 336 68 304 76.74 315.66 92 336"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="128" y="288" width="64" height="64"/>
+    <text class="cls-3" transform="translate(131.97 304.11)"><tspan x="0" y="0">B</tspan></text>
+    <path class="cls-5" d="M148,304h16c4.42,0,8,3.58,8,8h0c0,4.42-3.58,8-8,8h-16v16s16,0,16,0c4.42,0,8-3.58,8-8h0c0-4.42-3.58-8-8-8h-16v-16Z"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="208" y="288" width="64" height="64"/>
+    <text class="cls-3" transform="translate(211.36 304.11)"><tspan x="0" y="0">C</tspan></text>
+    <path class="cls-5" d="M252,304h-16c-4.42,0-8,3.58-8,8v16c0,4.42,3.58,8,8,8h16"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="288" y="288" width="64" height="64"/>
+    <text class="cls-3" transform="translate(291.43 304.11)"><tspan x="0" y="0">D</tspan></text>
+    <path class="cls-5" d="M308,304h16c4.42,0,8,3.58,8,8v16c0,4.42-3.58,8-8,8h-16V304Z"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="368" y="288" width="64" height="64"/>
+    <text class="cls-3" transform="translate(372.39 304.11)"><tspan x="0" y="0">E</tspan></text>
+    <path class="cls-5" d="M412,304h-16c-4.42,0-8,3.58-8,8v8h24-24v8c0,4.42,3.58,8,8,8h16"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="448" y="288" width="64" height="64"/>
+    <text class="cls-3" transform="translate(452.48 304.11)"><tspan x="0" y="0">F</tspan></text>
+    <path class="cls-5" d="M492,304h-16c-4.42,0-8,3.58-8,8v8h24-24v16"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="528" y="288" width="64" height="64"/>
+    <text class="cls-3" transform="translate(531.23 304.11)"><tspan x="0" y="0">G</tspan></text>
+    <path class="cls-5" d="M572,312H572c0-4.42-3.58-8-8-8h-8c-4.42,0-8,3.58-8,8v16c0,4.42,3.58,8,8,8h8c4.42,0,8-3.58,8-8v-8h-12"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="608" y="288" width="64" height="64"/>
+    <text class="cls-3" transform="translate(611.25 304.11)"><tspan x="0" y="0">H</tspan></text>
+    <g>
+      <line class="cls-4" x1="628" y1="304" x2="628" y2="336"/>
+      <line class="cls-4" x1="628" y1="320" x2="652" y2="320"/>
+      <line class="cls-4" x1="652" y1="304" x2="652" y2="336"/>
+    </g>
+  </g>
+  <g>
+    <rect class="cls-6" x="688" y="288" width="64" height="64"/>
+    <text class="cls-3" transform="translate(695.05 304.11)"><tspan x="0" y="0">I</tspan></text>
+    <g>
+      <line class="cls-4" x1="708" y1="304" x2="732" y2="304"/>
+      <line class="cls-4" x1="720" y1="304" x2="720" y2="336"/>
+      <line class="cls-4" x1="708" y1="336" x2="732" y2="336"/>
+    </g>
+  </g>
+  <g>
+    <rect class="cls-6" x="768" y="288" width="64" height="64"/>
+    <text class="cls-3" transform="translate(772.63 304.11)"><tspan x="0" y="0">J</tspan></text>
+    <path class="cls-5" d="M812,304v24c0,4.42-3.58,8-8,8h-8c-4.42,0-8-3.58-8-8v-8"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="848" y="288" width="64" height="64"/>
+    <text class="cls-3" transform="translate(851.83 304.11)"><tspan x="0" y="0">K</tspan></text>
+    <g>
+      <line class="cls-5" x1="868" y1="304" x2="868" y2="336"/>
+      <line class="cls-7" x1="868" y1="324.92" x2="892" y2="304"/>
+      <line class="cls-7" x1="876.15" y1="317.82" x2="892" y2="336"/>
+    </g>
+  </g>
+  <g>
+    <rect class="cls-6" x="928" y="288" width="64" height="64"/>
+    <text class="cls-3" transform="translate(932.68 304.11)"><tspan x="0" y="0">L</tspan></text>
+    <path class="cls-5" d="M948,304v24c0,4.42,3.58,8,8,8h16"/>
+  </g>
+  <g>
+    <rect class="cls-6" x="1008" y="288" width="64" height="64"/>
+    <text class="cls-3" transform="translate(1009.9736 304.1093)"><tspan x="0" y="0">M</tspan></text>
+    <polyline class="cls-7" points="1028 336 1028 304 1040 320 1052 304 1052 336"/>
+  </g>
+  <rect class="cls-6" x="48" y="368" width="64" height="64"/>
+  <rect class="cls-6" x="128" y="368" width="64" height="64"/>
+  <rect class="cls-6" x="208" y="368" width="64" height="64"/>
+  <rect class="cls-6" x="288" y="368" width="64" height="64"/>
+  <rect class="cls-6" x="368" y="368" width="64" height="64"/>
+  <rect class="cls-6" x="448" y="368" width="64" height="64"/>
+  <rect class="cls-6" x="528" y="368" width="64" height="64"/>
+  <rect class="cls-6" x="608" y="368" width="64" height="64"/>
+  <rect class="cls-6" x="688" y="368" width="64" height="64"/>
+  <rect class="cls-6" x="768" y="368" width="64" height="64"/>
+  <rect class="cls-6" x="848" y="368" width="64" height="64"/>
+  <rect class="cls-6" x="928" y="368" width="64" height="64"/>
+  <rect class="cls-6" x="1008" y="368" width="64" height="64"/>
+  <g>
+    <rect class="cls-6" x="48" y="448" width="64" height="64"/>
+    <rect class="cls-6" x="128" y="448" width="64" height="64"/>
+    <rect class="cls-6" x="208" y="448" width="64" height="64"/>
+    <rect class="cls-6" x="288" y="448" width="64" height="64"/>
+    <rect class="cls-6" x="368" y="448" width="64" height="64"/>
+    <rect class="cls-6" x="448" y="448" width="64" height="64"/>
+    <rect class="cls-6" x="528" y="448" width="64" height="64"/>
+    <rect class="cls-6" x="608" y="448" width="64" height="64"/>
+    <rect class="cls-6" x="688" y="448" width="64" height="64"/>
+    <rect class="cls-6" x="768" y="448" width="64" height="64"/>
+    <rect class="cls-6" x="848" y="448" width="64" height="64"/>
+    <rect class="cls-6" x="928" y="448" width="64" height="64"/>
+    <rect class="cls-6" x="1008" y="448" width="64" height="64"/>
+    <rect class="cls-6" x="48" y="528" width="64" height="64"/>
+    <rect class="cls-6" x="128" y="528" width="64" height="64"/>
+    <rect class="cls-6" x="208" y="528" width="64" height="64"/>
+    <rect class="cls-6" x="288" y="528" width="64" height="64"/>
+    <rect class="cls-6" x="368" y="528" width="64" height="64"/>
+    <rect class="cls-6" x="448" y="528" width="64" height="64"/>
+    <rect class="cls-6" x="528" y="528" width="64" height="64"/>
+    <rect class="cls-6" x="608" y="528" width="64" height="64"/>
+    <rect class="cls-6" x="688" y="528" width="64" height="64"/>
+    <rect class="cls-6" x="768" y="528" width="64" height="64"/>
+    <rect class="cls-6" x="848" y="528" width="64" height="64"/>
+    <rect class="cls-6" x="928" y="528" width="64" height="64"/>
+    <rect class="cls-6" x="1008" y="528" width="64" height="64"/>
+  </g>
+  <text class="cls-3" transform="translate(51.17 384.11)"><tspan x="0" y="0">N</tspan></text>
+  <path class="cls-5" d="M68,416v-20c0-3.84,4.89-5.48,7.2-2.4l9.6,12.8c2.31,3.08,7.2,1.44,7.2-2.4v-20"/>
+  <text class="cls-3" transform="translate(131.08 384.11)"><tspan x="0" y="0">O</tspan></text>
+  <rect class="cls-5" x="148" y="384" width="24" height="32" rx="8" ry="8"/>
+  <text class="cls-3" transform="translate(212.09 384.11)"><tspan x="0" y="0">P</tspan></text>
+  <path class="cls-5" d="M228,416v-24c0-4.42,3.58-8,8-8h8c4.42,0,8,3.58,8,8h0c0,4.42-3.58,8-8,8h-16"/>
+</svg>
