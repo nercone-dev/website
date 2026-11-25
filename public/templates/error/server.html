@@ -21,21 +21,22 @@
         <!-- PWA -->
         <link rel="manifest" href="https://nercone.dev/site.webmanifest">
         <link rel="apple-touch-icon" href="https://assets.nercone.dev/images/favicon.png" sizes="384x384">
+        <link rel="icon" type="image/jxl" href="https://assets.nercone.dev/images/favicon.jxl" sizes="384x384">
         <link rel="icon" type="image/png" href="https://assets.nercone.dev/images/favicon.png" sizes="384x384">
         <link rel="icon" type="image/svg+xml" href="https://assets.nercone.dev/images/favicon.svg" sizes="384x384">
         <!-- Scripts -->
         <script src="https://assets.nercone.dev/script.js" defer></script>
         <!-- Stylesheets -->
         <link rel="stylesheet" href="https://assets.nercone.dev/style.css">
+        <link rel="stylesheet" href="https://assets.nercone.dev/styles/themes/auto-stark.css">
         <noscript>
             <link rel="stylesheet" href="https://assets.nercone.dev/styles/noscript.css">
-            <link rel="stylesheet" href="https://assets.nercone.dev/styles/themes/auto-stark.css">
         </noscript>
     </head>
     <body>
-        <div id="cursor"></div>
+        <div id="cursor" data-view-transition-keep></div>
 
-        <div id="loading-overlay">
+        <div id="loading-overlay" data-view-transition-keep>
             <svg viewBox="96 256 832 512" xmlns="http://www.w3.org/2000/svg">
                 <polyline points="872 572.75 152 332 152 692 512 692 872 332 872 692 684.5 692" fill="currentColor"/>
             </svg>
