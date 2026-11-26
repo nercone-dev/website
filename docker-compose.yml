@@ -1,21 +1,99 @@
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
 services:
+  conet:
+    container_name: website-conet
+    image: ghcr.io/nercone-infra/conet-agent:latest
+    restart: unless-stopped
+    init: true
+    logging: *logging
+    cap_add:
+      - NET_ADMIN
+    dns:
+      - 127.0.0.1
+    dns_opt:
+      - trust-ad
+    volumes:
+      - ./conet:/etc/conet.d:ro
+      - ./data/certs:/etc/certs:ro
+    environment:
+      - CONET_NAME=website
+      - CONET_PRIVATE_KEY=${CONET_PRIVATE_KEY:?CONET_PRIVATE_KEY is required}
+      - CONET_PRESHARED_KEY=${CONET_PRESHARED_KEY:?CONET_PRESHARED_KEY is required}
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/conet-agent", "health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  cert:
+    container_name: website-cert
+    image: ghcr.io/nercone-infra/cert-agent:latest
+    restart: unless-stopped
+    init: true
+    logging: *logging
+    network_mode: service:conet
+    volumes:
+      - ./data/certs:/etc/certs
+    environment:
+      - CERT_BUNDLES=conet
+      - CERT_CA_FINGERPRINT=${CERT_CA_FINGERPRINT:-}
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/entrypoint", "health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      conet:
+        condition: service_started
+        restart: true
+
+  nginx:
+    container_name: website-nginx
+    image: nginx:stable-trixie
+    restart: unless-stopped
+    logging: *logging
+    network_mode: service:conet
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - website-run:/run/website
+    depends_on:
+      conet:
+        condition: service_started
+        restart: true
+
   website:
     container_name: website
     build: .
     restart: unless-stopped
-    ports:
-      - "127.0.0.1:8080:8080"
+    logging: *logging
+    network_mode: service:conet
     environment:
-      WEBSITE_TCP: 8080
       WEBSITE_UDS: /run/website/app.sock
+      WEBSITE_TCP_HOST: 127.0.0.1
+      WEBSITE_TCP_PORT: 8080
+      FORWARDED_ALLOW_IPS: "*"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/ping"]
+      test: ["CMD", "curl", "-f", "--unix-socket", "/run/website/app.sock", "http://localhost/ping"]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 20s
     volumes:
-      - "/run/website:/run/website"
       - "./.git:/srv/website/.git:ro"
       - "./public:/srv/website/public:ro"
       - "./private:/srv/website/private"
+      - website-run:/run/website
+    depends_on:
+      conet:
+        condition: service_started
+        restart: true
+
+volumes:
+  website-run:
