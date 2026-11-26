@@ -42,6 +42,12 @@ async def status() -> Response:
         }
     )
 
+# MTA-STS
+@app.api_route("/mta-sts/.well-known/mta-sts.txt", methods=["GET"])
+async def status(request: Request) -> Response:
+    request.scope["nercone"]["response"]["headers"]["cache-control"].set("max-age", "2592000")
+    return PlainTextResponse("version: STSv1\r\nmode: enforce\r\nmx: mx.nercone.dev\r\nmax_age: 2592000")
+
 # Access Counter Trigger
 @app.api_route("/assets/images/counter.png", methods=["GET"])
 async def access_counter_trigger(request: Request) -> Response:

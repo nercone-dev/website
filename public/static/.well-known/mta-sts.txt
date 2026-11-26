@@ -1,4 +1,0 @@
-version: STSv1
-mode: enforce
-mx: mx.nercone.dev
-max_age: 2592000
