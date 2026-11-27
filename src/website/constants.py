@@ -18,6 +18,7 @@ class Directories:
     base = Path.cwd()
 
     public = base.joinpath("public")
+    public_data = public.joinpath("data")
     static = public.joinpath("static")
     templates = public.joinpath("templates")
 
@@ -29,7 +30,7 @@ class Directories:
 
 class Files:
     mime_types = Directories.databases.joinpath("mime.types")
-    access_counter = Directories.static.joinpath("access_counter.txt")
+    access_counter = Directories.public_data.joinpath("access_counter.txt")
 
     class Bundles:
         css_entry  = Directories.assets.joinpath("styles", "index.css")

@@ -2,6 +2,6 @@
 *.tmp
 __pycache__/
 /private/
-/public/static/access_counter.txt
+/public/data/
 .env
 /data/
