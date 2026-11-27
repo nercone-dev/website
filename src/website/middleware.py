@@ -183,8 +183,10 @@ class Middleware:
 
         # Development
         if content_type.startswith(("text/html", "text/css", "text/javascript", "application/javascript", "image/svg+xml")) and Startup.mode == StartupMode.DEVELOPMENT:
-            response.body = bytes(response.body).replace(b"https://api.nercone.dev/",    f"http://localhost:{Ports.tcp_port}/api/".encode())
-            response.body = bytes(response.body).replace(b"https://assets.nercone.dev/", f"http://localhost:{Ports.tcp_port}/assets/".encode())
+            netloc = state["request"]["headers"].get("host", "") or f"localhost:{Ports.tcp_port}"
+            origin = f"{scope.get('scheme', 'http')}://{netloc}"
+            response.body = bytes(response.body).replace(b"https://api.nercone.dev/",    f"{origin}/api/".encode())
+            response.body = bytes(response.body).replace(b"https://assets.nercone.dev/", f"{origin}/assets/".encode())
 
         # Compression
         if state["response"]["compression"] and "content-encoding" not in response.headers and Compressor.compressible(content_type, len(response.body)):
