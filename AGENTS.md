@@ -49,6 +49,8 @@
 ├── private/                   非公開データ(Git管理外・絶対に公開しない): logs/, databases/
 ├── data/                      実行時データ(Git管理外): data/certs/ に証明書
 ├── tools/                     start.sh, update.sh, png2jxl.sh
+│   └── sounds/                サウンド(Zerc / Zercone / Mirai)の作曲・レンダリング(.docs/sounds.md)
+├── .docs/                     開発者向けドキュメント
 └── .claude/launch.json        開発サーバー(website-dev)の起動定義
 ```
 
@@ -104,6 +106,7 @@ WEBSITE_DEV=1 WEBSITE_TCP_PORT=8080 uv run nercone-website
 - `tools/start.sh [--dev]`: ビルドして `up -d` します。
 - `tools/update.sh [--dev]`: `git pull` し、ビルドして `restart` と `up -d` を行います。
 - `tools/png2jxl.sh`: PNGをJPEG XLへ変換する補助スクリプトです(`cjxl` が必要)。
+- `tools/sounds/build.py`: `public/static/assets/sounds/` のサウンドを MIDI から生成します(`uv run tools/sounds/build.py`、FFmpeg が必要)。詳細は `.docs/sounds.md` を参照してください。
 
 本番サーバーへの操作(デプロイ、再起動、`update.sh` の実行など)は、必ず人間に確認してから行ってください。
 
