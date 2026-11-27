@@ -59,12 +59,18 @@ class Signal:
         return 10.0 ** (gain_db * weight / 20.0)
 
     @staticmethod
-    def filter(samples: Buffer, rate: int, response: Callable[[Buffer], Buffer], padding: int = 4096, taps: int = 1 << 16) -> Buffer:
+    def filter(samples: Buffer, rate: int, response: Callable[[Buffer], Buffer], padding: int = 4096, taps: int = 1 << 16, circular: bool = False) -> Buffer:
         # Zero-phase filtering with the given magnitude response. Short signals are filtered
         # in one FFT (padding keeps the circular convolution from wrapping the tail onto the
         # head). Long ones would need a song-length FFT, so they are convolved block by block
         # with a windowed, centred FIR sampled from the same response (bounded memory).
+        # circular=True treats the samples as one period of a repeating signal (a seamless
+        # loop): one FFT of exactly that length, so the filter wraps the end onto the start.
         count = samples.shape[-1]
+        if circular:
+            spectrum = np.fft.rfft(samples, axis=-1)
+            spectrum *= response(np.fft.rfftfreq(count, 1.0 / rate))
+            return np.fft.irfft(spectrum, n=count, axis=-1)
         if count <= taps * 16:
             size = 1 << (count + padding - 1).bit_length()
             spectrum = np.fft.rfft(samples, n=size, axis=-1)
@@ -95,6 +101,18 @@ class Signal:
             end = min(start + size, output.shape[-1])
             output[:, start:end] += result[:, :end - start]
         return output
+
+    @staticmethod
+    def fold(samples: Buffer, period: int) -> Buffer:
+        # One period of a loop as it sounds once it has repeated for a while: everything that
+        # rings past the end (reverb, echoes, held notes) is added back onto the start.
+        if period <= 0:
+            raise ValueError(f"The period must be positive: {period}")
+        folded = np.array(samples[..., :period], copy=True)
+        for start in range(period, samples.shape[-1], period):
+            segment = samples[..., start:start + period]
+            folded[..., :segment.shape[-1]] += segment
+        return folded
 
     @staticmethod
     def saturate(samples: Buffer, drive: float) -> Buffer:
@@ -216,6 +234,9 @@ class FM(Instrument):
     tine_level: float = 0.0
     detune: float = 0.0
     tracking: float = 0.4
+    # How much the velocity scales the modulation index: 1.0 in full proportion (a softer
+    # strike is duller), 0.0 not at all (the timbre stays the same at every velocity).
+    velocity_index: float = 1.0
 
     def render(self, pitch: int, velocity: float, duration: float, rate: int) -> Buffer:
         frequency = Pitch.frequency(pitch)
@@ -224,7 +245,7 @@ class FM(Instrument):
         level = envelope.render(duration, rate)
         count = level.shape[-1]
         time = Signal.seconds(count, rate)
-        index = (self.index_floor + (self.index - self.index_floor) * np.exp(-time * Signal.DECAY60 / (self.index_decay * scale))) * velocity
+        index = (self.index_floor + (self.index - self.index_floor) * np.exp(-time * Signal.DECAY60 / (self.index_decay * scale))) * (1.0 - self.velocity_index + self.velocity_index * velocity)
         channels = []
         for side in (-1.0, 1.0):
             carrier = frequency * 2.0 ** (side * self.detune / 1200.0)
@@ -240,7 +261,8 @@ class FM(Instrument):
 @dataclass(frozen=True)
 class Analog(Instrument):
     # Virtual-analogue voice: band-limited saw/square/triangle built from harmonics, through a
-    # time-varying low-pass filter, with unison detune, vibrato and a sub oscillator.
+    # time-varying low-pass filter, with unison detune, vibrato, a pitch bend at the start of
+    # the note and a sub oscillator.
     waveform: str = "saw"
     voices: int = 1
     detune: float = 0.0
@@ -259,6 +281,10 @@ class Analog(Instrument):
     sub: float = 0.0
     drift: float = 0.0
     seed: int = 0
+    # Pitch bend into the note: it starts `bend` semitones away from its pitch (negative:
+    # below) and settles exponentially with the time constant `bend_time` (seconds).
+    bend: float = 0.0
+    bend_time: float = 0.02
 
     def weights(self, count: int) -> Buffer:
         harmonics = np.arange(1, count + 1, dtype=np.float64)
@@ -287,7 +313,10 @@ class Analog(Instrument):
         tracked = self.cutoff * (frequency / Signal.MIDDLE_C) ** self.keytrack
         opening = self.amount * (1.0 - self.velocity_amount + self.velocity_amount * velocity)
         cutoff = np.minimum(tracked * 2.0 ** (opening * contour), rate * 0.45)
-        harmonic_limit = int(min(rate * 0.45, float(cutoff.max()) * 6.0) // frequency)
+        # Harmonics are counted from the highest pitch the note reaches, so a bend from above
+        # cannot push any of them past the Nyquist frequency.
+        highest = frequency * 2.0 ** (max(self.bend, 0.0) / 12.0)
+        harmonic_limit = int(min(rate * 0.45, float(cutoff.max()) * 6.0) // highest)
         harmonic_limit = max(harmonic_limit, 1)
         weights = self.weights(harmonic_limit)
 
@@ -301,6 +330,8 @@ class Analog(Instrument):
             if vibrato_ramp is not None:
                 vibrato_phase = generator.uniform(0, 2 * math.pi)
                 instantaneous *= 2.0 ** (self.vibrato_depth / 1200.0 * vibrato_ramp * np.sin(2 * math.pi * self.vibrato_rate * time + vibrato_phase))
+            if self.bend != 0.0:
+                instantaneous *= 2.0 ** (self.bend * np.exp(-time / max(self.bend_time, 1e-6)) / 12.0)
             phases[voice] = 2 * math.pi * np.cumsum(instantaneous) / rate + generator.uniform(0, 2 * math.pi)
 
         # Harmonics in the outer loop: the filter gain of a harmonic is the same for every

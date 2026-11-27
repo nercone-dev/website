@@ -41,6 +41,10 @@ class Master:
     tail: float = 3.0
     fade: float = 1.5
     highpass: float = 25.0
+    # Length in seconds of a seamless loop (ringtones, alarms), or None for a one-shot. A loop
+    # is rendered with `tail` seconds of overhang that is folded back onto its start, and is
+    # neither faded nor padded, so it can repeat without a seam.
+    loop: Optional[float] = None
 
 class Mixer:
     # MIDI control numbers from the General MIDI specification.
@@ -97,8 +101,21 @@ class Mixer:
         return np.minimum(recovery, approach).astype(np.float32)
 
     def render(self, midi: MIDIFile, strips: Dict[str, Strip], master: Master) -> Buffer:
+        return self.finish(self.mix(midi, strips, master), master)
+
+    def mix(self, midi: MIDIFile, strips: Dict[str, Strip], master: Master) -> Buffer:
+        # The stereo bus before mastering: every track, the effect returns, and for a loop the
+        # overhang folded back onto the start.
         self.cache.clear()
-        count = int((midi.seconds(midi.length()) + master.tail) * self.rate)
+        end = midi.seconds(midi.length())
+        period: Optional[int] = None
+        if master.loop is not None:
+            period = int(round(master.loop * self.rate))
+            last = max((note.start for track in midi.tracks for note in track.notes), default=0)
+            if period <= 0 or midi.seconds(last) * self.rate >= period:
+                raise ValueError(f"Every note of a {master.loop} s loop must start inside it")
+            end = max(end, master.loop)
+        count = int((end + master.tail) * self.rate)
         bus = np.zeros((2, count), dtype=np.float32)
         reverb = np.zeros((2, count), dtype=np.float32)
         delay = np.zeros((2, count), dtype=np.float32)
@@ -112,8 +129,8 @@ class Mixer:
                 start = int(round(midi.seconds(note.start) * self.rate))
                 length = int(round(midi.seconds(note.end) * self.rate)) - start
                 rendered = self.voice(track.name, strip, note.pitch, note.velocity, length)
-                end = min(start + rendered.shape[-1], count)
-                buffer[:, start:end] += rendered[:, :end - start]
+                stop = min(start + rendered.shape[-1], count)
+                buffer[:, start:stop] += rendered[:, :stop - start]
             curve = self.expression(midi, track, count)
             if curve is not None:
                 buffer *= curve
@@ -128,18 +145,30 @@ class Mixer:
                 reverb += buffer * strip.reverb
             if strip.delay > 0:
                 delay += buffer * strip.delay
+        if period is not None:
+            # The effects may spread sound backwards in time (the delay band-limits its input
+            # with a zero-phase filter). For a loop, that part belongs to the end of the
+            # previous pass, so give it one period of room before the start and fold it there.
+            # The length is a whole number of periods, so the rotation keeps every sample at
+            # its place within the loop.
+            total = -(-(count + period) // period) * period
+            bus, reverb, delay = (np.pad(buffer, ((0, 0), (period, total - period - count))) for buffer in (bus, reverb, delay))
+            count = total
         if master.delay is not None and np.any(delay):
             echoes = master.delay.process(delay, self.rate)
             bus += echoes[:, :count]
             reverb += echoes[:, :count] * 0.5
         if np.any(reverb):
             bus += master.reverb.process(reverb, self.rate)[:, :count]
-        return self.finish(bus, master)
+        if period is not None:
+            bus = Signal.fold(np.roll(bus, -period, axis=-1), period)
+        return bus
 
     def finish(self, bus: Buffer, master: Master) -> Buffer:
-        audio = Signal.filter(bus.astype(np.float64), self.rate, lambda f: Signal.highpass(f, master.highpass, 2))
+        loop = master.loop is not None
+        audio = Signal.filter(bus.astype(np.float64), self.rate, lambda f: Signal.highpass(f, master.highpass, 2), circular=loop)
         fade = int(master.fade * self.rate)
-        if fade > 0:
+        if fade > 0 and not loop:
             audio[:, -fade:] *= np.cos(np.linspace(0, math.pi / 2, fade)) ** 2
         # K-weighting is linear, so scaling the audio by g scales every block power by g^2:
         # measure once and solve on the block powers. Two passes, because scaling moves quiet
@@ -152,7 +181,7 @@ class Mixer:
         for _ in range(2):
             gain *= 10.0 ** ((master.loudness - Loudness.gate(powers * gain ** 2)) / 20.0)
         audio *= gain
-        audio, reduction = master.limiter.process(audio, self.rate)
+        audio, reduction = master.limiter.process(audio, self.rate, circular=loop)
         peak = float(np.abs(audio).max())
         self.report = {
             "loudness_before": loudness,

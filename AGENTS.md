@@ -49,7 +49,7 @@
 ├── private/                   非公開データ(Git管理外・絶対に公開しない): logs/, databases/
 ├── data/                      実行時データ(Git管理外): data/certs/ に証明書
 ├── tools/                     start.sh, update.sh, png2jxl.sh
-│   └── sounds/                サウンド(Zerc / Zercone / Mirai)の作曲・レンダリング(.docs/sounds.md)
+│   └── sounds/                サウンド(Zerc / Zercone / Mirai、user-interface/ の通知音など)の作曲・レンダリング(.docs/sounds.md)
 ├── .docs/                     開発者向けドキュメント
 └── .claude/launch.json        開発サーバー(website-dev)の起動定義
 ```

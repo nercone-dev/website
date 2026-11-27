@@ -90,7 +90,13 @@ class Limiter:
     release: float = 0.12
     block: int = 32
 
-    def process(self, samples: Buffer, rate: int) -> Tuple[Buffer, float]:
+    def process(self, samples: Buffer, rate: int, circular: bool = False) -> Tuple[Buffer, float]:
+        # circular=True limits one period of a loop: the middle of three copies, so the gain
+        # at the start already knows the peaks at the end (and the other way round).
+        if circular:
+            count = samples.shape[-1]
+            limited, reduction = self.process(np.concatenate((samples, samples, samples), axis=-1), rate)
+            return limited[..., count:2 * count], reduction
         ceiling = 10.0 ** (self.ceiling / 20.0)
         count = samples.shape[-1]
         blocks = -(-count // self.block)

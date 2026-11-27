@@ -58,7 +58,15 @@ class Song:
     # A piece of music: the score as MIDI, plus how each track is voiced and mixed.
     name: ClassVar[str] = ""
     title: ClassVar[str] = ""
+    # Subdirectory of the output directory, as a relative POSIX path ("" for the top level).
+    directory: ClassVar[str] = ""
     rate: ClassVar[int] = 48000
+
+    @classmethod
+    def path(cls) -> str:
+        # Where the song goes, relative to the output directory and without a suffix; also
+        # the name it is selected by on the command line.
+        return f"{cls.directory}/{cls.name}" if cls.directory else cls.name
 
     def compose(self) -> MIDIFile:
         raise NotImplementedError()
